@@ -27,14 +27,14 @@ export default {
 </script>
 <style>
 #hit img{
-  height:11vw;
-  width:8vw;
+  height:170px;
+  width:120px;
   border-style:solid;
   border-color:aliceblue;
   border-width:3px;
 }
 #hit{
-  width:69vw;
+  width:1100px;
   margin-top:0;
 }
 button.slick-prev:before, button.slick-next:before {

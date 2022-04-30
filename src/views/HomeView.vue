@@ -7,7 +7,7 @@
       <div id="vertical">
         <div class="books hothit">
           <span class="title"
-            ><img class="hot books" src="../assets/title/books.png" />流行图书<a
+            ><img class="hot books" src="@/assets/title/books.png" />流行图书<a
               href="http://localhost:8080/book"
               class="Fordetail"
               >&ensp;>&ensp;</a
@@ -17,7 +17,7 @@
         </div>
         <div class="movies hothit">
           <span class="title"
-            ><img class="hot" src="../assets/title/movie.png" />精彩电影<a
+            ><img class="hot" src="@/assets/title/movie.png" />精彩电影<a
               href="http://localhost:8080/video"
               class="Fordetail"
               >&ensp;>&ensp;</a
@@ -27,7 +27,7 @@
         </div>
         <div class="tv hothit">
           <span class="title"
-            ><img class="hot" src="../assets/title/tv.png" />推荐电视剧<a
+            ><img class="hot" src="@/assets/title/tv.png" />推荐电视剧<a
               href="http://localhost:8080/video"
               class="Fordetail"
               >&ensp;>&ensp;</a
@@ -38,10 +38,10 @@
       </div>
       <div id="aside">
         <div class="topics hotlist">
+          <span class="title">
+            <img class="hot" src="@/assets/title/fire.png" />热点话题
+            </span>
           <ul class="topics hotlist">
-            <span class="title"
-              ><img class="hot" src="../assets/title/fire.png" />热点话题</span
-            >
             <li id="topic1">
               <span>1.&ensp;</span
               ><a href="../topic">影史上有哪些你不喜欢的致敬？</a>
@@ -98,7 +98,7 @@
             <span class="title"
               ><img
                 class="hot"
-                src="../assets/title/groups.png"
+                src="@/assets/title/groups.png"
               />发现小组</span
             >
           </div>
@@ -115,19 +115,15 @@
             <li><a href="../group">switch交流基地</a></li>
             <li><a href="../group">985废物引进计划</a></li>
             <li><a href="../group">这个要拍下来</a></li>
-
           </ul>
         </div>
       </div>
       <br />
       <div class="comments">
-        <span class="title"
-          ><img class="hot" src="../assets/title/comment.png" />热门评论</span
-        >
-        <hr />
-        <comments></comments>
-        <hr />
-        <comments></comments>
+        <span class="title"><img class="hot" src="@/assets/title/comment.png" />热门评论</span>
+        
+        <comment-display></comment-display>
+        <comment-display></comment-display>
         
       </div>
     </div>
@@ -136,14 +132,14 @@
 
 <style>
 div#body {
-  margin-left: 5vw;
-  width: 92vw;
+  margin-left: 100px;
+  width: 1580px;
   display: flex;
   flex-wrap: wrap;
 }
 #aside {
-  padding-top: 10vh;
-  margin-left:3vw ;
+  margin-top: 100px;
+  margin-left:50px ;
   margin-right: 0;
   padding-right: 0;
 }
@@ -157,7 +153,11 @@ li {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 .hotlist {
-  width: 18.5vw;
+  padding-top:10px;
+  width: 340px;
+}
+.hotlist ul{
+  padding-top:10px;
 }
 .hotlist a {
   color: rgb(2, 98, 182);
@@ -168,6 +168,7 @@ li {
   font-weight: 600;
 }
 .comments {
+  margin-top:50px;
   text-align: left;
 }
 .comments .title {
@@ -175,7 +176,7 @@ li {
   font-weight: 600;
 }
 div.hothit {
-  margin-top: 5vh;
+  margin-top: 70px;
   text-align: left;
 }
 .topics li {
@@ -190,11 +191,8 @@ div.hothit {
 #topic3 span {
   color: rgb(255, 195, 44);
 }
-ul.topics.hotlist {
+div.topics.hotlist {
   background-color: rgb(246, 243, 243);
-  padding-left: 5px;
-  padding-bottom: 10px;
-  padding-right: 5px;
   border-style: solid;
   border-width: 3px;
   border-top-color: rgb(246, 243, 243);
@@ -202,6 +200,9 @@ ul.topics.hotlist {
   border-bottom-color: rgb(225, 225, 225);
   border-right-color: rgb(225, 225, 225);
   border-radius: 20px;
+}
+ul.topics.hotlist {
+  padding-left: 20px;
 }
 div.groups.hotlist {
   border-style: solid;
@@ -235,26 +236,26 @@ img.hot.books {
   background-color: rgb(227, 239, 250);
 }
 div.hotlist.comments {
-  width: 80vw;
+  width: 1080px;
 }
 </style>
 <script>
 // @ is an alias to /src
-import powerpoint from "../components/PowerPoint";
-import hit from "../components/Hit";
-import search from "../components/SelectSearch.vue";
-import comments from "../components/ComDisplay.vue"
+import powerpoint from "@/components/PowerPoint";
+import hit from "@/components/Hit";
+import search from "@/components/SelectSearch.vue";
+import commentDisplay from "@/components/ComDisplay.vue"
 //load the img needed
-import bookImg1 from "../assets/books/Zissc.jpg";
-import bookImg2 from "../assets/books/Jiaoldr.jpg";
-import usericon from "../assets/int.png";
+import bookImg1 from "@/assets/books/Zissc.jpg";
+import bookImg2 from "@/assets/books/Jiaoldr.jpg";
+import usericon from "@/assets/user/int.png";
 export default {
   name: "home",
   components: {
     powerpoint,
     hit,
     search,
-    comments,
+    commentDisplay,
   },
   methods: {
     //this is the function to update the images of books

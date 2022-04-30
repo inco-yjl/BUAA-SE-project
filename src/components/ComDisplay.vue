@@ -1,12 +1,13 @@
 <template>
   <div class="comment">
+    <hr />
     <a class="userOfcomment" href="/otherusers/1">
     <img class="iconOfuser" /><span class="nameOfuser"></span>
     </a>
     <br />
-        <div class="comments_content">
-            <div><a class="comment-origin"><img class="comments_pic" src="../assets/books/Zissc.jpg"></a></div>
-            <div class="commentlist"></div>
+        <div class="comments-content">
+            <div><a class="comment-origin" href="/book/1"><img class="comments-pic" src="@/assets/books/Zissc.jpg"></a></div>
+            <div class="comments-text"><a class="commentlist" href="/book/1/comments/1"></a></div>
         </div>
     <div class="origin">
       <a href="http://localhost:8080/group"> ————查看原帖</a>
@@ -14,11 +15,14 @@
   </div>
 </template>
 <style scoped>
-.comments_pic{
-  height:8vw;
-  width:6vw;
+.comment{
+  width:95%;
 }
-.comments_content{
+.comments-pic{
+  height:150px;
+  width:110px;
+}
+.comments-content{
     display: flex;
     flex-wrap: nowrap;
 }
@@ -30,6 +34,7 @@
 }
 .comment a:hover {
   color: rgb(0, 166, 255);
+  text-decoration: underline;
 }
 div.origin {
   text-align: right;
@@ -38,7 +43,6 @@ div.origin {
   color: brown;
   font-weight: 600;
   font-family: "Courier New", Courier, monospace;
-  font-style: italic;
   font-size: 16px;
 }
 .origin a:hover {
@@ -47,14 +51,22 @@ div.origin {
 }
 .iconOfuser {
   height: 30px;
+  margin-right: 5px;
   vertical-align: sub;
 }
-.commentlist{
-    margin-left: 20px;
-    margin-right: 10px;
+.comments-text{
+  margin-left: 20px;
+  margin-right: 10px;
+}
+a.commentlist{
     font-size: 17px;
+    text-decoration: none;
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-weight:600;
     color: black;
+}
+a.commentlist:hover{
+  color:gray;
+  text-decoration: none;
 }
 </style>

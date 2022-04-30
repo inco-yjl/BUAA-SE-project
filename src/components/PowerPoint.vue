@@ -36,7 +36,7 @@
 
   #demo{
       top:30px;
-      width:80vw;
+      width:1500px;
       padding: 0,0,0,0;
       margin-left: 5vw;
       border-radius: 20px;
