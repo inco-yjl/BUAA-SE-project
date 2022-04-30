@@ -29,12 +29,12 @@
 .comment a {
   font-weight: 500;
   font-size: 22px;
-  color: black;
+  color: rgb(0, 0, 0);
   text-decoration: none;
 }
 .comment a:hover {
+  text-decoration: none;
   color: rgb(0, 166, 255);
-  text-decoration: underline;
 }
 div.origin {
   text-align: right;
@@ -64,6 +64,7 @@ a.commentlist{
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-weight:600;
     color: black;
+    transition:.2s ease;
 }
 a.commentlist:hover{
   color:gray;

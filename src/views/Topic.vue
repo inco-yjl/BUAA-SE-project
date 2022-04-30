@@ -116,7 +116,14 @@ button:active {
 .topic_cirle_title {
   margin-right: 30px;
 }
-
+.hotlist a {
+  color: rgb(2, 98, 182);
+  font-weight: 500;
+}
+.hotlist a:hover {
+  background-color: rgb(213, 230, 245);
+  font-weight: 600;
+}
 .flex_box {
   display: flex;
 }
@@ -147,7 +154,7 @@ div.title {
   border-style: solid;
   position: relative;
   border-radius: 4px;
-  border-color: rgb(213, 230, 245);
+  border-color: rgb(201, 201, 201);
   width: 230px;
   margin: 20px;
   padding-top: 25px;
@@ -158,6 +165,16 @@ div.title {
   font-weight: 500;
   color: rgb(53, 53, 53);
   font-family: "Noto Serif SC", serif;
+}
+.boxesOfTopic a {
+  border-radius: 5px;
+  color: rgb(77, 157, 243);
+  transition: all 0.2s ease;
+}
+.boxesOfTopic a:hover {
+  background: rgb(77, 157, 243);
+  border-color: rgb(77, 157, 243);
+  color: white;
 }
 .topicboxes-route {
   font-size: 22px;
@@ -220,7 +237,7 @@ div.title {
   list-style-position: inside;
 }
 .diarylist {
-  width: 1580px;
+  width: 1650px;
 }
 .topic-display {
   margin-left: 100px;
@@ -237,6 +254,7 @@ div.title {
 import search from "../components/SelectSearch.vue";
 import diary from "../components/TopicDisplay.vue";
 import usericon from "@/assets/user/int.png";
+import topicpic1 from "@/assets/topic/spring.jpg";
 export default {
   name: "topic",
   components: {
@@ -256,13 +274,43 @@ export default {
         .getElementsByClassName("iconOfuser")
         .item(0)
         .setAttribute("src", usericon);
-      document.getElementsByClassName("nameOfuser").item(0).innerHTML =
-        "yjlintp" + ":";
+      document
+        .getElementsByClassName("display-publisher")
+        .item(0)
+        .getElementsByClassName("nameOfuser")
+        .item(0).innerHTML = "yjlintp";
       document
         .getElementsByClassName("diarytext")
         .item(0)
         .getElementsByClassName("diarylist")
-        .item(0).innerHTML = "?";
+        .item(0).innerHTML =
+        "既然如何， 我们都知道，只要有意义，那么就必须慎重考虑。\
+         所谓前端，关键是前端需要如何写。 一般来讲，我们都必须务必慎重的考虑考虑。\
+          前端因何而发生?这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 \
+          培根在不经意间这样说过，深窥自己的心，而后发觉一切的奇迹在你自己。带着这句话，我们还要更加慎重的审视这个问题：\
+           总结的来说， 我认为， 那么， 一般来讲，我们都必须务必慎重的考虑考虑。 我们不得不面对一个非常尴尬的事实，那就是，\
+            本人也是经过了深思熟虑，在每个日日夜夜思考这个问题。 现在，解决前端的问题，是非常非常重要的。\
+             所以， 要想清楚，前端，到底是一种怎么样的存在。 我们不得不面对一个非常尴尬的事实，那就是，\
+              现在，解决前端的问题，是非常非常重要的。";
+      document.getElementsByClassName("publishtime").item(0).innerHTML =
+        "2022-04-30";
+      document
+        .getElementsByClassName("topic-origin")
+        .item(0)
+        .getElementsByClassName("topic-origin-name")
+        .item(0).innerHTML = "寻找春日气息";
+      document
+        .getElementsByClassName("topic-origin")
+        .item(0)
+        .getElementsByClassName("topic-origin-name")
+        .item(0)
+        .setAttribute("href", "topic/1");
+      document
+        .getElementsByClassName("diary-origin-pic")
+        .item(0)
+        .getElementsByClassName("diary-pic")
+        .item(0)
+        .setAttribute("src", topicpic1);
     },
   },
   mounted() {

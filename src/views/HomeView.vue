@@ -130,7 +130,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 div#body {
   margin-left: 100px;
   width: 1580px;
