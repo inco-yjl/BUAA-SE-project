@@ -1,8 +1,13 @@
 <template>
 <div id="selection_search">
+  <div class="break"></div>
     <div class="selection">
      <span >
-  <button class="selection">书籍</button>/<button class="selection">影视</button>/<button class="selection">小组</button>/<button class="selection">话题</button>
+  <button class="selection_un" onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'">书籍</button>/
+  <button class="selection_un" onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'">电影</button>/
+  <button class="selection_un" onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'">电视剧</button>/
+  <button class="selection_un" onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'">小组</button>/
+  <button class="selection_un" onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'">话题</button>
       </span>                 
   </div>
  <div style="padding:5px;"  class="search_box">
@@ -26,7 +31,8 @@ div.selection {
   text-align: left;
   padding-left: 7vw;
 }
-button.selection {
+
+button.selection_un {
   background: white;
   outline:none;
   color: rgb(120, 118, 118);
@@ -36,24 +42,17 @@ button.selection {
 }
 
 
-button.selection:focus 
-  {
-    outline: none;
-    color:black;
-    font-weight: bold;
-  }
-button.selection:active{
+button.selection_ed{
+  background: white;
   outline: none;
-    color:black;
-    font-weight: bold;
+  font-size: 20px;
+  border: none;
+  color:black;
+  font-weight: bold;
 }
-button.selection::after{
-  outline: none;
-    color:black;
-    font-weight: bold;
+.break{
+  height:10vh;
+  margin: 0,0,0,0;
 }
-button.selection::-moz-focus-inner 
-{
-  border-color: transparent;
-}
+
 </style>

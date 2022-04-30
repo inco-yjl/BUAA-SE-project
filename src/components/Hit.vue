@@ -24,20 +24,17 @@ export default {
   name: 'MyComponent',
   components: { VueSlickCarousel },
 }
-
-
 </script>
-<style scoped>
+<style>
 #hit img{
-  height:20vh;
-  width:15vh;
+  height:11vw;
+  width:8vw;
   border-style:solid;
   border-color:aliceblue;
   border-width:3px;
 }
 #hit{
-  width:70vw;
-  margin-right: 0;
+  width:69vw;
   margin-top:0;
 }
 button.slick-prev:before, button.slick-next:before {
