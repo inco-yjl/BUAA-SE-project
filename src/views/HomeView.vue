@@ -3,7 +3,6 @@
     <search></search>
     <powerpoint></powerpoint>
     <div id="body">
-      
       <div id="vertical">
         <div class="books hothit">
           <span class="title"
@@ -88,7 +87,7 @@
             <li><span>14.</span><a href="../topic">小而真实的快乐</a></li>
             <li>
               <span>15.</span
-              ><a href="../topic">你在日常是生活中发现的食品安全隐患</a>
+              ><a href="../topic">日常生活的食品安全隐患</a>
             </li>
           </ul>
         </div>
@@ -131,17 +130,37 @@
 </template>
 
 <style scoped>
+#home{
+  padding-left: 100px;
+}
 div#body {
-  margin-left: 100px;
   width: 1580px;
   display: flex;
   flex-wrap: wrap;
 }
+#vertical{
+  padding-top:20px;
+  padding-left: 40px;
+  padding-right: 35px;
+  margin-top:80px;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  box-shadow:0px 1px 1px #888888a6;
+}
 #aside {
-  margin-top: 100px;
-  margin-left:50px ;
+  margin-top: 80px;
+  margin-left:30px ;
   margin-right: 0;
-  padding-right: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top:25px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  background-color: white;
+  box-shadow:0px 1px 1px #888888a6;
 }
 .title {
   text-align: left;
@@ -154,7 +173,7 @@ li {
 }
 .hotlist {
   padding-top:10px;
-  width: 340px;
+  width: 320px;
 }
 .hotlist ul{
   padding-top:10px;
@@ -168,15 +187,23 @@ li {
   font-weight: 600;
 }
 .comments {
+  width:1140px;
   margin-top:50px;
   text-align: left;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top:25px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  background-color: white;
+  box-shadow:0px 1px 1px #888888a6;
 }
 .comments .title {
   font-size: 30px;
   font-weight: 600;
 }
 div.hothit {
-  margin-top: 70px;
   text-align: left;
 }
 .topics li {
@@ -191,28 +218,32 @@ div.hothit {
 #topic3 span {
   color: rgb(255, 195, 44);
 }
+
 div.topics.hotlist {
-  background-color: rgb(246, 243, 243);
   border-style: solid;
-  border-width: 3px;
-  border-top-color: rgb(246, 243, 243);
-  border-left-color: rgb(246, 243, 243);
-  border-bottom-color: rgb(225, 225, 225);
-  border-right-color: rgb(225, 225, 225);
+  border-width: 4px;
+  background-color: rgb(255, 250, 244);
+  border-top-color: rgb(255, 247, 238);
+  border-left-color: rgb(255, 247, 238);
+  border-bottom-color: rgb(250, 239, 224);
+  border-right-color:rgb(250, 239, 224);
   border-radius: 20px;
+  box-shadow:0px 1px 1px #888888a6;
 }
+
 ul.topics.hotlist {
   padding-left: 20px;
 }
 div.groups.hotlist {
   border-style: solid;
-  border-width: 3px;
-  background-color: aliceblue;
+  border-width: 4px;
+  background-color: rgb(244, 250, 255);
   border-top-color: rgb(244, 250, 255);
   border-left-color: rgb(244, 250, 255);
   border-bottom-color: rgb(224, 238, 250);
   border-right-color: rgb(224, 238, 250);
   border-radius: 20px;
+    box-shadow:0px 1px 1px #888888a6;
 }
 img.hot {
   height: 40px;
@@ -235,9 +266,7 @@ img.hot.books {
   border-radius: 40px;
   background-color: rgb(227, 239, 250);
 }
-div.hotlist.comments {
-  width: 1080px;
-}
+
 </style>
 <script>
 // @ is an alias to /src
@@ -290,10 +319,16 @@ export default {
       document.getElementsByClassName("commentlist").item(1).innerHTML =
         "testtest";
     },
+    beforeCreate() {
+            document
+                .querySelector('body')
+                .setAttribute('style', 'background-color:#fafafa')
+        },
   },
   mounted() {
     this.UpdateBookImg();
     this.UpdateComments();
+    this.beforeCreate();
   },
   data() {
     return {

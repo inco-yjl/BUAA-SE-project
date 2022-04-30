@@ -15,9 +15,6 @@
   </div>
 </template>
 <style scoped>
-.comment{
-  width:95%;
-}
 .comments-pic{
   height:150px;
   width:110px;

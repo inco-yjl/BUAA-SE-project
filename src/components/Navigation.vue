@@ -1,6 +1,5 @@
 <template>
     <div id="navigation">
-        <hr id="line"> 
         <router-link id="Tohome" to="/"><span id="icon"><img id="sitelogo" alt="logo" src="@/assets/icon/logo.png" width=50px ></span></router-link>
         <router-link to="/book"><span  class="guide"><img id="bookimg" src="@/assets/icon/book.png" width=30px>图书</span></router-link>
         <router-link to="/video"><span  class="guide"><img id="videoimg" src="@/assets/icon/video.png" width=30px>影视</span></router-link>
@@ -29,13 +28,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&display=swap');
 #navigation{
     width:100%;
-    height:50px;
+    height:70px;
     margin: 0,0,0,auto;
     padding-top:0,0,0,auto;
     justify-content: flex-start;
     flex-direction: row;
     flex-wrap: nowrap;
     font-weight:bolder;
+    box-shadow:0px 2px 4px #888888;
 }
 #line{
     position: absolute;

@@ -23,6 +23,7 @@
 <style scoped>
 #selection_search{
   margin-top:0vh;
+  height:200px;
 }
 #search_button{
   height:15px;
@@ -33,9 +34,9 @@ div.selection {
 }
 
 button.selection_un {
-  background: white;
+  background: none;
   outline:none;
-  color: rgb(120, 118, 118);
+  color: rgb(96, 94, 94);
   font-size: 20px;
   border: none;
   transition: opacity 0.2s;
@@ -43,7 +44,7 @@ button.selection_un {
 
 
 button.selection_ed{
-  background: white;
+  background: none;
   outline: none;
   font-size: 20px;
   border: none;

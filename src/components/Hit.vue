@@ -34,11 +34,11 @@ export default {
   border-width:3px;
 }
 #hit{
-  width:1100px;
+  width:1050px;
   margin-top:0;
+  margin-bottom: 50px;
 }
 button.slick-prev:before, button.slick-next:before {
   color:rgb(90, 87, 87)!important;
-  margin:0,10px!important;
 }
 </style>

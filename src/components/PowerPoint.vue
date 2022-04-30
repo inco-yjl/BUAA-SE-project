@@ -38,7 +38,6 @@
       top:30px;
       width:1500px;
       padding: 0,0,0,0;
-      margin-left: 5vw;
       border-radius: 20px;
   }
 #demo .carousel-item.active{
@@ -46,7 +45,7 @@
 }
 #demo .carousel-inner{
    width:100%;
-    border-radius: 20px;
+   border-radius: 20px;
 }
  #demo .carousel-inner img {
       width:100%;
