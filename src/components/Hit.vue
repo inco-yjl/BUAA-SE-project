@@ -34,7 +34,7 @@ export default {
   border-width:3px;
 }
 #hit{
-  width:1050px;
+  width:1070px;
   margin-top:0;
   margin-bottom: 50px;
 }

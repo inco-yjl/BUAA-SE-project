@@ -1,53 +1,63 @@
 <template>
-  <div>
+  <div id="topicpage">
     <search></search>
 
-    <div class="topic_circle">
-      <div class="title">
-        <span class="topic_cirle_title">话题广场</span
-        ><button onclick="">
-          <img id="change_topic" src="@/assets/guide/change_topic.png" />
-        </button>
-      </div>
-
-      <div class="flex_box">
-        <div class="boxesOfTopic">
-          <div>
-            寻找春日气息<br /><a class="topicboxes-route" href="/1">参与话题</a>
+    <div class="flex_box">
+      <div class="topic_circle">
+        <div class="title">
+          <span class="topic_cirle_title">话题广场</span
+          ><button onclick="">
+            <img id="change_topic" src="@/assets/guide/change_topic.png" />
+          </button>
           </div>
-          <div>
-            今天是立秋<br /><a class="topicboxes-route" href="/1">参与话题</a>
-          </div>
-          <div>
-            你最爱的海上电影镜头<br /><a class="topicboxes-route" href="/1"
-              >参与话题</a
-            >
-          </div>
-          <div>
-            老家记忆<br /><a class="topicboxes-route" href="/1">参与话题</a>
-          </div>
-          <div>
-            后疫情时代的旅行<br /><a class="topicboxes-route" href="/1"
-              >参与话题</a
-            >
-          </div>
-          <div>
-            你拍过的最搞笑的照片<br /><a class="topicboxes-route" href="/1"
-              >参与话题</a
-            >
-          </div>
-          <div>
-            寻找春日气息<br /><a class="topicboxes-route" href="/1">参与话题</a>
-          </div>
-          <div>
-            寻找春日气息<br /><a class="topicboxes-route" href="/1">参与话题</a>
-          </div>
+          <div class="boxesOfTopic">
+            <div>
+              寻找春日气息<br /><a class="topicboxes-route" href="/1"
+                >参与话题</a
+              >
+            </div>
+            <div>
+              今天是立秋<br /><a class="topicboxes-route" href="/1">参与话题</a>
+            </div>
+            <div>
+              你最爱的海上电影镜头<br /><a class="topicboxes-route" href="/1"
+                >参与话题</a
+              >
+            </div>
+            <div>
+              老家记忆<br /><a class="topicboxes-route" href="/1">参与话题</a>
+            </div>
+            <div>
+              后疫情时代的旅行<br /><a class="topicboxes-route" href="/1"
+                >参与话题</a
+              >
+            </div>
+            <div>
+              你拍过的最搞笑的照片<br /><a class="topicboxes-route" href="/1"
+                >参与话题</a
+              >
+            </div>
+            <div>
+              寻找春日气息<br /><a class="topicboxes-route" href="/1"
+                >参与话题</a
+              >
+            </div>
+            <div>
+              寻找春日气息<br /><a class="topicboxes-route" href="/1"
+                >参与话题</a
+              >
+            </div>
         </div>
-        <div>
+      </div>
+        <div class="aside">
           <div class="collection">
             <a href="../user/topics">
               <img src="@/assets/guide/star_topic.png" />已关注话题
             </a>
+            <ul class="collection-list">
+              <li><a>老家记忆</a></li>
+              <li><a>这是在干嘛</a></li>
+            </ul>
           </div>
           <div></div>
           <br />
@@ -73,7 +83,7 @@
               <li><a href="/2">今天吃什么？</a></li>
             </ol>
           </div>
-        </div>
+        
       </div>
     </div>
     <div class="diarylist">
@@ -91,6 +101,9 @@
 
 
 <style scoped>
+#topicpage {
+  padding-left: 100px;
+}
 button {
   border-radius: 40px;
   background-color: white;
@@ -127,6 +140,20 @@ button:active {
 .flex_box {
   display: flex;
 }
+.aside {
+  margin-top: 30px;
+  margin-left: 10px;
+  margin-right: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 25px;
+  padding-bottom:20px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  background-color: white;
+  box-shadow: 0px 1px 1px #888888a6;
+}
 #change_topic {
   padding-left: 0;
   margin-right: 0;
@@ -139,14 +166,21 @@ div.title {
   color: rgb(52, 52, 52);
 }
 .topic_circle {
-  margin-top: 30px;
-  margin-left: 70px;
+  padding-top: 20px;
+  padding-left: 30px;
+  padding-bottom: 30px;
+  width:1150px;
+  margin-top:30px;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  box-shadow: 0px 1px 1px #888888a6;
 }
 .boxesOfTopic {
   display: flex;
   flex-wrap: wrap;
   width: 1150px;
-  margin-left: 20px;
 }
 .boxesOfTopic > div {
   height: 230px;
@@ -208,6 +242,10 @@ div.title {
 .collection a:active {
   color: orange;
 }
+.collection-list a{
+  font-size: 18px;
+  font-family:  Source Han Sans CN Normal;
+}
 .topic_page.title img {
   height: 35px;
   margin-left: 27px;
@@ -217,7 +255,7 @@ div.title {
   font-size: 17px;
   text-align: left;
   border-radius: 20px;
-  border-width: 3px;
+  border-width: 4px;
   padding: 15px;
   width: 340px;
   background-color: rgb(255, 250, 244);
@@ -226,6 +264,7 @@ div.title {
   border-bottom-color: antiquewhite;
   border-right-color: antiquewhite;
   border-style: solid;
+  box-shadow: 0px 1px 1px #888888a6;
 }
 .topic_page.title {
   padding-bottom: 10px;
@@ -240,10 +279,9 @@ div.title {
   width: 1650px;
 }
 .topic-display {
-  margin-left: 100px;
+  margin-left: 20px;
 }
 .diary-hit {
-  padding-left: 60px;
   margin-top: 10px;
 }
 .diary-hit img {
