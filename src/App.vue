@@ -16,7 +16,6 @@
 
 <script>
   import navigation from './components/Navigation'
- 
   export default {
     name: 'App',
     components:{

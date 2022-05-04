@@ -2,6 +2,14 @@
         <!--2.这里id对应new Vditor('vditor',{...})的第一个参数vidtor-->
         <div id="vditor" name="description" ></div> 
 </template>
+<style scoped>
+#vditor{
+  position: absolute;
+  left:400px;
+  right:400px;
+  top:300px;
+}
+</style>
     <script>
     import Vditor from "vditor";  //1.import一下vditor组件
     import "vditor/src/assets/scss/index.scss"; //1.import一下vditor组件样式
@@ -15,7 +23,7 @@
         mounted(){
             this.contentEditor = new Vditor('vditor', { //4.刚刚声明的变量contentEditor被赋值为一个Vditor实例,
               height: 500,                               
-              placeholder: '此处为话题内容……',             
+              placeholder: '此处为正文内容……',             
               theme: 'classic',
               counter: {
                 enable: true,
@@ -53,8 +61,6 @@
                 '|',
                 'quote',
                 'line',
-                'code',
-                'inline-code',
                 'insert-before',
                 'insert-after',
                 '|',
@@ -66,18 +72,8 @@
                 '|',
                 'edit-mode',
                 // 'content-theme',
-                'code-theme',
                 'export',
-                {
-                    name: 'more',
-                    toolbar: [
-                        'fullscreen',
-                        'both',
-                        'preview',
-                        'info',
-                        'help',
-                    ],
-                }],
+               ],
             })
         },
       methods: {

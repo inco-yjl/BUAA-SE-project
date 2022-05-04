@@ -143,6 +143,7 @@
 
 <style scoped>
 #home {
+  width:1600px;
   padding-left: 100px;
 }
 div.body {
@@ -322,6 +323,7 @@ import commentDisplay from "@/components/ComDisplay.vue";
 import bookImg1 from "@/assets/books/Zissc.jpg";
 import bookImg2 from "@/assets/books/Jiaoldr.jpg";
 import usericon from "@/assets/user/int.png";
+
 
 export default {
   name: "home",
