@@ -28,7 +28,11 @@ const routes = [
     name: 'editor',
     component: () => import(/* webpackChunkName: "about" */ '../views/Editor.vue')
   },
-
+  {
+    path: '/person',
+    name: 'person',
+    component: () => import('../views/Person.vue')
+  },
 ]
 
 const router = new VueRouter({

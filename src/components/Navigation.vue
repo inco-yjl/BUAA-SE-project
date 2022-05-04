@@ -12,7 +12,7 @@
                 <el-dropdown trigger="click">
                      <span class="el-dropdown-link">用户名<i class="el-icon-arrow-down el-icon--right"></i></span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-user-solid">个人主页</el-dropdown-item>
+                        <a href = "http://localhost:8080/person"><el-dropdown-item icon="el-icon-user-solid">个人主页</el-dropdown-item></a>
                         <el-dropdown-item icon="el-icon-chat-line-round">我的消息</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-switch-button">退出账号</el-dropdown-item>
                     </el-dropdown-menu>
