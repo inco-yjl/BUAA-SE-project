@@ -7,6 +7,13 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    redirect: '/login'
+}, {
+  path:'/',
+  name:'base',
+  component: () => import('../views/Base.vue'),
+  children: [{
+    path: '/home',
     name: 'home',
     component: () => import(/* webpackChunkName: "about" */ '../views/HomeView.vue')
   },
@@ -25,6 +32,19 @@ const routes = [
     name: 'person',
     component: () => import('../views/user/Person.vue')
   },
+  
+  ]
+},
+{
+  path: '/login',
+  name: 'login',
+  component: () => import('../views/login/Login.vue')
+},
+{
+  path: '/register',
+  name: 'register',
+  component: () => import('../views/login/Register.vue')
+},
 ]
 
 const router = new VueRouter({

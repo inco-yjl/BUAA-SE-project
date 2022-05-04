@@ -5,9 +5,11 @@ import store from './store'
 import ElementUI from 'element-ui';
 import './styles/font.less'
 import './styles/globalbackground.css'
-
+import axios from 'axios'
 Vue.use(ElementUI);
 Vue.config.productionTip = false
+
+Vue.prototype.$axios = axios
 
 new Vue({
   router,
