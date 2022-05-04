@@ -308,8 +308,8 @@ div.title {
 }
 </style>
 <script>
-import search from "../components/SelectSearch.vue";
-import diary from "../components/TopicDisplay.vue";
+import search from "@/components/SelectSearch.vue";
+import diary from "@/components/TopicDisplay.vue";
 import usericon from "@/assets/user/int.png";
 import topicpic1 from "@/assets/topic/spring.jpg";
 export default {

@@ -154,7 +154,7 @@
 }
 @font-face {
   font-family: 'massage_font';
-  src: url('../assets/fonts/思源黑体CN-Medium.otf');
+  src: url('@/assets/fonts/思源黑体CN-Medium.otf');
 }
 .heigh{
   height: 300px;
@@ -222,7 +222,7 @@
   <div class="个人主页">
     <search></search>
     <div class = "head-second">
-      <img class = "head-img round_icon" src = ../assets/user/int.jpg>
+      <img class = "head-img round_icon" src = "@/assets/user/int.jpg">
       <div class = "id-second">
         <span style="float: right;width: 80%;margin-top:10px; display:block; text-align: left;font-size: 25px">TheSleepGod</span>
         <span style="float: right;width: 80%;margin-top:10px; display:block; font-size: 18px;text-align: left">睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉睡觉</span>
@@ -241,55 +241,55 @@
             <li>
           <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
             <div class="normal_active"> <span class="massage">fgo</span> </div>
-            <div class="heigh_active"> <img class = "hidden_img" src = "../assets/img/1.jpg"> </div>
+            <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/1.jpg"> </div>
           </div>
             </li>
             <li>
           <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
             <div class="normal_active"> <span class="massage">原神</span> </div>
-            <div class="heigh_active"> <img class = "hidden_img" src = "../assets/img/2.jpg"> </div>
+            <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/2.jpg"> </div>
           </div>
             </li>
             <li>
           <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
             <div class="normal_active"> <span class="massage">龙斗士</span> </div>
-            <div class="heigh_active"> <img class = "hidden_img" src = "../assets/img/3.jpg"> </div>
+            <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/3.jpg"> </div>
           </div>
             </li> 
             <li>
           <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
             <div class="normal_active"> <span class="massage">双人成行</span> </div>
-            <div class="heigh_active"> <img class = "hidden_img" src = "../assets/img/4.jpg"> </div>
+            <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/4.jpg"> </div>
           </div>
             </li>
             <li>
           <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
             <div class="normal_active"> <span class="massage">lol</span> </div>
-            <div class="heigh_active"> <img class = "hidden_img" src = "../assets/img/5.jpg"> </div>
+            <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/5.jpg"> </div>
           </div>
             </li>
             <li>  
           <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
             <div class="normal_active"> <span class="massage">NoManSky</span> </div>
-            <div class="heigh_active"> <img class = "hidden_img" src = "../assets/img/6.jpg"></div>
+            <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/6.jpg"></div>
           </div>
             </li>
             <li>
               <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
                 <div class="normal_active"> <span class="massage">Gta</span> </div>
-                <div class="heigh_active"> <img class = "hidden_img" src = "../assets/img/1.jpg"> </div>
+                <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/1.jpg"> </div>
               </div>
             </li>
             <li>
               <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
                 <div class="normal_active"> <span class="massage">csgo</span> </div>
-                <div class="heigh_active"> <img class = "hidden_img" src = "../assets/img/2.jpg"></div>
+                <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/2.jpg"></div>
               </div>
             </li>
             <li>
               <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
                 <div class="normal_active"> <span class="massage">Wild</span> </div>
-                <div class="heigh_active"> <img class = "hidden_img" src = "../assets/img/3.jpg"> </div>
+                <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/3.jpg"> </div>
               </div>
             </li>
           </ul>
@@ -319,28 +319,28 @@
             </span>
           </div>
           <div class = "mid_message ">
-            <img class = "showImg" src="../assets/img/1.jpg">
+            <img class = "showImg" src="@/assets/img/1.jpg">
             <el-button plain style = "text-align: right; float: right">删除</el-button>
             <span class = "mid_message_font">
               “我在那之前从来没有为死亡而哀悼过，也从没有因死亡而恐惧。甚至都不曾意识。”“但是，拥有着和自己对等力量的生命在我眼前消失了。即便我同所有人一样，最初就知道有“死”存在，那却是我第一次真正的感受到它。”吉尔伽美什所说的“对等的生命”是指恩奇都吧。叙事诗上说，吉尔伽美什亲眼目睹了恩奇都的死亡，察觉到自己终有一日也会如此死去。他对这样的命运惶惶不安，所以才会为了挣脱死的束缚、为了克服死而去拜访贤者。英雄王最后的冒险。前往冥界奇修迦尔|Kishgal|展开的探寻永生之路。
             </span> 
           </div>
           <div class = "mid_message ">
-            <img class = "showImg" src="../assets/img/6.jpg">
+            <img class = "showImg" src="@/assets/img/6.jpg">
             <el-button plain style = "text-align: right; float: right">删除</el-button>
             <span class = "mid_message_font">
              故事的最后，雪停了，二人来到室外，玛修生平第一次，在她熟悉的世界看到了晴朗的天空。
             </span>
           </div>
           <div class = "mid_message ">
-            <img class = "showImg" src="../assets/img/5.jpg">
+            <img class = "showImg" src="@/assets/img/5.jpg">
             <el-button plain style = "text-align: right; float: right">删除</el-button>
             <span class = "mid_message_font">
              欧嘉斯特生来具有既不属于光明也不属于黑暗的强大魔力，其魔力庞大程度及强度质量在十二盾中最高，被马卡洛夫称为“其他十二盾根本无法相提并论的大魔力之主”。他精通了古今中外的一切魔法，这就是他“魔法王"称号的由来。
             </span>
           </div>
           <div class = "mid_message ">
-            <img class = "showImg" src="../assets/img/4.jpg">
+            <img class = "showImg" src="@/assets/img/4.jpg">
             <el-button plain style = "text-align: right; float: right">删除</el-button>
             <span class = "mid_message_font">
              如果那一天真的来了，橘子花洁白如雪，新娘的裙子也洁白如雪，骏马拉着的婚车从古堡中驶出，而你握着冰冷的狙击枪等候在那片必经的森林里，请瞄准车轴，安静地激发，做你一生中最大胆也最冒险的事……即使我不在你的身边
@@ -356,7 +356,7 @@
             </span>
         </div>
         <div class = "mylove">
-          <img style="height: 400px; width: 300px; filter:blur(1px)" src = "../assets/img/3.jpg">
+          <img style="height: 400px; width: 300px; filter:blur(1px)" src = "@/assets/img/3.jpg">
           <div class="text1">
             <p>红楼梦</p>
           </div>
@@ -364,7 +364,7 @@
           <el-progress :percentage="72" :format="format"></el-progress>
         </div>
         <div class = "mylove">
-          <img style="height: 400px; width: 300px; filter:blur(1px)" src = "../assets/img/4.jpg">
+          <img style="height: 400px; width: 300px; filter:blur(1px)" src = "@/assets/img/4.jpg">
           <div class="text1">
             <p>龙族</p>
           </div>
@@ -380,7 +380,7 @@
 
 <script>
 // @ is an alias to /src
-import search from '../components/SelectSearch.vue'
+import search from '@/components/SelectSearch.vue'
 import Scroll from '@/components/ScrollHorizontally.vue'
 export default {
   name: 'HomeView',

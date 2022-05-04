@@ -27,10 +27,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&display=swap');
 #navigation{
-    width:100%;
+    width:1690.5px;
     height:70px;
-    margin: 0,0,0,auto;
-    padding-top:0,0,0,auto;
+    margin: 0,0,0,0;
+    padding-top:0,0,0,0;
     justify-content: flex-start;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -54,14 +54,14 @@
     position: relative;
     top:15px;
     left:30px;
-    margin-right:10vw ;
+    margin-right:200px ;
     float:left;
 }
 
 span.guide{
     position: relative;
     top:14px;
-    margin-right:10vw ;
+    margin-right:200px ;
     float:left;
     font-family: 'Noto Serif SC', serif;
     font-size: 30px;

@@ -7,7 +7,7 @@
 <script>
 import vditor from "@/components/Editor.vue";
 export default {
-  name: "home",
+  name: "editor",
   components: {
     vditor
   },}
