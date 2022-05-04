@@ -18,7 +18,7 @@ const routes = [
   {
     path: '/editor',
     name: 'editor',
-    component: () => import(/* webpackChunkName: "about" */ '../views/editors/BookEditor.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/editors/CommentEditor.vue')
   },
   {
     path: '/person',

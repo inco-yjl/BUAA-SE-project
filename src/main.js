@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import ElementUI from 'element-ui';
 import './styles/font.less'
-
+import './styles/globalbackground.css'
 
 Vue.use(ElementUI);
 Vue.config.productionTip = false

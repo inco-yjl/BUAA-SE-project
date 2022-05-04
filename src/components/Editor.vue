@@ -22,7 +22,8 @@
         },
         mounted(){
             this.contentEditor = new Vditor('vditor', { //4.刚刚声明的变量contentEditor被赋值为一个Vditor实例,
-              height: 500,                               
+              height: 650,       
+              width:800,                        
               placeholder: '此处为正文内容……',             
               theme: 'classic',
               counter: {

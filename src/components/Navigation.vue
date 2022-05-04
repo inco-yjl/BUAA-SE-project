@@ -27,7 +27,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&display=swap');
 #navigation{
-    width:1690.5px;
+    width:1690px;
     height:70px;
     margin: 0,0,0,0;
     padding-top:0,0,0,0;
