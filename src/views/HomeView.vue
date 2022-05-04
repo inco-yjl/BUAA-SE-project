@@ -2,16 +2,15 @@
   <div id="home">
     <search></search>
     <powerpoint></powerpoint>
-    <div id="body">
+    <div class="body">
       <div id="vertical">
         <div class="books hothit">
-          <span class="title"
-            ><img class="hot books" src="@/assets/title/books.png" />流行图书<a
-              href="http://localhost:8080/book"
-              class="Fordetail"
-              >&ensp;>&ensp;</a
-            ></span
-          >
+          <span class="title">
+            <img class="hot books" src="@/assets/title/books.png" />流行图书
+            <a href="http://localhost:8080/book" class="Fordetail">
+              &ensp;>&ensp;
+            </a>
+          </span>
           <hit></hit>
         </div>
         <div class="movies hothit">
@@ -118,6 +117,9 @@
         <div id="bookcomment">
           <span class="title">
             <img class="hot" src="@/assets/title/book_comment.png" />热门书评
+            <a href="http://localhost:8080/book" class="Fordetail">
+              &ensp;>&ensp;
+            </a>
           </span>
 
           <comment-display></comment-display>
@@ -127,8 +129,10 @@
         <div id="moviecomment">
           <span class="title">
             <img class="hot" src="@/assets/title/movie_comment.png" />热门影评
+            <a href="http://localhost:8080/book" class="Fordetail">
+              &ensp;>&ensp;
+            </a>
           </span>
-
           <comment-display></comment-display>
           <comment-display></comment-display>
         </div>
@@ -141,7 +145,7 @@
 #home {
   padding-left: 100px;
 }
-div#body {
+div.body {
   width: 1580px;
   display: flex;
   flex-wrap: wrap;
@@ -155,7 +159,7 @@ div#body {
   border-style: solid;
   border-width: 1px;
   border-color: rgb(181, 181, 181);
-  box-shadow: 0px 1px 1px #888888a6;
+  box-shadow: 0px 2px 3px #888888a6;
 }
 .aside {
   margin-top: 80px;
@@ -168,7 +172,7 @@ div#body {
   border-width: 1px;
   border-color: rgb(181, 181, 181);
   background-color: white;
-  box-shadow: 0px 1px 1px #888888a6;
+  box-shadow: 0px 2px 3px #888888a6;
 }
 .title {
   text-align: left;
@@ -201,7 +205,7 @@ li {
   flex-wrap: nowrap;
 }
 #bookcomment {
-  width:750px;
+  width: 750px;
   margin-top: 50px;
   margin-right: 10px;
   text-align: left;
@@ -213,10 +217,10 @@ li {
   border-width: 1px;
   border-color: rgb(181, 181, 181);
   background-color: white;
-  box-shadow: 0px 1px 1px #888888a6;
+  box-shadow: 0px 2px 3px #888888a6;
 }
 #moviecomment {
-  width:750px;
+  width: 750px;
   margin-top: 50px;
   margin-right: 10px;
   text-align: left;
@@ -228,7 +232,7 @@ li {
   border-width: 1px;
   border-color: rgb(181, 181, 181);
   background-color: white;
-  box-shadow: 0px 1px 1px #888888a6;
+  box-shadow: 0px 2px 3px #888888a6;
 }
 .comments .title {
   font-size: 30px;
@@ -280,10 +284,10 @@ img.hot {
   height: 40px;
   vertical-align: -30%;
 }
-#bookcomment img{
+#bookcomment img {
   vertical-align: -10%;
 }
-#moviecomment img{
+#moviecomment img {
   vertical-align: -20%;
 }
 img.hot.books {
@@ -294,8 +298,12 @@ img.hot.books {
   font-size: 30px;
   color: rgb(90, 88, 88);
   font-weight: 600;
-  margin-left: 25px;
+  margin-left: 5px;
   vertical-align: -2%;
+}
+.comments .Fordetail {
+  font-size: 40px;
+  margin-left: 0px;
 }
 .title a:hover {
   text-decoration: none;
@@ -358,16 +366,10 @@ export default {
       document.getElementsByClassName("commentlist").item(1).innerHTML =
         "testtest";
     },
-    beforeCreate() {
-      document
-        .querySelector("body")
-        .setAttribute("style", "background-color:#fafafa");
-    },
   },
   mounted() {
     this.UpdateBookImg();
     this.UpdateComments();
-    this.beforeCreate();
   },
   data() {
     return {

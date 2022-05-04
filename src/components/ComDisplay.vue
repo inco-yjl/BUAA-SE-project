@@ -15,9 +15,13 @@
   </div>
 </template>
 <style scoped>
+.comment{
+  padding-bottom:0px;
+  margin-bottom: 0px;
+}
 .comments-pic{
-  height:150px;
-  width:110px;
+  height:120px;
+  width:90px;
 }
 .comments-content{
     display: flex;

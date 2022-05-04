@@ -13,7 +13,7 @@
  <div style="padding:5px;"  class="search_box">
                         <el-row :gutter="10">
                             <el-col :span="14">
-                                <el-input style="width:80%;" v-model="input"  placeholder="请输入搜索的关键字"><template slot="append"><el-button type="primary" plain @click=""><img id="search_button" src="@/assets/guide/search.png"></el-button></template></el-input>
+                                <el-input v-model="input"  placeholder="请输入搜索的关键字"><template slot="append"><el-button type="primary" plain @click=""><img id="search_button" src="@/assets/guide/search.png"></el-button></template></el-input>
                             </el-col>
                             
                         </el-row>
@@ -22,17 +22,21 @@
 </template>
 <style scoped>
 #selection_search{
-  margin-top:0vh;
+  padding-top:30px;
   height:200px;
+  margin-bottom: 10px;
 }
 #search_button{
   height:15px;
 }
 div.selection {
   text-align: left;
-  padding-left: 7vw;
+  padding-left: 20px;
 }
-
+.search_box{
+  margin-left:0px;
+  width:1000px;
+}
 button.selection_un {
   background: none;
   outline:none;

@@ -33,7 +33,7 @@
 </template>
 <style scoped>
 .topicdiary {
-  width: 95%;
+  width: 1200px;
   text-align: left;
 }
 .diary-display-body {
@@ -41,7 +41,9 @@
   flex-wrap: wrap;
 }
 .display-publisher {
-  width: 1100px;
+  margin-top:0;
+  padding-top:0;
+  width: 820px;
 }
 .publishtime {
   padding-left: 20px;
@@ -65,13 +67,13 @@
   color: rgb(31, 169, 255);
 }
 .diary-pic{
-  height:130px;
-  padding-left: 0;
-  padding-right: 0;
+  height:200px;
+  align-content: middle;
 }
 div.diary-origin-pic{
-  height: 150px;
-  width: 220px;
+  margin-left: 20px;
+  height: 180px;
+  width: 300px;
   overflow:hidden;
 }
 .diary-content {
@@ -96,7 +98,7 @@ div.diary-origin-pic{
   margin-left: 50px;
 }
 .diarytext {
-  width: 1200px;
+  width: 800px;
   margin-left: 20px;
 }
 a.diarylist {

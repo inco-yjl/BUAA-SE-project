@@ -33,7 +33,7 @@ nav a.router-link-exact-active {
     components:{
       navigation
     },
-   
+
   }
 
 </script>
