@@ -12,13 +12,7 @@
   justify-content: center;
   overflow: hidden;
 }
-.person{
-  width: 100%;
-  height: 70px;
-  position: sticky;
-  top:0;
-  border: 1px dashed black;
-}
+
 .head-img{
   float: left;
   height: 100px;
@@ -26,14 +20,7 @@
   position: relative;
   left: 100px;
 }
-.id{
-  float: left;
-  width: 30%;
-  font-size: 20px;
-  margin-bottom: 0;
-  position: absolute;
-  bottom: 10px;
-}
+
 .id-second{
   float: left;
   width: 60%;
@@ -48,17 +35,7 @@
   left: 100px;
   right: 100px;
 }
-.edge{
-  width: 20%;
-  margin-top: 10px;
-  padding: 3px;
-  height: 100px;
-  z-index: 2;
-  border: 1px inset saddlebrown;
-}
-.mid_edge{
-  border: 1px inset saddlebrown;
-}
+
 .left{
   float: left;
   position: relative;
@@ -124,14 +101,7 @@
   position: relative;
   margin-top: 5px;
 }
-.line{
-  line-height: 1px;
-}
-.button-delect{
-  position: relative;
-  top: 20px;
-  right: 200px;
-}
+
 .title{
   height: 30px;
   margin-top: 50px;
@@ -139,22 +109,14 @@
   text-align: left;
   margin-left: 10px;
 }
-.message{
-  margin-top:6px;
-  display:block;
-  font-size:14px;
-  text-align: left;
-  margin-left: 10px;
-}
+
 .b_radius{
   border-radius: 3px
 }
-.yellow {
-  background: yellow;
-}
+
 @font-face {
   font-family: 'massage_font';
-  src: url('@/assets/fonts/思源黑体CN-Medium.otf');
+  src: url('../../assets/fonts/思源黑体CN-Medium.otf');
 }
 .heigh{
   height: 300px;
@@ -191,9 +153,7 @@
   
 }
 
-.el-aside {
-  color: #333;
-}
+
 .showImg{
   height: 240px;
   width: 200px;

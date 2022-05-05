@@ -1,13 +1,13 @@
 <template>
   <div class="comment">
     <hr />
-    <a class="userOfcomment" href="/otherusers/1">
+    <a class="userOfcomment" href="../views/user/otherusers.vue">
     <img class="iconOfuser" /><span class="nameOfuser"></span>
     </a>
     <br />
         <div class="comments-content">
             <div><a class="comment-origin" href="/book/1"><img class="comments-pic" src="@/assets/books/Zissc.jpg"></a></div>
-            <div class="comments-text"><a class="commentlist" href="/book/1/comments/1"></a></div>
+            <div class="comments-text"><a class="commentlist" href="/book/1/comments/1"></a></div> <!-- 路径问题 -->
         </div>
     <div class="origin">
       <a href="http://localhost:8080/group"> ————查看原帖</a>
@@ -16,8 +16,8 @@
 </template>
 <style scoped>
 .comment{
-  padding-bottom:0px;
-  margin-bottom: 0px;
+  padding-bottom:0;
+  margin-bottom: 0;
 }
 .comments-pic{
   height:120px;
