@@ -8,7 +8,8 @@ const routes = [
   {
     path: '/',
     redirect: '/login'
-}, {
+}, 
+  {
   path:'/',
   name:'base',
   component: () => import('../views/Base.vue'),
@@ -31,8 +32,12 @@ const routes = [
     path: '/person',
     name: 'person',
     component: () => import('../views/user/Person.vue')
-  },
-  
+  }, 
+    {
+      path: '/group',
+      name: 'group',
+      component: () => import('../views/group/group.vue')
+    }
   ]
 },
 {

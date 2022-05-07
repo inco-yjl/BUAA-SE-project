@@ -44,7 +44,6 @@
 </template>
  
 <script>
-import axios from "axios";
 export default {
   name: "login",
   data() {
@@ -91,7 +90,7 @@ export default {
 .login {
   width: 100%;
   height: 100vh;
-  background: url("@/assets/bg/login.jpg") no-repeat;
+  background: url("../../assets/bg/login.jpg") no-repeat;
   overflow: hidden;
 }
 .login-wrap {

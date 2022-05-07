@@ -8,27 +8,29 @@
 
 <style>
 .el-carousel{
-  width: 1200px;
+  width: 600px;
+  height: 600px;
 }
 .el-carousel__item h3 {
   color: #475669;
   font-size: 14px;
   opacity: 0.75;
-  line-height: 200px;
   margin: 0;
+  height: 500px;
 }
 .el-carousel__item img{
-  height: 300px;
-  width: 300px;
+  height: 600px;
+  width: 500px;
 }
 .el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
-  width: 600px;
+  width: 300px;
+  height: 500px;
 }
 
 .el-carousel__item:nth-child(2n+1) {
   background-color: #d3dce6;
-  width: 600px;
+  width: 300px;
+  height: 500px;
 }
 </style>
 
