@@ -28,8 +28,14 @@
           <router-link to="/">找回密码</router-link>
           <router-link to="/register">注册账号</router-link>
           <el-form-item>
-            <el-button id="login-button" type="primary" icon="el-icon-upload" @click="doLogin()">登 录</el-button>
-              <button id="pass-button">游客进入</button>
+            <el-button
+              id="login-button"
+              type="primary"
+              icon="el-icon-upload"
+              @click="doLogin()"
+              >登 录</el-button
+            >
+            <button id="pass-button">游客进入</button>
           </el-form-item>
         </el-form>
       </el-row>
@@ -82,7 +88,6 @@ export default {
  
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .login {
   width: 100%;
   height: 100vh;
@@ -114,23 +119,23 @@ hr {
 a {
   text-decoration: none;
   color: #aaa;
-  
-  padding-right: 20px;
+
+  margin-left: 60px;
   font-size: 15px;
 }
 a:hover {
   color: rgb(255, 0, 0);
 }
-#login-button{
-position: absolute;
+#login-button {
+  position: absolute;
   width: 100px;
-  left:0px;
+  left: 0px;
 }
 #pass-button {
   position: absolute;
-  border:none;
+  border: none;
   background: none;
   width: 100px;
-  left:100px;
+  left: 100px;
 }
 </style>
