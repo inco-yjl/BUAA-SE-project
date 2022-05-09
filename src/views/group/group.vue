@@ -18,13 +18,15 @@ export default {
 
 <style>
 .body{
-  position: relative;
+  position: absolute;
   top: 150px;
   height: 1600px;
   width: 1690px;
   left: 100px;
 }
 .head_title{
+  position: relative;
+  left: -100px;
   width: 1690px;
   height: 200px;
   background: #2C8DF4;
