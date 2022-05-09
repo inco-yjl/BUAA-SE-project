@@ -37,7 +37,32 @@ const routes = [
       path: '/group',
       name: 'group',
       component: () => import('../views/group/group.vue')
-    }
+    },
+    {
+      path: '/group/main',
+      name: 'groupmain',
+      component: () => import('../views/group/GroupMain.vue')
+    },
+    {
+      path: '/group/addgroup',
+      name: 'groupadd',
+      component: () => import('../views/group/GroupAdd.vue')
+    },
+    {
+      path: '/group/commit',
+      name: 'groupcommit',
+      component: () => import('../views/group/GroupCommit.vue')
+    },
+    {
+      path: '/group/reply',
+      name: 'groupreply',
+      component: () => import('../views/group/GroupReply.vue')
+    },
+    {
+      path: '/group/recommend',
+      name: 'grouprecommend',
+      component: () => import('../views/group/GroupRecommit.vue')
+    },
   ]
 },
 {
