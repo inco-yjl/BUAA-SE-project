@@ -20,13 +20,13 @@
         </button>
         来自话题<a class="topic-origin-name"></a>
       </div>
-      <div class="diarytext">
-        <a class="diarylist" href="/topic/1/comments/1"></a>
-      </div>
       <div class="diary-origin-pic">
         <a class="diary-origin" href="/topic/1/diary/1"
           ><img class="diary-pic" />
         </a>
+      </div>
+      <div class="diarytext">
+        <a class="diarylist" href="/topic/1/comments/1"></a>
       </div>
     </div>
   </div>
@@ -51,15 +51,16 @@
   color: rgb(157, 157, 157);
 }
 .topic-origin {
+  position: relative;
   font-size: 18px;
   text-align: left;
-  width: 370px;
+  width: 1000px;
 }
 .topic-origin a {
   font-family: Source Han Sans CN Normal;
   color: black;
   text-decoration: none;
-  padding-left: 10px;
+  padding-left: 5px;
   text-decoration: none;
 }
 .topic-origin a:hover {
@@ -71,9 +72,12 @@
   align-content: middle;
 }
 div.diary-origin-pic{
+  position: relative;
+  left:0;
   margin-left: 20px;
+  border-radius: 5px;
   height: 180px;
-  width: 300px;
+  width: 270px;
   overflow:hidden;
 }
 .diary-content {
@@ -94,12 +98,9 @@ div.diary-origin-pic{
   margin-right: 5px;
   vertical-align: sub;
 }
-.diary-origin {
-  margin-left: 50px;
-}
 .diarytext {
   width: 800px;
-  margin-left: 20px;
+  margin-left: 30px;
 }
 a.diarylist {
   font-size: 17px;

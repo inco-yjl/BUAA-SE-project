@@ -6,22 +6,23 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    redirect: '/login'
-}, 
-  {
   path:'/',
   name:'base',
   component: () => import('../views/Base.vue'),
   children: [{
     path: '/home',
     name: 'home',
-    component: () => import(/* webpackChunkName: "about" */ '../views/HomeView.vue')
+    component: HomeView
   },
   {
     path: '/topic',
     name: 'topic',
     component: () => import(/* webpackChunkName: "about" */ '../views/Topic/Topic.vue')
+  },
+  {
+    path: '/topic/detail',
+    name: 'topicdetail',
+    component: () =>import('../views/Topic/TopicDetail.vue')
   },
   {
     path: '/editor',
@@ -63,18 +64,19 @@ const routes = [
       name: 'grouprecommend',
       component: () => import('../views/group/GroupRecommit.vue')
     },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/user/Login.vue')
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/user/Register.vue')
+    },
   ]
 },
-{
-  path: '/login',
-  name: 'login',
-  component: () => import('../views/login/Login.vue')
-},
-{
-  path: '/register',
-  name: 'register',
-  component: () => import('../views/login/Register.vue')
-},
+
 ]
 
 const router = new VueRouter({

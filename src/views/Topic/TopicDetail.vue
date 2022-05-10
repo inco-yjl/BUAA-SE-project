@@ -1,53 +1,13 @@
 <template>
-  <div id="topicpage">
+  <div id="topicdetail">
     <search></search>
     <div class="body">
       <div class="flex_box">
-        <div class="topic_circle">
+        <div class="introOfTopic">
           <div class="title">
-            <span class="topic_cirle_title">话题广场</span
-            ><button onclick="">
-              <img id="change_topic" src="@/assets/guide/change_topic.png" />
-            </button>
+            <span class="topic_cirle_title">标题</span>
           </div>
-          <div class="boxesOfTopic">
-            <div>
-              寻找春日气息<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              今天是立秋<br /><a class="topicboxes-route" href="/1">参与话题</a>
-            </div>
-            <div>
-              你最爱的海上电影镜头<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              老家记忆<br /><a class="topicboxes-route" href="/1">参与话题</a>
-            </div>
-            <div>
-              后疫情时代的旅行<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              你拍过的最搞笑的照片<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              寻找春日气息<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              寻找春日气息<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-          </div>
+          <div class="boxesOfTopic"></div>
         </div>
         <div class="aside">
           <div class="collection">
@@ -150,7 +110,7 @@ button.selection_ed {
   color: black;
   font-weight: bold;
 }
-#topicpage {
+#topicdetail {
   padding-left: 100px;
 }
 div.body {
@@ -164,24 +124,7 @@ div.body {
   position: relative;
   z-index: 0;
 }
-.topic_circle button::before {
-  position: absolute;
-  content: "";
-  transition: all 0.3s ease;
-  border-radius: 10px;
-  z-index: -1;
-}
-.topic_circle button:hover::before {
-  top: 0;
-  height: 100%;
-}
 
-.topic_circle button:active {
-  top: 2px;
-}
-.topic_cirle_title {
-  margin-right: 30px;
-}
 .hotlist a {
   color: rgb(2, 98, 182);
   font-weight: 500;
@@ -388,7 +331,7 @@ div.title {
 }
 .topic-page-number {
   margin-left: 400px;
-  padding-bottom:40px;
+  padding-bottom: 40px;
 }
 </style>
 <style>
@@ -503,9 +446,7 @@ export default {
           .setAttribute("src", this.dt[i].img);
       }
     },
-    changeTopicdt(){
-      
-    }
+    changeTopicdt() {},
   },
   mounted() {
     this.Updatediary();

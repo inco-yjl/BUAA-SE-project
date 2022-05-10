@@ -34,7 +34,7 @@
 }
 .content-img {
   position: absolute;
-  left: 300px;
+  left: 445px;
   top: 100px;
   padding-right: 400px;
   height: 150px;

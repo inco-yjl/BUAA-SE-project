@@ -176,6 +176,7 @@ div.body {
   box-shadow: 0px 2px 3px #888888a6;
 }
 .title {
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   text-align: left;
   font-size: 20px;
   padding-left: 10px;
@@ -334,6 +335,10 @@ export default {
     commentDisplay,
   },
   methods: {
+     addNavigation(){
+            this.$parent.notLogin=true;
+      console.log(this.$parent.notLogin);
+    },
     //this is the function to update the images of books
     UpdateBookImg() {
       document
@@ -370,13 +375,9 @@ export default {
     },
   },
   mounted() {
+    this,this.addNavigation();
     this.UpdateBookImg();
     this.UpdateComments();
-  },
-  data() {
-    return {
-      input: "",
-    };
   },
 };
 </script>

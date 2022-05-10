@@ -19,6 +19,9 @@
   padding-bottom:0;
   margin-bottom: 0;
 }
+.nameOfuser{
+  font-family: PingFang SC;
+}
 .comments-pic{
   height:120px;
   width:90px;

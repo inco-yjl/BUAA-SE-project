@@ -1,125 +1,111 @@
 <template>
-  <div id="base">
-    <navigation v-if="notLogin"></navigation>
+  <div  id="base">
+      <template v-if="notLogin">
+      <div  id="navigation">
+        <router-link id="Tohome" to="/home"><span id="icon"><img id="sitelogo" alt="logo" src="@/assets/icon/logo.png" width=50px ></span></router-link>
+        <router-link to="/book"><span  class="guide"><img id="bookimg" src="@/assets/icon/book.png" width=30px>图书</span></router-link>
+        <router-link to="/video"><span  class="guide"><img id="videoimg" src="@/assets/icon/video.png" width=30px>影视</span></router-link>
+        <router-link to="/group"><span  class="guide"><img id="videoimg" src="@/assets/icon/group.png" width=30px>小组</span></router-link>
+        <router-link to="/topic"><span  class="guide"><img id="videoimg" src="@/assets/icon/topic.png" width=30px>话题</span></router-link>
+        
+        <span id="login">
+             <el-col :span="25">
+                <span class="demonstration"><img src="@/assets/user/int.png" width=30px></span>
+                <el-dropdown trigger="click">
+                     <span class="el-dropdown-link">用户名<i class="el-icon-arrow-down el-icon--right"></i></span>
+                    <el-dropdown-menu slot="dropdown">
+                        <a href = "http://localhost:8080/person"><el-dropdown-item icon="el-icon-user-solid">个人主页</el-dropdown-item></a>
+                        <el-dropdown-item icon="el-icon-chat-line-round">我的消息</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-switch-button">退出账号</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </el-col>
+        </span> 
+        </div>
+        </template>
+        <router-view :key="this.$route.path"></router-view>
   </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+<script>
+export default ({
+   data () {
+       var notLogin=true;
+    return {
+      notLogin,
+    }
+  },
+  methods: {
+    // 初始化
+    isLogin (msg) {
+      this.notLoginn=false;
+    }
+  }
+}
+)
+</script>
+
+
+<style scoped>
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&display=swap');
+#navigation{
+    width:1690px;
+    height:70px;
+    margin: 0,0,0,0;
+    padding-top:0,0,0,0;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    font-weight:bolder;
+    box-shadow:0px 2px 4px #888888;
+}
+#line{
+    position: absolute;
+    top:65px;
+    left: 0;
+    right: 0;
+}
+#login{
+    position: relative;
+    top:20px;
+    float:right;
+    margin-right:0;
+    padding-right: 0;
+}
+#icon{
+    position: relative;
+    top:15px;
+    left:30px;
+    margin-right:200px ;
+    float:left;
 }
 
+span.guide{
+    position: relative;
+    top:14px;
+    margin-right:200px ;
+    float:left;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 30px;
+    transition: opacity 0.2s;
+}
+a{
+    color:black;
+    transition: all .5s ease;  
+}
+a.router-link-active{
+    color:rgb(130, 130, 130);
+}
+a:hover{
+    color:rgb(111, 184, 186);
+}
+a:hover::after {
+  opacity: 1;
+}
+img{
+    vertical-align:-10%;
+}
 </style>
 
-<script>
-import navigation from '@/components/Navigation'
-import { ref } from 'vue';
-import { useRoute } from 'vue-router';
 
-// 设置用户权限
-var isAdmin = false;
-if (localStorage.getItem('adminTag')) {
-    var adminTag = localStorage.getItem('adminTag');
-    if (adminTag === '0') {
-        isAdmin = true;
-    }
-}
-
-export default {
-    name: 'base',
-    components: {
-        navigation
-    },
-    provide() {
-        // 父组件中通过provide来提供变量，在子组件中通过inject来注入变量。
-        return {
-            reload: this.reload
-        };
-    },
-
-    setup() {
-        const route = useRoute();
-        const currentTab = ref([route.path]);
-        return {
-            currentTab
-        };
-    },
-    data() {
-        return {
-            isRouterAlive: true, // 控制视图是否显示的变量
-            currentScreenWidth: window.screen.availWidth - 17,
-            currentScreenHeight: window.screen.availHeight,
-            currentScaleRatio: 1.0,
-            currentLeftOffset: '0%',
-            currentTopOffset: '0px',
-            isAdmin: isAdmin, // 是否有权限访问页面
-            notLogin:true,
-            msg:'',
-        };
-    },
-    mounted() {
-        // 根据网页可见区域宽自动缩放屏幕
-        window.onresize = () => {
-            return (() => {
-                this.currentScreenWidth = window.screen.availWidth - 17;
-                this.currentScreenHeight = window.screen.availHeight;
-            })()
-        }
-    },
-    watch: {
-        currentScreenWidth: {
-            handler: function (val, oldVal) {
-                console.log('检测到屏幕分辨率发生变化，当前宽度：', val);
-                if (val <= 1920) { // 小于设计稿尺寸的屏幕大小
-                    // 第一步：通过scale改变整个页面的尺寸
-                    this.currentScaleRatio = val / 1920;
-                    // 第二步：解决横向偏移量问题
-                    // 注意，默认存在右侧的纵向滚动条，因此可显示区域实际宽度为 val =（window.screen.availWidth - 17）px
-                    this.currentLeftOffset = '-' + ((1920 - val) / 2 / val * 100) + '%';
-                    // 第三步：解决纵向偏移量问题
-                    this.currentTopOffset = '-' + ((1080 - 1080 * this.currentScaleRatio) / 2) + 'px';
-                } else { // 大于设计稿尺寸的屏幕大小
-                    // 第一步：通过scale改变整个页面的尺寸
-                    this.currentScaleRatio = val / 1920;
-                    // 第二步：解决横向偏移量问题
-                    this.currentLeftOffset = ((val - 1920) / 2 / val * 100) + '%';
-                    // 第三步：解决纵向偏移量问题
-                    this.currentTopOffset = ((1080 * this.currentScaleRatio - 1080) / 2) + 'px';
-                }
-                // console.log('检测到屏幕尺寸发生变化', val, this.currentScaleRatio, this.currentLeftOffset, this.currentTopOffset);
-            },
-            immediate: true
-        },
-         '$route':function(){
-        if((this.$route.name=='login') ||(this.$route.name=='register')){
-          this.notLogin=false;
-        }
-        else{
-          this.notLogin=true;
-        }
-      }
-    },
-    methods: {
-        reload() {
-            console.log('come in2');
-            this.isRouterAlive = false; // 先关闭，
-            this.$nextTick(function () {
-                this.isRouterAlive = true; // 再打开
-            });
-        },
-
-        // 点击菜单，路由跳转,注意的是当点击MenuItem才会触发此函数
-        menuClick({ item, key, keyPath }) {
-            // 获取到当前的key,并且跳转
-            this.$router.push({
-                path: item.index
-            });
-            console.log(item.index);
-        }
-    }
-};
-
-</script>

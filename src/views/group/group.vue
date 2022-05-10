@@ -1,5 +1,5 @@
 <template>
-<div id = "body">
+<div id = "group-body">
   <div class="head_title">
     <h1 style="text-align: left;  font-weight: bolder;">我的小组讨论</h1>
   </div>
@@ -168,17 +168,17 @@ export default {
   font-family: "Adobe 宋体 Std L",serif;
   font-size: 30px;
 }
-#body{
+#group-body{
   position: absolute;
   top: 150px;
   height: 700px;
-  width: 1690px;
+  width: 1590px;
   left: 100px;
 }
 .head_title{
   position: relative;
   left: -100px;
-  width: 1690px;
+  width: 1590px;
   height: 70px;
 }
 .left{
