@@ -18,10 +18,10 @@
         >
           {{ content }}
         </button>
-        来自话题<a class="topic-origin-name"></a>
+        来自话题<a class="topic-origin-name" href="javascript:void(0)"></a>
       </div>
       <div class="diary-origin-pic">
-        <a class="diary-origin" href="/topic/1/diary/1"
+        <a class="diary-origin" href="javascript:void(0)"
           ><img class="diary-pic" />
         </a>
       </div>

@@ -37,7 +37,6 @@
 
 <script>
 import global from '@/components/common.vue';
-import router from "@/router";
 export default {
   name: "Login",
   data() {
@@ -57,7 +56,7 @@ export default {
     passanger() {
             const _this = this;
             global.currentUserId=null;
-            router.replace({
+            this.$router.replace({
                             path: '/home'
                         });
         },

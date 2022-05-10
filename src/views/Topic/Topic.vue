@@ -120,10 +120,11 @@
         </div>
         <div class="topic-page-number">
           <el-pagination
-            @next-click="changeTopicdt()"
+            @next-click="handleCurrentChange(this.currentPage+1)"
             :page-size="3"
+            @current-change="handleCurrentChange"
             layout="prev, pager, next, jumper"
-            :total="18"
+            :total="dtamount"
           >
           </el-pagination>
         </div>
@@ -180,6 +181,7 @@ div.body {
   top: 2px;
 }
 .topic_cirle_title {
+  font-weight: bold;
   margin-right: 30px;
 }
 .hotlist a {
@@ -388,7 +390,7 @@ div.title {
 }
 .topic-page-number {
   margin-left: 400px;
-  padding-bottom:40px;
+  padding-bottom: 40px;
 }
 </style>
 <style>
@@ -404,13 +406,16 @@ div.title {
 import search from "@/components/SelectSearch.vue";
 import diary from "@/components/TopicDisplay.vue";
 import usericon from "@/assets/user/int.png";
+import router from "@/router";
 export default {
   name: "topic",
   components: {
     search,
     diary,
   },
+
   data() {
+    var dtamount = 18;
     var dt = [
       {
         user: "yjl",
@@ -423,6 +428,7 @@ export default {
             本人也是经过了深思熟虑，在每个日日夜夜思考这个问题。 现在，解决前端的问题，是非常非常重要的。",
         date: "2022-4-30",
         topic: "寻找春日气息",
+        id: 1,
         img: "https://i.imgtg.com/2022/05/10/zSkWF.jpg",
       },
       {
@@ -430,6 +436,7 @@ export default {
         passage: "懒得想了",
         date: "2022-5-10",
         topic: "一起去看海",
+        id: 2,
         img: "https://i.imgtg.com/2022/05/10/zSxy6.jpg",
       },
       {
@@ -437,14 +444,23 @@ export default {
         passage: "testtest",
         date: "2002-6-7",
         topic: "游戏中的难忘瞬间",
+        id: 3,
         img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
       },
     ];
     return {
       dt,
+      dtamount,
     };
   },
   methods: {
+    ToTopicDetail(p) {
+      const _this = this;
+      _this.$router.push({
+        name: "topicdetail",
+        params: { id: p },
+      });
+    },
     hotTopicdt() {
       //获取数据
       document
@@ -465,6 +481,7 @@ export default {
     },
     Updatediary() {
       var i = 0;
+      var topic_detail_link = [this.dt[0].id, this.dt[1].id, this.dt[2].id];
       for (i = 0; i < 3; i++) {
         document
           .getElementsByClassName("iconOfuser")
@@ -502,10 +519,39 @@ export default {
           .item(0)
           .setAttribute("src", this.dt[i].img);
       }
+      document
+        .getElementsByClassName("diary-origin")
+        .item(0)
+        .addEventListener("click", function () {
+          router.push({
+            name: "topicdetail",
+            query: { id: topic_detail_link[0] },
+          });
+        });
+      document
+        .getElementsByClassName("diary-origin")
+        .item(1)
+        .addEventListener("click", function () {
+          router.push({
+            name: "topicdetail",
+            query: { id: topic_detail_link[1] },
+          });
+        });
+      document
+        .getElementsByClassName("diary-origin")
+        .item(2)
+        .addEventListener("click", function () {
+          router.push({
+            name: "topicdetail",
+            query: { id: topic_detail_link[2] },
+          });
+        });
     },
-    changeTopicdt(){
-      
-    }
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.changeTopicdt();
+    },
+    changeTopicdt() {},
   },
   mounted() {
     this.Updatediary();

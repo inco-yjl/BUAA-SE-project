@@ -176,9 +176,10 @@ div.body {
   box-shadow: 0px 2px 3px #888888a6;
 }
 .title {
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   text-align: left;
   font-size: 20px;
+  font-weight: bold;
   padding-left: 10px;
 }
 li {

@@ -57,7 +57,7 @@
               onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
               @click="hotTopicdt()"
             >
-              话题精选动态</button
+              热门</button
             >/
             <button
               class="selection_un"
@@ -65,7 +65,7 @@
               onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
               @click="specifyTopicdt()"
             >
-              我关注的话题动态
+              最新
             </button>
           </span>
         </div>
@@ -354,6 +354,31 @@ export default {
     diary,
   },
   data() {
+    var id = this.$route.params.id; //根据id来询问
+    var intro = {
+      name: "寻找春日气息",
+      intro: "哈哈，春天来了！",
+      new: [
+        {
+          user: "yjl",
+          passage: "懒得想了",
+          date: "2022-4-30",
+          img: "https://i.imgtg.com/2022/05/10/zSkWF.jpg",
+        },
+        {
+          user: "intp",
+          passage: "懒得想了2",
+          date: "2022-5-10",
+          img: "https://i.imgtg.com/2022/05/10/zSxy6.jpg",
+        },
+        {
+          user: "bot",
+          passage: "懒得想了3",
+          date: "2002-6-7",
+          img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
+        },
+      ],
+    };
     var dt = [
       {
         user: "yjl",
