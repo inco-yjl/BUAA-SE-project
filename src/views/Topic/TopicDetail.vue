@@ -162,7 +162,7 @@ div.title {
   font-size: 25px;
   color: rgb(52, 52, 52);
 }
-.topic_circle {
+.introOfTopic {
   margin-left: 20px;
   padding-top: 10px;
   padding-left: 10px;
