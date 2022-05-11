@@ -26,7 +26,7 @@
         </a>
       </div>
       <div class="diarytext">
-        <a class="diarylist" href="/topic/1/comments/1"></a>
+        <a class="diarytext-origin" href="/topic/1/comments/1"></a>
       </div>
     </div>
   </div>
@@ -37,6 +37,7 @@
   text-align: left;
 }
 .diary-display-body {
+  padding-left: 30px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -99,10 +100,12 @@ div.diary-origin-pic{
   vertical-align: sub;
 }
 .diarytext {
+  position: relative;
+  top:20px;
   width: 800px;
   margin-left: 30px;
 }
-a.diarylist {
+a.diarytext-origin {
   font-size: 17px;
   text-decoration: none;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
@@ -110,7 +113,7 @@ a.diarylist {
   color: black;
   transition: 0.3s ease;
 }
-a.diarylist:hover {
+a.diarytext-origin:hover {
   color: gray;
   text-decoration: none;
 }
@@ -134,8 +137,9 @@ button {
 </style>
 <script>
 export default {
-  name: "zan",
+  name: "topicdisplay",
   data() {
+
     return {
       liked: false,
       content: "+关注话题",
@@ -144,6 +148,7 @@ export default {
     };
   },
   methods: {
+
     favor(e) {
       this.liked = !this.liked;
       if (this.liked) {

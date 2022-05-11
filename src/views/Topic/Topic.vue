@@ -497,7 +497,7 @@ export default {
         document
           .getElementsByClassName("diarytext")
           .item(i)
-          .getElementsByClassName("diarylist")
+          .getElementsByClassName("diarytext-origin")
           .item(0).innerText = dtText;
         document.getElementsByClassName("publishtime").item(i).innerText =
           this.dt[i].date;
@@ -507,11 +507,9 @@ export default {
           .getElementsByClassName("topic-origin-name")
           .item(0).innerText = this.dt[i].topic;
         document
-          .getElementsByClassName("topic-origin")
+          .getElementsByClassName("diary-origin")
           .item(i)
-          .getElementsByClassName("topic-origin-name")
-          .item(0)
-          .setAttribute("href", "topic/" + this.dt[i].topic);
+          .setAttribute("href", "topic/" + i);
         document
           .getElementsByClassName("diary-origin-pic")
           .item(i)
@@ -520,7 +518,7 @@ export default {
           .setAttribute("src", this.dt[i].img);
       }
       document
-        .getElementsByClassName("diary-origin")
+        .getElementsByClassName("topic-origin-name")
         .item(0)
         .addEventListener("click", function () {
           router.push({
@@ -529,7 +527,7 @@ export default {
           });
         });
       document
-        .getElementsByClassName("diary-origin")
+        .getElementsByClassName("topic-origin-name")
         .item(1)
         .addEventListener("click", function () {
           router.push({
@@ -538,7 +536,7 @@ export default {
           });
         });
       document
-        .getElementsByClassName("diary-origin")
+        .getElementsByClassName("topic-origin-name")
         .item(2)
         .addEventListener("click", function () {
           router.push({

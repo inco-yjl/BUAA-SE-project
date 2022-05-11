@@ -6,6 +6,10 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path:"/",
+    redirect:"/home"
+  },
+  {
   path:'/',
   name:'base',
   component: () => import('../views/Base.vue'),
@@ -82,7 +86,15 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
+   //在此处加入以下内容
+   scrollBehavior(to,from,saveTop){
+    if(saveTop){
+      return saveTop;
+    }else{
+      return {x:0,y:0}
+    }
+  },
 })
 
 export default router

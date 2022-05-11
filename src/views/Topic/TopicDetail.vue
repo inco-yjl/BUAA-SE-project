@@ -5,9 +5,33 @@
       <div class="flex_box">
         <div class="introOfTopic">
           <div class="title">
-            <span class="topic_cirle_title">标题</span>
+            <img src="@/assets/title/topic-intro.png" /><span class="topic-name"
+              >{{ topic.name
+              }}<button
+                @click="favor"
+                class="topic-button"
+                :style="{ backgroundColor: bg_color, color: ft_color }"
+                @mouseenter="change()"
+                @mouseleave="goback()"
+              >
+                {{ content }}
+              </button></span
+            >
           </div>
-          <div class="boxesOfTopic"></div>
+          <div class="boxesOfTopic">
+            <p id="topic-intro-info">
+              {{ topic.dtnum }}篇内容·{{ topic.peoplenum }}人关注
+            </p>
+            <p id="topic-intro-content">{{ topic.intro }}</p>
+          </div>
+          <div class="topic-detail-interact">
+            <button class="share-topic">
+              <img src="@/assets/guide/share.png" /><span>分享话题</span>
+            </button>
+            <button class="write-dt">
+              <img src="@/assets/guide/write_dt.png" /><span>发布动态</span>
+            </button>
+          </div>
         </div>
         <div class="aside">
           <div class="collection">
@@ -27,25 +51,9 @@
           </div>
           <div></div>
           <br />
-          <div class="hotlist topic_page palebluestyle">
-            <div class="title topic_page">
-              <img src="@/assets/guide/topic_trend.png" /><span>话题趋势</span>
-            </div>
-            <ol>
-              <li>&ensp;<a href="/1">我的世界读书日</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li>&ensp;<a href="/2">你每天都有哪些突如其来的感悟</a></li>
-              <li>&ensp;<a href="/2">和新冠肺炎疫情有关的记忆</a></li>
-              <li>&ensp;<a href="/2">热爱生活的一万个理由</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li><a href="/2">今天吃什么？</a></li>
-            </ol>
-          </div>
         </div>
       </div>
+
       <div class="diarylist">
         <div class="title diary-hit">
           <span
@@ -69,21 +77,89 @@
             </button>
           </span>
         </div>
+
         <div class="topic-display">
           <div class="block">
             <span class="demonstration">
-              <diary></diary>
-              <diary></diary>
-              <diary></diary>
+              <div class="topicdiary">
+                <hr />
+                <div class="diary-display-body">
+                  <div class="display-publisher">
+                    <a class="userOfdiary" href="/otherusers/1">
+                      <img class="iconOfuser"/><span class="nameOfuser"></span>
+                    </a>
+                    <span class="publishtime"></span>
+                  </div>
+                  <div class="diary-origin-pic">
+                    <a class="diary-origin" href="javascript:void(0)"
+                      ><img class="diary-pic" :src="dt1.img"/>
+                    </a>
+                  </div>
+                  <div class="diarytext">
+                    <a class="diarytext-origin" href="/topic/1/comments/1"></a>
+                  </div>
+                </div>
+              </div>
             </span>
           </div>
         </div>
+        <div class="topic-display">
+          <div class="block">
+            <span class="demonstration">
+              <div class="topicdiary">
+                <hr />
+                <div class="diary-display-body">
+                  <div class="display-publisher">
+                    <a class="userOfdiary" href="/otherusers/1">
+                      <img class="iconOfuser" /><span class="nameOfuser"></span>
+                    </a>
+                    <span class="publishtime"></span>
+                  </div>
+                  <div class="diary-origin-pic">
+                    <a class="diary-origin" href="javascript:void(0)"
+                      ><img class="diary-pic" />
+                    </a>
+                  </div>
+                  <div class="diarytext">
+                    <a class="diarytext-origin" href="/topic/1/comments/1"></a>
+                  </div>
+                </div>
+              </div>
+            </span>
+          </div>
+          
+        </div><div class="topic-display">
+          <div class="block">
+            <span class="demonstration">
+              <div class="topicdiary">
+                <hr />
+                <div class="diary-display-body">
+                  <div class="display-publisher">
+                    <a class="userOfdiary" href="/otherusers/1">
+                      <img class="iconOfuser" /><span class="nameOfuser"></span>
+                    </a>
+                    <span class="publishtime"></span>
+                  </div>
+                  <div class="diary-origin-pic">
+                    <a class="diary-origin" href="javascript:void(0)"
+                      ><img class="diary-pic" />
+                    </a>
+                  </div>
+                  <div class="diarytext">
+                    <a class="diarytext-origin" href="/topic/1/comments/1"></a>
+                  </div>
+                </div>
+              </div>
+            </span>
+          </div>
+        </div>
+
         <div class="topic-page-number">
           <el-pagination
             @next-click="changeTopicdt()"
             :page-size="3"
             layout="prev, pager, next, jumper"
-            :total="18"
+            :total="topic.dtnum"
           >
           </el-pagination>
         </div>
@@ -94,6 +170,10 @@
 
 
 <style scoped>
+.topic-name {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-weight: bold;
+}
 button.selection_un {
   background: none;
   outline: none;
@@ -101,6 +181,18 @@ button.selection_un {
   font-size: 20px;
   border: none;
   transition: opacity 0.2s;
+}
+.topic-detail-interact button {
+  position: relative;
+  left: 900px;
+  background: none;
+  outline: none;
+  font-size: 18px;
+  border: none;
+  transition: opacity 0.2s;
+}
+.topic-detail-interact button :hover {
+  text-decoration: underline;
 }
 button.selection_ed {
   background: none;
@@ -110,25 +202,22 @@ button.selection_ed {
   color: black;
   font-weight: bold;
 }
+.title img {
+  vertical-align: -10px;
+  margin-right: 5px;
+  height: 40px;
+}
 #topicdetail {
   padding-left: 100px;
 }
 div.body {
   padding-bottom: 100px;
 }
-.topic_circle button {
-  border-radius: 40px;
-  background-color: white;
-  border-color: rgba(128, 128, 128, 0.498);
-  outline: none;
-  position: relative;
-  z-index: 0;
-}
-
 .hotlist a {
   color: rgb(2, 98, 182);
   font-weight: 500;
 }
+
 .hotlist a:hover {
   background-color: rgb(213, 230, 245);
   font-weight: 600;
@@ -141,19 +230,15 @@ div.body {
   margin-left: 10px;
   margin-right: 0;
   padding-left: 20px;
-  padding-right: 20px;
+  padding-right: 40px;
   padding-top: 25px;
   padding-bottom: 20px;
+  width: 250px;
   border-style: solid;
   border-width: 1px;
   border-color: rgb(181, 181, 181);
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
-}
-#change_topic {
-  padding-left: 0;
-  margin-right: 0;
-  height: 37px;
 }
 div.title {
   text-align: left;
@@ -167,7 +252,7 @@ div.title {
   padding-top: 10px;
   padding-left: 10px;
   padding-bottom: 10px;
-  width: 1100px;
+  width: 1200px;
   margin-top: 30px;
   background-color: white;
   border-style: solid;
@@ -175,47 +260,19 @@ div.title {
   border-color: rgb(181, 181, 181);
   box-shadow: 0px 2px 3px #888888a6;
 }
-.boxesOfTopic {
-  display: flex;
+#topic-intro-content {
+  margin-top: 15px;
+  margin-left: 20px;
   flex-wrap: wrap;
   width: 1150px;
+  font-family: Source Han Sans CN Normal;
+  font-size: 20px;
 }
-.boxesOfTopic > div {
-  height: 230px;
-  background-color: #c7e9ff04;
-  border-style: solid;
-  position: relative;
-  border-radius: 4px;
-  border-color: rgb(201, 201, 201);
-  width: 230px;
-  margin: 20px;
-  padding-top: 25px;
-  padding-left: 15px;
-  padding-right: 15px;
-  text-align: center;
-  font-size: 30px;
-  font-weight: 500;
-  color: rgb(53, 53, 53);
-  font-family: "Noto Serif SC", serif;
-}
-.boxesOfTopic a {
-  border-radius: 5px;
-  color: rgb(77, 157, 243);
-  transition: all 0.2s ease;
-}
-.boxesOfTopic a:hover {
-  background: rgb(77, 157, 243);
-  border-color: rgb(77, 157, 243);
-  color: white;
-}
-.topicboxes-route {
-  font-size: 22px;
-  text-decoration: none;
-  border: solid;
-  position: absolute;
-  bottom: 20px;
-  left: 40px;
-  right: 40px;
+#topic-intro-info {
+  margin-left: 25px;
+  margin-top: 10px;
+  font-size: 18px;
+  color: rgb(179, 179, 179);
 }
 .collection {
   text-align: left;
@@ -253,7 +310,7 @@ div.title {
   position: absolute;
   line-height: 40px;
   top: 440px;
-  left: 1280px;
+  left: 1380px;
 }
 .topic_page.title img {
   height: 35px;
@@ -285,11 +342,12 @@ div.title {
   list-style-position: inside;
 }
 .diarylist {
+  position: absolute;
   padding-left: 100px;
   padding-top: 50px;
   width: 1460px;
   margin-left: 20px;
-  margin-top: 50px;
+  margin-top: 15px;
   border-style: solid;
   border-width: 1px;
   border-color: rgb(181, 181, 181);
@@ -298,6 +356,7 @@ div.title {
 }
 .topic-display {
   margin-left: 20px;
+  margin-bottom:50px;
 }
 .diary-hit {
   margin-top: 10px;
@@ -305,33 +364,115 @@ div.title {
 .diary-hit img {
   height: 45px;
 }
-
-.topic_circle button {
-  border-radius: 40px;
-  background-color: white;
-  border-color: rgba(128, 128, 128, 0.498);
-  outline: none;
-  position: relative;
-  z-index: 0;
-}
-.topic_circle button::before {
-  position: absolute;
-  content: "";
-  transition: all 0.3s ease;
-  border-radius: 10px;
-  z-index: -1;
-}
-.topic_circle button:hover::before {
-  top: 0;
-  height: 100%;
-}
-
-.topic_circle button:active {
-  top: 2px;
+.topic-detail-interact img {
+  height: 20px;
 }
 .topic-page-number {
   margin-left: 400px;
   padding-bottom: 40px;
+}
+
+.topicdiary {
+  width: 1200px;
+  text-align: left;
+}
+.diary-display-body {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 30px;
+}
+.display-publisher {
+  margin-top: 0;
+  padding-top: 0;
+  width: 920px;
+}
+.publishtime {
+  padding-left: 20px;
+  font-weight: 400;
+  color: rgb(157, 157, 157);
+}
+.topic-origin {
+  position: relative;
+  font-size: 18px;
+  text-align: left;
+  width: 1000px;
+}
+.topic-origin a {
+  font-family: Source Han Sans CN Normal;
+  color: black;
+  text-decoration: none;
+  padding-left: 5px;
+  text-decoration: none;
+}
+.topic-origin a:hover {
+  font-family: Source Han Sans CN Normal;
+  color: rgb(31, 169, 255);
+}
+.diary-pic {
+  height: 200px;
+  align-content: middle;
+}
+div.diary-origin-pic {
+  position: relative;
+  left: 0;
+  top:20px;
+  margin-left: 20px;
+  border-radius: 5px;
+  height: 180px;
+  width: 270px;
+  overflow: hidden;
+}
+.diary-content {
+  display: flex;
+  flex-wrap: row;
+}
+.display-publisher a {
+  font-weight: 500;
+  font-size: 22px;
+  color: black;
+  text-decoration: none;
+}
+.display-publisher a:hover {
+  color: rgb(0, 166, 255);
+}
+.iconOfuser {
+  height: 30px;
+  margin-right: 5px;
+  vertical-align: sub;
+}
+.diarytext {
+  width: 800px;
+  margin-left: 30px;
+}
+a.diarytext-origin {
+  position: relative;
+  top:36px;
+  font-size: 17px;
+  text-decoration: none;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-weight: 600;
+  color: black;
+  transition: 0.3s ease;
+}
+a.diarytext-origin:hover {
+  color: gray;
+  text-decoration: none;
+}
+button {
+  outline: none;
+  margin-right: 0;
+}
+.topic-button {
+  width: 150px;
+  color: #47ff5d;
+  background: #f2fef0;
+  border: #c4fbc9 solid;
+  border-radius: 20px;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  -webkit-transform: scale(0.7);
 }
 </style>
 <style>
@@ -347,17 +488,22 @@ div.title {
 import search from "@/components/SelectSearch.vue";
 import diary from "@/components/TopicDisplay.vue";
 import usericon from "@/assets/user/int.png";
+import App from "@/App.vue";
 export default {
   name: "topic",
   components: {
     search,
     diary,
+    App,
   },
   data() {
     var id = this.$route.params.id; //根据id来询问
-    var intro = {
+    var topic = {
       name: "寻找春日气息",
-      intro: "哈哈，春天来了！",
+      intro:
+        "哈哈，春天来了！为了让画面好看，这里要写长一点，但是不能写的太长，",
+      peoplenum: 22,
+      dtnum: 20,
       new: [
         {
           user: "yjl",
@@ -409,10 +555,40 @@ export default {
       },
     ];
     return {
-      dt,
+      dt1:dt[0],
+      topic,
+      liked: false,
+      content: "+关注话题",
+      bg_color: "#f2fef0",
+      ft_color: "#47ff5d",
     };
   },
   methods: {
+    favor(e) {
+      this.liked = !this.liked;
+      if (this.liked) {
+        this.content = "已关注";
+        this.bg_color = "#6cf57c";
+        this.ft_color = "#f2fef0";
+      } else {
+        this.content = "+关注话题";
+        this.bg_color = "#f2fef0";
+        this.ft_color = "#6cf57c";
+      }
+    },
+    change() {
+      this.bg_color = "#45ff5b";
+      this.ft_color = "#f2fef0";
+    },
+    goback() {
+      if (this.liked) {
+        this.bg_color = "#6cf57c;";
+        this.ft_color = "#f2fef0";
+      } else {
+        this.bg_color = "#f2fef0";
+        this.ft_color = "#6cf57c";
+      }
+    },
     hotTopicdt() {
       //获取数据
       document
@@ -420,6 +596,7 @@ export default {
         .setAttribute("class", "selection_un");
     },
     specifyTopicdt() {
+      //获取数据
       document
         .getElementById("select-hot-topic-dt")
         .setAttribute("class", "selection_un");
@@ -432,45 +609,9 @@ export default {
         .setAttribute("class", "selection_ed");
     },
     Updatediary() {
-      var i = 0;
-      for (i = 0; i < 3; i++) {
-        document
-          .getElementsByClassName("iconOfuser")
-          .item(i)
-          .setAttribute("src", usericon);
-        document
-          .getElementsByClassName("display-publisher")
-          .item(i)
-          .getElementsByClassName("nameOfuser")
-          .item(0).innerText = this.dt[i].user;
-        var dtText = this.dt[i].passage.substring(0, 300);
-        if (this.dt[i].passage.length > 300) dtText = dtText.concat("(……)");
-        document
-          .getElementsByClassName("diarytext")
-          .item(i)
-          .getElementsByClassName("diarylist")
-          .item(0).innerText = dtText;
-        document.getElementsByClassName("publishtime").item(i).innerText =
-          this.dt[i].date;
-        document
-          .getElementsByClassName("topic-origin")
-          .item(i)
-          .getElementsByClassName("topic-origin-name")
-          .item(0).innerText = this.dt[i].topic;
-        document
-          .getElementsByClassName("topic-origin")
-          .item(i)
-          .getElementsByClassName("topic-origin-name")
-          .item(0)
-          .setAttribute("href", "topic/" + this.dt[i].topic);
-        document
-          .getElementsByClassName("diary-origin-pic")
-          .item(i)
-          .getElementsByClassName("diary-pic")
-          .item(0)
-          .setAttribute("src", this.dt[i].img);
-      }
-    },
+      //获取数据
+      },
+    
     changeTopicdt() {},
   },
   mounted() {

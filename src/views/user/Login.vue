@@ -70,6 +70,8 @@ export default {
 
 <style scoped>
 #login {
+  position: absolute;
+  top:0;
   font-family: "Noto Serif SC", serif;
   width: 100%;
   height: 100vh;
