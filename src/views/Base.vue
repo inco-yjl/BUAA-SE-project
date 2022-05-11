@@ -1,6 +1,6 @@
 <template>
   <div  id="base">
-      <template v-if="notLogin">
+      <template v-if="navigate">
       <div  id="navigation">
         <router-link id="Tohome" to="/home"><span id="icon"><img id="sitelogo" alt="logo" src="@/assets/icon/logo.png" width=50px ></span></router-link>
         <router-link to="/book"><span  class="guide"><img id="bookimg" src="@/assets/icon/book.png" width=30px>图书</span></router-link>
@@ -14,7 +14,7 @@
                 <el-dropdown trigger="click">
                      <span class="el-dropdown-link">用户名<i class="el-icon-arrow-down el-icon--right"></i></span>
                     <el-dropdown-menu slot="dropdown">
-                        <a href = "http://localhost:8080/person"><el-dropdown-item icon="el-icon-user-solid">个人主页</el-dropdown-item></a>
+                        <a href = "/person"><el-dropdown-item icon="el-icon-user-solid">个人主页</el-dropdown-item></a>
                         <el-dropdown-item icon="el-icon-chat-line-round">我的消息</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-switch-button">退出账号</el-dropdown-item>
                     </el-dropdown-menu>
@@ -30,15 +30,15 @@
 <script>
 export default ({
    data () {
-       var notLogin=true;
+       var navigate=true;
     return {
-      notLogin,
+      navigate,
     }
   },
   methods: {
     // 初始化
     isLogin (msg) {
-      this.notLoginn=false;
+      this.navigate=false;
     }
   }
 }

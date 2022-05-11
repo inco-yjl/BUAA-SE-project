@@ -58,8 +58,7 @@ export default {
   },
   methods: {
     removeNavigation(){
-            this.$parent.notLogin=false;
-      console.log(this.$parent.notLogin);
+            this.$parent.navigate=false;
     },
     register: function () {
       this.$axios.post('/user/register', qs.stringify(this.form))

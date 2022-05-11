@@ -28,7 +28,7 @@
             <button class="share-topic">
               <img src="@/assets/guide/share.png" /><span>分享话题</span>
             </button>
-            <button class="write-dt">
+            <button class="write-dt" @click="writeTopicDt">
               <img src="@/assets/guide/write_dt.png" /><span>发布动态</span>
             </button>
           </div>
@@ -487,7 +487,6 @@ button {
 <script>
 import search from "@/components/SelectSearch.vue";
 import diary from "@/components/TopicDisplay.vue";
-import usericon from "@/assets/user/int.png";
 import App from "@/App.vue";
 export default {
   name: "topic",
@@ -600,7 +599,7 @@ export default {
       }
     },
     hotTopicdt() {
-      //获取数据
+      //更换标签时获取数据
       document
         .getElementById("select-new-topic-dt")
         .setAttribute("class", "selection_un");
@@ -620,7 +619,16 @@ export default {
       this.dt2=this.dt[1];
       this.dt3=this.dt[2];
       },
-    
+    writeTopicDt(){
+        this.$router.push({
+          name:"topicDtEditor",
+          params:{
+            topic_name:this.topic.name,
+            topic_intro:this.topic.intro,
+            id:this.id
+          }
+        })
+    },
     changeTopicdt() {},
     newTopicdt(){
       //获取新的数据

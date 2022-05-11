@@ -49,11 +49,14 @@ export default {
   },
  
   methods: {
+      addNavigation(){
+            this.$parent.navigate=true;
+    },
     removeNavigation(){
-            this.$parent.notLogin=false;
-      console.log(this.$parent.notLogin);
+            this.$parent.navigate=false;
     },
     passanger() {
+      this.addNavigation();
             const _this = this;
             global.currentUserId=null;
             this.$router.replace({

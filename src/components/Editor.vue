@@ -18,6 +18,7 @@
 <style scoped>
 #editor {
   position: absolute;
+  width:900px;
   left: 400px;
   right: 400px;
   top: 300px;

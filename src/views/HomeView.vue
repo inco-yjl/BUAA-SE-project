@@ -336,10 +336,6 @@ export default {
     commentDisplay,
   },
   methods: {
-     addNavigation(){
-            this.$parent.notLogin=true;
-      console.log(this.$parent.notLogin);
-    },
     //this is the function to update the images of books
     UpdateBookImg() {
       document
@@ -376,7 +372,6 @@ export default {
     },
   },
   mounted() {
-    this,this.addNavigation();
     this.UpdateBookImg();
     this.UpdateComments();
   },
