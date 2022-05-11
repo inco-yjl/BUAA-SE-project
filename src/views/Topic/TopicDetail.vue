@@ -60,7 +60,7 @@
             ><img src="@/assets/title/topic-hit.png" />
 
             <button
-              class="selection_un"
+              class="selection_ed"
               id="select-hot-topic-dt"
               onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
               @click="hotTopicdt()"
@@ -69,9 +69,9 @@
             >/
             <button
               class="selection_un"
-              id="select-follow-topic-dt"
+              id="select-new-topic-dt"
               onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
-              @click="specifyTopicdt()"
+              @click="newTopicdt()"
             >
               最新
             </button>
@@ -86,9 +86,9 @@
                 <div class="diary-display-body">
                   <div class="display-publisher">
                     <a class="userOfdiary" href="/otherusers/1">
-                      <img class="iconOfuser"/><span class="nameOfuser"></span>
+                      <img class="iconOfuser" :src="dt1.usericon"/><span class="nameOfuser">{{dt1.user}}</span>
                     </a>
-                    <span class="publishtime"></span>
+                    <span class="publishtime">{{dt1.date}}</span>
                   </div>
                   <div class="diary-origin-pic">
                     <a class="diary-origin" href="javascript:void(0)"
@@ -96,7 +96,7 @@
                     </a>
                   </div>
                   <div class="diarytext">
-                    <a class="diarytext-origin" href="/topic/1/comments/1"></a>
+                    <a class="diarytext-origin" href="/topic/1/comments/1">{{dt1.passage}}</a>
                   </div>
                 </div>
               </div>
@@ -111,17 +111,17 @@
                 <div class="diary-display-body">
                   <div class="display-publisher">
                     <a class="userOfdiary" href="/otherusers/1">
-                      <img class="iconOfuser" /><span class="nameOfuser"></span>
+                      <img class="iconOfuser" :src="dt2.usericon"/><span class="nameOfuser">{{dt2.user}}</span>
                     </a>
-                    <span class="publishtime"></span>
+                    <span class="publishtime">{{dt2.date}}</span>
                   </div>
                   <div class="diary-origin-pic">
                     <a class="diary-origin" href="javascript:void(0)"
-                      ><img class="diary-pic" />
+                      ><img class="diary-pic" :src="dt2.img"/>
                     </a>
                   </div>
                   <div class="diarytext">
-                    <a class="diarytext-origin" href="/topic/1/comments/1"></a>
+                    <a class="diarytext-origin" href="/topic/1/comments/1">{{dt2.passage}}</a>
                   </div>
                 </div>
               </div>
@@ -136,17 +136,17 @@
                 <div class="diary-display-body">
                   <div class="display-publisher">
                     <a class="userOfdiary" href="/otherusers/1">
-                      <img class="iconOfuser" /><span class="nameOfuser"></span>
+                      <img class="iconOfuser" :src="dt3.usericon"/><span class="nameOfuser">{{dt3.user}}</span>
                     </a>
-                    <span class="publishtime"></span>
+                    <span class="publishtime">{{dt3.date}}</span>
                   </div>
                   <div class="diary-origin-pic">
                     <a class="diary-origin" href="javascript:void(0)"
-                      ><img class="diary-pic" />
+                      ><img class="diary-pic" :src="dt3.img"/>
                     </a>
                   </div>
                   <div class="diarytext">
-                    <a class="diarytext-origin" href="/topic/1/comments/1"></a>
+                    <a class="diarytext-origin" href="/topic/1/comments/1">{{dt3.passage}}</a>
                   </div>
                 </div>
               </div>
@@ -504,30 +504,34 @@ export default {
         "哈哈，春天来了！为了让画面好看，这里要写长一点，但是不能写的太长，",
       peoplenum: 22,
       dtnum: 20,
-      new: [
+      hotdt: [
         {
           user: "yjl",
+          usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
           passage: "懒得想了",
           date: "2022-4-30",
           img: "https://i.imgtg.com/2022/05/10/zSkWF.jpg",
         },
         {
           user: "intp",
+          usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
           passage: "懒得想了2",
           date: "2022-5-10",
           img: "https://i.imgtg.com/2022/05/10/zSxy6.jpg",
         },
         {
           user: "bot",
+          usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
           passage: "懒得想了3",
           date: "2002-6-7",
           img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
         },
       ],
     };
-    var dt = [
+    var newdt = [
       {
         user: "yjl",
+        usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
         passage:
           "既然如何， 我们都知道，只要有意义，那么就必须慎重考虑。\
          所谓前端，关键是前端需要如何写。 一般来讲，我们都必须务必慎重的考虑考虑。\
@@ -541,6 +545,7 @@ export default {
       },
       {
         user: "intp",
+        usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
         passage: "懒得想了",
         date: "2022-5-10",
         topic: "一起去看海",
@@ -548,15 +553,20 @@ export default {
       },
       {
         user: "bot",
+        usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
         passage: "testtest",
         date: "2002-6-7",
         topic: "游戏中的难忘瞬间",
         img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
       },
     ];
+    var dt=topic.hotdt;
     return {
       dt1:dt[0],
+      dt2:dt[1],
+      dt3:dt[2],
       topic,
+      newdt,
       liked: false,
       content: "+关注话题",
       bg_color: "#f2fef0",
@@ -592,14 +602,11 @@ export default {
     hotTopicdt() {
       //获取数据
       document
-        .getElementById("select-follow-topic-dt")
+        .getElementById("select-new-topic-dt")
         .setAttribute("class", "selection_un");
-    },
-    specifyTopicdt() {
-      //获取数据
-      document
-        .getElementById("select-hot-topic-dt")
-        .setAttribute("class", "selection_un");
+      this.dt=this.topic.hotdt;
+      this.Updatediary();
+      
     },
     //this is the function to update the images of books
     updateButton() {
@@ -609,10 +616,20 @@ export default {
         .setAttribute("class", "selection_ed");
     },
     Updatediary() {
-      //获取数据
+      this.dt1=this.dt[0];
+      this.dt2=this.dt[1];
+      this.dt3=this.dt[2];
       },
     
     changeTopicdt() {},
+    newTopicdt(){
+      //获取新的数据
+      document
+        .getElementById("select-hot-topic-dt")
+        .setAttribute("class", "selection_un");
+      this.dt=this.newdt;
+      this.Updatediary();
+    }
   },
   mounted() {
     this.Updatediary();
