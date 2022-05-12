@@ -96,7 +96,7 @@ export default {
   data() {
     var topicName = this.$route.params.topic_name;
     var topicIntro = this.$route.params.topic_intro;
-    var id=this.$route.params.id;
+    var id = this.$route.params.id;
     return {
       topicName,
       topicIntro,
@@ -104,14 +104,14 @@ export default {
   },
   methods: {
     backToTopic() {
-        this.addNavigation();
+      this.addNavigation();
       this.$router.push({
         name: "topicdetail",
-        query: {id:this.id}
+        query: { id: this.id },
       });
     },
-    addNavigation(){
-        this.$parent.navigate=true;
+    addNavigation() {
+      this.$parent.navigate = true;
     },
     removeNavigation() {
       this.$parent.navigate = false;

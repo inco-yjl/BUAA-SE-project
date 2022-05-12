@@ -170,6 +170,7 @@
 
 
 <style scoped>
+
 .topic-name {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-weight: bold;
@@ -208,10 +209,8 @@ button.selection_ed {
   height: 40px;
 }
 #topicdetail {
+  height:1600px;
   padding-left: 100px;
-}
-div.body {
-  padding-bottom: 100px;
 }
 .hotlist a {
   color: rgb(2, 98, 182);
@@ -473,6 +472,9 @@ button {
   font-size: 20px;
   font-weight: 600;
   -webkit-transform: scale(0.7);
+}
+div.body{
+  padding-bottom: 100px;
 }
 </style>
 <style>

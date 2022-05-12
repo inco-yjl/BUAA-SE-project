@@ -19,6 +19,11 @@ const routes = [
     component: HomeView
   },
   {
+    path:'/search',
+    name: 'search',
+    component: () => import('../views/Search.vue')
+  },
+  {
     path: '/topic',
     name: 'topic',
     component: () => import(/* webpackChunkName: "about" */ '../views/Topic/Topic.vue')

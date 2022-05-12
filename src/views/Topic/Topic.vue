@@ -92,7 +92,7 @@
             ><img src="@/assets/title/topic-hit.png" />
 
             <button
-              class="selection_un"
+              class="selection_ed"
               id="select-hot-topic-dt"
               onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
               @click="hotTopicdt()"

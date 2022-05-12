@@ -36,45 +36,45 @@
 </template>
 
 <script>
-import global from '@/components/common.vue';
+import global from "@/components/common.vue";
 export default {
   name: "Login",
   data() {
     return {
       form: {
         username: "",
-        password: ""
-      }
-    }
+        password: "",
+      },
+    };
   },
- 
+
   methods: {
-      addNavigation(){
-            this.$parent.navigate=true;
+    addNavigation() {
+      this.$parent.navigate = true;
     },
-    removeNavigation(){
-            this.$parent.navigate=false;
+    removeNavigation() {
+      this.$parent.navigate = false;
     },
     passanger() {
       this.addNavigation();
-            const _this = this;
-            global.currentUserId=null;
-            this.$router.replace({
-                            path: '/home'
-                        });
-        },
+      const _this = this;
+      global.currentUserId = null;
+      this.$router.replace({
+        path: "/home",
+      });
+    },
   },
 
-   mounted(){
+  mounted() {
     this.removeNavigation();
   },
-}
+};
 </script>
 
 <style scoped>
 #login {
   position: absolute;
-  top:0;
+  top: 0;
   font-family: "Noto Serif SC", serif;
   width: 100%;
   height: 100vh;
@@ -87,9 +87,9 @@ export default {
   padding-top: 5px;
   padding-bottom: 5px;
 }
-#login-title{
+#login-title {
   position: relative;
-  left:130px;
+  left: 130px;
 }
 #login .wrap {
   position: absolute;
