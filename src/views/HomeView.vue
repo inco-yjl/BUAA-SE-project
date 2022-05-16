@@ -5,7 +5,7 @@
     <div class="body">
       <div id="vertical">
         <div class="books hothit">
-          <span class="title">
+          <span class="homepage-title">
             <img class="hot books" src="@/assets/title/books.png" />流行图书
             <a href="http://localhost:8080/book" class="Fordetail">
               &ensp;>&ensp;
@@ -14,7 +14,7 @@
           <hit></hit>
         </div>
         <div class="movies hothit">
-          <span class="title"
+          <span class="homepage-title"
             ><img class="hot" src="@/assets/title/movie.png" />精彩电影<a
               href="http://localhost:8080/video"
               class="Fordetail"
@@ -24,7 +24,7 @@
           <hit></hit>
         </div>
         <div class="tv hothit">
-          <span class="title"
+          <span class="homepage-title"
             ><img class="hot" src="@/assets/title/tv.png" />推荐电视剧<a
               href="http://localhost:8080/video"
               class="Fordetail"
@@ -36,7 +36,7 @@
       </div>
       <div class="homepage aside">
         <div class="topics hotlist">
-          <span class="title">
+          <span class="homepage-title">
             <img class="hot" src="@/assets/title/fire.png" />热点话题
           </span>
           <ul class="topics hotlist">
@@ -92,7 +92,7 @@
         <br />
         <div class="groups hotlist">
           <div>
-            <span class="title"
+            <span class="homepage-title"
               ><img class="hot" src="@/assets/title/groups.png" />发现小组</span
             >
           </div>
@@ -115,7 +115,7 @@
       <br />
       <div class="comments">
         <div id="bookcomment">
-          <span class="title">
+          <span class="homepage-title">
             <img class="hot" src="@/assets/title/book_comment.png" />热门书评
             <a href="http://localhost:8080/book" class="Fordetail">
               &ensp;>&ensp;
@@ -127,7 +127,7 @@
         </div>
 
         <div id="moviecomment">
-          <span class="title">
+          <span class="homepage-title">
             <img class="hot" src="@/assets/title/movie_comment.png" />热门影评
             <a href="http://localhost:8080/book" class="Fordetail">
               &ensp;>&ensp;
@@ -175,7 +175,7 @@ div.body {
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
 }
-.title {
+.homepage-title {
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   text-align: left;
   font-size: 20px;
@@ -237,9 +237,12 @@ li {
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
 }
-.comments .title {
+.comments .homepage-title {
   font-size: 30px;
   font-weight: 600;
+}
+.aside .homepage-title{
+  margin-left: 70px;
 }
 div.hothit {
   text-align: left;
@@ -308,7 +311,7 @@ img.hot.books {
   font-size: 40px;
   margin-left: 0px;
 }
-.title a:hover {
+.homepage-title a:hover {
   text-decoration: none;
   font-weight: 600;
   border-radius: 40px;

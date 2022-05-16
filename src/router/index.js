@@ -39,6 +39,11 @@ const routes = [
     component: () =>import('../views/Topic/TopicEditor.vue')
   },
   {
+    path: '/book',
+    name: 'book',
+    component: () =>import('../views/book/Book.vue')
+  },
+  {
     path: '/editor',
     name: 'editor',
     component: () => import(/* webpackChunkName: "about" */ '../views/editors/CommentEditor.vue')

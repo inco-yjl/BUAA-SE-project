@@ -642,6 +642,7 @@ export default {
     }
   },
   mounted() {
+    this.$parent.navigate = true;
     this.Updatediary();
     this.updateButton();
   },

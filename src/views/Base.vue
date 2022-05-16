@@ -107,5 +107,16 @@ img{
     vertical-align:-10%;
 }
 </style>
+<style>
+div{
+  cursor:default;
+}
+a{
+  cursor: pointer;
+}
+button{
+  cursor: pointer;
+}
+</style>
 
 
