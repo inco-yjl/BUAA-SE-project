@@ -122,8 +122,34 @@
             </a>
           </span>
 
-          <comment-display></comment-display>
-          <comment-display></comment-display>
+
+          <div v-for="comment in bookcomments"
+            :key="comment.id" class="comment">
+            <hr />
+            <a class="userOfcomment" href="../views/user/otherusers.vue">
+              <img class="iconOfuser" :src="comment.usericon" /><span
+                class="nameOfuser"
+                >{{ comment.username }}</span
+              >
+            </a>
+            <br />
+            <div class="comments-content">
+              <div>
+                <a class="comment-origin" href="/book/1"
+                  ><img class="comments-pic" :src="comment.img"
+                /></a>
+              </div>
+              <div class="comments-text">
+                <a class="commentlist" href="/book/1/comments/1">{{
+                  comment.content
+                }}</a>
+              </div>
+              <!-- 路径问题 -->
+            </div>
+            <div class="origin">
+              >><a href="http://localhost:8080/group">查看原帖</a>
+            </div>
+          </div>
         </div>
 
         <div id="moviecomment">
@@ -133,8 +159,33 @@
               &ensp;>&ensp;
             </a>
           </span>
-          <comment-display></comment-display>
-          <comment-display></comment-display>
+          <div v-for="comment in moviecomments"
+            :key="comment.id" class="comment">
+            <hr />
+            <a class="userOfcomment" href="../views/user/otherusers.vue">
+              <img class="iconOfuser" :src="comment.usericon" /><span
+                class="nameOfuser"
+                >{{ comment.username }}</span
+              >
+            </a>
+            <br />
+            <div class="comments-content">
+              <div>
+                <a class="comment-origin" href="/book/1"
+                  ><img class="comments-pic" :src="comment.img"
+                /></a>
+              </div>
+              <div class="comments-text">
+                <a class="commentlist" href="/book/1/comments/1">{{
+                  comment.content
+                }}</a>
+              </div>
+              <!-- 路径问题 -->
+            </div>
+            <div class="origin">
+              >><a href="http://localhost:8080/group">查看原帖</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -143,7 +194,7 @@
 
 <style scoped>
 #home {
-  width:1600px;
+  width: 1600px;
   padding-left: 100px;
 }
 div.body {
@@ -176,7 +227,7 @@ div.body {
   box-shadow: 0px 2px 3px #888888a6;
 }
 .homepage-title {
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   text-align: left;
   font-size: 20px;
   font-weight: bold;
@@ -241,7 +292,7 @@ li {
   font-size: 30px;
   font-weight: 600;
 }
-.aside .homepage-title{
+.aside .homepage-title {
   margin-left: 70px;
 }
 div.hothit {
@@ -317,6 +368,65 @@ img.hot.books {
   border-radius: 40px;
   background-color: rgb(227, 239, 250);
 }
+.comment{
+  padding-bottom:0;
+  margin-bottom: 0;
+}
+.nameOfuser{
+  font-family: PingFang SC;
+}
+.comments-pic{
+  height:120px;
+  width:90px;
+}
+.comments-content{
+    display: flex;
+    flex-wrap: nowrap;
+}
+.comment a {
+  font-weight: 500;
+  font-size: 22px;
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+}
+.comment a:hover {
+  text-decoration: none;
+  color: rgb(0, 166, 255);
+}
+div.origin {
+  text-align: right;
+}
+.origin a {
+  color: rgb(121, 121, 121);
+  font-weight: 600;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 16px;
+}
+.origin a:hover {
+  text-decoration: underline;
+  color: rgb(121, 121, 121);
+}
+.iconOfuser {
+  height: 30px;
+  margin-right: 5px;
+  vertical-align: sub;
+}
+.comments-text{
+  margin-left: 20px;
+  margin-right: 10px;
+}
+a.commentlist{
+    font-size: 16px;
+    text-decoration: none;
+    font-family:Helvetica, Arial, sans-serif;
+    font-weight:500;
+    color: black;
+    transition:.2s ease;
+}
+a.commentlist:hover{
+  color:gray;
+  text-decoration: none;
+}
 </style>
 <script>
 // @ is an alias to /src
@@ -327,11 +437,59 @@ import commentDisplay from "@/components/ComDisplay.vue";
 //load the img needed
 import bookImg1 from "@/assets/books/Zissc.jpg";
 import bookImg2 from "@/assets/books/Jiaoldr.jpg";
-import usericon from "@/assets/user/int.png";
-
+import "@/styles/comment.css";
 
 export default {
   name: "home",
+  data() {
+    var bookcomments = [
+      {
+        id: 1,
+        userId: 1,
+        title:"标题",
+        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+        username: "yjl",
+        img: bookImg1,
+        content:
+          "听Jpop不听King Gnu，\
+        就像四大名著不看红楼梦，说明这个人文学造诣和自我修养不足，\
+        他理解不了这种内在的阳春白雪的高雅艺术，他只能看到外表的辞藻堆砌，\
+        参不透其中深奥的精神内核，他整个人的层次就卡在这里了，只能度过一个相对失败的人生。",
+      },
+      {
+        id: 2,
+        userId: 2,
+        title: "标题",
+        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+        username: "IntP",
+        img: bookImg2,
+        content: "testtest",
+      },
+    ];
+    var moviecomments = [
+      {
+        id: 1,
+        userId: 1,
+        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+        username: "yjl",
+        img: "https://i.imgtg.com/2022/05/12/z9ZmB.webp",
+        content:
+          "没什么可说的",
+      },
+      {
+        id: 2,
+        userId: 2,
+        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+        username: "IntP",
+        img: bookImg2,
+        content: "testtest",
+      },
+    ];
+    return {
+      bookcomments,
+      moviecomments,
+    };
+  },
   components: {
     powerpoint,
     hit,
@@ -340,44 +498,10 @@ export default {
   },
   methods: {
     //this is the function to update the images of books
-    UpdateBookImg() {
-      document
-        .getElementsByClassName("item1")
-        .item(0)
-        .setAttribute("src", bookImg1);
-      document
-        .getElementsByClassName("item2")
-        .item(0)
-        .setAttribute("src", bookImg2);
-    },
-    UpdateComments() {
-      document
-        .getElementsByClassName("iconOfuser")
-        .item(0)
-        .setAttribute("src", usericon);
-      document
-        .getElementById("bookcomment")
-        .getElementsByClassName("nameOfuser")
-        .item(0).innerHTML = "yjlintp" + ":";
-      document.getElementsByClassName("commentlist").item(0).innerHTML =
-        "<span>听Jpop不听King Gnu，\
-        就像四大名著不看红楼梦，说明这个人文学造诣和自我修养不足，\
-        他理解不了这种内在的阳春白雪的高雅艺术，他只能看到外表的辞藻堆砌，\
-        参不透其中深奥的精神内核，他整个人的层次就卡在这里了，只能度过一个相对失败的人生。</span>";
-      document
-        .getElementsByClassName("iconOfuser")
-        .item(1)
-        .setAttribute("src", usericon);
-      document.getElementsByClassName("nameOfuser").item(1).innerHTML =
-        "yjlintp" + ":";
-      document.getElementsByClassName("commentlist").item(1).innerHTML =
-        "testtest";
-    },
+    
+  
   },
-  mounted() {
-    this.UpdateBookImg();
-    this.UpdateComments();
-  },
+  mounted() {},
 };
 </script>
 

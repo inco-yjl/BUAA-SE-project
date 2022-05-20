@@ -32,6 +32,7 @@
   </div>
 </template>
 <style scoped>
+
 .topicdiary {
   width: 1200px;
   text-align: left;
@@ -106,10 +107,10 @@ div.diary-origin-pic{
   margin-left: 30px;
 }
 a.diarytext-origin {
-  font-size: 17px;
+  font-size: 16px;
   text-decoration: none;
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-  font-weight: 600;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 500;
   color: black;
   transition: 0.3s ease;
 }
@@ -134,6 +135,7 @@ button {
   font-weight: 600;
   -webkit-transform: scale(0.7);
 }
+
 </style>
 <script>
 export default {

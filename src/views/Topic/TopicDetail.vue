@@ -40,7 +40,7 @@
                 <img src="@/assets/guide/star_topic.png" />已关注话题
               </a>
             </div>
-            <ul class="collection-list hotlist palebluestyle">
+            <ul class="collection-list hotlist">
               <li><a>老家记忆</a></li>
               <li><a>这是在干嘛</a></li>
               <li><a>再写一个</a></li>
@@ -289,13 +289,13 @@ div.title {
   font-size: 22px;
 }
 .collection .title a:hover {
-  color: rgb(255, 132, 0);
+  color: rgb(2, 98, 182);
 }
 .collection a:hover::after {
   opacity: 1;
 }
 .collection a:active {
-  color: orange;
+  color: rgb(0, 166, 255);;
 }
 .collection-list a {
   font-size: 18px;

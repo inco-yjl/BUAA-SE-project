@@ -2,15 +2,15 @@
   <div class="comment">
     <hr />
     <a class="userOfcomment" href="../views/user/otherusers.vue">
-    <img class="iconOfuser" /><span class="nameOfuser"></span>
+    <img class="iconOfuser" :src="comment.iconOfuser"/><span class="nameOfuser">{{comment.name}}</span>
     </a>
     <br />
         <div class="comments-content">
-            <div><a class="comment-origin" href="/book/1"><img class="comments-pic" src="@/assets/books/Zissc.jpg"></a></div>
-            <div class="comments-text"><a class="commentlist" href="/book/1/comments/1"></a></div> <!-- 路径问题 -->
+            <div><a class="comment-origin" href="/book/1"><img class="comments-pic" :src="comment.img"></a></div>
+            <div class="comments-text"><a class="commentlist" href="/book/1/comments/1">{{comment.content}}</a></div> <!-- 路径问题 -->
         </div>
     <div class="origin">
-      <a href="http://localhost:8080/group"> ————查看原帖</a>
+      >><a href="http://localhost:8080/group">查看原帖</a>
     </div>
   </div>
 </template>
@@ -44,14 +44,14 @@ div.origin {
   text-align: right;
 }
 .origin a {
-  color: brown;
+  color: rgb(121, 121, 121);
   font-weight: 600;
   font-family: "Courier New", Courier, monospace;
   font-size: 16px;
 }
 .origin a:hover {
-  text-decoration: none;
-  color: burlywood;
+  text-decoration: underline;
+  color: rgb(121, 121, 121);
 }
 .iconOfuser {
   height: 30px;
@@ -63,10 +63,10 @@ div.origin {
   margin-right: 10px;
 }
 a.commentlist{
-    font-size: 17px;
+    font-size: 16px;
     text-decoration: none;
-    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-weight:600;
+    font-family:Helvetica, Arial, sans-serif;
+    font-weight:500;
     color: black;
     transition:.2s ease;
 }

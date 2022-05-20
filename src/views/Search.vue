@@ -105,7 +105,7 @@
             <div class="result-info">
               <div class="result-star">
                 <el-rate
-                  v-model="value"
+                  v-model="tele.star"
                   disabled
                   show-score
                   text-color="#ff9900"
