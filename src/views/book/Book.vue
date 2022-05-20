@@ -1,7 +1,7 @@
 <template>
   <div id="bookpage">
     <search></search>
-    <div class="bookpage-body">
+    <div id="bookpage-body">
       <div class="bookpage-vertical">
         <div class="bookpage-hit">
           <div class="bookpage-title">
@@ -184,36 +184,7 @@ import VueSlickCarousel from "vue-slick-carousel";
 import "vue-slick-carousel/dist/vue-slick-carousel.css";
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 import search from "@/components/SelectSearch.vue";
-function getTop(element) {
-  //计算x坐标
-  var actualLeft = element.offsetLeft;
-  var current = element.offsetParent;
-  while (current !== null) {
-    actualLeft += current.offsetLeft + current.clientLeft;
-    current = current.offsetParent;
-  }
-  if (document.compatMode == "BackCompat") {
-    var elementScrollLeft = document.body.scrollLeft;
-  } else {
-    var elementScrollLeft = document.documentElement.scrollLeft;
-  }
-  var left = actualLeft - elementScrollLeft;
-  //计算y坐标
-  var actualTop = element.offsetTop;
-  var current = element.offsetParent;
-  while (current !== null) {
-    actualTop += current.offsetTop + current.clientTop;
-    current = current.offsetParent;
-  }
-  if (document.compatMode == "BackCompat") {
-    var elementScrollTop = document.body.scrollTop;
-  } else {
-    var elementScrollTop = document.documentElement.scrollTop;
-  }
-  var right = actualTop - elementScrollTop;
-  //返回结果
-  return { x: left, y: right };
-}
+
 export default {
   name: "MyComponent",
   data() {
@@ -388,8 +359,30 @@ export default {
         username: "IntP",
         img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
         bookname: "焦虑的人",
-        bookidL: 1,
+        bookid: 1,
         content: "testtest",
+      },
+      {
+        id: 3,
+        date: "2022-5-4",
+        userId: 2,
+        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+        username: "看看中文",
+        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
+        bookname: "焦虑的人",
+        bookid: 1,
+        content: "多搞点",
+      },
+      {
+        id: 4,
+        date: "2022-5-4",
+        userId: 2,
+        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+        username: "还有好多没写",
+        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
+        bookname: "焦虑的人",
+        bookid: 1,
+        content: "多搞点",
       },
     ];
     var collections = [
@@ -449,8 +442,8 @@ export default {
       console.log("slide");
       var vertical = document.getElementsByClassName("bookpage-vertical").item(0);
         var pos = vertical.getBoundingClientRect();
-        console.log(pos.bottom);
-        if (pos.bottom < 1812) {
+        console.log(pos.top);
+        if (pos.top < 29) {
           var aside = document.getElementsByClassName("aside").item(0);
           if(aside!=null)
           aside.setAttribute("class", "aside-slide");
@@ -470,8 +463,9 @@ export default {
   width: 1600px;
   padding-left: 100px;
 }
-.bookpage-body {
+#bookpage-body {
   width: 1580px;
+  padding-bottom: 50px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -546,7 +540,7 @@ export default {
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
   position: fixed;
-  right: 69px;
+  left:1260px;
   top: -50px;
 }
 .bookpage-comments {
@@ -579,6 +573,10 @@ div.comment-origin-pic {
   left: 0;
   top: 20px;
   margin-left: 5px;
+}
+.nameOfuser{
+  font-family: Source Han Sans CN Normal;
+  font-size: 17px;
 }
 .comment-content {
   display: flex;

@@ -100,6 +100,10 @@ div.diary-origin-pic{
   margin-right: 5px;
   vertical-align: sub;
 }
+.nameOfuser{
+  font-size: 17px;
+  font-family: Source Han Sans CN Normal;
+}
 .diarytext {
   position: relative;
   top:20px;

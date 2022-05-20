@@ -373,7 +373,8 @@ img.hot.books {
   margin-bottom: 0;
 }
 .nameOfuser{
-  font-family: PingFang SC;
+  font-size: 17px;
+  font-family: Source Han Sans CN Normal;
 }
 .comments-pic{
   height:120px;
