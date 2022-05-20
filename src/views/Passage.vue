@@ -48,7 +48,7 @@
           </button>
         </div>
       </div>
-      <div v-if="reply===true" class="reply-input">
+      <div v-if="Toreply === true" class="reply-input">
         <el-input
           type="textarea"
           placeholder="请输入回复"
@@ -58,6 +58,48 @@
           show-word-limit
         >
         </el-input>
+      </div>
+      <div class="reply-block">
+        <div class="title">回复</div>
+        <div class="reply-display" v-for="reply in replys" :key="reply.id">
+          <hr />
+          <div class="display-publisher">
+            <a class="userOfreply" @click="toUser(reply.userid)">
+              <img class="iconOfuser" :src="reply.usericon" /><span
+                class="nameOfuser"
+                >{{ reply.username }}</span
+              >
+            </a>
+            <span class="publishtime">{{ reply.date }}</span>
+          </div>
+          <div class="reply-content">
+            {{ reply.content }}
+            <div
+              class="sreply-display"
+              v-for="sreply in reply.reply"
+              :key="sreply.id"
+            >
+              <div class="display-publisher">
+                <a class="userOfreply" @click="toUser(sreply.userid)">
+                  <img class="iconOfuser" :src="reply.usericon" /><span
+                    class="nameOfuser"
+                    >{{ sreply.username }}</span
+                  >
+                </a>
+                <span class="publishtime">{{ reply.date }}</span>
+              </div>
+              <div class="reply-content">
+                <a class="replied-user" @click="toUser(sreply.replyed_userid)">
+                  @{{ sreply.replyed_username }}
+                </a>
+                {{ sreply.content }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div clas="aside">
+
       </div>
     </div>
   </div>
@@ -88,12 +130,46 @@ export default {
       like: 100,
       reply: 0,
     };
+    var replys = [
+      {
+        id: 1,
+        username: "Puff",
+        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+        userid: 1,
+        date: "2020-1-1",
+        content: "说了一段很有才华的话，好多人点赞",
+        reply: [
+          {
+            id: 3,
+            username: "是我呀",
+            usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+            userid: 3,
+            date: "2022-4-1",
+            replyed_username: "Puff",
+            replyed_userid: 1,
+            content:
+              "正确的，直接的，中肯的，雅致的，客观的，完整的，立体的，全面的，辩证的，形而上学的，雅俗共赏的，一针见血‌‌​​‌‌​​​​‌‌‌​​​‌‌​​的，直击要害的",
+          },
+        ],
+      },
+      {
+        id: 2,
+        username: "哈哈",
+        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+        userid: 2,
+        date: "2002-4-1",
+        content:
+          "凑一百字废话哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈凑一百字废话哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈\
+凑一百字废话哈哈哈哈哈哈",
+      },
+    ];
     var like = false;
-    var reply = false;
+    var Toreply = false;
     return {
       passage,
       like,
-      reply,
+      Toreply,
+      replys,
       text: "",
       textarea: "",
     };
@@ -110,7 +186,14 @@ export default {
       this.like = false;
     },
     clickreply() {
-      this.reply = true;
+      if (this.Toreply === false) this.Toreply = true;
+      else this.Toreply = false;
+    },
+    toUser(id) {
+      this.$router.push({
+        name: "user",
+        query: { id: id },
+      });
     },
   },
 };
@@ -233,12 +316,52 @@ export default {
   width: 100px;
   display: flex;
 }
-.reply-input{
-    margin-top:30px;
-    width:860px;
-    margin-left: 150px;
-    margin-right: 150px;
-    border-radius: 6px;
-    box-shadow: 0px 2px 3px #888888a6;
+.reply-input {
+  margin-top: 30px;
+  width: 860px;
+  margin-left: 150px;
+  margin-right: 150px;
+  border-radius: 6px;
+  box-shadow: 0px 2px 3px #888888a6;
+}
+.reply-block {
+  margin-top: 60px;
+  width: 1160px;
+  padding-left: 100px;
+  padding-right: 100px;
+  padding-bottom: 30px;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  box-shadow: 0px 2px 3px #888888a6;
+}
+.reply-block a:hover {
+  color: rgb(0, 166, 255);
+}
+a.replied-user{
+    color: rgb(0, 166, 255);
+}
+.display-publisher {
+  margin-top: 0;
+  padding-top: 0;
+  width: 820px;
+}
+.publishtime {
+  padding-left: 20px;
+  font-weight: 400;
+  color: rgb(157, 157, 157);
+}
+.reply-content {
+  margin-left: 20px;
+  padding-bottom: 20px;
+}
+.sreply-display {
+  margin-top: 5px;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 4px;
+  background-color: #dfdede55;
 }
 </style>
