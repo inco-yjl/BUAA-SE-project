@@ -24,21 +24,21 @@
       </div>
       <div style="border-top: 3px solid #d3dce6;width: 1000px ;height: 0; float: left;left: 0px; position:relative;"></div>
       <div class = "m_div">
-        <soan class = "title_l font_l blue">oslab4只得51分可能是因为什么</soan>
+        <span class = "title_l font_l blue">oslab4只得51分可能是因为什么</span>
         <span class = "res_l font_l">0回应</span>
         <span class = "time_l font_l">今天11：59</span>
         <span class = "group-name_l font_l blue">os学习小组</span>
         <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
       </div>
       <div class = "m_div m_nothead">
-        <soan class = "title_l font_l blue">绿园的鸭鸭</soan>
+        <span class = "title_l font_l blue">绿园的鸭鸭</span>
         <span class = "res_l font_l">122回应</span>
         <span class = "time_l font_l">今天11：58</span>
         <span class = "group-name_l font_l blue">唐博园！</span>
         <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
       </div>
       <div class = "m_div m_nothead">
-        <soan class = "title_l font_l blue">软工遇到no match</soan>
+        <span class = "title_l font_l blue">软工遇到no match</span>
         <span class = "res_l font_l">1回应</span>
         <span class = "time_l font_l">今天8：24</span>
         <span class = "group-name_l font_l blue">se学习小组</span>
