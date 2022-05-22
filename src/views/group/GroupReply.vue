@@ -24,28 +24,28 @@
       </div>
       <div style="border-top: 3px solid #d3dce6;width: 1000px ;height: 0; float: left;left: 0px; position:relative;"></div>
       <div class = "m_div m_nothead">
-        <soan class = "title_l font_l blue">oop网课，查询os状态</soan>
+        <span class = "title_l font_l blue">oop网课，查询os状态</span>
         <span class = "res_l font_l">352回应</span>
         <span class = "time_l font_l">昨天22：59</span>
         <span class = "group-name_l font_l blue">super2021</span>
         <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
       </div>
       <div class = "m_div m_nothead">
-        <soan class = "title_l font_l blue">全员核酸！</soan>
+        <span class = "title_l font_l blue">全员核酸！</span>
         <span class = "res_l font_l">155回应</span>
         <span class = "time_l font_l">前天8：59</span>
         <span class = "group-name_l font_l blue">校医院</span>
         <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
       </div>
       <div class = "m_div m_nothead">
-        <soan class = "title_l font_l blue">软工遇到no match</soan>
+        <span class = "title_l font_l blue">软工遇到no match</span>
         <span class = "res_l font_l">1回应</span>
         <span class = "time_l font_l">今天8：24</span>
         <span class = "group-name_l font_l blue">se学习小组</span>
         <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
       </div>
       <div class = "m_div m_nothead">
-        <soan class = "title_l font_l blue">平顶山市创建全国法治政府示范市</soan>
+        <span class = "title_l font_l blue">平顶山市创建全国法治政府示范市</span>
         <span class = "res_l font_l">1034回应</span>
         <span class = "time_l font_l">4月19日</span>
         <span class = "group-name_l font_l blue">观察者网</span>

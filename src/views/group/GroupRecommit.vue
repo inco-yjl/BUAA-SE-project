@@ -24,14 +24,14 @@
       </div>
       <div style="border-top: 3px solid #d3dce6;width: 1000px ;height: 0; float: left;left: 0px; position:relative;"></div>
       <div class = "m_div m_nothead">
-        <soan class = "title_l font_l blue">鸭鸭需要送到合一改造</soan>
+        <span class = "title_l font_l blue">鸭鸭需要送到合一改造</span>
         <span class = "res_l font_l">203回应</span>
         <span class = "time_l font_l">4月18日</span>
         <span class = "group-name_l font_l blue">唐博园</span>
         <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
       </div>
       <div class = "m_div m_nothead">
-        <soan class = "title_l font_l blue">lab3 2小时 0分！</soan>
+        <span class = "title_l font_l blue">lab3 2小时 0分！</span>
         <span class = "res_l font_l">534回应</span>
         <span class = "time_l font_l">4月16日</span>
         <span class = "group-name_l font_l blue">os学习小组</span>

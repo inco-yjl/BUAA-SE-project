@@ -6,7 +6,7 @@
   
   <div class = "left">
     <div class = "m_div">
-      <soan class = "title_l font_l blue">这个bug是因为什么呢</soan>
+      <span class = "title_l font_l blue">这个bug是因为什么呢</span>
       <span class = "res_l font_l">25回应</span>
       <span class = "time_l font_l">今天14：59</span>
       <span class = "group-name_l font_l blue">os学习小组</span>
@@ -20,63 +20,63 @@
       <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
     </div>
     <div class = "m_div m_nothead">
-      <soan class = "title_l font_l blue">绿园的鸭鸭</soan>
+      <span class = "title_l font_l blue">绿园的鸭鸭</span>
       <span class = "res_l font_l">122回应</span>
       <span class = "time_l font_l">今天11：58</span>
       <span class = "group-name_l font_l blue">唐博园！</span>
       <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
     </div>
     <div class = "m_div m_nothead">
-      <soan class = "title_l font_l blue">软工遇到no match</soan>
+      <span class = "title_l font_l blue">软工遇到no match</span>
       <span class = "res_l font_l">1回应</span>
       <span class = "time_l font_l">今天8：24</span>
       <span class = "group-name_l font_l blue">se学习小组</span>
       <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
     </div>
     <div class = "m_div m_nothead">
-      <soan class = "title_l font_l blue">oop网课，查询os状态</soan>
+      <span class = "title_l font_l blue">oop网课，查询os状态</span>
       <span class = "res_l font_l">352回应</span>
       <span class = "time_l font_l">昨天22：59</span>
       <span class = "group-name_l font_l blue">super2021</span>
       <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
     </div>
     <div class = "m_div m_nothead">
-      <soan class = "title_l font_l blue">体育网课！？</soan>
+      <span class = "title_l font_l blue">体育网课！？</span>
       <span class = "res_l font_l">18回应</span>
       <span class = "time_l font_l">昨天18：59</span>
       <span class = "group-name_l font_l blue">super2021</span>
       <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
     </div>
     <div class = "m_div m_nothead">
-      <soan class = "title_l font_l blue">全员核酸！</soan>
+      <span class = "title_l font_l blue">全员核酸！</span>
       <span class = "res_l font_l">155回应</span>
       <span class = "time_l font_l">前天8：59</span>
       <span class = "group-name_l font_l blue">校医院</span>
       <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
     </div>
     <div class = "m_div m_nothead">
-      <soan class = "title_l font_l blue">蹲在新北的小伙子</soan>
+      <span class = "title_l font_l blue">蹲在新北的小伙子</span>
       <span class = "res_l font_l">103回应</span>
       <span class = "time_l font_l">5月4日</span>
       <span class = "group-name_l font_l blue">观察者网</span>
       <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
     </div>
     <div class = "m_div m_nothead">
-      <soan class = "title_l font_l blue">平顶山市创建全国法治政府示范市</soan>
+      <span class = "title_l font_l blue">平顶山市创建全国法治政府示范市</span>
       <span class = "res_l font_l">1034回应</span>
       <span class = "time_l font_l">4月19日</span>
       <span class = "group-name_l font_l blue">观察者网</span>
       <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
     </div>
     <div class = "m_div m_nothead">
-      <soan class = "title_l font_l blue">鸭鸭需要送到合一改造</soan>
+      <span class = "title_l font_l blue">鸭鸭需要送到合一改造</span>
       <span class = "res_l font_l">203回应</span>
       <span class = "time_l font_l">4月18日</span>
       <span class = "group-name_l font_l blue">唐博园</span>
       <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
     </div>
     <div class = "m_div m_nothead">
-      <soan class = "title_l font_l blue">lab3 2小时 0分！</soan>
+      <span class = "title_l font_l blue">lab3 2小时 0分！</span>
       <span class = "res_l font_l">534回应</span>
       <span class = "time_l font_l">4月16日</span>
       <span class = "group-name_l font_l blue">os学习小组</span>
