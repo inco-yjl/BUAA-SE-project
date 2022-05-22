@@ -177,7 +177,7 @@ export default {
 }
 .head_title{
   position: relative;
-  left: -100px;
+  left: 100px;
   width: 1590px;
   height: 70px;
 }

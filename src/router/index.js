@@ -44,6 +44,11 @@ const routes = [
     component: () =>import('../views/book/Book.vue')
   },
   {
+    path: '/book/comment',
+    name: 'bookcomment',
+    component: () =>import('../views/book/BookComment.vue')
+  },
+  {
     path: '/editor',
     name: 'editor',
     component: () => import('../views/editors/CommentEditor.vue')

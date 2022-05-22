@@ -50,9 +50,10 @@ export default ({
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&display=swap');
 #navigation{
-    width:1690px;
+    position: absolute;
+    width:100%;
     height:70px;
-    margin: 0,0,0,0;
+    margin-bottom: 0px;
     padding-top:0,0,0,0;
     justify-content: flex-start;
     flex-direction: row;
