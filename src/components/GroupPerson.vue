@@ -5,7 +5,7 @@
     <div class = "personG">
         <span>&nbsp;</span>
         <a href="../group/main"> <!--用相对路径跳转，不是文件路径，所以有警告，有空我试试消除0.0-->
-        <h2 id = "mypersonworld">我的个人主页</h2>
+        <h2 id = "mypersonworld">我的小组主页</h2>
         </a>  
         <span class = "smallword">&nbsp;发起(3)</span>
         <span class = "smallword">&nbsp;|&nbsp;</span>

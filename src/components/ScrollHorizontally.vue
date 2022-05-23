@@ -1,6 +1,6 @@
 <template>  
   <el-carousel :interval="4000" type="card" height="200px">
-    <el-carousel-item v-for="(img) in arr">
+    <el-carousel-item v-for="(img) in arr" :key="index">
       <img :src = "img.url">
     </el-carousel-item>
   </el-carousel>

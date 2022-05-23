@@ -585,10 +585,12 @@ export default {
         this.content = "已关注";
         this.bg_color = "#6cf57c";
         this.ft_color = "#f2fef0";
+        this.topic.peoplenum++;
       } else {
         this.content = "+关注话题";
         this.bg_color = "#f2fef0";
         this.ft_color = "#6cf57c";
+        this.topic.peoplenum--;
       }
     },
     change() {

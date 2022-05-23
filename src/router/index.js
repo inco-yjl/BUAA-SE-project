@@ -98,6 +98,16 @@ const routes = [
       name: 'register',
       component: () => import('../views/user/Register.vue')
     },
+    {
+      path: '/GroupHome',
+      name: 'GroupHome',
+      component: () => import('../views/group/GroupHome.vue')
+    },
+    {
+      path: '/groupinit',
+      name: 'Groupinit',
+      component: () => import('../views/group/groupinit.vue')
+    },
   ]
 },
 

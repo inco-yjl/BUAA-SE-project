@@ -3,7 +3,6 @@
   <div class="head_title">
     <h1 style="text-align: left;  font-weight: bolder;">我的小组讨论</h1>
   </div>
-  
   <div class = "left">
     <div class = "m_div">
       <span class = "title_l font_l blue">这个bug是因为什么呢</span>
@@ -82,7 +81,23 @@
       <span class = "group-name_l font_l blue">os学习小组</span>
       <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
     </div>
+    <div class='page-nav'>
+      <ul>
+        <li><a href="#">首页</a></li>
+        <li><a href="#">上一页</a></li>0.
+
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#">下一页</a></li>
+        <li><a href="#">末页</a></li>
+      </ul>
+    </div>
+
   </div>
+  
   <div style="border-left: 3px solid #d3dce6;width: 0;height: 500px; float: left;left: 25px; position:relative;"></div>
   <div class = "right">
     <groupPerson></groupPerson>
@@ -163,6 +178,25 @@ export default {
 </script>
 
 <style>
+.page-nav{
+  height: 60px;
+  width:100%;
+  line-height: 60px;
+  text-align: center;
+  overflow: hidden;
+}
+.page-nav>ul{
+  overflow: hidden;
+  margin: 0 30%;
+  width:80%;
+}
+.page-nav>ul>li{
+  float: left;
+  list-style-type: none;
+  margin-right:20px;
+}
+
+
 .title{
   font-weight: bold;
   font-family: "Adobe 宋体 Std L",serif;
@@ -177,7 +211,6 @@ export default {
 }
 .head_title{
   position: relative;
-  left: -100px;
   width: 1590px;
   height: 70px;
 }
@@ -223,7 +256,7 @@ export default {
   transition: 0.5s;
 }
 .massage{
-  font-size: 25px;
+  font-size: 20px;
   font-family: "Adobe 宋体 Std L",serif;
   font-weight: bold;
 }
@@ -252,7 +285,7 @@ export default {
   float: left;
 }
 .font_l{
-  font-size: 24px;
+  font-size: 20px;
   font-family: "Adobe 宋体 Std L",serif;
   font-weight: bold;
 }
