@@ -16,7 +16,7 @@
                     <el-dropdown-menu slot="dropdown">
                         <a href = "/person"><el-dropdown-item icon="el-icon-user-solid">个人主页</el-dropdown-item></a>
                         <el-dropdown-item icon="el-icon-chat-line-round">我的消息</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-switch-button">退出账号</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-switch-button" @click="logout">退出账号</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-col>
@@ -39,6 +39,9 @@ export default ({
     // 初始化
     isLogin (msg) {
       this.navigate=false;
+    },
+    logout(){
+      this.$router.replace({path:'/login'});
     }
   }
 }

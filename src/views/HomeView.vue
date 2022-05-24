@@ -499,7 +499,9 @@ export default {
   },
   methods: {
     //this is the function to update the images of books
-    
+    logout(){
+      this.$router.replace({path:'/login'});
+    }
   
   },
   mounted() {},

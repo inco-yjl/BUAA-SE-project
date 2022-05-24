@@ -22,7 +22,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item class="btn_login">
-          <el-button type="primary">登&nbsp;&nbsp;录</el-button>
+          <el-button type="primary" @click="login">登&nbsp;&nbsp;录</el-button>
         </el-form-item>
         <el-form-item class="btn_login">
           <el-button onclick="window.location.href='../register'"
@@ -37,14 +37,18 @@
 
 <script>
 import global from "@/components/common.vue";
+import { LoginRequest } from "@/plugins/request/LoginRequest";
+import axios from "axios";
 export default {
   name: "Login",
+
   data() {
+    var form = {
+      username: "",
+      password: "",
+    };
     return {
-      form: {
-        username: "",
-        password: "",
-      },
+      form,
     };
   },
 
@@ -62,6 +66,24 @@ export default {
       this.$router.replace({
         path: "/home",
       });
+    },
+    login: function () {
+      console.log("！！！");
+      this.$axios({ url: '/login', method: "post", data: this.form })
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            this.$message.success("登录成功");
+            this.$store.dispatch("saveUserInfo", {
+              user: res.data.data,
+            });
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 
