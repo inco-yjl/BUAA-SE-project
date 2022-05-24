@@ -61,8 +61,9 @@ export default {
             this.$parent.navigate=false;
     },
     register: function () {
-      this.$axios.post('/user/register', qs.stringify(this.form))
+      this.$axios.post('/register', qs.stringify(this.user))
         .then(res => {
+          console.log(res);
           if (res.data.errno === 0) {
             this.$message.success("注册成功");
             setTimeout(() => {

@@ -37,8 +37,7 @@
 
 <script>
 import global from "@/components/common.vue";
-import { LoginRequest } from "@/plugins/request/LoginRequest";
-import axios from "axios";
+import qs from "qs";
 export default {
   name: "Login",
 
@@ -62,27 +61,35 @@ export default {
     passanger() {
       this.addNavigation();
       const _this = this;
-      global.currentUserId = null;
+      global.currentUserId = -1;
       this.$router.replace({
         path: "/home",
       });
     },
-    login: function () {
-      console.log("！！！");
-      this.$axios({ url: '/login', method: "post", data: this.form })
+    login() {
+      this.$axios
+        .post("/login", qs.stringify(this.form))
         .then((res) => {
-          console.log(res);
-          if (res.data.errno === 0) {
-            this.$message.success("登录成功");
-            this.$store.dispatch("saveUserInfo", {
-              user: res.data.data,
+          if (res.data.msg === '登录成功') {
+            console.log("获取到登录信息", res);
+            this.$message({
+              message: "登录成功",
+              type: "success",
             });
-          } else {
-            this.$message.error(res.data.msg);
+            console.log(res.data.data);
+            this.$store.dispatch('saveUserInfo', {
+                user: res.data.data
+              });
+              global.currentUserId = res.data.data.id;
+              console.log(res.data.data.id+'已登录');
+              window.open('/home', '_self');
+          }
+          else{
+             this.$message.error(res.data.msg);
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((error) => {
+          console.log(error);
         });
     },
   },

@@ -4,24 +4,18 @@ function resolve(dir) {
 }
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
-  publicPath: '/',
   devServer: {
-    // can be overwritten by process.env.HOST
-    host: 'localhost',
-    port: 8080,
-    proxy:{
-      '/api/*':{
-        target:'http://127.0.0.1:8081/api',
-        changeOrigin: true, // true:开启代理，使接口 允许跨域
-        secure:false
-        /*
-        pathRewrite: {
-          '^/api': ' ' 
+    proxy: {
+        '/api/*': {
+            target: 'http://127.0.0.1:8081/api',
+            // ↑这个就是你的接口地址↑
+            changeOrigin: true,
+            pathRewrite: {
+                '^/api': '/'
+            }
         }
-        */
-      }
     }
-  },
+},
   transpileDependencies: true,
   chainWebpack: config => {
     config.resolve.alias
