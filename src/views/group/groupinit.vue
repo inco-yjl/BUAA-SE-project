@@ -44,7 +44,7 @@
                 class="selection_ed"
                 id="select-hot-topic-dt"
                 onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
-                @click="hotTopicdt()"
+                @click="hotGroup()"
             >
               热门讨论</button
             >/
@@ -52,15 +52,15 @@
                 class="selection_un"
                 id="select-new-topic-dt"
                 onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
-                @click="newTopicdt()"
+                @click="newGroup()"
             >
               最新讨论
             </button>
           </span>
         </div>
-
-        <div class = "vertical" style="position:relative; float: left; width: 1050px"> 
-          <div class = "m_div m_nothead ver" v-for="mes in message" :key = "mes.id">
+        
+        <div  style="position:relative; float: left; width: 1450px; margin-top: 30px;"> 
+          <div class = "m_div m_nothead " v-for="mes in nowmes" :key = "mes.id">
             <span class = "title_l font_l" style="color: #444444;">{{mes.name}}</span>
             <span class = "res_l font_l">{{mes.replynumber}}回复</span>
             <span class = "time_l font_l">{{mes.time}}</span>
@@ -69,15 +69,7 @@
           </div>
           <span>&nbsp;</span>
         </div>
-
-        <div class="topic-page-number">
-          <el-pagination
-              @next-click="changeTopicdt()"
-              :page-size="3"
-              layout="prev, pager, next, jumper"
-              :total="topic.dtnum"
-          >
-          </el-pagination>
+        <div><span>&nbsp;</span></div>
         </div>
       </div>
     </div>
@@ -89,6 +81,49 @@
 
 .topic-name {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-weight: bold;
+}
+.title_second_head{
+  font-size: 26px;
+  font-family: 华文细黑,sans-serif;
+}
+.title_Second{
+  position: relative;
+  float: left;
+  height: 50px;
+}
+.title_second_head{
+  font-size: 26px;
+  font-family: 华文细黑,sans-serif;
+}
+.title_Second{
+  position: relative;
+  float: left;
+  height: 50px;
+}
+.title_l{
+  width: 525px;
+  position: relative;
+  float: left;
+}
+.group-name_l{
+  width: 150px;
+  position: relative;
+  float: left;
+}
+.res_l{
+  width: 125px;
+  position: relative;
+  float: left;
+}
+.time_l{
+  width: 200px;
+  position: relative;
+  float: left;
+}
+.font_l{
+  font-size: 24px;
+  font-family: "Adobe 宋体 Std L",serif;
   font-weight: bold;
 }
 button.selection_un {
@@ -182,6 +217,8 @@ div.title {
   width: 1150px;
   font-family: Source Han Sans CN Normal;
   font-size: 20px;
+  position: relative;
+  float: left;
 }
 #topic-intro-info {
   margin-left: 25px;
@@ -396,6 +433,17 @@ button {
 div.body{
   padding-bottom: 100px;
 }
+.vertical {
+  padding-top: 20px;
+  padding-left: 40px;
+  padding-right: 35px;
+  margin-top: 80px;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  box-shadow: 0px 2px 3px #888888a6;
+}
 </style>
 <style>
 .el-pager li {
@@ -419,61 +467,39 @@ export default {
   },
   data() {
     var id = this.$route.params.id; //根据id来询问
-    var topic = {
-      name: "寻找春日气息",
-      peoplenum: 22,
-      hotdt: [
-        {
-          user: "yjl",
-          usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
-          passage: "懒得想了",
-          date: "2022-4-30",
-          img: "https://i.imgtg.com/2022/05/10/zSkWF.jpg",
-        },
-        {
-          user: "intp",
-          usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
-          passage: "懒得想了2",
-          date: "2022-5-10",
-          img: "https://i.imgtg.com/2022/05/10/zSxy6.jpg",
-        },
-        {
-          user: "bot",
-          usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
-          passage: "懒得想了3",
-          date: "2002-6-7",
-          img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
-        },
-      ],
-    };
     var group = {
       name: "龙族",
       peoplenum: 22,
-      hotdt: [
-        {
-          user: "yjl",
-          usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
-          passage: "懒得想了",
-          date: "2022-4-30",
-          img: "https://i.imgtg.com/2022/05/10/zSkWF.jpg",
-        },
-        {
-          user: "intp",
-          usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
-          passage: "懒得想了2",
-          date: "2022-5-10",
-          img: "https://i.imgtg.com/2022/05/10/zSxy6.jpg",
-        },
-        {
-          user: "bot",
-          usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
-          passage: "懒得想了3",
-          date: "2002-6-7",
-          img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
-        },
-      ],
     };
     var hotmes = [
+      {
+        name: "这个bug是因为什么呢",
+        id: 2,
+        replynumber: 23,
+        time: "2022-4-13",
+        groupname: "se学习小组",
+      },
+      {
+        name: "体育网课！？",
+        id: 2,
+        replynumber: 47,
+        time: "2022-4-13",
+        groupname: "体育场",
+      },
+      {
+        name: "上午核酸人数查询",
+        id: 2,
+        replynumber: 66,
+        time: "2022-4-18",
+        groupname: "校医院",
+      },
+      {
+        name: "软工进度？？？",
+        id: 2,
+        replynumber: 56,
+        time: "2022-4-10",
+        groupname: "se学习小组",
+      },
       {
         name: "lab3 2小时 0分！",
         id: 2,
@@ -526,52 +552,16 @@ export default {
         groupname: "os学习小组",
       },
     ];
-    var newdt = [
-      {
-        user: "yjl",
-        usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
-        passage:
-            "既然如何， 我们都知道，只要有意义，那么就必须慎重考虑。\
-           所谓前端，关键是前端需要如何写。 一般来讲，我们都必须务必慎重的考虑考虑。\
-            前端因何而发生?这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 \
-            培根在不经意间这样说过，深窥自己的心，而后发觉一切的奇迹在你自己。带着这句话，我们还要更加慎重的审视这个问题：\
-             总结的来说， 我认为， 那么， 一般来讲，我们都必须务必慎重的考虑考虑。 我们不得不面对一个非常尴尬的事实，那就是，\
-              本人也是经过了深思熟虑，在每个日日夜夜思考这个问题。 现在，解决前端的问题，是非常非常重要的。",
-        date: "2022-4-30",
-        topic: "寻找春日气息",
-        img: "https://i.imgtg.com/2022/05/10/zSkWF.jpg",
-      },
-      {
-        user: "intp",
-        usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
-        passage: "懒得想了",
-        date: "2022-5-10",
-        topic: "一起去看海",
-        img: "https://i.imgtg.com/2022/05/10/zSxy6.jpg",
-      },
-      {
-        user: "bot",
-        usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
-        passage: "testtest",
-        date: "2002-6-7",
-        topic: "游戏中的难忘瞬间",
-        img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
-      },
-    ];
-    var dt=topic.hotdt;
+    
     var nowmes = hotmes;
+    
     return {
-      dt1:dt[0],
-      dt2:dt[1],
-      dt3:dt[2],
-      topic,
-      newdt,
       hotmes,
       newmes,
       nowmes,
       group,
       liked: false,
-      content: "+关注话题",
+      content: "加入小组",
       bg_color: "#f2fef0",
       ft_color: "#47ff5d",
     };
@@ -605,19 +595,16 @@ export default {
       }
     },
     hotGroup() {
+      document
+          .getElementById("select-new-topic-dt")
+          .setAttribute("class", "selection_un");
       this.nowmes = this.hotmes;
     },
     newGroup() {
       this.nowmes = this.newmes;
-    },
-    hotTopicdt() {
-      //更换标签时获取数据
       document
-          .getElementById("select-new-topic-dt")
+          .getElementById("select-hot-topic-dt")
           .setAttribute("class", "selection_un");
-      this.dt=this.topic.hotdt;
-      this.Updatediary();
-
     },
     //this is the function to update the images of books
     updateButton() {
@@ -625,11 +612,6 @@ export default {
           .getElementsByClassName("selection_un")
           .item(4)
           .setAttribute("class", "selection_ed");
-    },
-    Updatediary() {
-      this.dt1=this.dt[0];
-      this.dt2=this.dt[1];
-      this.dt3=this.dt[2];
     },
     writeTopicDt(){ //zhe li you dian wen ti deng deng
       this.$router.push({
@@ -642,14 +624,6 @@ export default {
       })
     },
     changeTopicdt() {},
-    newTopicdt(){
-      //获取新的数据
-      document
-          .getElementById("select-hot-topic-dt")
-          .setAttribute("class", "selection_un");
-      this.dt=this.newdt;
-      this.Updatediary();
-    }
   },
   mounted() {
     this.$parent.navigate = true;

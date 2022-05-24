@@ -3,103 +3,31 @@
   <div class="head_title">
     <h1 style="text-align: left;  font-weight: bolder;">我的小组讨论</h1>
   </div>
-  <div class = "left">
-    <div class = "m_div">
-      <span class = "title_l font_l blue">这个bug是因为什么呢</span>
-      <span class = "res_l font_l">25回应</span>
-      <span class = "time_l font_l">今天14：59</span>
-      <span class = "group-name_l font_l blue">os学习小组</span>
-      <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
+  <div class = "left vertical" style="top: 0px;">
+    <div  style="position:relative; float: left; width: 1450px; margin-top: 30px;">
+      <div class = "m_div m_nothead " v-for="mes in message[nowpage-1]" :key = "mes.id">
+        <span class = "title_l font_l" style="color: #444444;">{{mes.name}}</span>
+        <span class = "res_l font_l">{{mes.replynumber}}回复</span>
+        <span class = "time_l font_l">{{mes.time}}</span>
+        <span class = "group-name_l font_l" style="color: #444444;">{{mes.groupname}}</span>
+        <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
+      </div>
+      <span>&nbsp;</span>
     </div>
-    <div class = "m_div m_nothead">
-      <soan class = "title_l font_l blue">oslab4只得51分可能是因为什么</soan>
-      <span class = "res_l font_l">0回应</span>
-      <span class = "time_l font_l">今天11：59</span>
-      <span class = "group-name_l font_l blue">os学习小组</span>
-      <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
-    </div>
-    <div class = "m_div m_nothead">
-      <span class = "title_l font_l blue">绿园的鸭鸭</span>
-      <span class = "res_l font_l">122回应</span>
-      <span class = "time_l font_l">今天11：58</span>
-      <span class = "group-name_l font_l blue">唐博园！</span>
-      <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
-    </div>
-    <div class = "m_div m_nothead">
-      <span class = "title_l font_l blue">软工遇到no match</span>
-      <span class = "res_l font_l">1回应</span>
-      <span class = "time_l font_l">今天8：24</span>
-      <span class = "group-name_l font_l blue">se学习小组</span>
-      <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
-    </div>
-    <div class = "m_div m_nothead">
-      <span class = "title_l font_l blue">oop网课，查询os状态</span>
-      <span class = "res_l font_l">352回应</span>
-      <span class = "time_l font_l">昨天22：59</span>
-      <span class = "group-name_l font_l blue">super2021</span>
-      <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
-    </div>
-    <div class = "m_div m_nothead">
-      <span class = "title_l font_l blue">体育网课！？</span>
-      <span class = "res_l font_l">18回应</span>
-      <span class = "time_l font_l">昨天18：59</span>
-      <span class = "group-name_l font_l blue">super2021</span>
-      <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
-    </div>
-    <div class = "m_div m_nothead">
-      <span class = "title_l font_l blue">全员核酸！</span>
-      <span class = "res_l font_l">155回应</span>
-      <span class = "time_l font_l">前天8：59</span>
-      <span class = "group-name_l font_l blue">校医院</span>
-      <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
-    </div>
-    <div class = "m_div m_nothead">
-      <span class = "title_l font_l blue">蹲在新北的小伙子</span>
-      <span class = "res_l font_l">103回应</span>
-      <span class = "time_l font_l">5月4日</span>
-      <span class = "group-name_l font_l blue">观察者网</span>
-      <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
-    </div>
-    <div class = "m_div m_nothead">
-      <span class = "title_l font_l blue">平顶山市创建全国法治政府示范市</span>
-      <span class = "res_l font_l">1034回应</span>
-      <span class = "time_l font_l">4月19日</span>
-      <span class = "group-name_l font_l blue">观察者网</span>
-      <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
-    </div>
-    <div class = "m_div m_nothead">
-      <span class = "title_l font_l blue">鸭鸭需要送到合一改造</span>
-      <span class = "res_l font_l">203回应</span>
-      <span class = "time_l font_l">4月18日</span>
-      <span class = "group-name_l font_l blue">唐博园</span>
-      <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
-    </div>
-    <div class = "m_div m_nothead">
-      <span class = "title_l font_l blue">lab3 2小时 0分！</span>
-      <span class = "res_l font_l">534回应</span>
-      <span class = "time_l font_l">4月16日</span>
-      <span class = "group-name_l font_l blue">os学习小组</span>
-      <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
-    </div>
-    <div class='page-nav'>
-      <ul>
-        <li><a href="#">首页</a></li>
-        <li><a href="#">上一页</a></li>0.
-
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li><a href="#">下一页</a></li>
-        <li><a href="#">末页</a></li>
-      </ul>
-    </div>
+    <div class="page-nav">
+      <el-pagination
+          id = page
+          @current-change="tochange"
+          :page-size="10"
+          layout="prev, pager, next, jumper"
+          :total="maxpage*10"
+      >
+      </el-pagination>
+    </div>  
 
   </div>
   
-  <div style="border-left: 3px solid #d3dce6;width: 0;height: 500px; float: left;left: 25px; position:relative;"></div>
-  <div class = "right">
+  <div class = "right vertical">
     <groupPerson></groupPerson>
     <div class = "groupusually">
       <h2 style="text-align: left" class = "title">常去的小组</h2>
@@ -172,12 +100,177 @@ export default {
   name: "group",
   components: {
     groupPerson,
+  },
+  data() {
+    var message = [
+        [
+      {
+        name: "lab3 2小时 0分！",
+        id: 2,
+        replynumber: 1,
+        time: "2022-4-13",
+        groupname: "se学习小组",
+      },
+      {
+        name: "软工遇到no match",
+        id: 3,
+        replynumber: 534,
+        time: "2022-4-12",
+        groupname: "os学习小组",
+      },
+      {
+        name: "oslab4只得51分可能是因为什么",
+        id: 4,
+        replynumber: 5,
+        time: "2022-4-10",
+        groupname: "os学习小组",
+      },
+      {
+        name: "oop网课，查询os状态",
+        id: 5,
+        replynumber: 12,
+        time: "2022-4-02",
+        groupname: "面向奶奶",
+      },
+      {
+        name: "平顶山市创建全国法治政府示范市",
+        id: 6,
+        replynumber: 1042,
+        time: "2022-4-02",
+        groupname: "平顶上山",
+      },
+      {
+        name: "全员核酸！",
+        id: 7,
+        replynumber: 102,
+        time: "2022-4-01",
+        groupname: "校医院",
+      },
+      {
+        name: "蹲在新北的小虎子",
+        id: 9,
+        replynumber: 52,
+        time: "2022-2-12",
+        groupname: "观察者网",
+      },
+      {
+        name: "绿园的鸭鸭",
+        id: 10,
+        replynumber: 15552,
+        time: "2022-2-12",
+        groupname: "唐博湖",
+      },
+      {
+        name: "软工大作业",
+        id: 9,
+        replynumber: 256,
+        time: "2022-2-12",
+        groupname: "se小组",
+      },],
+      [
+        {
+          name: "lab3 2小时 0分！",
+          id: 2,
+          replynumber: 1,
+          time: "2022-4-13",
+          groupname: "se学习小组",
+        },
+        {
+          name: "软工遇到no match",
+          id: 3,
+          replynumber: 534,
+          time: "2022-4-12",
+          groupname: "os学习小组",
+        },
+        {
+          name: "oslab4只得51分可能是因为什么",
+          id: 4,
+          replynumber: 5,
+          time: "2022-4-10",
+          groupname: "os学习小组",
+        },
+        {
+          name: "oop网课，查询os状态",
+          id: 5,
+          replynumber: 12,
+          time: "2022-4-02",
+          groupname: "面向奶奶",
+        },
+        {
+          name: "平顶山市创建全国法治政府示范市",
+          id: 6,
+          replynumber: 1042,
+          time: "2022-4-02",
+          groupname: "平顶上山",
+        },
+        {
+          name: "全员核酸！",
+          id: 7,
+          replynumber: 102,
+          time: "2022-4-01",
+          groupname: "校医院",
+        }, 
+      ],
+    ];
+    
+    var nowpage = 1;
+    var maxpage = 2;
+    return{
+      message,
+      maxpage,
+      nowpage,
+    }
+  },
+  methods: {
+    first() {
+      this.nowpage = 1;
+      document.getElementById("1")
+              .setAttribute("class","blue");
+    },
+    last() {
+      this.nowpage = 2;
+      document.getElementById("1")
+          .setAttribute("class","blue");
+    },
+    next() {
+      if(nowpage != maxpage)
+      this.nowpage++;
+      document.getElementById("{{this.nowpage}}")
+          .setAttribute("class","blue");
+    },
+    before() {
+      if(this.nowpage != 1)
+      this.nowpage--;
+      document.getElementById("{{this.nowpage}}")
+          .setAttribute("class","blue");
+    },
+    topage(e) {
+      this.nowpage = e;
+      document.getElementById(e)
+          .setAttribute("class","blue");
+    },
+    tochange(Page) {
+      this.nowpage = Page;
+      document.getElementById(Page)
+          .setAttribute("class","blue");
+    }
   }
-  
 }
 </script>
 
 <style>
+.vertical {
+  padding-top: 20px;
+  padding-left: 40px;
+  padding-right: 35px;
+  margin-top: 20px;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  box-shadow: 0px 2px 3px #888888a6;
+  padding-bottom: 20px;
+}
 .page-nav{
   height: 60px;
   width:100%;
