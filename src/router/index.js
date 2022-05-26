@@ -16,6 +16,9 @@ const routes = [
   children: [{
     path: '/home',
     name: 'home',
+    meta: {
+      keepAlive : true 
+    },
     component: HomeView
   },
   {
@@ -118,6 +121,14 @@ const routes = [
 {
   path:'/admin/uploadbook',
   component: () => import('../views/admin/UploadBook.vue'),
+},
+{
+  path:'/admin/uploadmovie',
+  component: () => import('../views/admin/UploadMovie.vue'),
+},
+{
+  path:'/admin/uploadtele',
+  component: () => import('../views/admin/UploadTele.vue'),
 }
 ]
 

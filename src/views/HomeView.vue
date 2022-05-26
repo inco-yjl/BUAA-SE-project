@@ -13,33 +13,27 @@
           </span>
           <div class="hit-ppt">
             <VueSlickCarousel
-            :dots="true"
-            :useCSS="true"
-            :infinite="false"
-            :speed="500"
-            :slidesToShow="8"
-            :slidesToScroll="8"
-            :touchThreshold="5"
-          >
-            <div
-              v-for="book in hotbooks"
-              :key="book.id"
+              :dots="true"
+              :useCSS="true"
+              :infinite="false"
+              :speed="500"
+              :slidesToShow="8"
+              :slidesToScroll="8"
+              :touchThreshold="5"
             >
-              <div>
-                <div class="hot-display-line">
-                  <img class="hot-display" :src="book.image"/>
-                  <div class="display-info">
-                    <span class="display-title"
-                      >《{{ book.name }}》</span
-                    ><br v-if="book.name.length<9"/>
-                    <span class="display-writer"
-                      >{{ book.author }}</span
-                    >
+              <div v-for="book in hotbooks" :key="book.id">
+                <div>
+                  <div class="hot-display-line">
+                    <img class="hot-display" :src="book.image" />
+                    <div class="display-info">
+                      <span class="display-title">《{{ book.name }}》</span
+                      ><br v-if="book.name.length < 9" />
+                      <span>{{ book.author }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </VueSlickCarousel>
+            </VueSlickCarousel>
           </div>
         </div>
         <div class="movies hothit">
@@ -52,33 +46,27 @@
           >
           <div class="hit-ppt">
             <VueSlickCarousel
-            :dots="true"
-            :useCSS="true"
-            :infinite="false"
-            :speed="500"
-            :slidesToShow="8"
-            :slidesToScroll="8"
-            :touchThreshold="5"
-          >
-            <div
-              v-for="book in hotbooks"
-              :key="book.id"
+              :dots="true"
+              :useCSS="true"
+              :infinite="false"
+              :speed="500"
+              :slidesToShow="8"
+              :slidesToScroll="8"
+              :touchThreshold="5"
             >
-              <div>
-                <div class="hot-display-line">
-                  <img class="hot-display" :src="book.img" />
-                  <div class="book-display-info">
-                    <span class="book-display-title"
-                      >《{{ book.name }}》</span
-                    ><br />
-                    <span class="book-display-writer"
-                      >{{ book.writer }}</span
-                    >
+              <div v-for="movie in hotmovies" :key="movie.id">
+                <div>
+                  <div class="hot-display-line">
+                    <img class="hot-display" :src="movie.image" />
+                    <div class="display-info">
+                      <span class="display-title">《{{ movie.name }}》</span
+                      ><br v-if="movie.name.length < 9"/>
+                      <span>{{ movie.director }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </VueSlickCarousel>
+            </VueSlickCarousel>
           </div>
         </div>
         <div class="tv hothit">
@@ -89,35 +77,29 @@
               >&ensp;>&ensp;</a
             ></span
           >
-           <div class="hit-ppt">
+          <div class="hit-ppt">
             <VueSlickCarousel
-            :dots="true"
-            :useCSS="true"
-            :infinite="false"
-            :speed="500"
-            :slidesToShow="8"
-            :slidesToScroll="8"
-            :touchThreshold="5"
-          >
-            <div
-              v-for="book in hotbooks"
-              :key="book.id"
+              :dots="true"
+              :useCSS="true"
+              :infinite="false"
+              :speed="500"
+              :slidesToShow="8"
+              :slidesToScroll="8"
+              :touchThreshold="5"
             >
-              <div>
-                <div class="hot-display-line">
-                  <img class="hot-display" :src="book.img" />
-                  <div class="display-info">
-                    <span class="display-title"
-                      >《{{ book.name }}》</span
-                    ><br />
-                    <span class="display-writer"
-                      >{{ book.writer }}</span
-                    >
+              <div v-for="book in hotbooks" :key="book.id">
+                <div>
+                  <div class="hot-display-line">
+                    <img class="hot-display" :src="book.img" />
+                    <div class="display-info">
+                      <span class="display-title">《{{ book.name }}》</span
+                      ><br />
+                      <span class="display-writer">{{ book.writer }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </VueSlickCarousel>
+            </VueSlickCarousel>
           </div>
         </div>
       </div>
@@ -298,14 +280,13 @@ div.body {
   padding-top: 20px;
   padding-left: 40px;
   padding-right: 35px;
-  padding-bottom:30px;
+  padding-bottom: 30px;
   margin-top: 80px;
   background-color: white;
   border-style: solid;
   border-width: 1px;
   border-color: rgb(181, 181, 181);
   box-shadow: 0px 2px 3px #888888a6;
-
 }
 .aside {
   margin-top: 80px;
@@ -534,10 +515,10 @@ a.commentlist:hover {
   border-color: aliceblue;
   border-width: 3px;
 }
-.display-info{
+.display-info {
   font-size: 12px;
 }
-.hit-ppt{
+.hit-ppt {
   width: 1070px;
   margin-bottom: 20px;
 }
@@ -545,7 +526,6 @@ a.commentlist:hover {
 <script>
 // @ is an alias to /src
 import powerpoint from "@/components/PowerPoint";
-import hit from "@/components/Hit";
 import search from "@/components/SelectSearch.vue";
 import commentDisplay from "@/components/ComDisplay.vue";
 //load the img needed
@@ -557,10 +537,10 @@ import "vue-slick-carousel/dist/vue-slick-carousel.css";
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 import "@/styles/comment.css";
 import qs from "qs";
-
 export default {
   name: "home",
   data() {
+    var loaddata =false;
     var bookcomments = [
       {
         id: 1,
@@ -603,87 +583,18 @@ export default {
         content: "testtest",
       },
     ];
-     var hotbooks = [
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-    ];
+    var hotbooks=[{}];
+    var hotmovies=[{}];
     return {
       bookcomments,
       moviecomments,
       hotbooks,
+      hotmovies,
+      loaddata
     };
   },
   components: {
     powerpoint,
-    hit,
     search,
     commentDisplay,
     VueSlickCarousel,
@@ -693,9 +604,12 @@ export default {
     logout() {
       this.$router.replace({ path: "/login" });
     },
-    updateHotBook() {
-      var params={
-        num:10
+    created(){
+      this.updateHotBook();
+    },
+    async updateHotBook() {
+      var params = {
+        num: 10,
       };
       this.$axios
         .post("/book/hot", qs.stringify(params))
@@ -704,11 +618,39 @@ export default {
             console.log("书籍查询成功");
             //console.log(res.data.data)
             this.hotbooks = res.data.data;
-            var i=0;
-            for(i=0;i<10;i++){
-              var length=14-this.hotbooks[i].name.length;
-              if(this.hotbooks[i].author.length>length)
-                this.hotbooks[i].author=this.hotbooks[i].author.substring(0,length)+'…';
+            var i = 0;
+            for (i = 0; i < 10; i++) {
+              var length = 14 - this.hotbooks[i].name.length;
+              if (this.hotbooks[i].author.length > length)
+                this.hotbooks[i].author =
+                  this.hotbooks[i].author.substring(0, length) + "…";
+            }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+        this.loaddata=true;
+    },
+    async updateHotMovies() {
+      var params = {
+        num: 10,
+      };
+      this.$axios
+        .post("/movie/hot", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("电影查询成功");
+            //console.log(res.data.data)
+            this.hotmovies = res.data.data;
+            var i = 0;
+            for (i = 0; i < 10; i++) {
+              var length = 14 - this.hotmovies[i].name.length;
+              if (this.hotmovies[i].director.length > length)
+                this.hotmovies[i].director =
+                  this.hotmovies[i].director.substring(0, length) + "…";
             }
           } else {
             this.$message.error("查询失败");
@@ -720,10 +662,14 @@ export default {
     },
   },
   mounted() {
-    this.$nextTick(() => {
-      this.updateHotBook()
-    });
+    this.updateHotBook();
+    this.updateHotMovies();
   },
+  beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.updateHotBook();
+        });
+    }
 };
 </script>
 
