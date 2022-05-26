@@ -11,7 +11,36 @@
               &ensp;>&ensp;
             </a>
           </span>
-          <hit></hit>
+          <div class="hit-ppt">
+            <VueSlickCarousel
+            :dots="true"
+            :useCSS="true"
+            :infinite="false"
+            :speed="500"
+            :slidesToShow="8"
+            :slidesToScroll="8"
+            :touchThreshold="5"
+          >
+            <div
+              v-for="book in hotbooks"
+              :key="book.id"
+            >
+              <div>
+                <div class="hot-display-line">
+                  <img class="hot-display" :src="book.image"/>
+                  <div class="display-info">
+                    <span class="display-title"
+                      >《{{ book.name }}》</span
+                    ><br v-if="book.name.length<9"/>
+                    <span class="display-writer"
+                      >{{ book.author }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </VueSlickCarousel>
+          </div>
         </div>
         <div class="movies hothit">
           <span class="homepage-title"
@@ -21,7 +50,36 @@
               >&ensp;>&ensp;</a
             ></span
           >
-          <hit></hit>
+          <div class="hit-ppt">
+            <VueSlickCarousel
+            :dots="true"
+            :useCSS="true"
+            :infinite="false"
+            :speed="500"
+            :slidesToShow="8"
+            :slidesToScroll="8"
+            :touchThreshold="5"
+          >
+            <div
+              v-for="book in hotbooks"
+              :key="book.id"
+            >
+              <div>
+                <div class="hot-display-line">
+                  <img class="hot-display" :src="book.img" />
+                  <div class="book-display-info">
+                    <span class="book-display-title"
+                      >《{{ book.name }}》</span
+                    ><br />
+                    <span class="book-display-writer"
+                      >{{ book.writer }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </VueSlickCarousel>
+          </div>
         </div>
         <div class="tv hothit">
           <span class="homepage-title"
@@ -31,7 +89,36 @@
               >&ensp;>&ensp;</a
             ></span
           >
-          <hit></hit>
+           <div class="hit-ppt">
+            <VueSlickCarousel
+            :dots="true"
+            :useCSS="true"
+            :infinite="false"
+            :speed="500"
+            :slidesToShow="8"
+            :slidesToScroll="8"
+            :touchThreshold="5"
+          >
+            <div
+              v-for="book in hotbooks"
+              :key="book.id"
+            >
+              <div>
+                <div class="hot-display-line">
+                  <img class="hot-display" :src="book.img" />
+                  <div class="display-info">
+                    <span class="display-title"
+                      >《{{ book.name }}》</span
+                    ><br />
+                    <span class="display-writer"
+                      >{{ book.writer }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </VueSlickCarousel>
+          </div>
         </div>
       </div>
       <div class="homepage aside">
@@ -122,9 +209,11 @@
             </a>
           </span>
 
-
-          <div v-for="comment in bookcomments"
-            :key="comment.id" class="comment">
+          <div
+            v-for="comment in bookcomments"
+            :key="comment.id"
+            class="comment"
+          >
             <hr />
             <a class="userOfcomment" href="../views/user/otherusers.vue">
               <img class="iconOfuser" :src="comment.usericon" /><span
@@ -159,8 +248,11 @@
               &ensp;>&ensp;
             </a>
           </span>
-          <div v-for="comment in moviecomments"
-            :key="comment.id" class="comment">
+          <div
+            v-for="comment in moviecomments"
+            :key="comment.id"
+            class="comment"
+          >
             <hr />
             <a class="userOfcomment" href="../views/user/otherusers.vue">
               <img class="iconOfuser" :src="comment.usericon" /><span
@@ -206,12 +298,14 @@ div.body {
   padding-top: 20px;
   padding-left: 40px;
   padding-right: 35px;
+  padding-bottom:30px;
   margin-top: 80px;
   background-color: white;
   border-style: solid;
   border-width: 1px;
   border-color: rgb(181, 181, 181);
   box-shadow: 0px 2px 3px #888888a6;
+
 }
 .aside {
   margin-top: 80px;
@@ -237,6 +331,7 @@ li {
   text-align: left;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
+
 .hotlist {
   padding-top: 10px;
   width: 320px;
@@ -368,21 +463,21 @@ img.hot.books {
   border-radius: 40px;
   background-color: rgb(227, 239, 250);
 }
-.comment{
-  padding-bottom:0;
+.comment {
+  padding-bottom: 0;
   margin-bottom: 0;
 }
-.nameOfuser{
+.nameOfuser {
   font-size: 17px;
   font-family: Source Han Sans CN Normal;
 }
-.comments-pic{
-  height:120px;
-  width:90px;
+.comments-pic {
+  height: 120px;
+  width: 90px;
 }
-.comments-content{
-    display: flex;
-    flex-wrap: nowrap;
+.comments-content {
+  display: flex;
+  flex-wrap: nowrap;
 }
 .comment a {
   font-weight: 500;
@@ -412,21 +507,39 @@ div.origin {
   margin-right: 5px;
   vertical-align: sub;
 }
-.comments-text{
+.comments-text {
   margin-left: 20px;
   margin-right: 10px;
 }
-a.commentlist{
-    font-size: 16px;
-    text-decoration: none;
-    font-family:Helvetica, Arial, sans-serif;
-    font-weight:500;
-    color: black;
-    transition:.2s ease;
-}
-a.commentlist:hover{
-  color:gray;
+a.commentlist {
+  font-size: 16px;
   text-decoration: none;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  color: black;
+  transition: 0.2s ease;
+}
+a.commentlist:hover {
+  color: gray;
+  text-decoration: none;
+}
+.hot-display-line {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.hot-display {
+  height: 170px;
+  width: 120px;
+  border-style: solid;
+  border-color: aliceblue;
+  border-width: 3px;
+}
+.display-info{
+  font-size: 12px;
+}
+.hit-ppt{
+  width: 1070px;
+  margin-bottom: 20px;
 }
 </style>
 <script>
@@ -438,7 +551,12 @@ import commentDisplay from "@/components/ComDisplay.vue";
 //load the img needed
 import bookImg1 from "@/assets/books/Zissc.jpg";
 import bookImg2 from "@/assets/books/Jiaoldr.jpg";
+import "element-ui/lib/theme-chalk/index.css";
+import VueSlickCarousel from "vue-slick-carousel";
+import "vue-slick-carousel/dist/vue-slick-carousel.css";
+import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 import "@/styles/comment.css";
+import qs from "qs";
 
 export default {
   name: "home",
@@ -447,7 +565,7 @@ export default {
       {
         id: 1,
         userId: 1,
-        title:"标题",
+        title: "标题",
         usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
         username: "yjl",
         img: bookImg1,
@@ -474,8 +592,7 @@ export default {
         usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
         username: "yjl",
         img: "https://i.imgtg.com/2022/05/12/z9ZmB.webp",
-        content:
-          "没什么可说的",
+        content: "没什么可说的",
       },
       {
         id: 2,
@@ -486,9 +603,82 @@ export default {
         content: "testtest",
       },
     ];
+     var hotbooks = [
+      {
+        name: "焦虑的人",
+        id: 1,
+        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
+        writer: "xxx·xxx",
+        nation: "瑞典",
+      },
+      {
+        name: "焦虑的人",
+        id: 1,
+        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
+        writer: "xxx·xxx",
+        nation: "瑞典",
+      },
+      {
+        name: "焦虑的人",
+        id: 1,
+        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
+        writer: "xxx·xxx",
+        nation: "瑞典",
+      },
+      {
+        name: "焦虑的人",
+        id: 1,
+        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
+        writer: "xxx·xxx",
+        nation: "瑞典",
+      },
+      {
+        name: "焦虑的人",
+        id: 1,
+        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
+        writer: "xxx·xxx",
+        nation: "瑞典",
+      },
+      {
+        name: "焦虑的人",
+        id: 1,
+        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
+        writer: "xxx·xxx",
+        nation: "瑞典",
+      },
+      {
+        name: "焦虑的人",
+        id: 1,
+        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
+        writer: "xxx·xxx",
+        nation: "瑞典",
+      },
+      {
+        name: "焦虑的人",
+        id: 1,
+        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
+        writer: "xxx·xxx",
+        nation: "瑞典",
+      },
+      {
+        name: "焦虑的人",
+        id: 1,
+        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
+        writer: "xxx·xxx",
+        nation: "瑞典",
+      },
+      {
+        name: "焦虑的人",
+        id: 1,
+        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
+        writer: "xxx·xxx",
+        nation: "瑞典",
+      },
+    ];
     return {
       bookcomments,
       moviecomments,
+      hotbooks,
     };
   },
   components: {
@@ -496,15 +686,44 @@ export default {
     hit,
     search,
     commentDisplay,
+    VueSlickCarousel,
   },
   methods: {
     //this is the function to update the images of books
-    logout(){
-      this.$router.replace({path:'/login'});
-    }
-  
+    logout() {
+      this.$router.replace({ path: "/login" });
+    },
+    updateHotBook() {
+      var params={
+        num:10
+      };
+      this.$axios
+        .post("/book/hot", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("书籍查询成功");
+            //console.log(res.data.data)
+            this.hotbooks = res.data.data;
+            var i=0;
+            for(i=0;i<10;i++){
+              var length=14-this.hotbooks[i].name.length;
+              if(this.hotbooks[i].author.length>length)
+                this.hotbooks[i].author=this.hotbooks[i].author.substring(0,length)+'…';
+            }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
-  mounted() {},
+  mounted() {
+    this.$nextTick(() => {
+      this.updateHotBook()
+    });
+  },
 };
 </script>
 

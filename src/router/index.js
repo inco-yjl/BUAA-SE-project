@@ -115,7 +115,10 @@ const routes = [
     },
   ]
 },
-
+{
+  path:'/admin/uploadbook',
+  component: () => import('../views/admin/UploadBook.vue'),
+}
 ]
 
 const router = new VueRouter({
