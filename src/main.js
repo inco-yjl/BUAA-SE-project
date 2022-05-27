@@ -5,11 +5,14 @@ import store from './store'
 import ElementUI from 'element-ui';
 import './styles/font.less'
 import './styles/globalbackground.css'
-import axios from 'axios'
+import axios from '@/plugins/axios/axios'
 Vue.use(ElementUI);
-Vue.config.productionTip = false
 
-Vue.prototype.$axios = axios
+
+Vue.config.productionTip = false
+Vue.prototype.$axios = axios;
+
+// add token into headers
 
 new Vue({
   router,

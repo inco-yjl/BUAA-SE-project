@@ -22,7 +22,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item class="btn_login">
-          <el-button type="primary">登&nbsp;&nbsp;录</el-button>
+          <el-button type="primary" @click="login">登&nbsp;&nbsp;录</el-button>
         </el-form-item>
         <el-form-item class="btn_login">
           <el-button onclick="window.location.href='../register'"
@@ -37,14 +37,17 @@
 
 <script>
 import global from "@/components/common.vue";
+import qs from "qs";
 export default {
   name: "Login",
+
   data() {
+    var form = {
+      username: "",
+      password: "",
+    };
     return {
-      form: {
-        username: "",
-        password: "",
-      },
+      form,
     };
   },
 
@@ -58,10 +61,36 @@ export default {
     passanger() {
       this.addNavigation();
       const _this = this;
-      global.currentUserId = null;
+      global.currentUserId = -1;
       this.$router.replace({
         path: "/home",
       });
+    },
+    login() {
+      this.$axios
+        .post("/login", qs.stringify(this.form))
+        .then((res) => {
+          if (res.data.msg === '登录成功') {
+            console.log("获取到登录信息", res);
+            this.$message({
+              message: "登录成功",
+              type: "success",
+            });
+            console.log(res.data.data);
+            this.$store.dispatch('saveUserInfo', {
+                user: res.data.data
+              });
+              global.currentUserId = res.data.data.id;
+              console.log(res.data.data.id+'已登录');
+              window.open('/home', '_self');
+          }
+          else{
+             this.$message.error(res.data.msg);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 

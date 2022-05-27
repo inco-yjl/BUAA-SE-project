@@ -123,7 +123,7 @@
                 </a>
               </div>
               <div class="commenttext">
-                <a class="commenttext-origin" href="/topic/1/comments/1">{{
+                <a class="commenttext-origin" @click="bookcomment">{{
                   comment.content
                 }}</a>
               </div>
@@ -436,7 +436,11 @@ export default {
     VueSlickCarousel,
     search,
   },
-  methods: {},
+  methods: {
+    bookcomment(){
+      this.$router.push({name:'bookcomment'})
+    }
+  },
   mounted() {
     window.onscroll = function (e) {
       console.log("slide");

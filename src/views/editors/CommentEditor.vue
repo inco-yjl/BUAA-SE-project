@@ -15,8 +15,20 @@
     </div>
 
     <!--2.这里id对应new Vditor('vditor',{...})的第一个参数vidtor-->
-    <div id="editor">
-      <vditor></vditor>
+      <div id="editor" style="border: 1px solid #ccc;">
+        <Toolbar
+            style="border-bottom: 1px solid #ccc"
+            :editor="editor"
+            :defaultConfig="toolbarConfig"
+            :mode="mode"
+        />
+        <Editor
+            style="height: 600px; overflow-y: hidden;"
+            v-model="html"
+            :defaultConfig="editorConfig"
+            :mode="mode"
+            @onCreated="onCreated"
+        />
     </div>
   </div>
 </template>
@@ -68,19 +80,31 @@
   top:100px;
   left:20px;
 }
+#editor {
+  position: absolute;
+  width:900px;
+  left: 400px;
+  right: 400px;
+  top: 300px;
+}
 </style>
 <script>
 import bookImg from "@/assets/books/Jiaoldr.jpg";
-import vditor from "@/components/Editor.vue";
+import Vue from 'vue'
+import '@wangeditor/editor/dist/css/style.css'
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 export default {
   name: "editor",
-  components: {
-    vditor,
-  },
+  components: { Editor, Toolbar },
   data() {
     return {
         value2: 3,
-        colors: ['#99A9BF', '#F7BA2A', '#FF9900']  // 等同于 { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+        colors: ['#99A9BF', '#F7BA2A', '#FF9900'],  // 等同于 { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+        editor: null,
+            html: '<p>hello</p>',
+            toolbarConfig: { },
+            editorConfig: { placeholder: '请输入内容...' },
+            mode: 'default', // or 'simple'
     }
   },
   methods: {
@@ -92,9 +116,20 @@ export default {
         "作者:" + "[" + "雅典" + "]" + "弗雷德里克·巴克曼";
         document.getElementById("contentstar").innerHTML="评分:"+this.value2;
     },
+    onCreated(editor) {
+            this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
+        },
   },
   mounted() {
     this.UpdateComment();
+     setTimeout(() => {
+            this.html = '<p>修改内容</p>'
+        }, 1500)
   },
+  beforeDestroy() {
+        const editor = this.editor
+        if (editor == null) return
+        editor.destroy() // 组件销毁时，及时销毁编辑器
+    }
 };
 </script>

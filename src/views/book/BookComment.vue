@@ -3,6 +3,14 @@
     <search></search>
     <div class="passage-body">
       <div class="content-body">
+          <div id="collect-button" class="user-buttons">
+            <button v-if="collect" @click="clickuncollect()">
+              <img src="@/assets/guide/collect.png" />
+            </button>
+            <button v-else @click="clickcollect()">
+              <img src="@/assets/guide/collected.png" />
+            </button>
+          </div>
         <div class="title">{{ passage.title }}</div>
         <div class="passage-info">
           <div>
@@ -49,7 +57,40 @@
         </div>
       </div>
       <div class="aside">
-
+        <div class="source-book">
+          <a class="source-item">
+            <img class="source-img" :src="source.img" />
+            <div class="source-info">
+              《{{ source.name }}》
+              <el-rate
+                v-model="source.star"
+                disabled
+                show-score
+                text-color="#ff9900"
+                score-template="{value}"
+                disabled-void-color="ffffff"
+              >
+              </el-rate>
+              [{{ source.nation }}]{{ source.writer }}
+            </div>
+          </a>
+        </div>
+        <div class="recommend-passage">
+            <div class="title">本书推荐书评</div>
+            <ul class="recommend-list">
+              <li><a>焦虑它如影随形</a></li>
+              <li><a> 不对抗的人生</a></li>
+              <li><a>再写一个</a></li>
+            </ul>
+        </div>
+        <div class="recommend-passage">
+            <div class="title">该用户其他书评</div>
+            <ul class="recommend-list">
+              <li><a>我们不再爱电影</a></li>
+              <li><a> 满船清梦压星河</a></li>
+              <li><a>再写一个</a></li>
+            </ul>
+        </div>
       </div>
       <div v-if="Toreply === false" class="reply-input">
         <el-input
@@ -112,9 +153,14 @@ export default {
     search,
   },
   data() {
-    var source={
-
-    }
+    var source = {
+      name: "焦虑的人",
+      id: 1,
+      star: 4.5,
+      img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
+      writer: "xxx·xxx",
+      nation: "瑞典",
+    };
     var passage = {
       userid: 1,
       username: "Lilac",
@@ -185,14 +231,14 @@ export default {
             date: "2022-4-1",
             replyed_username: "哈哈",
             replyed_userid: 1,
-            content:
-              "确实",
+            content: "确实",
           },
-          ],
+        ],
       },
     ];
     var like = false;
     var Toreply = false;
+    var collect = false;
     return {
       passage,
       like,
@@ -200,6 +246,8 @@ export default {
       replys,
       text: "",
       textarea: "",
+      source,
+      collect
     };
   },
   methods: {
@@ -213,6 +261,12 @@ export default {
       this.passage.like--;
       this.like = false;
     },
+    clickcollect(){
+        this.collect = true;
+    },
+    clickuncollect(){
+        this.collect =false;
+    },
     clickreply() {
       if (this.Toreply === false) this.Toreply = true;
       else this.Toreply = false;
@@ -223,6 +277,24 @@ export default {
         query: { id: id },
       });
     },
+  },
+  mounted() {
+    window.onscroll = function (e) {
+      console.log("slide");
+      var vertical = document.getElementsByClassName("content-body").item(0);
+        var pos = vertical.getBoundingClientRect();
+        console.log(pos.top);
+        if (pos.top < 29) {
+          var aside = document.getElementsByClassName("aside").item(0);
+          if(aside!=null)
+          aside.setAttribute("class", "aside-slide");
+        }
+        else{
+           var aside = document.getElementsByClassName("aside-slide").item(0);
+          if(aside!=null)
+          aside.setAttribute("class", "aside");
+        }
+    };
   },
 };
 </script>
@@ -300,6 +372,10 @@ export default {
 .passage-text >>> {
   font-size: 17px;
   line-height: 32px;
+}
+#collect-button{
+    position: absolute;
+    left:400px;
 }
 .user-buttons {
   display: flex;
@@ -404,7 +480,7 @@ a.replied-user {
   border-color: rgb(181, 181, 181);
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
-  height: 750px;
+  height: 550px;
 }
 .aside-slide {
   margin-top: 80px;
@@ -418,9 +494,46 @@ a.replied-user {
   border-color: rgb(181, 181, 181);
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
-  height: 750px;
+  height: 550px;
   position: fixed;
-  left:1260px;
+  left: 1260px;
   top: -50px;
+}
+.source-item {
+  display: flex;
+}
+.source-img {
+  width: 85px;
+  margin-right: 20px;
+}
+.source-info {
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 30px;
+  font-family: Source Han Sans CN Normal;
+}
+.source-book a {
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  border-radius: 5px;
+  background-color: #dfdede55;
+  margin-top: 10px;
+  width: 300px;
+}
+.source-book a:hover {
+  background-color: #91919155;
+}
+.recommend-list a {
+  color: rgb(2, 98, 182);
+  font-weight: 500;
+}
+.recommend-list a:hover {
+  background-color: rgb(213, 230, 245);
+  color: rgb(2, 98, 182);
+  font-weight: 600;
 }
 </style>
