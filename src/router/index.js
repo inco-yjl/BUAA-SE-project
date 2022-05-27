@@ -108,6 +108,11 @@ const routes = [
       name: 'Groupinit',
       component: () => import('../views/group/groupinit.vue')
     },
+    {
+      path: '/groupadmin',
+      name: 'Groupadmin',
+      component: () => import('../views/group/admin.vue')
+    },
   ]
 },
 

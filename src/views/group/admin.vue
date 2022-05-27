@@ -8,23 +8,11 @@
             <img src="@/assets/title/topic-intro.png" />
             <span class="topic-name">{{ group.name }}
             <button
-                @click="favor"
                 class="topic-button"
                 :style="{ backgroundColor: bg_color, color: ft_color }"
-                @mouseenter="change()"
-                @mouseleave="goback()"
             >
-                {{ content }}
+                管理员模式
             </button>
-            <button v-if = " content == '已加入'"
-                @click="favorthing"
-                class="topic-button"
-                :style="{ backgroundColor: bg_colordo, color: ft_colordo }"
-                @mouseenter="changedo()"
-                @mouseleave="qobackdo()"
-            >
-                {{ dothing }}
-            </button>  
             </span>
           </div>
           <div class="boxesOfTopic">
@@ -33,12 +21,6 @@
             </p>
           </div>
           <div class="topic-detail-interact" style="float: left; position: relative; left: 200px">
-            <button class="share-topic">
-              <img src="@/assets/guide/share.png" /><span>分享小组</span>
-            </button>
-            <button class="write-dt" @click="writeTopicDt">
-              <img src="@/assets/guide/write_dt.png" /><span>发布讨论</span>  <!--有问题，唉-->
-            </button>
           </div>
         </div>
 
@@ -47,10 +29,10 @@
         <div class = "title diary-hit">
           <span class = "top_mes"><img src="@/assets/group/group-hit.png" />
             <button style="font-size: 26px"
-                  class="selection_ed"
-                  id="select-top-dt"
-                  onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
-                  @click="topmesm()">
+                    class="selection_ed"
+                    id="select-top-dt"
+                    onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
+                    @click="topmesm()">
               置顶</button>/
             <button style="font-size: 26px"
                     class="selection_un"
@@ -66,44 +48,30 @@
               <span class = "res_l font_l">{{mes.replynumber}}回复</span>
               <span class = "time_l font_l">{{mes.time}}</span>
               <span class = "group-name_l font_l" style="color: #444444;">{{mes.groupname}}</span>
-              <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
+              <button
+                  v-if = "heames === topmes"
+                  class="topic-button"
+                  :style="{ backgroundColor: bg_color, color: ft_color }"
+                  @click="del()"
+              >
+                取消置顶
+              </button>
+              <button
+                  v-if = "heames === valmes"
+                  class="topic-button"
+                  :style="{ backgroundColor: bg_color, color: ft_color }"
+                  @click="del()"
+              >
+                取消精华
+              </button>
+
             </div>
             <span>&nbsp;</span>
           </div>
           <div><span>&nbsp;</span></div>
-        </div>  
-        
-        <div class="title diary-hit">
-          <span
-          ><img src="@/assets/title/topic-hit.png" />
+        </div>
 
-            <button style="font-size: 26px"
-                class="selection_ed"
-                id="select-hot-topic-dt"
-                onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
-                @click="hotGroup()">
-              热门讨论</button>/
-            <button style="font-size: 26px"
-                class="selection_un"
-                id="select-new-topic-dt"
-                onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
-                @click="newGroup()"
-            >
-              最新讨论
-            </button>
-          </span>
-        <div  style="position:relative; float: left; width: 1450px; margin-top: 30px;">
-          <div class = "m_div m_nothead " v-for="mes in nowmes" :key = "index">
-            <span class = "title_l font_l" style="color: #444444;">{{mes.name}}</span>
-            <span class = "res_l font_l">{{mes.replynumber}}回复</span>
-            <span class = "time_l font_l">{{mes.time}}</span>
-            <span class = "group-name_l font_l" style="color: #444444;">{{mes.groupname}}</span>
-            <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
-          </div>
-          <span>&nbsp;</span>
-        </div>
-        <div><span>&nbsp;</span></div>
-        </div>
+        
         <div class="title diary-hit">
           <span
           ><img src="@/assets/group/all-message.png" />
@@ -115,7 +83,20 @@
               <span class = "res_l font_l">{{mes.replynumber}}回复</span>
               <span class = "time_l font_l">{{mes.time}}</span>
               <span class = "group-name_l font_l" style="color: #444444;">{{mes.groupname}}</span>
-              <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
+              <button
+                  class="topic-button"
+                  :style="{ backgroundColor: bg_color, color: ft_color }"
+                  @click="del()"
+              >
+                置顶
+              </button>
+              <button
+                  class="topic-button"
+                  :style="{ backgroundColor: bg_color, color: ft_color }"
+                  @click="del()"
+              >
+                精华
+              </button>
             </div>
             <span>&nbsp;</span>
           </div>
@@ -128,12 +109,6 @@
 
 
 <style scoped>
-.m_div{
-  float: left;
-  position: relative;
-  height: 50px;
-  top: 10px;
-}
 .top_mes {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-size: 26px;
@@ -772,7 +747,7 @@ export default {
       this.bg_color = "#45ff5b";
       this.ft_color = "#f2fef0";
     },
-    
+
     qobackdo() {
       if (this.do) {
         this.bg_colordo = "#6cf57c";
@@ -815,6 +790,7 @@ export default {
           .setAttribute("class", "selection_un");
       this.heames = this.valmes;
     },
+    del() {},
     //this is the function to update the images of books
     updateButton() {
       document
