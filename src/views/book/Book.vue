@@ -19,29 +19,29 @@
             <div
               v-for="book in hotbooks"
               class="bookpage-hit-box"
-              :key="book.book1.id"
+              :key="book.id"
             >
               <div class="flex-book-display">
                 <div class="book-display-line">
-                  <img class="book-display" :src="book.book1.img" />
+                  <img class="book-display" :src="book.book1.image" />
                   <div class="book-display-info">
                     <span class="book-display-title"
                       >《{{ book.book1.name }}》</span
-                    ><br />
-                    <span class="book-display-writer"
-                      >[{{ book.book1.nation }}]{{ book.book1.writer }}</span
-                    >
+                    ><br v-if="book.book1.name.length < 7" />
+                    <span class="book-display-writer">{{
+                      book.book1.author
+                    }}</span>
                   </div>
                 </div>
                 <div class="book-display-line">
-                  <img class="book-display" :src="book.book2.img" />
+                  <img class="book-display" :src="book.book2.image" />
                   <div class="book-display-info">
                     <span class="book-display-title"
                       >《{{ book.book2.name }}》</span
-                    ><br />
-                    <span class="book-display-writer"
-                      >[{{ book.book2.nation }}]{{ book.book2.writer }}</span
-                    >
+                    ><br v-if="book.book2.name.length < 7" />
+                    <span class="book-display-writer">{{
+                      book.book2.author
+                    }}</span>
                   </div>
                 </div>
               </div>
@@ -62,31 +62,30 @@
             :touchThreshold="5"
           >
             <div
-              v-for="book in hotbooks"
+              v-for="book in highbooks"
               class="bookpage-hit-box"
-              :key="book.book1.id"
+              :key="book.id"
             >
               <div class="flex-book-display">
                 <div class="book-display-line">
-                  <img class="book-display" :src="book.book1.img" />
+                  <img class="book-display" :src="book.book1.image" />
+                  <div class="over-star">{{book.book1.star}}</div>
                   <div class="book-display-info">
                     <span class="book-display-title"
-                      >《{{ book.book1.name }}》</span
+                      >《{{ book.book1.name }}</span
                     ><br />
-                    <span class="book-display-writer"
-                      >[{{ book.book1.nation }}]{{ book.book1.writer }}</span
-                    >
+                    <span class="book-display-writer">{{
+                      book.book1.score
+                    }}</span>
                   </div>
                 </div>
                 <div class="book-display-line">
-                  <img class="book-display" :src="book.book2.img" />
+                  <img class="book-display" :src="book.book2.image" />
+                  <div class="over-star">{{book.book2.star}}</div>
                   <div class="book-display-info">
                     <span class="book-display-title"
-                      >《{{ book.book2.name }}》</span
+                      >《{{ book.book2.name }}</span
                     ><br />
-                    <span class="book-display-writer"
-                      >[{{ book.book2.nation }}]{{ book.book2.writer }}</span
-                    >
                   </div>
                 </div>
               </div>
@@ -185,157 +184,12 @@ import "vue-slick-carousel/dist/vue-slick-carousel.css";
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 import search from "@/components/SelectSearch.vue";
 import global from "@/components/common.vue";
-import qs from 'qs';
+import qs from "qs";
 export default {
   name: "MyComponent",
   data() {
-    var hotbooks = [
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        writer: "xxx·xxx",
-        nation: "瑞典",
-      },
-    ];
-    var i;
-    var books = [];
-    for (i = 0; i < 20; i = i + 2) {
-      books.push({ book1: hotbooks[i], book2: hotbooks[i + 1] });
-    }
+    var hotbooks = [{}];
+    var highbooks = [{}];
     var bookcomments = [
       {
         id: 1,
@@ -402,7 +256,8 @@ export default {
       },
     ];
     return {
-      hotbooks: books,
+      hotbooks,
+      highbooks,
       bookcomments,
       collections,
       passages,
@@ -424,10 +279,9 @@ export default {
         .post("/book/collection", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
-            console.log(res.data.data);
             this.collections = [];
-            var i=0;
-            for(i=0;i<3 && i<res.data.data.length;i++)
+            var i = 0;
+            for (i = 0; i < 3 && i < res.data.data.length; i++)
               this.collections.push(res.data.data[i]);
           } else {
             this.$message.error("查询失败");
@@ -438,9 +292,81 @@ export default {
         });
       this.loaddata = true;
     },
+    async updateHotBook() {
+      var params = {
+        num: 20,
+      };
+      this.$axios
+        .post("/book/hot", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("获取到热门图书");
+            console.log(res.data.data);
+            var books = [];
+            books = res.data.data;
+            var i = 0;
+            for (i = 0; i < 20; i++) {
+              books[i].star=i/4;
+              var length = 14 - books[i].name.length;
+              if (books[i].name.length > 7 && books[i].author.length > length)
+                books[i].author = books[i].author.substring(0, length) + "…";
+              if (books[i].author.length > 8)
+                books[i].author = books[i].author.substring(0, 9) + "…";
+            }
+            this.hotbooks = [];
+            for (i = 0; i < 20; i = i + 2) {
+              this.hotbooks.push({
+                book1: books[i],
+                book2: books[i + 1],
+                id: i,
+              });
+            }
+            console.log(this.hotbooks[0]);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    async updateHighBook() {
+      this.$axios
+        .post("/book/high")
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("获取到高分图书");
+            console.log(res.data.data);
+            var books = [];
+            books = res.data.data;
+            var i = 0;
+            for (i = 0; i < 20; i++) {
+              books[i].star = 4.5;
+              books[i].name = books[i].name + "》";
+              if (books[i].name.length > 6)
+                books[i].name = books[i].name.substring(0, 6) + "…";
+            }
+            this.highbooks = [];
+            for (i = 0; i < 20; i = i + 2) {
+              this.highbooks.push({
+                book1: books[i],
+                book2: books[i + 1],
+                id: i,
+              });
+            }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   mounted() {
     this.updateCollection();
+    this.updateHotBook();
+    this.updateHighBook();
     window.onscroll = function (e) {
       var vertical = document
         .getElementsByClassName("bookpage-vertical")
@@ -500,6 +426,20 @@ export default {
   margin-bottom: 10px;
   margin-left: 10px;
   margin-right: 10px;
+}
+.book-display-info {
+  width: 120px;
+  font-size: 14px;
+}
+.over-star{
+  position: relative;
+  margin-bottom:-55px;
+  top:-52px;
+  left:68px;
+  color:rgb(255, 230, 0);
+  font-size: 40px;
+  font-family: 'Patrick Hand', cursive;
+  text-shadow:3px 1px 1px rgb(0, 0, 0);
 }
 .bookpage-title {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
@@ -684,4 +624,6 @@ a.comment-book-name {
   font-weight: 600;
   color: rgb(2, 98, 182);
 }
+
+
 </style>

@@ -286,7 +286,7 @@ div.body {
   padding-top: 20px;
   padding-left: 40px;
   padding-right: 35px;
-  padding-bottom: 30px;
+  padding-bottom: 60px;
   margin-top: 80px;
   background-color: white;
   border-style: solid;
@@ -625,10 +625,13 @@ export default {
             this.hotbooks = res.data.data;
             var i = 0;
             for (i = 0; i < 10; i++) {
-              var length = 14 - this.hotbooks[i].name.length;
-              if (this.hotbooks[i].author.length > length)
+              var length = 17 - this.hotbooks[i].name.length;
+              if (this.hotbooks[i].name.length>=9 && this.hotbooks[i].author.length > length)
                 this.hotbooks[i].author =
                   this.hotbooks[i].author.substring(0, length) + "…";
+              if (this.hotbooks[i].author.length > 10)
+                this.hotbooks[i].author =
+                  this.hotbooks[i].author.substring(0, 10) + "…";
             }
           } else {
             this.$message.error("查询失败");
