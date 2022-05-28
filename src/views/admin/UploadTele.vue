@@ -133,7 +133,7 @@ export default {
 }
 #upload-title {
   position: relative;
-  left: 100px;
+  left: 70px;
 }
 #teleupload .wrap {
   position: absolute;

@@ -61,7 +61,7 @@
                     <div class="display-info">
                       <span class="display-title">《{{ movie.name }}》</span
                       ><br v-if="movie.name.length < 9"/>
-                      <span>{{ movie.director }}</span>
+                      <span>[导演]{{ movie.director }}</span>
                     </div>
                   </div>
                 </div>
@@ -87,14 +87,14 @@
               :slidesToScroll="8"
               :touchThreshold="5"
             >
-              <div v-for="book in hotbooks" :key="book.id">
+              <div v-for="tele in hotteles" :key="tele.id">
                 <div>
                   <div class="hot-display-line">
-                    <img class="hot-display" :src="book.img" />
+                    <img class="hot-display" :src="tele.image" />
                     <div class="display-info">
-                      <span class="display-title">《{{ book.name }}》</span
-                      ><br />
-                      <span class="display-writer">{{ book.writer }}</span>
+                      <span class="display-title">《{{ tele.name }}》</span
+                      ><br v-if="tele.name.length < 9"/>
+                      <span>({{tele.year}})[{{tele.nation}}]</span>
                     </div>
                   </div>
                 </div>
@@ -585,11 +585,13 @@ export default {
     ];
     var hotbooks=[{}];
     var hotmovies=[{}];
+    var hotteles=[{}];
     return {
       bookcomments,
       moviecomments,
       hotbooks,
       hotmovies,
+      hotteles,
       loaddata
     };
   },
@@ -603,9 +605,6 @@ export default {
     //this is the function to update the images of books
     logout() {
       this.$router.replace({ path: "/login" });
-    },
-    created(){
-      this.updateHotBook();
     },
     async updateHotBook() {
       var params = {
@@ -647,11 +646,32 @@ export default {
             this.hotmovies = res.data.data;
             var i = 0;
             for (i = 0; i < 10; i++) {
-              var length = 14 - this.hotmovies[i].name.length;
+              var length = 12 - this.hotmovies[i].name.length;
               if (this.hotmovies[i].director.length > length)
                 this.hotmovies[i].director =
                   this.hotmovies[i].director.substring(0, length) + "…";
+              if(this.hotmovies[i].director.length>6)
+                this.hotmovies[i].director = this.hotmovies[i].director.substring(0, 6) + "…";
             }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    async updateHotTeles() {
+      var params = {
+        num: 10,
+      };
+      this.$axios
+        .post("/tele/hot", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("电视剧查询成功");
+            //console.log(res.data.data)
+            this.hotteles = res.data.data;
           } else {
             this.$message.error("查询失败");
           }
@@ -664,6 +684,7 @@ export default {
   mounted() {
     this.updateHotBook();
     this.updateHotMovies();
+    this.updateHotTeles();
   },
   beforeRouteEnter(to, from, next) {
         next(vm => {

@@ -443,7 +443,6 @@ export default {
   },
   mounted() {
     window.onscroll = function (e) {
-      console.log("slide");
       var vertical = document.getElementsByClassName("bookpage-vertical").item(0);
         var pos = vertical.getBoundingClientRect();
         console.log(pos.top);
