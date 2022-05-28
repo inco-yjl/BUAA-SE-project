@@ -144,9 +144,9 @@
             :key="book.id"
           >
             <a class="collection-item">
-              <img class="collection-img" :src="book.img" />
+              <img class="collection-img" :src="book.image" />
               <div class="collection-info">
-                《{{ book.bookname }}》
+                《{{ book.name }}》
                 <el-rate
                   v-model="book.star"
                   disabled
@@ -156,7 +156,7 @@
                   disabled-void-color="ffffff"
                 >
                 </el-rate>
-                [{{ book.nation }}]{{ book.writer }}
+                {{ book.author }}
               </div>
             </a>
           </div>
@@ -184,7 +184,8 @@ import VueSlickCarousel from "vue-slick-carousel";
 import "vue-slick-carousel/dist/vue-slick-carousel.css";
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 import search from "@/components/SelectSearch.vue";
-
+import global from "@/components/common.vue";
+import qs from 'qs';
 export default {
   name: "MyComponent",
   data() {
@@ -385,32 +386,7 @@ export default {
         content: "多搞点",
       },
     ];
-    var collections = [
-      {
-        bookname: "焦虑的人",
-        bookid: 1,
-        star: 4.5,
-        nation: "瑞典",
-        writer: "xxx·xxx",
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-      },
-      {
-        bookname: "焦虑的人",
-        bookid: 2,
-        star: 4.5,
-        nation: "瑞典",
-        writer: "xxx·xxx",
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-      },
-      {
-        bookname: "焦虑的人",
-        bookid: 3,
-        star: 4.5,
-        nation: "瑞典",
-        writer: "xxx·xxx",
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-      },
-    ];
+    var collections = [{}];
     var passages = [
       {
         id: 1,
@@ -437,25 +413,47 @@ export default {
     search,
   },
   methods: {
-    bookcomment(){
-      this.$router.push({name:'bookcomment'})
-    }
+    bookcomment() {
+      this.$router.push({ name: "bookcomment" });
+    },
+    async updateCollection() {
+      var params = {
+        user_id: global.currentUserId,
+      };
+      this.$axios
+        .post("/book/collection", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.data);
+            this.collections = [];
+            var i=0;
+            for(i=0;i<3 && i<res.data.data.length;i++)
+              this.collections.push(res.data.data[i]);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      this.loaddata = true;
+    },
   },
   mounted() {
+    this.updateCollection();
     window.onscroll = function (e) {
-      var vertical = document.getElementsByClassName("bookpage-vertical").item(0);
-        var pos = vertical.getBoundingClientRect();
-        console.log(pos.top);
-        if (pos.top < 29) {
-          var aside = document.getElementsByClassName("aside").item(0);
-          if(aside!=null)
-          aside.setAttribute("class", "aside-slide");
-        }
-        else{
-           var aside = document.getElementsByClassName("aside-slide").item(0);
-          if(aside!=null)
-          aside.setAttribute("class", "aside");
-        }
+      var vertical = document
+        .getElementsByClassName("bookpage-vertical")
+        .item(0);
+      var pos = vertical.getBoundingClientRect();
+      console.log(pos.top);
+      if (pos.top < 29) {
+        var aside = document.getElementsByClassName("aside").item(0);
+        if (aside != null) aside.setAttribute("class", "aside-slide");
+      } else {
+        var aside = document.getElementsByClassName("aside-slide").item(0);
+        if (aside != null) aside.setAttribute("class", "aside");
+      }
     };
   },
 };
@@ -543,7 +541,7 @@ export default {
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
   position: fixed;
-  left:1260px;
+  left: 1260px;
   top: -50px;
 }
 .bookpage-comments {
@@ -577,7 +575,7 @@ div.comment-origin-pic {
   top: 20px;
   margin-left: 5px;
 }
-.nameOfuser{
+.nameOfuser {
   font-family: Source Han Sans CN Normal;
   font-size: 17px;
 }

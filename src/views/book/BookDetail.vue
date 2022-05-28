@@ -74,9 +74,9 @@
             :key="book.id"
           >
             <a class="collection-item">
-              <img class="collection-img" :src="book.img" />
+              <img class="collection-img" :src="book.image" />
               <div class="collection-info">
-                《{{ book.bookname }}》
+                《{{ book.name }}》
                 <el-rate
                   v-model="book.star"
                   disabled
@@ -86,7 +86,7 @@
                   disabled-void-color="ffffff"
                 >
                 </el-rate>
-                [{{ book.nation }}]{{ book.writer }}
+                {{ book.author }}
               </div>
             </a>
           </div>
@@ -234,32 +234,7 @@ export default {
       },
     ];
     var loadSuccess = false;
-    var collections = [
-      {
-        bookname: "焦虑的人",
-        bookid: 1,
-        star: 4.5,
-        nation: "瑞典",
-        writer: "xxx·xxx",
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-      },
-      {
-        bookname: "焦虑的人",
-        bookid: 2,
-        star: 4.5,
-        nation: "瑞典",
-        writer: "xxx·xxx",
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-      },
-      {
-        bookname: "焦虑的人",
-        bookid: 3,
-        star: 4.5,
-        nation: "瑞典",
-        writer: "xxx·xxx",
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-      },
-    ];
+    var collections = [{}];
     var passages = [
       {
         id: 1,
@@ -343,7 +318,29 @@ export default {
     Tobookcomment() {
       this.$router.push({ name: "bookcomment" });
     },
-    async UpdateContent() {
+    async updateCollection() {
+      var params = {
+        user_id: global.currentUserId,
+      };
+      this.$axios
+        .post("/book/collection", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.data);
+            this.collections = [];
+            var i=0;
+            for(i=0;i<3 && i<res.data.data.length;i++)
+              this.collections.push(res.data.data[i]);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      this.loaddata = true;
+    },
+    async updateContent() {
       var params = {
         book_id: this.id,
         user_id: global.currentUserId,
@@ -393,7 +390,8 @@ export default {
     },
   },
   mounted() {
-    this.UpdateContent();
+    this.updateContent();
+    this.updateCollection();
     window.onscroll = function (e) {
       var vertical = document.getElementsByClassName("detail-vertical").item(0);
       var pos = vertical.getBoundingClientRect();
