@@ -142,7 +142,6 @@
           </div>
         </div>
       </div>
-      <div clas="aside"></div>
     </div>
   </div>
 </template>
@@ -476,6 +475,8 @@ a.replied-user {
   padding-right: 15px;
   padding-top: 25px;
   border-style: solid;
+  position: absolute;
+  left: 1260px;
   border-width: 1px;
   border-color: rgb(181, 181, 181);
   background-color: white;

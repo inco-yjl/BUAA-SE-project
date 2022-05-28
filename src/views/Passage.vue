@@ -393,6 +393,8 @@ a.replied-user {
   background-color: #dfdede55;
 }
 .aside {
+  position: absolute;
+  left:1260px;
   margin-top: 80px;
   margin-left: 10px;
   margin-right: 0;

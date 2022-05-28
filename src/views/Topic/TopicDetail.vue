@@ -502,7 +502,7 @@ export default {
     App,
   },
   data() {
-    var id = this.$route.params.id; //根据id来询问
+    var id = this.$route.query.id; //根据id来询问
     var topic = {
       name: "寻找春日气息",
       intro:

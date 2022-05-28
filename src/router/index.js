@@ -122,7 +122,7 @@ const routes = [
       component: () => import('../views/group/admin.vue')
     },
     {
-      path: '/bookdetail',
+      path: '/book/detail',
       name: 'bookdetail',
       component: () => import('../views/book/BookDetail.vue')
     },  

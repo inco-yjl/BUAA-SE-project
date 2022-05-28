@@ -24,12 +24,14 @@
               <div v-for="book in hotbooks" :key="book.id">
                 <div>
                   <div class="hot-display-line">
-                    <img class="hot-display" :src="book.image" />
-                    <div class="display-info">
-                      <span class="display-title">《{{ book.name }}》</span
-                      ><br v-if="book.name.length < 9" />
-                      <span>{{ book.author }}</span>
-                    </div>
+                    <a @click="ToBookDetail(book.id)">
+                      <img class="hot-display" :src="book.image" />
+                      <div class="display-info">
+                        <span class="display-title">《{{ book.name }}》</span
+                        ><br v-if="book.name.length < 9" />
+                        <span>{{ book.author }}</span>
+                      </div>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -57,12 +59,14 @@
               <div v-for="movie in hotmovies" :key="movie.id">
                 <div>
                   <div class="hot-display-line">
-                    <img class="hot-display" :src="movie.image" />
-                    <div class="display-info">
-                      <span class="display-title">《{{ movie.name }}》</span
-                      ><br v-if="movie.name.length < 9"/>
-                      <span>[导演]{{ movie.director }}</span>
-                    </div>
+                    <a @click="ToMovieDetail(movie.id)">
+                      <img class="hot-display" :src="movie.image" />
+                      <div class="display-info">
+                        <span class="display-title">《{{ movie.name }}》</span
+                        ><br v-if="movie.name.length < 9" />
+                        <span>[导演]{{ movie.director }}</span>
+                      </div>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -90,12 +94,14 @@
               <div v-for="tele in hotteles" :key="tele.id">
                 <div>
                   <div class="hot-display-line">
-                    <img class="hot-display" :src="tele.image" />
-                    <div class="display-info">
-                      <span class="display-title">《{{ tele.name }}》</span
-                      ><br v-if="tele.name.length < 9"/>
-                      <span>({{tele.year}})[{{tele.nation}}]</span>
-                    </div>
+                    <a @click="ToTeleDetail(tele.id)">
+                      <img class="hot-display" :src="tele.image" />
+                      <div class="display-info">
+                        <span class="display-title">《{{ tele.name }}》</span
+                        ><br v-if="tele.name.length < 9" />
+                        <span>({{ tele.year }})[{{ tele.nation }}]</span>
+                      </div>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -540,7 +546,7 @@ import qs from "qs";
 export default {
   name: "home",
   data() {
-    var loaddata =false;
+    var loaddata = false;
     var bookcomments = [
       {
         id: 1,
@@ -583,16 +589,16 @@ export default {
         content: "testtest",
       },
     ];
-    var hotbooks=[{}];
-    var hotmovies=[{}];
-    var hotteles=[{}];
+    var hotbooks = [{}];
+    var hotmovies = [{}];
+    var hotteles = [{}];
     return {
       bookcomments,
       moviecomments,
       hotbooks,
       hotmovies,
       hotteles,
-      loaddata
+      loaddata,
     };
   },
   components: {
@@ -631,7 +637,7 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-        this.loaddata=true;
+      this.loaddata = true;
     },
     async updateHotMovies() {
       var params = {
@@ -650,8 +656,9 @@ export default {
               if (this.hotmovies[i].director.length > length)
                 this.hotmovies[i].director =
                   this.hotmovies[i].director.substring(0, length) + "…";
-              if(this.hotmovies[i].director.length>6)
-                this.hotmovies[i].director = this.hotmovies[i].director.substring(0, 6) + "…";
+              if (this.hotmovies[i].director.length > 6)
+                this.hotmovies[i].director =
+                  this.hotmovies[i].director.substring(0, 6) + "…";
             }
           } else {
             this.$message.error("查询失败");
@@ -680,6 +687,24 @@ export default {
           console.log(error);
         });
     },
+    ToBookDetail(id) {
+      this.$router.push({
+        name: "bookdetail",
+        query: { id: id },
+      });
+    },
+    ToMovieDetail(id) {
+      this.$router.push({
+        name: "bookdetail",
+        query: { id: id },
+      });
+    },
+    ToTeleDetail(id) {
+      this.$router.push({
+        name: "bookdetail",
+        query: { id: id },
+      });
+    },
   },
   mounted() {
     this.updateHotBook();
@@ -687,10 +712,10 @@ export default {
     this.updateHotTeles();
   },
   beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.updateHotBook();
-        });
-    }
+    next((vm) => {
+      vm.updateHotBook();
+    });
+  },
 };
 </script>
 
