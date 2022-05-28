@@ -5,6 +5,7 @@
       <div class="flex_box">
         <div class="introOfTopic">
           <div class="title">
+            <img src = "https://i.imgtg.com/2022/05/23/hmqft.jpg" alt="" style="height: 150px; width: 100px; position: relative; float: left; margin-right: 20px">
             <img src="@/assets/title/topic-intro.png" />
             <span class="topic-name">{{ group.name }}
             <button
