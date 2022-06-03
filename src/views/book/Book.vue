@@ -167,8 +167,8 @@
             </a>
           </div>
           <ul class="book-comment-list hotlist">
-            <li v-for="passage in passages" :key="passage.id">
-              <a>{{ passage.title }}</a>
+            <li :v-if="passages.length>0" v-for="passage in passages" :key="passage.id">
+              <a @click="ToComment(passage.id)">{{ passage.title }}</a>
             </li>
           </ul>
         </div>
@@ -183,7 +183,6 @@ import VueSlickCarousel from "vue-slick-carousel";
 import "vue-slick-carousel/dist/vue-slick-carousel.css";
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 import search from "@/components/SelectSearch.vue";
-import global from "@/components/common.vue";
 import qs from "qs";
 export default {
   name: "MyComponent",
@@ -241,20 +240,7 @@ export default {
       },
     ];
     var collections = [{}];
-    var passages = [
-      {
-        id: 1,
-        title: "彗星",
-      },
-      {
-        id: 2,
-        title: "化作繁星",
-      },
-      {
-        id: 3,
-        title: "My nonfiction",
-      },
-    ];
+    var passages = [{}]
     return {
       hotbooks,
       highbooks,
@@ -268,12 +254,15 @@ export default {
     search,
   },
   methods: {
+    ToComment(id) {
+      this.$router.push({ name: "bookcomment", query: { id: id },});
+    },
     bookcomment() {
       this.$router.push({ name: "bookcomment" });
     },
     async updateCollection() {
       var params = {
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
       this.$axios
         .post("/book/collection", qs.stringify(params))
@@ -292,6 +281,29 @@ export default {
         });
       this.loaddata = true;
     },
+    async updatePassage() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+        .post("/book/mypassage", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.passages=[];
+            var i;
+            var length=3;
+            if(res.data.data.length<3)
+            length=res.data.data.length;
+            for(i=0;i<length;i++)
+            this.passages.push(res.data.data[i])
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     async updateHotBook() {
       var params = {
         num: 20,
@@ -301,7 +313,6 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("获取到热门图书");
-            console.log(res.data.data);
             var books = [];
             books = res.data.data;
             var i = 0;
@@ -321,7 +332,6 @@ export default {
                 id: i,
               });
             }
-            console.log(this.hotbooks[0]);
           } else {
             this.$message.error("查询失败");
           }
@@ -336,7 +346,6 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("获取到高分图书");
-            console.log(res.data.data);
             var books = [];
             books = res.data.data;
             var i = 0;
@@ -364,15 +373,16 @@ export default {
     },
   },
   mounted() {
+    console.log(this.$store.getters.getUser.user.id);
     this.updateCollection();
     this.updateHotBook();
     this.updateHighBook();
+    this.updatePassage();
     window.onscroll = function (e) {
       var vertical = document
         .getElementsByClassName("bookpage-vertical")
         .item(0);
       var pos = vertical.getBoundingClientRect();
-      console.log(pos.top);
       if (pos.top < 29) {
         var aside = document.getElementsByClassName("aside").item(0);
         if (aside != null) aside.setAttribute("class", "aside-slide");

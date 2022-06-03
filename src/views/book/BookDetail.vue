@@ -172,7 +172,6 @@
 </template>
 
 <script>
-import global from "@/components/common.vue";
 import search from "@/components/SelectSearch.vue";
 import qs from "qs";
 export default {
@@ -259,15 +258,14 @@ export default {
   },
   methods: {
     clickcollect() {
-      if (global.currentUserId === -1) {
+      if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
         return;
       }
       var params = {
         book_id: this.id,
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
-      console.log("user:" + global.currentUserId);
       this.$axios
         .post("/book/collect", qs.stringify(params))
         .then((res) => {
@@ -286,15 +284,14 @@ export default {
         });
     },
     clickuncollect() {
-      if (global.currentUserId === -1) {
+      if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
         return;
       }
       var params = {
         book_id: this.id,
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
-      console.log("user:" + global.currentUserId);
       this.$axios
         .post("/book/uncollect", qs.stringify(params))
         .then((res) => {
@@ -313,7 +310,7 @@ export default {
         });
     },
     writeComment() {
-      if (global.currentUserId === -1) {
+      if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
         return;
       }
@@ -329,8 +326,9 @@ export default {
     },
     async updateCollection() {
       var params = {
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
+      console.log(this.$store.getters.getUser.user.id)
       this.$axios
         .post("/book/collection", qs.stringify(params))
         .then((res) => {
@@ -354,9 +352,9 @@ export default {
     async updateContent() {
       var params = {
         book_id: this.id,
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
-      console.log("user:" + global.currentUserId);
+      console.log("user:" + this.$store.getters.getUser.user.id);
       this.$axios
         .post("/book/detail", qs.stringify(params))
         .then((res) => {
@@ -414,7 +412,7 @@ export default {
     },
     async updatePassage() {
       var params = {
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
       this.$axios
         .post("/book/mypassage", qs.stringify(params))
@@ -437,7 +435,7 @@ export default {
     },
     starTheBook() {
     var params = {
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
         book_id: this.id,
         score: this.evaluate
       };
@@ -461,6 +459,7 @@ export default {
   },
   },
   mounted() {
+    console.log('user'+this.$store.getters.getUser.user.id);
     this.updateContent();
     this.updateCollection();
     this.updatePassage();

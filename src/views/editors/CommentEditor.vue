@@ -157,7 +157,6 @@
 
 <script>
 import qs from "qs";
-import global from "@/components/common.vue";
 import { createEditor, createToolbar } from "@wangeditor/editor";
 const editorConfig = {};
 
@@ -188,9 +187,9 @@ export default {
     async updateContent() {
       var params = {
         book_id: this.id,
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
-      console.log("user:" + global.currentUserId);
+      console.log("user:" + this.$store.getters.getUser.user.id);
       this.$axios
         .post("/book/detail", qs.stringify(params))
         .then((res) => {
@@ -210,7 +209,7 @@ export default {
     },
     starTheBook() {
     var params = {
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
         book_id: this.id,
         score: this.evaluate
       };
@@ -261,8 +260,13 @@ export default {
         this.$message.error("字数过多！不得超过10000字");
         return;
       }
+      if(this.passage.length<25)
+      {
+        this.$message.error("评论正文至少25个字符");
+        return;
+      }
       var params = {
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
         book_id: this.id,
         title:this.title,
         text:this.passage,
@@ -278,7 +282,7 @@ export default {
             });
             console.log(res.data.data);
           } else {
-            this.$message.error("查询失败");
+            this.$message.error("发布失败");
           }
         })
         .catch((error) => {

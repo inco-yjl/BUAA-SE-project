@@ -62,7 +62,6 @@
   </div>
 </template>
 <script>
-import global from "@/components/common.vue";
 import qs from "qs";
 export default {
   name: "Login",

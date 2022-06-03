@@ -39,7 +39,7 @@ const routes = [
   {
     path: '/topic/edit',
     name: 'topicDtEditor',
-    component: () =>import('../views/Topic/TopicEditor.vue')
+    component: () =>import('../views/editors/TopicEditor.vue')
   },
   {
     path: '/book',

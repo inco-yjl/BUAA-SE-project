@@ -157,7 +157,6 @@
 </template>
 
 <script>
-import global from "@/components/common.vue";
 import search from "@/components/SelectSearch.vue";
 import qs from "qs";
 export default {
@@ -241,15 +240,15 @@ export default {
   },
   methods: {
     clickcollect() {
-      if (global.currentUserId === -1) {
+      if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
         return;
       }
       var params = {
         tele_id: this.id,
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
-      console.log("user:" + global.currentUserId);
+      console.log("user:" + this.$store.getters.getUser.user.id);
       this.$axios
         .post("/tele/collect", qs.stringify(params))
         .then((res) => {
@@ -268,15 +267,15 @@ export default {
         });
     },
     clickuncollect() {
-      if (global.currentUserId === -1) {
+      if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
         return;
       }
       var params = {
         tele_id: this.id,
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
-      console.log("user:" + global.currentUserId);
+      console.log("user:" + this.$store.getters.getUser.user.id);
       this.$axios
         .post("/tele/uncollect", qs.stringify(params))
         .then((res) => {
@@ -299,7 +298,7 @@ export default {
     },
     async updateCollection() {
       var params = {
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
       this.$axios
         .post("/tele/collection", qs.stringify(params))
@@ -322,9 +321,9 @@ export default {
     async updateContent() {
       var params = {
         tele_id: this.id,
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
-      console.log("user:" + global.currentUserId);
+      console.log("user:" + this.$store.getters.getUser.user.id);
       this.$axios
         .post("/tele/detail", qs.stringify(params))
         .then((res) => {

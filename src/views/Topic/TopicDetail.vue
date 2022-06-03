@@ -446,7 +446,6 @@ button {
 import search from "@/components/SelectSearch.vue";
 import diary from "@/components/TopicDisplay.vue";
 import App from "@/App.vue";
-import global from "@/components/common.vue";
 import qs from 'qs';
 export default {
   name: "topic",
@@ -564,15 +563,15 @@ export default {
       }
     },
       clickcollect() {
-      if (global.currentUserId === -1) {
+      if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
         return;
       }
       var params = {
         topic_id: this.id,
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
-      console.log("user:" + global.currentUserId);
+      console.log("user:" + this.$store.getters.getUser.user.id);
       this.$axios
         .post("/topic/collect", qs.stringify(params))
         .then((res) => {
@@ -592,15 +591,15 @@ export default {
         });
     },
     clickuncollect() {
-      if (global.currentUserId === -1) {
+      if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
         return;
       }
       var params = {
         topic_id: this.id,
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
-      console.log("user:" + global.currentUserId);
+      console.log("user:" + this.$store.getters.getUser.user.id);
       this.$axios
         .post("/topic/uncollect", qs.stringify(params))
         .then((res) => {
@@ -637,9 +636,9 @@ export default {
     async updateContent() {
       var params = {
         topic_id: this.id,
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
-      console.log("user:" + global.currentUserId);
+      console.log("user:" + this.$store.getters.getUser.user.id);
       this.$axios
         .post("/topic/detail", qs.stringify(params))
         .then((res) => {
@@ -674,7 +673,7 @@ export default {
     },
     updateCollection() {
       var params = {
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
       this.$axios
         .post("/topic/collection", qs.stringify(params))
@@ -703,9 +702,7 @@ export default {
     writeTopicDt(){
         this.$router.push({
           name:"topicDtEditor",
-          params:{
-            topic_name:this.topic.name,
-            topic_intro:this.topic.intro,
+          query:{
             id:this.id
           }
         })

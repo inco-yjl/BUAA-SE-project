@@ -12,7 +12,9 @@
           </div>
           <div class="boxesOfTopic">
             <div v-for="topic in topic_circle" :key="topic.id">
-              {{topic.name}}<br /><a class="topicboxes-route" @click="ToTopicDetail(topic.id)"
+              {{ topic.name }}<br /><a
+                class="topicboxes-route"
+                @click="ToTopicDetail(topic.id)"
                 >参与话题</a
               >
             </div>
@@ -30,19 +32,24 @@
               <li><a>这是在干嘛</a></li>
               <li><a>再写一个</a></li>
             </ul>
-            <div id="more-collection-topic" class="hotlist">
-              <a>……</a>
+            <div class="title">
+              <a href="../user/topics">
+                <img src="@/assets/guide/mycomment.png" />已发布动态
+              </a>
             </div>
+            <ul class="collection-list hotlist" id="passage-list">
+              <li v-for="passage in passages" :key="passage.id"><a>{{passage.text}}</a></li>
+            </ul>
           </div>
-          <br />
           <div class="hotlist topic_page">
             <div class="title topic_page">
               <img src="@/assets/guide/topic_trend.png" /><span>话题趋势</span>
             </div>
             <ol>
               <li v-for="(topic, index) in hottopics" :key="topic.id">
-              <span v-if="index < 10">&ensp;</span>
-              <a @click="ToTopicDetail(topic.id)">{{topic.name}}</a></li>
+                <span v-if="index < 10">&ensp;</span>
+                <a @click="ToTopicDetail(topic.id)">{{ topic.name }}</a>
+              </li>
             </ol>
           </div>
         </div>
@@ -81,7 +88,7 @@
         </div>
         <div class="topic-page-number">
           <el-pagination
-            @next-click="handleCurrentChange(this.currentPage+1)"
+            @next-click="handleCurrentChange(this.currentPage + 1)"
             :page-size="3"
             @current-change="handleCurrentChange"
             layout="prev, pager, next, jumper"
@@ -121,7 +128,7 @@ div.body {
 .topic_circle button {
   border-radius: 40px;
   background-color: white;
-  border:none;
+  border: none;
   outline: none;
   position: relative;
   z-index: 0;
@@ -143,8 +150,11 @@ div.body {
 }
 .topic_cirle_title {
   font-weight: bold;
+  font-size: 30px;
+  margin-left: 20px;
   margin-right: 10px;
 }
+
 .hotlist a {
   color: rgb(2, 98, 182);
   font-weight: 500;
@@ -153,6 +163,9 @@ div.body {
 .hotlist a:hover {
   background-color: rgb(213, 230, 245);
   font-weight: 600;
+}
+#passage-list a{
+  font-size: 16px;
 }
 .flex_box {
   display: flex;
@@ -184,7 +197,7 @@ div.title {
   font-size: 25px;
   color: #343434;
 }
-.hotlist .title{
+.hotlist .title {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   text-align: left;
   font-size: 20px;
@@ -193,7 +206,7 @@ div.title {
 }
 .topic_circle {
   margin-left: 20px;
-  padding-top: 10px;
+  padding-top: 40px;
   padding-left: 10px;
   padding-bottom: 10px;
   width: 1100px;
@@ -248,6 +261,7 @@ div.title {
 }
 .collection {
   text-align: left;
+  height:260px;
   padding-bottom: 0px;
 }
 .collection img {
@@ -268,7 +282,7 @@ div.title {
   opacity: 1;
 }
 .collection a:active {
-  color: rgb(0, 166, 255);;
+  color: rgb(0, 166, 255);
 }
 .collection-list a {
   font-size: 18px;
@@ -278,18 +292,12 @@ div.title {
   font-weight: 600;
   color: rgb(2, 98, 182);
 }
-#more-collection-topic {
-  position: relative;
-  line-height: 40px;
-  left:20px;
-  top:-20px;
-}
 .topic_page.title img {
   height: 35px;
   margin-left: 27px;
 }
 .topic_page.hotlist {
-  line-height: 28px;
+  line-height: 24px;
   font-size: 17px;
   text-align: left;
   border-radius: 20px;
@@ -318,7 +326,7 @@ div.title {
   padding-top: 50px;
   width: 1460px;
   margin-left: 20px;
-  margin-top: 50px;
+  margin-top: 20px;
   border-style: solid;
   border-width: 1px;
   border-color: rgb(181, 181, 181);
@@ -377,7 +385,7 @@ import search from "@/components/SelectSearch.vue";
 import diary from "@/components/TopicDisplay.vue";
 import usericon from "@/assets/user/int.png";
 import router from "@/router";
-import qs from 'qs'
+import qs from "qs";
 export default {
   name: "topic",
   components: {
@@ -419,24 +427,31 @@ export default {
         img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
       },
     ];
-    var topic_circle=[{}];
-    var hottopics=[{}];
+    var topic_circle = [{}];
+    var hottopics = [{}];
+    var passages=[{}];
     return {
       dt,
+      passages,
       dtamount,
       topic_circle,
-      hottopics
+      hottopics,
     };
   },
   methods: {
+     ToText(HTML)
+    {
+      var input = HTML;
+      return input.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,'').
+      replace(/<[^>]+?>/g,'').replace(/\s+/g,' ').replace(/ /g,' ').replace(/>/g,' ');  
+    },
     randomTopic() {
       this.$axios
         .post("/topic/random")
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("获取到随机话题");
-            console.log(res.data.data)
-            this.topic_circle=res.data.data;
+            this.topic_circle = res.data.data;
           } else {
             this.$message.error("查询失败");
           }
@@ -451,6 +466,34 @@ export default {
         query: { id: id },
       });
     },
+    async updatePassage() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+        .post("/topic/mypassage", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.passages=[];
+            var i;
+            var length=3;
+            console.log(res.data.data)
+            if(res.data.data.length<3)
+            length=res.data.data.length;
+            for(i=0;i<length;i++){
+              res.data.data[i].text=this.ToText(res.data.data[i].text);
+              if(res.data.data[i].text.length>14)
+                res.data.data[i].text=res.data.data[i].text.substring(0,14)+'…';
+              this.passages.push(res.data.data[i])
+            }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     async updateHotTopics() {
       var params = {
         num: 10,
@@ -460,7 +503,6 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("话题查询成功");
-            console.log(res.data.data)
             this.hottopics = res.data.data;
           } else {
             this.$message.error("查询失败");
@@ -564,6 +606,7 @@ export default {
     this.Updatediary();
     this.updateButton();
     this.randomTopic();
+    this.updatePassage();
     this.updateHotTopics();
   },
 };
