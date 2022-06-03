@@ -23,7 +23,7 @@
         </span> 
         </div>
         </template>
-        <router-view :key="this.$route.path"></router-view>
+        <router-view :key="$router.currentRoute.fullPath"></router-view>
   </div>
 </template>
 

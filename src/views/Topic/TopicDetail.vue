@@ -1,13 +1,14 @@
 <template>
   <div id="topicdetail">
     <search></search>
-    <div class="body">
-      <div class="flex_box">
+    <div id="topic-detail-body">
         <div class="introOfTopic">
           <div class="title">
-            <img src="@/assets/title/topic-intro.png" /><span class="topic-name"
-              >{{ topic.name
-              }}<button
+            <img src="@/assets/title/topic-intro.png" />
+            <span :v-if="loadSuccess" class="topic-name">
+              {{ topic.name}}
+              <button
+              :v-if="loadSuccess"
                 @click="favor"
                 class="topic-button"
                 :style="{ backgroundColor: bg_color, color: ft_color }"
@@ -18,9 +19,9 @@
               </button></span
             >
           </div>
-          <div class="boxesOfTopic">
+          <div class="boxesOfTopic" :v-if="loadSuccess">
             <p id="topic-intro-info">
-              {{ topic.dtnum }}篇内容·{{ topic.peoplenum }}人关注
+              {{ topic.passage }}篇内容·{{ topic.people }}人关注
             </p>
             <p id="topic-intro-content">{{ topic.intro }}</p>
           </div>
@@ -40,19 +41,19 @@
                 <img src="@/assets/guide/star_topic.png" />已关注话题
               </a>
             </div>
-            <ul class="collection-list hotlist">
-              <li><a>老家记忆</a></li>
-              <li><a>这是在干嘛</a></li>
-              <li><a>再写一个</a></li>
+            <ul v-if="collection.length > 0" class="collection-list hotlist">
+              <li v-for="collect in collection" :key="collect.id">
+              <a @click="ToTopicDetail(collect.id)">{{collect.name}}</a>
+              </li>
             </ul>
-            <div id="more-collection-topic" class="hotlist">
+            <div id="more-collection-topic" class="hotlist" v-if="collection.length>0">
               <a>……</a>
             </div>
           </div>
           <div></div>
           <br />
         </div>
-      </div>
+
 
       <div class="diarylist">
         <div class="title diary-hit">
@@ -78,7 +79,7 @@
           </span>
         </div>
 
-        <div class="topic-display">
+        <div class="topic-display" v-for="(dt,index) in dts" :key="index">
           <div class="block">
             <span class="demonstration">
               <div class="topicdiary">
@@ -86,91 +87,45 @@
                 <div class="diary-display-body">
                   <div class="display-publisher">
                     <a class="userOfdiary" href="/otherusers/1">
-                      <img class="iconOfuser" :src="dt1.usericon"/><span class="nameOfuser">{{dt1.user}}</span>
+                      <img class="iconOfuser" :src="dt.usericon"/><span class="nameOfuser">{{dt.user}}</span>
                     </a>
-                    <span class="publishtime">{{dt1.date}}</span>
+                    <span class="publishtime">{{dt.date}}</span>
                   </div>
                   <div class="diary-origin-pic">
                     <a class="diary-origin" href="javascript:void(0)"
-                      ><img class="diary-pic" :src="dt1.img"/>
+                      ><img class="diary-pic" :src="dt.img"/>
                     </a>
                   </div>
                   <div class="diarytext">
-                    <a class="diarytext-origin" href="/topic/1/comments/1">{{dt1.passage}}</a>
+                    <a class="diarytext-origin" href="/topic/1/comments/1">{{dt.passage}}</a>
                   </div>
                 </div>
               </div>
             </span>
           </div>
         </div>
-        <div class="topic-display">
-          <div class="block">
-            <span class="demonstration">
-              <div class="topicdiary">
-                <hr />
-                <div class="diary-display-body">
-                  <div class="display-publisher">
-                    <a class="userOfdiary" href="/otherusers/1">
-                      <img class="iconOfuser" :src="dt2.usericon"/><span class="nameOfuser">{{dt2.user}}</span>
-                    </a>
-                    <span class="publishtime">{{dt2.date}}</span>
-                  </div>
-                  <div class="diary-origin-pic">
-                    <a class="diary-origin" href="javascript:void(0)"
-                      ><img class="diary-pic" :src="dt2.img"/>
-                    </a>
-                  </div>
-                  <div class="diarytext">
-                    <a class="diarytext-origin" href="/topic/1/comments/1">{{dt2.passage}}</a>
-                  </div>
-                </div>
-              </div>
-            </span>
-          </div>
-          
-        </div><div class="topic-display">
-          <div class="block">
-            <span class="demonstration">
-              <div class="topicdiary">
-                <hr />
-                <div class="diary-display-body">
-                  <div class="display-publisher">
-                    <a class="userOfdiary" href="/otherusers/1">
-                      <img class="iconOfuser" :src="dt3.usericon"/><span class="nameOfuser">{{dt3.user}}</span>
-                    </a>
-                    <span class="publishtime">{{dt3.date}}</span>
-                  </div>
-                  <div class="diary-origin-pic">
-                    <a class="diary-origin" href="javascript:void(0)"
-                      ><img class="diary-pic" :src="dt3.img"/>
-                    </a>
-                  </div>
-                  <div class="diarytext">
-                    <a class="diarytext-origin" href="/topic/1/comments/1">{{dt3.passage}}</a>
-                  </div>
-                </div>
-              </div>
-            </span>
-          </div>
-        </div>
-
         <div class="topic-page-number">
           <el-pagination
             @next-click="changeTopicdt()"
             :page-size="3"
             layout="prev, pager, next, jumper"
-            :total="topic.dtnum"
+            :total="30"
           >
           </el-pagination>
         </div>
+        </div> 
       </div>
     </div>
-  </div>
 </template>
 
 
 <style scoped>
-
+#topic-detail-body{
+  width: 1580px;
+  padding-bottom: 50px;
+  display: flex;
+  flex-wrap: wrap;
+}
 .topic-name {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-weight: bold;
@@ -185,7 +140,7 @@ button.selection_un {
 }
 .topic-detail-interact button {
   position: relative;
-  left: 900px;
+  left: 850px;
   background: none;
   outline: none;
   font-size: 18px;
@@ -209,9 +164,10 @@ button.selection_ed {
   height: 40px;
 }
 #topicdetail {
-  height:1600px;
+  width: 1600px;
   padding-left: 100px;
 }
+
 .hotlist a {
   color: rgb(2, 98, 182);
   font-weight: 500;
@@ -221,23 +177,38 @@ button.selection_ed {
   background-color: rgb(213, 230, 245);
   font-weight: 600;
 }
-.flex_box {
-  display: flex;
-}
 .aside {
-  margin-top: 30px;
+  margin-top: 80px;
   margin-left: 10px;
   margin-right: 0;
-  padding-left: 20px;
-  padding-right: 40px;
+  padding-left: 15px;
+  padding-right: 15px;
   padding-top: 25px;
-  padding-bottom: 20px;
-  width: 250px;
   border-style: solid;
   border-width: 1px;
   border-color: rgb(181, 181, 181);
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
+  height: 200px;
+  width:312px;
+}
+.aside-slide {
+  margin-top: 80px;
+  margin-left: 10px;
+  margin-right: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 25px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  background-color: white;
+  box-shadow: 0px 2px 3px #888888a6;
+  height: 200px;
+  position: fixed;
+  left: 1300px;
+  width:312px;
+  top: -50px;
 }
 div.title {
   text-align: left;
@@ -247,12 +218,13 @@ div.title {
   color: rgb(52, 52, 52);
 }
 .introOfTopic {
-  margin-left: 20px;
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-bottom: 10px;
+  padding-top: 20px;
+  padding-left: 80px;
+  padding-right: 80px;
+  padding-bottom: 20px;
+  margin-top: 80px;
   width: 1200px;
-  margin-top: 30px;
+  height:auto;
   background-color: white;
   border-style: solid;
   border-width: 1px;
@@ -263,7 +235,7 @@ div.title {
   margin-top: 15px;
   margin-left: 20px;
   flex-wrap: wrap;
-  width: 1150px;
+  width: 1000px;
   font-family: Source Han Sans CN Normal;
   font-size: 20px;
 }
@@ -298,7 +270,7 @@ div.title {
   color: rgb(0, 166, 255);;
 }
 .collection-list a {
-  font-size: 18px;
+  font-size: 17.5px;
   font-family: Source Han Sans CN Normal;
 }
 .collection-list a:hover {
@@ -306,10 +278,10 @@ div.title {
   color: rgb(2, 98, 182);
 }
 #more-collection-topic {
-  position: absolute;
+  position: relative;
   line-height: 40px;
-  top: 440px;
-  left: 1380px;
+  top:-20px;
+  left:20px;
 }
 .topic_page.title img {
   height: 35px;
@@ -341,20 +313,20 @@ div.title {
   list-style-position: inside;
 }
 .diarylist {
-  position: absolute;
+  margin-top: 20px;
+  width: 1200px;
   padding-left: 100px;
+  padding-right: 100px;
   padding-top: 50px;
-  width: 1460px;
-  margin-left: 20px;
-  margin-top: 15px;
+  padding-right: 100px;
+  padding-bottom: 30px;
+  background-color: white;
   border-style: solid;
   border-width: 1px;
   border-color: rgb(181, 181, 181);
-  background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
 }
 .topic-display {
-  margin-left: 20px;
   margin-bottom:50px;
 }
 .diary-hit {
@@ -372,12 +344,12 @@ div.title {
 }
 
 .topicdiary {
-  width: 1200px;
   text-align: left;
 }
 .diary-display-body {
   display: flex;
   flex-wrap: wrap;
+  height:220px;
   padding-left: 30px;
 }
 .display-publisher {
@@ -390,23 +362,6 @@ div.title {
   font-weight: 400;
   color: rgb(157, 157, 157);
 }
-.topic-origin {
-  position: relative;
-  font-size: 18px;
-  text-align: left;
-  width: 1000px;
-}
-.topic-origin a {
-  font-family: Source Han Sans CN Normal;
-  color: black;
-  text-decoration: none;
-  padding-left: 5px;
-  text-decoration: none;
-}
-.topic-origin a:hover {
-  font-family: Source Han Sans CN Normal;
-  color: rgb(31, 169, 255);
-}
 .diary-pic {
   height: 200px;
   align-content: middle;
@@ -414,7 +369,7 @@ div.title {
 div.diary-origin-pic {
   position: relative;
   left: 0;
-  top:20px;
+  margin-top: 20px;
   margin-left: 20px;
   border-radius: 5px;
   height: 180px;
@@ -444,7 +399,7 @@ div.diary-origin-pic {
   font-family: Source Han Sans CN Normal;
 }
 .diarytext {
-  width: 800px;
+  width: 600px;
   margin-left: 30px;
 }
 a.diarytext-origin {
@@ -477,9 +432,6 @@ button {
   font-weight: 600;
   -webkit-transform: scale(0.7);
 }
-div.body{
-  padding-bottom: 100px;
-}
 </style>
 <style>
 .el-pager li {
@@ -494,6 +446,8 @@ div.body{
 import search from "@/components/SelectSearch.vue";
 import diary from "@/components/TopicDisplay.vue";
 import App from "@/App.vue";
+import global from "@/components/common.vue";
+import qs from 'qs';
 export default {
   name: "topic",
   components: {
@@ -503,13 +457,9 @@ export default {
   },
   data() {
     var id = this.$route.query.id; //根据id来询问
-    var topic = {
-      name: "寻找春日气息",
-      intro:
-        "哈哈，春天来了！为了让画面好看，这里要写长一点，但是不能写的太长，",
-      peoplenum: 22,
-      dtnum: 20,
-      hotdt: [
+    var topic;
+    var loadSuccess = false;
+    var hotdt= [
         {
           user: "yjl",
           usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
@@ -531,8 +481,7 @@ export default {
           date: "2002-6-7",
           img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
         },
-      ],
-    };
+      ];
     var newdt = [
       {
         user: "yjl",
@@ -565,32 +514,40 @@ export default {
         img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
       },
     ];
-    var dt=topic.hotdt;
+    var collection = [];
+    var dts=hotdt;
     return {
-      dt1:dt[0],
-      dt2:dt[1],
-      dt3:dt[2],
+      id,
+      dts,
       topic,
       newdt,
+      hotdt,
       liked: false,
+      loadSuccess,
+      collection,
       content: "+关注话题",
       bg_color: "#f2fef0",
       ft_color: "#47ff5d",
     };
   },
   methods: {
-    favor(e) {
+    favor() {
       this.liked = !this.liked;
+      if(this.liked)
+        this.clickcollect();
+      else
+        this.clickuncollect();
+      this.changeCollectButton();
+    },
+    changeCollectButton() {
       if (this.liked) {
         this.content = "已关注";
         this.bg_color = "#6cf57c";
         this.ft_color = "#f2fef0";
-        this.topic.peoplenum++;
       } else {
         this.content = "+关注话题";
         this.bg_color = "#f2fef0";
         this.ft_color = "#6cf57c";
-        this.topic.peoplenum--;
       }
     },
     change() {
@@ -606,14 +563,107 @@ export default {
         this.ft_color = "#6cf57c";
       }
     },
+      clickcollect() {
+      if (global.currentUserId === -1) {
+        this.$message.error("请先登录");
+        return;
+      }
+      var params = {
+        topic_id: this.id,
+        user_id: global.currentUserId,
+      };
+      console.log("user:" + global.currentUserId);
+      this.$axios
+        .post("/topic/collect", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.$message({
+              message: res.data.msg,
+              type: "success",
+            });
+            this.liked = true;
+            this.topic.people++;
+          } else {
+            this.$message.error("收藏失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    clickuncollect() {
+      if (global.currentUserId === -1) {
+        this.$message.error("请先登录");
+        return;
+      }
+      var params = {
+        topic_id: this.id,
+        user_id: global.currentUserId,
+      };
+      console.log("user:" + global.currentUserId);
+      this.$axios
+        .post("/topic/uncollect", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.$message({
+              message: res.data.msg,
+              type: "success",
+            });
+            this.liked = false;
+            this.topic.people--;
+          } else {
+            this.$message.error("取消收藏失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    ToTopicDetail(id) {
+      this.$router.push({
+        name: "topicdetail",
+        query: { id: id },
+      });
+    },
     hotTopicdt() {
       //更换标签时获取数据
       document
         .getElementById("select-new-topic-dt")
         .setAttribute("class", "selection_un");
-      this.dt=this.topic.hotdt;
+      this.dts=this.topic.hotdt;
       this.Updatediary();
       
+    },
+    async updateContent() {
+      var params = {
+        topic_id: this.id,
+        user_id: global.currentUserId,
+      };
+      console.log("user:" + global.currentUserId);
+      this.$axios
+        .post("/topic/detail", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("详情查询成功");
+            this.topic = res.data.data;
+            this.loadSuccess = true;
+            switch(res.data.collect)
+            {
+                case 1:
+                    this.liked = true;
+                    break;
+                case 0:
+                    this.liked = false;
+                    break;
+            }
+            this.changeCollectButton();
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     //this is the function to update the images of books
     updateButton() {
@@ -622,10 +672,33 @@ export default {
         .item(4)
         .setAttribute("class", "selection_ed");
     },
+    updateCollection() {
+      var params = {
+        user_id: global.currentUserId,
+      };
+      this.$axios
+        .post("/topic/collection", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("收藏查询成功");
+            this.collection = [];
+            var i,l=3;
+            if(res.data.data.length<3)
+              l=res.data.data.length;
+            for(i=0;i<l;i++)
+            this.collection.push(res.data.data[i]);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     Updatediary() {
-      this.dt1=this.dt[0];
-      this.dt2=this.dt[1];
-      this.dt3=this.dt[2];
+      this.dt1=this.dts[0];
+      this.dt2=this.dts[1];
+      this.dt3=this.dts[2];
       },
     writeTopicDt(){
         this.$router.push({
@@ -637,20 +710,36 @@ export default {
           }
         })
     },
-    changeTopicdt() {},
     newTopicdt(){
       //获取新的数据
       document
         .getElementById("select-hot-topic-dt")
         .setAttribute("class", "selection_un");
-      this.dt=this.newdt;
+      this.dts=this.newdt;
       this.Updatediary();
     }
   },
   mounted() {
     this.$parent.navigate = true;
-    this.Updatediary();
-    this.updateButton();
+    this.$nextTick(() => {
+      this.updateContent();
+      this.updateCollection();
+      this.Updatediary();
+  });
+    window.onscroll = function (e) {
+      var vertical = document
+        .getElementsByClassName("introOfTopic")
+        .item(0);
+      var pos = vertical.getBoundingClientRect();
+      console.log(pos.top);
+      if (pos.top < 29) {
+        var aside = document.getElementsByClassName("aside").item(0);
+        if (aside != null) aside.setAttribute("class", "aside-slide");
+      } else {
+        var aside = document.getElementsByClassName("aside-slide").item(0);
+        if (aside != null) aside.setAttribute("class", "aside");
+      }
+    };
   },
 };
 </script>

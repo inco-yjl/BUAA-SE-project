@@ -52,8 +52,8 @@ const routes = [
     component: () =>import('../views/book/BookComment.vue')
   },
   {
-    path: '/editor',
-    name: 'editor',
+    path: 'book/editor',
+    name: 'bookeditor',
     component: () => import('../views/editors/CommentEditor.vue')
   },
   {
@@ -125,7 +125,17 @@ const routes = [
       path: '/book/detail',
       name: 'bookdetail',
       component: () => import('../views/book/BookDetail.vue')
-    },  
+    },
+    {
+      path: '/video/movie/detail',
+      name: 'moviedetail',
+      component: () => import('../views/Video/MovieDetail.vue')
+    },
+    {
+      path: '/video/tele/detail',
+      name: 'teledetail',
+      component: () => import('../views/Video/TeleDetail.vue')
+    }  
   ]
 },
 {
@@ -139,6 +149,14 @@ const routes = [
 {
   path:'/admin/uploadtele',
   component: () => import('../views/admin/UploadTele.vue'),
+},
+{
+  path:'/admin/uploadgroup',
+  component: () => import('../views/admin/UploadGroup.vue'),
+},
+{
+  path:'/admin/uploadtopic',
+  component: () => import('../views/admin/UploadTopic.vue'),
 }
 ]
 

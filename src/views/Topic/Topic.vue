@@ -6,44 +6,13 @@
         <div class="topic_circle">
           <div class="title">
             <span class="topic_cirle_title">话题广场</span
-            ><button onclick="">
+            ><button @click="randomTopic()">
               <img id="change_topic" src="@/assets/guide/change_topic.png" />
             </button>
           </div>
           <div class="boxesOfTopic">
-            <div>
-              寻找春日气息<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              今天是立秋<br /><a class="topicboxes-route" href="/1">参与话题</a>
-            </div>
-            <div>
-              你最爱的海上电影镜头<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              老家记忆<br /><a class="topicboxes-route" href="/1">参与话题</a>
-            </div>
-            <div>
-              后疫情时代的旅行<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              你拍过的最搞笑的照片<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              寻找春日气息<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              寻找春日气息<br /><a class="topicboxes-route" href="/1"
+            <div v-for="topic in topic_circle" :key="topic.id">
+              {{topic.name}}<br /><a class="topicboxes-route" @click="ToTopicDetail(topic.id)"
                 >参与话题</a
               >
             </div>
@@ -71,16 +40,9 @@
               <img src="@/assets/guide/topic_trend.png" /><span>话题趋势</span>
             </div>
             <ol>
-              <li>&ensp;<a href="/1">我的世界读书日</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li>&ensp;<a href="/2">你每天都有哪些突如其来的感悟</a></li>
-              <li>&ensp;<a href="/2">和新冠肺炎疫情有关的记忆</a></li>
-              <li>&ensp;<a href="/2">热爱生活的一万个理由</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li><a href="/2">今天吃什么？</a></li>
+              <li v-for="(topic, index) in hottopics" :key="topic.id">
+              <span v-if="index < 10">&ensp;</span>
+              <a @click="ToTopicDetail(topic.id)">{{topic.name}}</a></li>
             </ol>
           </div>
         </div>
@@ -159,7 +121,7 @@ div.body {
 .topic_circle button {
   border-radius: 40px;
   background-color: white;
-  border-color: rgba(128, 128, 128, 0.498);
+  border:none;
   outline: none;
   position: relative;
   z-index: 0;
@@ -181,11 +143,12 @@ div.body {
 }
 .topic_cirle_title {
   font-weight: bold;
-  margin-right: 30px;
+  margin-right: 10px;
 }
 .hotlist a {
   color: rgb(2, 98, 182);
   font-weight: 500;
+  font-size: 16px;
 }
 .hotlist a:hover {
   background-color: rgb(213, 230, 245);
@@ -211,6 +174,7 @@ div.body {
 #change_topic {
   padding-left: 0;
   margin-right: 0;
+  vertical-align: -9px;
   height: 37px;
 }
 div.title {
@@ -218,7 +182,14 @@ div.title {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   margin-left: 20px;
   font-size: 25px;
-  color: rgb(52, 52, 52);
+  color: #343434;
+}
+.hotlist .title{
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  text-align: left;
+  font-size: 20px;
+  font-weight: bold;
+  padding-left: 10px;
 }
 .topic_circle {
   margin-left: 20px;
@@ -251,7 +222,7 @@ div.title {
   padding-left: 15px;
   padding-right: 15px;
   text-align: center;
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 500;
   color: rgb(53, 53, 53);
   font-family: "Noto Serif SC", serif;
@@ -277,7 +248,7 @@ div.title {
 }
 .collection {
   text-align: left;
-  padding-bottom: 30px;
+  padding-bottom: 0px;
 }
 .collection img {
   height: 30px;
@@ -308,10 +279,10 @@ div.title {
   color: rgb(2, 98, 182);
 }
 #more-collection-topic {
-  position: absolute;
+  position: relative;
   line-height: 40px;
-  top: 440px;
-  left: 1280px;
+  left:20px;
+  top:-20px;
 }
 .topic_page.title img {
   height: 35px;
@@ -406,6 +377,7 @@ import search from "@/components/SelectSearch.vue";
 import diary from "@/components/TopicDisplay.vue";
 import usericon from "@/assets/user/int.png";
 import router from "@/router";
+import qs from 'qs'
 export default {
   name: "topic",
   components: {
@@ -447,18 +419,56 @@ export default {
         img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
       },
     ];
+    var topic_circle=[{}];
+    var hottopics=[{}];
     return {
       dt,
       dtamount,
+      topic_circle,
+      hottopics
     };
   },
   methods: {
-    ToTopicDetail(p) {
-      const _this = this;
-      _this.$router.push({
+    randomTopic() {
+      this.$axios
+        .post("/topic/random")
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("获取到随机话题");
+            console.log(res.data.data)
+            this.topic_circle=res.data.data;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    ToTopicDetail(id) {
+      this.$router.push({
         name: "topicdetail",
-        params: { id: p },
+        query: { id: id },
       });
+    },
+    async updateHotTopics() {
+      var params = {
+        num: 10,
+      };
+      this.$axios
+        .post("/topic/hot", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("话题查询成功");
+            console.log(res.data.data)
+            this.hottopics = res.data.data;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     hotTopicdt() {
       //获取数据
@@ -553,6 +563,8 @@ export default {
   mounted() {
     this.Updatediary();
     this.updateButton();
+    this.randomTopic();
+    this.updateHotTopics();
   },
 };
 </script>
