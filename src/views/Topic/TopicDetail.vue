@@ -655,7 +655,6 @@ export default {
                     this.liked = false;
                     break;
             }
-            this.changeCollectButton();
           } else {
             this.$message.error("查询失败");
           }

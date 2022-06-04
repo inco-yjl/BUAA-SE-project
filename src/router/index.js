@@ -48,6 +48,11 @@ const routes = [
     component: () =>import('../views/book/Book.vue')
   },
   {
+    path: '/book/detail',
+    name: 'bookdetail',
+    component: () => import('../views/book/BookDetail.vue')
+  },
+  {
     path: '/book/comment',
     name: 'bookcomment',
     component: () =>import('../views/book/BookComment.vue')
@@ -121,11 +126,6 @@ const routes = [
       path: '/groupadmin',
       name: 'Groupadmin',
       component: () => import('../views/group/admin.vue')
-    },
-    {
-      path: '/book/detail',
-      name: 'bookdetail',
-      component: () => import('../views/book/BookDetail.vue')
     },
     {
       path: '/video/movie/detail',

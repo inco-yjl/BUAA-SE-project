@@ -38,7 +38,9 @@
               </a>
             </div>
             <ul class="collection-list hotlist" id="passage-list">
-              <li v-for="passage in passages" :key="passage.id"><a>{{passage.text}}</a></li>
+              <li v-for="passage in passages" :key="passage.id">
+              <a @click="ToTopicDt(passage.id)">{{passage.text}}</a>
+              </li>
             </ul>
           </div>
           <div class="hotlist topic_page">
@@ -465,6 +467,9 @@ export default {
         name: "topicdetail",
         query: { id: id },
       });
+    },
+    ToTopicDt(id){
+
     },
     async updatePassage() {
       var params = {

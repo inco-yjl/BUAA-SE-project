@@ -57,8 +57,8 @@
             :useCSS="true"
             :infinite="false"
             :speed="500"
-            :slidesToShow="8"
-            :slidesToScroll="8"
+            :slidesToShow="7"
+            :slidesToScroll="7"
             :touchThreshold="5"
           >
             <div
