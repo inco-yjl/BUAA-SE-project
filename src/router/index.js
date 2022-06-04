@@ -139,7 +139,7 @@ const routes = [
 {
   path:'/admin/uploadtele',
   component: () => import('../views/admin/UploadTele.vue'),
-}
+},
 ]
 
 const router = new VueRouter({
