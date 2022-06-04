@@ -96,10 +96,12 @@
 
 <script>
 import groupPerson from "@/components/GroupPerson";
+import report from "@/components/report";
 export default {
   name: "group",
   components: {
     groupPerson,
+    report,
   },
   data() {
     var message = [

@@ -15,12 +15,25 @@
                      <span class="el-dropdown-link">用户名<i class="el-icon-arrow-down el-icon--right"></i></span>
                     <el-dropdown-menu slot="dropdown">
                         <a href = "/person"><el-dropdown-item icon="el-icon-user-solid">个人主页</el-dropdown-item></a>
-                        <el-dropdown-item icon="el-icon-chat-line-round">我的消息</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-chat-line-round" @click.native ="drawer = true">我的消息
+                        </el-dropdown-item>
                         <el-dropdown-item icon="el-icon-switch-button" @click="logout">退出账号</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-col>
-        </span> 
+        </span>
+        <el-drawer
+            title="我的消息"
+            :visible.sync="drawer"
+            :direction="direction"
+            :before-close="handleClose">
+          <div v-for="per in messages" :key = "index">
+            <a herf = "">
+            <img class = "el-drawer-img" src = "../assets/user/int.jpg">
+            <span>{{per.name}} @了你</span>
+            </a>  
+          </div>
+        </el-drawer>
         </div>
         </template>
         <router-view :key="$router.currentRoute.fullPath"></router-view>
@@ -28,12 +41,57 @@
 </template>
 
 <script>
-export default ({
+export default {
    data () {
-       var navigate=true;
+     var messages = [
+       {
+         img: "../assets/user/int.jpg",
+         name: "owwo"
+       },
+       {
+         img: "../assets/user/int.png",
+         name: "owwo"
+       },
+       {
+         img: "../assets/user/int.png",
+         name: "owwo"
+       },
+       {
+         img: "../assets/user/int.png",
+         name: "owwo"
+       },
+       {
+         img: "../assets/user/int.png",
+         name: "owwo"
+       },
+       {
+         img: "../assets/user/int.png",
+         name: "owwo"
+       },
+       {
+         img: "../assets/user/int.png",
+         name: "owwo"
+       },
+       {
+         img: "../assets/user/int.png",
+         name: "owwo"
+       },
+       {
+         img: "../assets/user/int.png",
+         name: "owwo"
+       },
+       {
+         img: "../assets/user/int.png",
+         name: "owwo"
+       },
+     ];
+     var navigate=true;
     return {
       navigate,
-    }
+      messages,
+      drawer: false,
+      direction: 'rtl',
+    };
   },
   methods: {
     // 初始化
@@ -42,10 +100,16 @@ export default ({
     },
     logout(){
       this.$router.replace({path:'/login'});
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
     }
   }
 }
-)
 </script>
 
 
@@ -120,6 +184,12 @@ a{
 }
 button{
   cursor: pointer;
+}
+.el-drawer-img {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  overflow: hidden;
 }
 </style>
 
