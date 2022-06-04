@@ -157,7 +157,7 @@ export default {
       message,
       grouptime,
     };
-  }
+  },
 }
 </script>
 
