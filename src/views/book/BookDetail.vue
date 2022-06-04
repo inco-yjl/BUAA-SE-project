@@ -337,7 +337,7 @@ export default {
             this.collections = [];
             var i=0;
             for(i=0;i<3 && i<res.data.data.length;i++){
-              res.data.data[i].score=parseFloat(res.data.data[i].score);
+              res.data.data[i].star=parseFloat(res.data.data[i].star);
               this.collections.push(res.data.data[i]);
             }
               

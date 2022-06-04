@@ -240,13 +240,15 @@ export default {
       },
     ];
     var collections = [{}];
-    var passages = [{}]
+    var passages = [{}];
+    var loadSuccess = false;
     return {
       hotbooks,
       highbooks,
       bookcomments,
       collections,
       passages,
+      loadSuccess
     };
   },
   components: {
@@ -267,11 +269,14 @@ export default {
       this.$axios
         .post("/book/collection", qs.stringify(params))
         .then((res) => {
+          console.log(res);
           if (res.data.errno === 0) {
             this.collections = [];
             var i = 0;
-            for (i = 0; i < 3 && i < res.data.data.length; i++)
+            for (i = 0; i < 3 && i < res.data.data.length; i++){
+              res.data.data[i].star=parseFloat(res.data.data[i].star);
               this.collections.push(res.data.data[i]);
+            }
           } else {
             this.$message.error("查询失败");
           }
@@ -288,6 +293,7 @@ export default {
       this.$axios
         .post("/book/mypassage", qs.stringify(params))
         .then((res) => {
+          console.log(res);
           if (res.data.errno === 0) {
             this.passages=[];
             var i;
@@ -296,6 +302,7 @@ export default {
             length=res.data.data.length;
             for(i=0;i<length;i++)
             this.passages.push(res.data.data[i])
+            this.loadSuccess=true;
           } else {
             this.$message.error("查询失败");
           }
@@ -373,7 +380,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$store.getters.getUser.user.id);
     this.updateCollection();
     this.updateHotBook();
     this.updateHighBook();
