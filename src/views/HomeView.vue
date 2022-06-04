@@ -115,52 +115,18 @@
             <img class="hot" src="@/assets/title/fire.png" />热点话题
           </span>
           <ul class="topics hotlist">
-            <li id="topic1">
-              <span>1.&ensp;</span
-              ><a href="../topic">影史上有哪些你不喜欢的致敬？</a>
-            </li>
-            <li id="topic2">
-              <span>2.&ensp;</span>
-              <a href="../topic">我家的应急物资储备方案</a>
-            </li>
-            <li id="topic3">
-              <span>3.&ensp;</span>
-              <a href="../topic">哪一刻感到大自然在对你说话？</a>
-            </li>
-            <li>
-              <span>4.&ensp;</span> <a href="../topic">居家阳台观鸟计划</a>
-            </li>
-            <li>
-              <span>5.&ensp;</span>
-              <a href="../topic">和新冠肺炎疫情有关的记忆</a>
-            </li>
-            <li>
-              <span>6.&ensp;</span>
-              <a href="../topic">用一张照片🖼️证明春天来了</a>
-            </li>
-            <li>
-              <span>7.&ensp;</span><a href="../topic">2022年第一季度读书总结</a>
-            </li>
-            <li>
-              <span>8.&ensp;</span><a href="../topic">用一句话记录今天 </a>
-            </li>
-            <li>
-              <span>9.&ensp;</span
-              ><a href="../topic">生命中意识到自己是独立个体的时刻</a>
-            </li>
-            <li>
-              <span>10.</span
-              ><a href="../topic">电影中那些值得珍藏的浪漫镜头</a>
-            </li>
-            <li>
-              <span>11.</span
-              ><a href="../topic">给我凋谢的鲜花🥀建一座赛博坟墓</a>
-            </li>
-            <li><span>12.</span><a href="../topic">收集美的书籍内封</a></li>
-            <li><span>13.</span><a href="../topic">如果只剩下一首歌🎶</a></li>
-            <li><span>14.</span><a href="../topic">小而真实的快乐</a></li>
-            <li>
-              <span>15.</span><a href="../topic">日常生活的食品安全隐患</a>
+            <li v-for="(topic, index) in hottopics" 
+            :key="index">
+              <span
+              class="topic-list-item" 
+              :class="{
+              rank1: index === 0, 
+              rank2: index === 1, 
+              rank3: index === 2
+              }">
+              {{index+1}}.
+              <span v-if="index < 10">&ensp;</span></span
+              ><a @click="ToTopicDetail(topic.id)">{{topic.name}}</a>
             </li>
           </ul>
         </div>
@@ -172,18 +138,7 @@
             >
           </div>
           <ul>
-            <li><a href="../group">公园旅行家协会</a></li>
-            <li><a href="../group">原神</a></li>
-            <li><a href="../group">操作系统互助小组</a></li>
-            <li><a href="../group">列车文化爱好者</a></li>
-            <li><a href="../group">爱猫生活</a></li>
-            <li><a href="../group">收集下雨天</a></li>
-            <li><a href="../group">我爱·旅游</a></li>
-            <li><a href="../group">哈利波特迷</a></li>
-            <li><a href="../group">映像北京</a></li>
-            <li><a href="../group">switch交流基地</a></li>
-            <li><a href="../group">985废物引进计划</a></li>
-            <li><a href="../group">这个要拍下来</a></li>
+            <li v-for="group in hotgroups" :key="group.id"><a>{{group.name}}</a></li>
           </ul>
         </div>
       </div>
@@ -272,7 +227,7 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 #home {
   width: 1600px;
   padding-left: 100px;
@@ -383,16 +338,17 @@ div.hothit {
 .topics li {
   list-style: none;
 }
-#topic1 span {
-  color: red;
+.topic-list-item{
+  &.rank1{
+    color: red;
+  }
+  &.rank2{
+    color: rgb(255, 128, 0);
+  }
+  &.rank3{
+    color: rgb(255, 195, 44);
+  }
 }
-#topic2 span {
-  color: rgb(255, 128, 0);
-}
-#topic3 span {
-  color: rgb(255, 195, 44);
-}
-
 div.topics.hotlist {
   border-style: solid;
   border-width: 4px;
@@ -592,12 +548,16 @@ export default {
     var hotbooks = [{}];
     var hotmovies = [{}];
     var hotteles = [{}];
+    var hottopics = [{}];
+    var hotgroups = [{}];
     return {
       bookcomments,
       moviecomments,
       hotbooks,
       hotmovies,
       hotteles,
+      hottopics,
+      hotgroups,
       loaddata,
     };
   },
@@ -651,7 +611,7 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("电影查询成功");
-            //console.log(res.data.data)
+            console.log(res.data.data)
             this.hotmovies = res.data.data;
             var i = 0;
             for (i = 0; i < 10; i++) {
@@ -690,6 +650,44 @@ export default {
           console.log(error);
         });
     },
+    async updateHotTopics() {
+      var params = {
+        num: 15,
+      };
+      this.$axios
+        .post("/topic/hot", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("话题查询成功");
+            console.log(res.data.data)
+            this.hottopics = res.data.data;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    async updateHotGroups() {
+      var params = {
+        num: 12,
+      };
+      this.$axios
+        .post("/group/hot", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("小组查询成功");
+            console.log(res.data.data)
+            this.hotgroups = res.data.data;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     ToBookDetail(id) {
       this.$router.push({
         name: "bookdetail",
@@ -698,13 +696,20 @@ export default {
     },
     ToMovieDetail(id) {
       this.$router.push({
-        name: "bookdetail",
+        name: "moviedetail",
         query: { id: id },
       });
     },
     ToTeleDetail(id) {
       this.$router.push({
-        name: "bookdetail",
+        name: "teledetail",
+        query: { id: id },
+      });
+    },
+    ToTopicDetail(id) {
+      const _this = this;
+      _this.$router.push({
+        name: "topicdetail",
         query: { id: id },
       });
     },
@@ -713,6 +718,8 @@ export default {
     this.updateHotBook();
     this.updateHotMovies();
     this.updateHotTeles();
+    this.updateHotTopics();
+    this.updateHotGroups();
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {

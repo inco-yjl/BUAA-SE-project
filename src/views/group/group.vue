@@ -11,6 +11,7 @@
         <span class = "time_l font_l">{{mes.time}}</span>
         <span class = "group-name_l font_l" style="color: #444444;">{{mes.groupname}}</span>
         <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
+        <report></report>
       </div>
       <span>&nbsp;</span>
     </div>

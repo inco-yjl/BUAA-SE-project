@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import global from "@/components/common.vue";
 import qs from "qs";
 export default {
   name: "Login",
@@ -61,7 +60,7 @@ export default {
     passanger() {
       this.addNavigation();
       const _this = this;
-      global.currentUserId = -1;
+      this.$store.getters.getUser.user.id = -1;
       this.$router.replace({
         path: "/home",
       });
@@ -80,8 +79,7 @@ export default {
             this.$store.dispatch('saveUserInfo', {
                 user: res.data.data
               });
-              global.currentUserId = res.data.data.id;
-              console.log(res.data.data.id+'已登录');
+              console.log(res.data.data+'已登录');
               window.open('/home', '_self');
           }
           else{

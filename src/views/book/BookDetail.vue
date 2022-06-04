@@ -14,6 +14,23 @@
             </button>
           </div>
         </div>
+        <div class="book-detail-interact">
+          <div class="evaluate">打个分吧！</div>
+          <el-rate :show-score="true" 
+          class="star-button" 
+          style="width:150px"
+          v-model="evaluate" 
+          :colors="colors"
+          @change="starTheBook"
+          > 
+          </el-rate>
+            <button>
+              <img src="@/assets/guide/share.png" /><span>分享书籍</span>
+            </button>
+            <button  @click="writeComment()">
+              <img src="@/assets/guide/write_dt.png" /><span>撰写评论</span>
+            </button>
+          </div>
         <div clas="detail-content">
           <div class="detail-info">
             <div><img class="detail-img" :src="book.image" /></div>
@@ -28,29 +45,29 @@
                   <div class="score">
                     <strong class="num">{{ book.score }}</strong>
                   </div>
-                  <div>123人评价</div>
+                  <div>{{peoplenum}}人评价</div>
                 </div>
               </div>
               <div>
                 <div class="rate-number">
                   5星
-                  <div class="distribute" style="width: 150px"></div>
+                  <div class="distribute" :style="style5"></div>&ensp;{{rankList[4]}}人
                 </div>
                 <div class="rate-number">
                   4星
-                  <div class="distribute" style="width: 100px"></div>
+                  <div class="distribute" :style="style4"></div>&ensp;{{rankList[3]}}人
                 </div>
                 <div class="rate-number">
                   3星
-                  <div class="distribute" style="width: 96px"></div>
+                  <div class="distribute" :style="style3"></div>&ensp;{{rankList[2]}}人
                 </div>
                 <div class="rate-number">
                   2星
-                  <div class="distribute" style="width: 5px"></div>
+                  <div class="distribute" :style="style2"></div>&ensp;{{rankList[1]}}人
                 </div>
                 <div class="rate-number">
                   1星
-                  <div class="distribute" style="width: 18px"></div>
+                  <div class="distribute" :style="style1"></div>&ensp;{{rankList[0]}}人
                 </div>
               </div>
             </div>
@@ -98,7 +115,7 @@
             </a>
           </div>
           <ul class="book-comment-list hotlist">
-            <li v-for="passage in passages" :key="passage.id">
+            <li :v-if="passages.length>0" v-for="passage in passages" :key="passage.id">
               <a>{{ passage.title }}</a>
             </li>
           </ul>
@@ -112,7 +129,7 @@
               class="selection_ed"
               id="select-hot-comment"
               onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
-              @click="hotTopicdt()"
+              @click="hotComment()"
             >
               热门评论</button
             >/
@@ -120,7 +137,7 @@
               class="selection_un"
               id="select-new-comment"
               onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
-              @click="newTopicdt()"
+              @click="newComment()"
             >
               最新评论
             </button>
@@ -155,7 +172,6 @@
 </template>
 
 <script>
-import global from "@/components/common.vue";
 import search from "@/components/SelectSearch.vue";
 import qs from "qs";
 export default {
@@ -172,29 +188,7 @@ export default {
   data() {
     var id = this.$route.query.id;
     var book = {};
-    var item = {
-      bookname: "焦虑的人",
-      bookid: 1,
-      star: 4.5,
-      nation: "瑞典",
-      writer: "xxx·xxx",
-      img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-      press: "天津人民出版社",
-      intro:
-        "&ensp;&ensp;&ensp;&ensp;究竟是何种程度的无奈和绝望，迫使一个中年人在新年来临前的早晨，用一把玩具枪抢劫一家无现金银行。\
-        行动失败的劫匪仓皇之中逃进一间位于大楼顶层的待售公寓，里面全都是正在看房子的潜在买家。由此开始，抢劫案变成了劫持人质案。\
-        <br><br>&ensp;&ensp; &ensp;&ensp;然而事情的发展出乎预料，没有警匪对峙、没有致命一击，漫长的一天过后，八名人质安然无恙得到释放，\
-        劫匪却完全不见踪影。警察对人质逐一展开讯问，却发现他们每个人都有一肚子的抱怨和疑问，可是谁也说不清楚并且不关心劫匪究竟去了哪里。\
-        <br>&ensp;&ensp; &ensp;&ensp;婚姻、工作、家庭、育儿、投资、医疗、人际关系，现如今的生活，任何事情都会引发焦虑，没有人敢说自己一点\
-        儿都不焦虑。我们都是辛苦又脆弱的小人物，一边吐槽，一边还在咬牙坚持过下去。小说《焦虑的人》关照的正是平凡的你我。<br><br>&ensp;\
-        &ensp; &ensp;&ensp;作者巴克曼，写治愈暖心小说真的是一把好手，他的小说一大特点就是又好笑又好哭，不会刻意卖惨，但是在阅读中又不知不觉被\
-        感动、被温暖、被戳中。他的作品非常关注底层人群、弱势人群，关照平凡大众的喜怒哀乐。比如暴躁但正义的外婆、刻板但坚强的布里特-玛丽、\
-        臭脸但温柔的欧维。这些人都有缺点、遭遇困境，很容易让我们联想到身边人甚至是自己。<br><br>&ensp;&ensp;&ensp;&ensp;《焦虑的人》\
-        主角是一个愚蠢的银行抢劫犯和一群正在看房子的奇葩买家，本以为这个故事应该惊险刺激，但剧情的走向完全出乎预料。这群人共处一室带来一场闹剧，\
-        嬉笑怒骂背后却是令人唏嘘的人情冷暖和现代社会问题。不仅如此，故事的后半段，还有一个巨大的秘密等着读者去发现。<br><br>&ensp;&ensp;\
-        &ensp;&ensp;在《焦虑的人》里，面对艰难的人生之路，有些人放弃了，\
-        有些人还在尽力而为。而巴克曼的故事唤醒我们的同理心和共情力，在任何时候，爱、理解、宽恕和希望都能拯救我们。",
-    };
+    var peoplenum=0;
     var bookcomments = [
       {
         id: 1,
@@ -235,26 +229,28 @@ export default {
     ];
     var loadSuccess = false;
     var collections = [{}];
-    var passages = [
-      {
-        id: 1,
-        title: "彗星",
-      },
-      {
-        id: 2,
-        title: "化作繁星",
-      },
-      {
-        id: 3,
-        title: "My nonfiction",
-      },
-    ];
+    var passages = [{}];
     var collect = false;
+    var style1;
+    var style2;
+    var style3;
+    var style4;
+    var style5;
+    var rankList=[];
     return {
       collections,
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
+      evaluate: 0,
       passages,
       book,
+      style1,
+      style2,
+      style3,
+      style4,
+      style5,
+      peoplenum,
       collect,
+      rankList,
       id,
       bookcomments,
       loadSuccess,
@@ -262,15 +258,14 @@ export default {
   },
   methods: {
     clickcollect() {
-      if (global.currentUserId === -1) {
+      if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
         return;
       }
       var params = {
         book_id: this.id,
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
-      console.log("user:" + global.currentUserId);
       this.$axios
         .post("/book/collect", qs.stringify(params))
         .then((res) => {
@@ -289,15 +284,14 @@ export default {
         });
     },
     clickuncollect() {
-      if (global.currentUserId === -1) {
+      if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
         return;
       }
       var params = {
         book_id: this.id,
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
-      console.log("user:" + global.currentUserId);
       this.$axios
         .post("/book/uncollect", qs.stringify(params))
         .then((res) => {
@@ -315,13 +309,26 @@ export default {
           console.log(error);
         });
     },
+    writeComment() {
+      if (this.$store.getters.getUser.user.id === -1) {
+        this.$message.error("请先登录");
+        return;
+      }
+      else {
+        this.$router.push({
+        name: "bookeditor",
+        query: { id: this.id },
+      });
+      }
+    },
     Tobookcomment() {
       this.$router.push({ name: "bookcomment" });
     },
     async updateCollection() {
       var params = {
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
+      console.log(this.$store.getters.getUser.user.id)
       this.$axios
         .post("/book/collection", qs.stringify(params))
         .then((res) => {
@@ -329,8 +336,11 @@ export default {
             console.log(res.data.data);
             this.collections = [];
             var i=0;
-            for(i=0;i<3 && i<res.data.data.length;i++)
+            for(i=0;i<3 && i<res.data.data.length;i++){
+              res.data.data[i].score=parseFloat(res.data.data[i].score);
               this.collections.push(res.data.data[i]);
+            }
+              
           } else {
             this.$message.error("查询失败");
           }
@@ -338,21 +348,19 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-      this.loaddata = true;
     },
     async updateContent() {
       var params = {
         book_id: this.id,
-        user_id: global.currentUserId,
+        user_id: this.$store.getters.getUser.user.id,
       };
-      console.log("user:" + global.currentUserId);
+      console.log("user:" + this.$store.getters.getUser.user.id);
       this.$axios
         .post("/book/detail", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("书籍查询成功");
             this.book = res.data.data;
-            this.loadSuccess = true;
             switch(res.data.collect)
             {
                 case 1:
@@ -362,7 +370,22 @@ export default {
                     this.collect = false;
                     break;
             }
+          this.rankList=res.data.list;
+          this.evaluate=parseFloat(res.data.evaluate);
+          this.peoplenum=parseInt(res.data.people);
+          var length;
+          length=res.data.list[0]*200/this.peoplenum+5;
+          this.style1="width:"+length+"px";
+          length=res.data.list[1]*200/this.peoplenum+5;
+          this.style2="width:"+length+"px";
+          length=res.data.list[2]*200/this.peoplenum+5;
+          this.style3="width:"+length+"px";
+          length=res.data.list[3]*200/this.peoplenum+5;
+          this.style4="width:"+length+"px";
+          length=res.data.list[4]*200/this.peoplenum+5;
+          this.style5="width:"+length+"px";
 
+          this.loadSuccess = true;
           } else {
             this.$message.error("查询失败");
           }
@@ -370,9 +393,8 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-      this.loaddata = true;
     },
-    newCommentdt() {
+    newComment() {
       //获取新的数据
       document
         .getElementById("select-hot-comment")
@@ -380,7 +402,7 @@ export default {
       this.dt = this.newdt;
       this.Updatediary();
     },
-    hotCommentcdt() {
+    hotComment() {
       //更换标签时获取数据
       document
         .getElementById("select-new-comment")
@@ -388,10 +410,59 @@ export default {
       this.dt = this.topic.hotdt;
       this.Updatediary();
     },
+    async updatePassage() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+        .post("/book/mypassage", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.passages=[];
+            var i;
+            var length=3;
+            if(res.data.data.length<3)
+            length=res.data.data.length;
+            for(i=0;i<length;i++)
+            this.passages.push(res.data.data[i])
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    starTheBook() {
+    var params = {
+        user_id: this.$store.getters.getUser.user.id,
+        book_id: this.id,
+        score: this.evaluate
+      };
+      this.$axios
+        .post("/book/star", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data);
+            this.$message({
+              message: res.data.msg,
+              type: "success",
+            });
+            
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  },
   },
   mounted() {
+    console.log('user'+this.$store.getters.getUser.user.id);
     this.updateContent();
     this.updateCollection();
+    this.updatePassage();
     window.onscroll = function (e) {
       var vertical = document.getElementsByClassName("detail-vertical").item(0);
       var pos = vertical.getBoundingClientRect();
@@ -552,6 +623,33 @@ export default {
   vertical-align: -20%;
   margin-right: 5px;
 }
+.book-detail-interact button {
+  position: relative;
+  left: 700px;
+  top:280px;
+  background: none;
+  outline: none;
+  font-size: 18px;
+  border: none;
+  transition: opacity 0.2s;
+}
+.book-detail-interact button :hover {
+  text-decoration: underline;
+}
+.book-detail-interact img {
+  height: 20px;
+}
+.star-button{
+  position: absolute;
+  left: 740px;
+  top:672px;
+}
+.evaluate{
+  position: absolute;
+  left: 660px;
+  top:672px;
+  color:gray;
+}
 .aside {
   margin-top: 80px;
   margin-left: 10px;
@@ -567,6 +665,7 @@ export default {
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
+  width:352px;
 }
 .aside-slide {
   margin-top: 80px;
@@ -581,6 +680,7 @@ export default {
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
+  width:352px;
   position: fixed;
   left: 1260px;
   top: -50px;

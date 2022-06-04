@@ -2,7 +2,7 @@
   <div class="passage">
     <search></search>
     <div class="passage-body">
-      <div class="content-body">
+      <div v-if="loadSuccess" class="content-body">
           <div id="collect-button" class="user-buttons">
             <button v-if="collect" @click="clickuncollect()">
               <img src="@/assets/guide/collect.png" />
@@ -15,11 +15,11 @@
         <div class="passage-info">
           <div>
             <a class="userOfpassage" href="/otherusers/1">
-              <img class="iconOfuser" :src="passage.usericon" />
+              <img class="iconOfuser" :src="usericon" />
               <span class="nameOfuser">{{ passage.username }}</span>
             </a>
             <span class="normal">&ensp;评论了</span>
-            <a class="comment-book-name">《{{ passage.bookname }}》 </a>
+            <a class="comment-book-name">《{{ source.name }}》 </a>
             <span class="normal">{{ passage.date }}</span>
           </div>
           <div class="rate">
@@ -60,7 +60,7 @@
         <div class="source-book">
           <a class="source-item">
             <img class="source-img" :src="source.img" />
-            <div class="source-info">
+            <div v-if="loadSuccess" class="source-info">
               《{{ source.name }}》
               <el-rate
                 v-model="source.star"
@@ -71,7 +71,7 @@
                 disabled-void-color="ffffff"
               >
               </el-rate>
-              [{{ source.nation }}]{{ source.writer }}
+                {{ source.writer }}
             </div>
           </a>
         </div>
@@ -147,38 +147,16 @@
 </template>
 <script>
 import search from "@/components/SelectSearch.vue";
+import qs from "qs";
 export default {
   components: {
     search,
   },
   data() {
-    var source = {
-      name: "焦虑的人",
-      id: 1,
-      star: 4.5,
-      img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-      writer: "xxx·xxx",
-      nation: "瑞典",
-    };
-    var passage = {
-      userid: 1,
-      username: "Lilac",
-      usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-      star: 5,
-      bookname: "焦虑的人",
-      writer: "Fredrik Backman",
-      date: "2021-04-04",
-      title: "因为爱，我愿意接纳anxiety(从豆瓣抄的一份)",
-      content:
-        '<p>这本书开头让人一头雾水，读来有些食之寡淡弃之可惜，随着故事慢慢展开，人物悉数登场，最后你会捂着小心脏，满心幸福的发现，这是一个关于一群傻瓜互相救赎的故事。我一开始还疑惑，这样简短的一宗绑架案要如何撑满一个故事，其实不然，每个角色，从人质，到警察，到绑匪，甚至到人质的心理医生，都是活生生有灵魂的个体，而这个故事就是在讲述这样一群毫不起眼，你每天都可以在人群中擦肩而过一百次而不会注意到一次的人，他们如何阴差阳错的相遇，他们内心实际上充斥着不为人知的焦虑彷徨，以及他们之间如何建立起如此奇妙温暖的羁绊，互相救赎，以及自我救赎的傻乎乎的小故事。\
-这篇小说让我非常着迷的一点是它的叙事模式 - 审讯室口供记录、公寓里发生的事、曾经发生在每个人物身上的故事 - 相互交织层层递进，既完全没有打乱故事节奏，又轻描淡写之间将一切缘起娓娓道来，视角切换之间又穿插着作者自己的人生小体悟和解读，让我的心情随着故事发展一度起落。尤其是zara女士，她是第一位被记录口供的角色，我真的一开始对她咬牙切齿恨不得钻进书里教她做人哈哈哈，但在知道了她内心的苦楚迷茫，发现她冰冷盔甲下一颗怯懦柔软的心后，就会成功对她产生共情，一切行为就顺势合理化了。\
-作者让我觉得非常有意思的一个写作特征就是他在本书中经常使用“虚拟时态”+问句，以及“将来时态”+陈述，例如频繁的抛出“如果xxx没有发生会xxx吗？”抑或是在文章末尾章节一切尘埃落地后用一连串的will展示了各位角色即将迎来的美好生活（这段让我几欲落泪描写得实在太棒！），这种行文手法让我觉得读来十分有趣。我或许可以理解为这是作者自身的思考描摹习惯，对于一切事物都保留着三分不确定性，like we will see what happens then, but before that i will hold the most hope as i can to step into the future. 同时也能激起我身为读者对于角色的想象，增强代入感，不自觉的就产生了一种希冀感，毕竟这是一个幸福的小故事嘛。</p>\
-最后回到这本书给我带来的一些思考。\
-<img src="https://i.imgtg.com/2022/05/08/zDhaG.jpg">\
-我一直都记得在我申请国外研究生期间，一位中介的姐姐曾经和我说过的一句话，大意是，成长意味着越来越不去在乎别人的看法，而是更关注自己的内心需求。我深以为然。',
-      like: 100,
-      reply: 0,
-    };
+    var id = this.$route.query.id;
+    var source = {};
+    var usericon= "https://i.imgtg.com/2022/05/08/zDzsM.png";
+    var passage = {};
     var replys = [
       {
         id: 1,
@@ -238,7 +216,10 @@ export default {
     var like = false;
     var Toreply = false;
     var collect = false;
+    var loadSuccess = false;
     return {
+      id,
+      usericon,
       passage,
       like,
       Toreply,
@@ -246,10 +227,31 @@ export default {
       text: "",
       textarea: "",
       source,
-      collect
+      collect,
+      loadSuccess,
     };
   },
   methods: {
+    async updateComment() {
+      var params = {
+        article_id: this.$route.query.id
+      };
+      this.$axios
+        .post("/passage/bookcomment",qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.data)
+            this.passage=res.data.data.passage;
+            this.source=res.data.data.resource;
+            this.loadSuccess=true;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     clicklike() {
       // 数据post
       this.passage.like++;
@@ -278,6 +280,7 @@ export default {
     },
   },
   mounted() {
+    this.updateComment();
     window.onscroll = function (e) {
       console.log("slide");
       var vertical = document.getElementsByClassName("content-body").item(0);

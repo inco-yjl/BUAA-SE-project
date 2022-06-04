@@ -6,44 +6,15 @@
         <div class="topic_circle">
           <div class="title">
             <span class="topic_cirle_title">话题广场</span
-            ><button onclick="">
+            ><button @click="randomTopic()">
               <img id="change_topic" src="@/assets/guide/change_topic.png" />
             </button>
           </div>
           <div class="boxesOfTopic">
-            <div>
-              寻找春日气息<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              今天是立秋<br /><a class="topicboxes-route" href="/1">参与话题</a>
-            </div>
-            <div>
-              你最爱的海上电影镜头<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              老家记忆<br /><a class="topicboxes-route" href="/1">参与话题</a>
-            </div>
-            <div>
-              后疫情时代的旅行<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              你拍过的最搞笑的照片<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              寻找春日气息<br /><a class="topicboxes-route" href="/1"
-                >参与话题</a
-              >
-            </div>
-            <div>
-              寻找春日气息<br /><a class="topicboxes-route" href="/1"
+            <div v-for="topic in topic_circle" :key="topic.id">
+              {{ topic.name }}<br /><a
+                class="topicboxes-route"
+                @click="ToTopicDetail(topic.id)"
                 >参与话题</a
               >
             </div>
@@ -61,26 +32,24 @@
               <li><a>这是在干嘛</a></li>
               <li><a>再写一个</a></li>
             </ul>
-            <div id="more-collection-topic" class="hotlist">
-              <a>……</a>
+            <div class="title">
+              <a href="../user/topics">
+                <img src="@/assets/guide/mycomment.png" />已发布动态
+              </a>
             </div>
+            <ul class="collection-list hotlist" id="passage-list">
+              <li v-for="passage in passages" :key="passage.id"><a>{{passage.text}}</a></li>
+            </ul>
           </div>
-          <br />
           <div class="hotlist topic_page">
             <div class="title topic_page">
               <img src="@/assets/guide/topic_trend.png" /><span>话题趋势</span>
             </div>
             <ol>
-              <li>&ensp;<a href="/1">我的世界读书日</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li>&ensp;<a href="/2">你每天都有哪些突如其来的感悟</a></li>
-              <li>&ensp;<a href="/2">和新冠肺炎疫情有关的记忆</a></li>
-              <li>&ensp;<a href="/2">热爱生活的一万个理由</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li>&ensp;<a href="/2">今天吃什么？</a></li>
-              <li><a href="/2">今天吃什么？</a></li>
+              <li v-for="(topic, index) in hottopics" :key="topic.id">
+                <span v-if="index < 10">&ensp;</span>
+                <a @click="ToTopicDetail(topic.id)">{{ topic.name }}</a>
+              </li>
             </ol>
           </div>
         </div>
@@ -119,7 +88,7 @@
         </div>
         <div class="topic-page-number">
           <el-pagination
-            @next-click="handleCurrentChange(this.currentPage+1)"
+            @next-click="handleCurrentChange(this.currentPage + 1)"
             :page-size="3"
             @current-change="handleCurrentChange"
             layout="prev, pager, next, jumper"
@@ -159,7 +128,7 @@ div.body {
 .topic_circle button {
   border-radius: 40px;
   background-color: white;
-  border-color: rgba(128, 128, 128, 0.498);
+  border: none;
   outline: none;
   position: relative;
   z-index: 0;
@@ -181,15 +150,22 @@ div.body {
 }
 .topic_cirle_title {
   font-weight: bold;
-  margin-right: 30px;
+  font-size: 30px;
+  margin-left: 20px;
+  margin-right: 10px;
 }
+
 .hotlist a {
   color: rgb(2, 98, 182);
   font-weight: 500;
+  font-size: 16px;
 }
 .hotlist a:hover {
   background-color: rgb(213, 230, 245);
   font-weight: 600;
+}
+#passage-list a{
+  font-size: 16px;
 }
 .flex_box {
   display: flex;
@@ -211,6 +187,7 @@ div.body {
 #change_topic {
   padding-left: 0;
   margin-right: 0;
+  vertical-align: -9px;
   height: 37px;
 }
 div.title {
@@ -218,11 +195,18 @@ div.title {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   margin-left: 20px;
   font-size: 25px;
-  color: rgb(52, 52, 52);
+  color: #343434;
+}
+.hotlist .title {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  text-align: left;
+  font-size: 20px;
+  font-weight: bold;
+  padding-left: 10px;
 }
 .topic_circle {
   margin-left: 20px;
-  padding-top: 10px;
+  padding-top: 40px;
   padding-left: 10px;
   padding-bottom: 10px;
   width: 1100px;
@@ -251,7 +235,7 @@ div.title {
   padding-left: 15px;
   padding-right: 15px;
   text-align: center;
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 500;
   color: rgb(53, 53, 53);
   font-family: "Noto Serif SC", serif;
@@ -277,7 +261,8 @@ div.title {
 }
 .collection {
   text-align: left;
-  padding-bottom: 30px;
+  height:260px;
+  padding-bottom: 0px;
 }
 .collection img {
   height: 30px;
@@ -297,7 +282,7 @@ div.title {
   opacity: 1;
 }
 .collection a:active {
-  color: rgb(0, 166, 255);;
+  color: rgb(0, 166, 255);
 }
 .collection-list a {
   font-size: 18px;
@@ -307,18 +292,12 @@ div.title {
   font-weight: 600;
   color: rgb(2, 98, 182);
 }
-#more-collection-topic {
-  position: absolute;
-  line-height: 40px;
-  top: 440px;
-  left: 1280px;
-}
 .topic_page.title img {
   height: 35px;
   margin-left: 27px;
 }
 .topic_page.hotlist {
-  line-height: 28px;
+  line-height: 24px;
   font-size: 17px;
   text-align: left;
   border-radius: 20px;
@@ -347,7 +326,7 @@ div.title {
   padding-top: 50px;
   width: 1460px;
   margin-left: 20px;
-  margin-top: 50px;
+  margin-top: 20px;
   border-style: solid;
   border-width: 1px;
   border-color: rgb(181, 181, 181);
@@ -406,6 +385,7 @@ import search from "@/components/SelectSearch.vue";
 import diary from "@/components/TopicDisplay.vue";
 import usericon from "@/assets/user/int.png";
 import router from "@/router";
+import qs from "qs";
 export default {
   name: "topic",
   components: {
@@ -447,18 +427,90 @@ export default {
         img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
       },
     ];
+    var topic_circle = [{}];
+    var hottopics = [{}];
+    var passages=[{}];
     return {
       dt,
+      passages,
       dtamount,
+      topic_circle,
+      hottopics,
     };
   },
   methods: {
-    ToTopicDetail(p) {
-      const _this = this;
-      _this.$router.push({
+     ToText(HTML)
+    {
+      var input = HTML;
+      return input.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,'').
+      replace(/<[^>]+?>/g,'').replace(/\s+/g,' ').replace(/ /g,' ').replace(/>/g,' ');  
+    },
+    randomTopic() {
+      this.$axios
+        .post("/topic/random")
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("获取到随机话题");
+            this.topic_circle = res.data.data;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    ToTopicDetail(id) {
+      this.$router.push({
         name: "topicdetail",
-        params: { id: p },
+        query: { id: id },
       });
+    },
+    async updatePassage() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+        .post("/topic/mypassage", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.passages=[];
+            var i;
+            var length=3;
+            console.log(res.data.data)
+            if(res.data.data.length<3)
+            length=res.data.data.length;
+            for(i=0;i<length;i++){
+              res.data.data[i].text=this.ToText(res.data.data[i].text);
+              if(res.data.data[i].text.length>14)
+                res.data.data[i].text=res.data.data[i].text.substring(0,14)+'…';
+              this.passages.push(res.data.data[i])
+            }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    async updateHotTopics() {
+      var params = {
+        num: 10,
+      };
+      this.$axios
+        .post("/topic/hot", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("话题查询成功");
+            this.hottopics = res.data.data;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     hotTopicdt() {
       //获取数据
@@ -553,6 +605,9 @@ export default {
   mounted() {
     this.Updatediary();
     this.updateButton();
+    this.randomTopic();
+    this.updatePassage();
+    this.updateHotTopics();
   },
 };
 </script>

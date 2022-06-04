@@ -52,7 +52,6 @@
   </div>
 </template>
 <script>
-import global from "@/components/common.vue";
 import qs from "qs";
 export default {
   name: "Login",
@@ -80,7 +79,7 @@ export default {
     passanger() {
       this.addNavigation();
       const _this = this;
-      global.currentUserId = -1;
+      this.$store.getters.getUser.user.id = -1;
       this.$router.replace({
         path: "/home",
       });
