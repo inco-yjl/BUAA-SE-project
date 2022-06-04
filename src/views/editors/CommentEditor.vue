@@ -280,7 +280,7 @@ export default {
               message: res.data.msg,
               type: "success",
             });
-            console.log(res.data.data);
+            this.backToBook();
           } else {
             this.$message.error("发布失败");
           }
