@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import reportReply from "@/views/report-reply";
 
 Vue.use(VueRouter)
 
@@ -135,7 +136,12 @@ const routes = [
       path: '/video/tele/detail',
       name: 'teledetail',
       component: () => import('../views/Video/TeleDetail.vue')
-    }  
+    },
+    {
+      path: '/reportreply',
+      name: 'report-reply',
+      component: () => import('../views/report-reply.vue')
+    }
   ]
 },
 {
