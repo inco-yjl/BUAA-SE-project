@@ -106,9 +106,9 @@ export default {
             var img = new Image();
             img.src = this.userIcon;
             if(img.width>img.height)
-              this.styleOfIcon = "height:110px;position: relative; top:0px; left:-"+(img.width-img.height)/img.height*50+"px";
+              this.styleOfIcon = "height:110px;position: relative; top:0px; left:-"+(img.width-img.height)/img.height*55+"px";
             else  
-              this.styleOfIcon = "width:110px;position: relative;  left:0px;top:-"+(img.height-img.width)/img.width*50+"px";
+              this.styleOfIcon = "width:110px;position: relative;  left:0px;top:-"+(img.height-img.width)/img.width*55+"px";
           }
           else{
             this.userIcon="https://i.imgtg.com/2022/05/08/zDzsM.png";

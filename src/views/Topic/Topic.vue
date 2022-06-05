@@ -20,83 +20,127 @@
             </div>
           </div>
         </div>
-        <div class="aside">
-          <div class="collection">
-            <div class="title">
-              <a href="../user/topics">
-                <img src="@/assets/guide/star_topic.png" />已关注话题
-              </a>
-            </div>
-            <ul class="collection-list hotlist">
-              <li><a>老家记忆</a></li>
-              <li><a>这是在干嘛</a></li>
-              <li><a>再写一个</a></li>
-            </ul>
-            <div class="title">
-              <a href="../user/topics">
-                <img src="@/assets/guide/mycomment.png" />已发布动态
-              </a>
-            </div>
-            <ul class="collection-list hotlist" id="passage-list">
-              <li v-for="passage in passages" :key="passage.id">
-              <a @click="ToTopicDt(passage.id)">{{passage.text}}</a>
-              </li>
-            </ul>
+
+        <div class="diarylist">
+          <div class="title diary-hit">
+            <span
+              ><img src="@/assets/title/topic-hit.png" />
+
+              <button
+                class="selection_ed"
+                id="select-hot-topic-dt"
+                onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
+                @click="hotTopicdt()"
+              >
+                话题精选动态</button
+              >/
+              <button
+                class="selection_un"
+                id="select-follow-topic-dt"
+                onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
+                @click="specifyTopicdt()"
+              >
+                我关注的话题动态
+              </button>
+            </span>
           </div>
-          <div class="hotlist topic_page">
-            <div class="title topic_page">
-              <img src="@/assets/guide/topic_trend.png" /><span>话题趋势</span>
+          <div class="topic-display">
+            <div class="block">
+              <span class="demonstration">
+                <div class="topicdiary">
+                  <hr />
+                  <div class="diary-display-body">
+                    <div class="display-publisher">
+                      <a class="userOfdiary" href="/otherusers/1">
+                        <img class="iconOfuser" /><span
+                          class="nameOfuser"
+                        ></span>
+                      </a>
+                      <span class="publishtime"></span>
+                    </div>
+                    <div class="topic-origin">
+                      <button
+                        @click="favor"
+                        class="topic-button"
+                        :style="{ backgroundColor: bg_color, color: ft_color }"
+                        @mouseenter="change()"
+                        @mouseleave="goback()"
+                      >
+                        {{ content }}
+                      </button>
+                      来自话题<a
+                        class="topic-origin-name"
+                        href="javascript:void(0)"
+                      ></a>
+                    </div>
+                    <div class="diary-origin-pic">
+                      <a class="diary-origin" href="javascript:void(0)"
+                        ><img class="diary-pic" />
+                      </a>
+                    </div>
+                    <div class="diarytext">
+                      <a
+                        class="diarytext-origin"
+                        href="/topic/1/comments/1"
+                      ></a>
+                    </div>
+                  </div>
+                </div>
+                <diary></diary>
+                <diary></diary>
+              </span>
             </div>
-            <ol>
-              <li v-for="(topic, index) in hottopics" :key="topic.id">
-                <span v-if="index < 10">&ensp;</span>
-                <a @click="ToTopicDetail(topic.id)">{{ topic.name }}</a>
-              </li>
-            </ol>
+          </div>
+          <div class="topic-page-number">
+            <el-pagination
+              @next-click="handleCurrentChange(this.currentPage + 1)"
+              :page-size="3"
+              @current-change="handleCurrentChange"
+              layout="prev, pager, next, jumper"
+              :total="dtamount"
+            >
+            </el-pagination>
           </div>
         </div>
       </div>
-      <div class="diarylist">
-        <div class="title diary-hit">
-          <span
-            ><img src="@/assets/title/topic-hit.png" />
-
-            <button
-              class="selection_ed"
-              id="select-hot-topic-dt"
-              onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
-              @click="hotTopicdt()"
-            >
-              话题精选动态</button
-            >/
-            <button
-              class="selection_un"
-              id="select-follow-topic-dt"
-              onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
-              @click="specifyTopicdt()"
-            >
-              我关注的话题动态
-            </button>
-          </span>
-        </div>
-        <div class="topic-display">
-          <div class="block">
-            <span class="demonstration">
-              <diary></diary>
-              <diary></diary>
-              <diary></diary>
-            </span>
+      <div class="aside">
+        <div class="collection">
+          <div class="title">
+            <a href="../user/topics">
+              <img src="@/assets/guide/star_topic.png" />已关注话题
+            </a>
           </div>
-        </div>
-        <div class="topic-page-number">
-          <el-pagination
-            @next-click="handleCurrentChange(this.currentPage + 1)"
-            :page-size="3"
-            @current-change="handleCurrentChange"
-            layout="prev, pager, next, jumper"
-            :total="dtamount"
+          <ul v-if="collection.length > 0" class="collection-list hotlist">
+            <li v-for="collect in collection" :key="collect.id">
+              <a @click="ToTopicDetail(collect.id)">{{ collect.name }}</a>
+            </li>
+          </ul>
+          <br />
+          <div class="title">
+            <a href="../user/topics">
+              <img src="@/assets/guide/mycomment.png" />已发布动态
+            </a>
+          </div>
+          <ul
+            class="collection-list hotlist"
+            id="passage-list"
+            v-if="passages.length > 0"
           >
-          </el-pagination>
+            <li v-for="passage in passages" :key="passage.id">
+              <a @click="ToTopicDt(passage.id)">{{ passage.text }}</a>
+            </li>
+          </ul>
+        </div>
+        <div class="hotlist topic_page">
+          <div class="title topic_page">
+            <img src="@/assets/guide/topic_trend.png" /><span>话题趋势</span>
+          </div>
+          <ol>
+            <li v-for="(topic, index) in hottopics" :key="topic.id">
+              <span v-if="index < 10">&ensp;</span>
+              <a @click="ToTopicDetail(topic.id)">{{ topic.name }}</a>
+            </li>
+          </ol>
         </div>
       </div>
     </div>
@@ -126,6 +170,7 @@ button.selection_ed {
 }
 div.body {
   padding-bottom: 100px;
+  display: flex;
 }
 .topic_circle button {
   border-radius: 40px;
@@ -166,14 +211,11 @@ div.body {
   background-color: rgb(213, 230, 245);
   font-weight: 600;
 }
-#passage-list a{
+#passage-list a {
   font-size: 16px;
 }
-.flex_box {
-  display: flex;
-}
 .aside {
-  margin-top: 30px;
+  margin-top: 80px;
   margin-left: 10px;
   margin-right: 0;
   padding-left: 20px;
@@ -185,6 +227,26 @@ div.body {
   border-color: rgb(181, 181, 181);
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
+  height:636px;
+}
+.aside-slide {
+  margin-top: 80px;
+  margin-left: 10px;
+  margin-right: 0;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 25px;
+  padding-bottom: 20px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  background-color: white;
+  box-shadow: 0px 2px 3px #888888a6;
+  height:636px;
+  position: fixed;
+  left: 1220px;
+  top: -50px;
+  height:636px;
 }
 #change_topic {
   padding-left: 0;
@@ -205,19 +267,6 @@ div.title {
   font-size: 20px;
   font-weight: bold;
   padding-left: 10px;
-}
-.topic_circle {
-  margin-left: 20px;
-  padding-top: 40px;
-  padding-left: 10px;
-  padding-bottom: 10px;
-  width: 1100px;
-  margin-top: 30px;
-  background-color: white;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgb(181, 181, 181);
-  box-shadow: 0px 2px 3px #888888a6;
 }
 .boxesOfTopic {
   display: flex;
@@ -263,7 +312,7 @@ div.title {
 }
 .collection {
   text-align: left;
-  height:260px;
+  height: 260px;
   padding-bottom: 0px;
 }
 .collection img {
@@ -293,6 +342,12 @@ div.title {
 .collection-list a:hover {
   font-weight: 600;
   color: rgb(2, 98, 182);
+}
+#more-collection-topic {
+  position: relative;
+  line-height: 40px;
+  top: -20px;
+  left: 20px;
 }
 .topic_page.title img {
   height: 35px;
@@ -324,16 +379,11 @@ div.title {
   list-style-position: inside;
 }
 .diarylist {
-  padding-left: 100px;
+  padding-left: 10px;
   padding-top: 50px;
-  width: 1460px;
+  width: 1100px;
   margin-left: 20px;
   margin-top: 20px;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgb(181, 181, 181);
-  background-color: white;
-  box-shadow: 0px 2px 3px #888888a6;
 }
 .topic-display {
   margin-left: 20px;
@@ -371,6 +421,124 @@ div.title {
 .topic-page-number {
   margin-left: 400px;
   padding-bottom: 40px;
+}
+.flex_box{
+  margin-left: 20px;
+  padding-top: 40px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  width: 1100px;
+  margin-top: 80px;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  box-shadow: 0px 2px 3px #888888a6;
+}
+.topicdiary {
+  width: 980px;
+  text-align: left;
+}
+.diary-display-body {
+  display: flex;
+  flex-wrap: wrap;
+}
+.display-publisher {
+  margin-top: 0;
+  padding-top: 0;
+  width: 820px;
+}
+.publishtime {
+  padding-left: 20px;
+  font-weight: 400;
+  color: rgb(157, 157, 157);
+}
+.topic-origin {
+  position: relative;
+  font-size: 18px;
+  text-align: left;
+  width: 900px;
+}
+.topic-origin a {
+  font-family: Source Han Sans CN Normal;
+  color: black;
+  text-decoration: none;
+  padding-left: 5px;
+  text-decoration: none;
+}
+.topic-origin a:hover {
+  font-family: Source Han Sans CN Normal;
+  color: rgb(31, 169, 255);
+}
+.diary-pic {
+  height: 200px;
+  align-content: middle;
+}
+div.diary-origin-pic {
+  position: relative;
+  left: 0;
+  margin-left: 20px;
+  border-radius: 5px;
+  height: 180px;
+  width: 270px;
+  overflow: hidden;
+}
+.diary-content {
+  display: flex;
+  flex-wrap: row;
+}
+.display-publisher a {
+  font-weight: 500;
+  font-size: 22px;
+  color: black;
+  text-decoration: none;
+}
+.display-publisher a:hover {
+  color: rgb(0, 166, 255);
+}
+.iconOfuser {
+  height: 30px;
+  margin-right: 5px;
+  vertical-align: sub;
+}
+.nameOfuser {
+  font-size: 17px;
+  font-family: Source Han Sans CN Normal;
+}
+.diarytext {
+  position: relative;
+  top: 0px;
+  width: 620px;
+  margin-left: 30px;
+}
+a.diarytext-origin {
+  font-size: 16px;
+  text-decoration: none;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  color: black;
+  transition: 0.3s ease;
+}
+a.diarytext-origin:hover {
+  color: gray;
+  text-decoration: none;
+}
+button {
+  outline: none;
+  margin-right: 0;
+}
+
+.topic-button {
+  width: 150px;
+  color: #47ff5d;
+  background: #f2fef0;
+  border: #c4fbc9 solid;
+  border-radius: 20px;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  -webkit-transform: scale(0.7);
 }
 </style>
 <style>
@@ -431,21 +599,55 @@ export default {
     ];
     var topic_circle = [{}];
     var hottopics = [{}];
-    var passages=[{}];
+    var passages = [{}];
+    var collection = [];
     return {
       dt,
+      collection,
       passages,
       dtamount,
       topic_circle,
       hottopics,
+      liked: false,
+      content: "+关注话题",
+      bg_color: "#f2fef0",
+      ft_color: "#47ff5d",
     };
   },
   methods: {
-     ToText(HTML)
-    {
+    favor(e) {
+      this.liked = !this.liked;
+      if (this.liked) {
+        this.content = "已关注";
+        this.bg_color = "#6cf57c";
+        this.ft_color = "#f2fef0";
+      } else {
+        this.content = "+关注话题";
+        this.bg_color = "#f2fef0";
+        this.ft_color = "#6cf57c";
+      }
+    },
+    change() {
+      this.bg_color = "#45ff5b";
+      this.ft_color = "#f2fef0";
+    },
+    goback() {
+      if (this.liked) {
+        this.bg_color = "#6cf57c;";
+        this.ft_color = "#f2fef0";
+      } else {
+        this.bg_color = "#f2fef0";
+        this.ft_color = "#6cf57c";
+      }
+    },
+    ToText(HTML) {
       var input = HTML;
-      return input.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,'').
-      replace(/<[^>]+?>/g,'').replace(/\s+/g,' ').replace(/ /g,' ').replace(/>/g,' ');  
+      return input
+        .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/\s+/g, " ")
+        .replace(/ /g, " ")
+        .replace(/>/g, " ");
     },
     randomTopic() {
       this.$axios
@@ -468,8 +670,11 @@ export default {
         query: { id: id },
       });
     },
-    ToTopicDt(id){
-
+    ToTopicDt(id) {
+      this.$router.push({
+        name: "topicdt",
+        query: { id: id },
+      });
     },
     async updatePassage() {
       var params = {
@@ -479,17 +684,17 @@ export default {
         .post("/topic/mypassage", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
-            this.passages=[];
+            this.passages = [];
             var i;
-            var length=3;
-            console.log(res.data.data)
-            if(res.data.data.length<3)
-            length=res.data.data.length;
-            for(i=0;i<length;i++){
-              res.data.data[i].text=this.ToText(res.data.data[i].text);
-              if(res.data.data[i].text.length>14)
-                res.data.data[i].text=res.data.data[i].text.substring(0,14)+'…';
-              this.passages.push(res.data.data[i])
+            var length = 3;
+            console.log(res.data.data);
+            if (res.data.data.length < 3) length = res.data.data.length;
+            for (i = 0; i < length; i++) {
+              res.data.data[i].text = this.ToText(res.data.data[i].text);
+              if (res.data.data[i].text.length > 14)
+                res.data.data[i].text =
+                  res.data.data[i].text.substring(0, 14) + "…";
+              this.passages.push(res.data.data[i]);
             }
           } else {
             this.$message.error("查询失败");
@@ -534,6 +739,28 @@ export default {
         .getElementsByClassName("selection_un")
         .item(4)
         .setAttribute("class", "selection_ed");
+    },
+    updateCollection() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+        .post("/topic/collection", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("收藏查询成功");
+            this.collection = [];
+            var i,
+              l = 3;
+            if (res.data.data.length < 3) l = res.data.data.length;
+            for (i = 0; i < l; i++) this.collection.push(res.data.data[i]);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     Updatediary() {
       var i = 0;
@@ -611,8 +838,21 @@ export default {
     this.Updatediary();
     this.updateButton();
     this.randomTopic();
+    this.updateCollection();
     this.updatePassage();
     this.updateHotTopics();
+    window.onscroll = function (e) {
+      var vertical = document.getElementsByClassName("flex_box").item(0);
+      var pos = vertical.getBoundingClientRect();
+      console.log(pos.top);
+      if (pos.top < 29) {
+        var aside = document.getElementsByClassName("aside").item(0);
+        if (aside != null) aside.setAttribute("class", "aside-slide");
+      } else {
+        var aside = document.getElementsByClassName("aside-slide").item(0);
+        if (aside != null) aside.setAttribute("class", "aside");
+      }
+    };
   },
 };
 </script>

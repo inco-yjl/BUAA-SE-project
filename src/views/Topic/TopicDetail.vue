@@ -2,58 +2,65 @@
   <div id="topicdetail">
     <search></search>
     <div id="topic-detail-body">
-        <div class="introOfTopic">
-          <div class="title">
-            <img src="@/assets/title/topic-intro.png" />
-            <span :v-if="loadSuccess" class="topic-name">
-              {{ topic.name}}
-              <button
+      <div class="introOfTopic">
+        <div class="title">
+          <img src="@/assets/title/topic-intro.png" />
+          <span :v-if="loadSuccess" class="topic-name">
+            {{ topic.name }}
+            <button
               :v-if="loadSuccess"
-                @click="favor"
-                class="topic-button"
-                :style="{ backgroundColor: bg_color, color: ft_color }"
-                @mouseenter="change()"
-                @mouseleave="goback()"
-              >
-                {{ content }}
-              </button></span
+              @click="favor"
+              class="topic-button"
+              :style="{ backgroundColor: bg_color, color: ft_color }"
+              @mouseenter="change()"
+              @mouseleave="goback()"
             >
-          </div>
-          <div class="boxesOfTopic" :v-if="loadSuccess">
-            <p id="topic-intro-info">
-              {{ topic.passage }}篇内容·{{ topic.people }}人关注
-            </p>
-            <p id="topic-intro-content">{{ topic.intro }}</p>
-          </div>
-          <div class="topic-detail-interact">
-            <button class="share-topic">
-              <img src="@/assets/guide/share.png" /><span>分享话题</span>
-            </button>
-            <button class="write-dt" @click="writeTopicDt">
-              <img src="@/assets/guide/write_dt.png" /><span>发布动态</span>
-            </button>
-          </div>
+              {{ content }}
+            </button></span
+          >
         </div>
-        <div class="aside">
-          <div class="collection">
-            <div class="title">
-              <a href="../user/topics">
-                <img src="@/assets/guide/star_topic.png" />已关注话题
-              </a>
-            </div>
-            <ul v-if="collection.length > 0" class="collection-list hotlist">
-              <li v-for="collect in collection" :key="collect.id">
-              <a @click="ToTopicDetail(collect.id)">{{collect.name}}</a>
-              </li>
-            </ul>
-            <div id="more-collection-topic" class="hotlist" v-if="collection.length>0">
-              <a>……</a>
-            </div>
-          </div>
-          <div></div>
-          <br />
+        <div class="boxesOfTopic" :v-if="loadSuccess">
+          <p id="topic-intro-info">
+            {{ topic.passage }}篇内容·{{ topic.people }}人关注
+          </p>
+          <p id="topic-intro-content">{{ topic.intro }}</p>
         </div>
-
+        <div class="topic-detail-interact">
+          <button class="share-topic">
+            <img src="@/assets/guide/share.png" /><span>分享话题</span>
+          </button>
+          <button class="write-dt" @click="writeTopicDt">
+            <img src="@/assets/guide/write_dt.png" /><span>发布动态</span>
+          </button>
+        </div>
+      </div>
+      <div class="aside">
+        <div class="collection">
+          <div class="title">
+            <a href="../user/topics">
+              <img src="@/assets/guide/star_topic.png" />已关注话题
+            </a>
+          </div>
+          <ul v-if="collection.length > 0" class="collection-list hotlist">
+            <li v-for="collect in collection" :key="collect.id">
+              <a @click="ToTopicDetail(collect.id)">{{ collect.name }}</a>
+            </li>
+          </ul>
+          <br>
+          <div class="title">
+            <a href="../user/topics">
+              <img src="@/assets/guide/mycomment.png" />已发布动态
+            </a>
+          </div>
+          <ul class="collection-list hotlist" id="passage-list"  v-if="passages.length>0">
+            <li v-for="passage in passages" :key="passage.id">
+              <a @click="ToTopicDt(passage.id)">{{ passage.text }}</a>
+            </li>
+          </ul>
+        </div>
+        <div></div>
+        <br />
+      </div>
 
       <div class="diarylist">
         <div class="title diary-hit">
@@ -79,7 +86,7 @@
           </span>
         </div>
 
-        <div class="topic-display" v-for="(dt,index) in dts" :key="index">
+        <div class="topic-display" v-for="(dt, index) in dts" :key="index">
           <div class="block">
             <span class="demonstration">
               <div class="topicdiary">
@@ -87,17 +94,22 @@
                 <div class="diary-display-body">
                   <div class="display-publisher">
                     <a class="userOfdiary" href="/otherusers/1">
-                      <img class="iconOfuser" :src="dt.usericon"/><span class="nameOfuser">{{dt.user}}</span>
+                      <img class="iconOfuser" :src="dt.usericon" /><span
+                        class="nameOfuser"
+                        >{{ dt.user }}</span
+                      >
                     </a>
-                    <span class="publishtime">{{dt.date}}</span>
+                    <span class="publishtime">{{ dt.date }}</span>
                   </div>
                   <div class="diary-origin-pic">
                     <a class="diary-origin" href="javascript:void(0)"
-                      ><img class="diary-pic" :src="dt.img"/>
+                      ><img class="diary-pic" :src="dt.img" />
                     </a>
                   </div>
                   <div class="diarytext">
-                    <a class="diarytext-origin" href="/topic/1/comments/1">{{dt.passage}}</a>
+                    <a class="diarytext-origin" href="/topic/1/comments/1">{{
+                      dt.passage
+                    }}</a>
                   </div>
                 </div>
               </div>
@@ -113,14 +125,14 @@
           >
           </el-pagination>
         </div>
-        </div> 
       </div>
     </div>
+  </div>
 </template>
 
 
 <style scoped>
-#topic-detail-body{
+#topic-detail-body {
   width: 1580px;
   padding-bottom: 50px;
   display: flex;
@@ -189,8 +201,8 @@ button.selection_ed {
   border-color: rgb(181, 181, 181);
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
-  height: 200px;
-  width:312px;
+  height: 300px;
+  width: 312px;
 }
 .aside-slide {
   margin-top: 80px;
@@ -204,10 +216,10 @@ button.selection_ed {
   border-color: rgb(181, 181, 181);
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
-  height: 200px;
+  height: 300px;
   position: fixed;
   left: 1300px;
-  width:312px;
+  width: 312px;
   top: -50px;
 }
 div.title {
@@ -224,7 +236,7 @@ div.title {
   padding-bottom: 20px;
   margin-top: 80px;
   width: 1200px;
-  height:auto;
+  height: auto;
   background-color: white;
   border-style: solid;
   border-width: 1px;
@@ -267,7 +279,7 @@ div.title {
   opacity: 1;
 }
 .collection a:active {
-  color: rgb(0, 166, 255);;
+  color: rgb(0, 166, 255);
 }
 .collection-list a {
   font-size: 17.5px;
@@ -280,8 +292,11 @@ div.title {
 #more-collection-topic {
   position: relative;
   line-height: 40px;
-  top:-20px;
-  left:20px;
+  top: -20px;
+  left: 20px;
+}
+#passage-list a{
+  font-size: 16px;
 }
 .topic_page.title img {
   height: 35px;
@@ -327,7 +342,7 @@ div.title {
   box-shadow: 0px 2px 3px #888888a6;
 }
 .topic-display {
-  margin-bottom:50px;
+  margin-bottom: 50px;
 }
 .diary-hit {
   margin-top: 10px;
@@ -349,7 +364,7 @@ div.title {
 .diary-display-body {
   display: flex;
   flex-wrap: wrap;
-  height:220px;
+  height: 220px;
   padding-left: 30px;
 }
 .display-publisher {
@@ -394,7 +409,7 @@ div.diary-origin-pic {
   margin-right: 5px;
   vertical-align: sub;
 }
-.nameOfuser{
+.nameOfuser {
   font-size: 17px;
   font-family: Source Han Sans CN Normal;
 }
@@ -404,7 +419,7 @@ div.diary-origin-pic {
 }
 a.diarytext-origin {
   position: relative;
-  top:36px;
+  top: 36px;
   font-size: 17px;
   text-decoration: none;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
@@ -446,7 +461,7 @@ button {
 import search from "@/components/SelectSearch.vue";
 import diary from "@/components/TopicDisplay.vue";
 import App from "@/App.vue";
-import qs from 'qs';
+import qs from "qs";
 export default {
   name: "topic",
   components: {
@@ -458,33 +473,33 @@ export default {
     var id = this.$route.query.id; //根据id来询问
     var topic;
     var loadSuccess = false;
-    var hotdt= [
-        {
-          user: "yjl",
-          usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
-          passage: "懒得想了",
-          date: "2022-4-30",
-          img: "https://i.imgtg.com/2022/05/10/zSkWF.jpg",
-        },
-        {
-          user: "intp",
-          usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
-          passage: "懒得想了2",
-          date: "2022-5-10",
-          img: "https://i.imgtg.com/2022/05/10/zSxy6.jpg",
-        },
-        {
-          user: "bot",
-          usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
-          passage: "懒得想了3",
-          date: "2002-6-7",
-          img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
-        },
-      ];
+    var hotdt = [
+      {
+        user: "yjl",
+        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+        passage: "懒得想了",
+        date: "2022-4-30",
+        img: "https://i.imgtg.com/2022/05/10/zSkWF.jpg",
+      },
+      {
+        user: "intp",
+        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+        passage: "懒得想了2",
+        date: "2022-5-10",
+        img: "https://i.imgtg.com/2022/05/10/zSxy6.jpg",
+      },
+      {
+        user: "bot",
+        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+        passage: "懒得想了3",
+        date: "2002-6-7",
+        img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
+      },
+    ];
     var newdt = [
       {
         user: "yjl",
-        usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
+        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
         passage:
           "既然如何， 我们都知道，只要有意义，那么就必须慎重考虑。\
          所谓前端，关键是前端需要如何写。 一般来讲，我们都必须务必慎重的考虑考虑。\
@@ -498,7 +513,7 @@ export default {
       },
       {
         user: "intp",
-        usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
+        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
         passage: "懒得想了",
         date: "2022-5-10",
         topic: "一起去看海",
@@ -506,7 +521,7 @@ export default {
       },
       {
         user: "bot",
-        usericon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
+        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
         passage: "testtest",
         date: "2002-6-7",
         topic: "游戏中的难忘瞬间",
@@ -514,7 +529,8 @@ export default {
       },
     ];
     var collection = [];
-    var dts=hotdt;
+    var dts = hotdt;
+    var passages=[{}];
     return {
       id,
       dts,
@@ -524,19 +540,53 @@ export default {
       liked: false,
       loadSuccess,
       collection,
+      passages,
       content: "+关注话题",
       bg_color: "#f2fef0",
       ft_color: "#47ff5d",
     };
   },
   methods: {
+     ToText(HTML)
+    {
+      var input = HTML;
+      return input.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,'').
+      replace(/<[^>]+?>/g,'').replace(/\s+/g,' ').replace(/ /g,' ').replace(/>/g,' ');  
+    },
     favor() {
       this.liked = !this.liked;
-      if(this.liked)
-        this.clickcollect();
-      else
-        this.clickuncollect();
+      if (this.liked) this.clickcollect();
+      else this.clickuncollect();
       this.changeCollectButton();
+    },
+    async updatePassage() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+        .post("/topic/mypassage", qs.stringify(params))
+        .then((res) => {
+          console.log(res.data.data)
+          if (res.data.errno === 0) {
+            this.passages=[];
+            var i;
+            var length=3;
+            console.log(res.data.data)
+            if(res.data.data.length<3)
+            length=res.data.data.length;
+            for(i=0;i<length;i++){
+              res.data.data[i].text=this.ToText(res.data.data[i].text);
+              if(res.data.data[i].text.length>14)
+                res.data.data[i].text=res.data.data[i].text.substring(0,14)+'…';
+              this.passages.push(res.data.data[i])
+            }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     changeCollectButton() {
       if (this.liked) {
@@ -562,7 +612,7 @@ export default {
         this.ft_color = "#6cf57c";
       }
     },
-      clickcollect() {
+    clickcollect() {
       if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
         return;
@@ -589,6 +639,12 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    ToTopicDt(id){
+      this.$router.push({
+        name: "topicdt",
+        query: {id: id},
+      })
     },
     clickuncollect() {
       if (this.$store.getters.getUser.user.id === -1) {
@@ -629,9 +685,8 @@ export default {
       document
         .getElementById("select-new-topic-dt")
         .setAttribute("class", "selection_un");
-      this.dts=this.topic.hotdt;
+      this.dts = this.topic.hotdt;
       this.Updatediary();
-      
     },
     async updateContent() {
       var params = {
@@ -646,14 +701,13 @@ export default {
             console.log("详情查询成功");
             this.topic = res.data.data;
             this.loadSuccess = true;
-            switch(res.data.collect)
-            {
-                case 1:
-                    this.liked = true;
-                    break;
-                case 0:
-                    this.liked = false;
-                    break;
+            switch (res.data.collect) {
+              case 1:
+                this.liked = true;
+                break;
+              case 0:
+                this.liked = false;
+                break;
             }
           } else {
             this.$message.error("查询失败");
@@ -680,11 +734,10 @@ export default {
           if (res.data.errno === 0) {
             console.log("收藏查询成功");
             this.collection = [];
-            var i,l=3;
-            if(res.data.data.length<3)
-              l=res.data.data.length;
-            for(i=0;i<l;i++)
-            this.collection.push(res.data.data[i]);
+            var i,
+              l = 3;
+            if (res.data.data.length < 3) l = res.data.data.length;
+            for (i = 0; i < l; i++) this.collection.push(res.data.data[i]);
           } else {
             this.$message.error("查询失败");
           }
@@ -694,38 +747,37 @@ export default {
         });
     },
     Updatediary() {
-      this.dt1=this.dts[0];
-      this.dt2=this.dts[1];
-      this.dt3=this.dts[2];
-      },
-    writeTopicDt(){
-        this.$router.push({
-          name:"topicDtEditor",
-          query:{
-            id:this.id
-          }
-        })
+      this.dt1 = this.dts[0];
+      this.dt2 = this.dts[1];
+      this.dt3 = this.dts[2];
     },
-    newTopicdt(){
+    writeTopicDt() {
+      this.$router.push({
+        name: "topicDtEditor",
+        query: {
+          id: this.id,
+        },
+      });
+    },
+    newTopicdt() {
       //获取新的数据
       document
         .getElementById("select-hot-topic-dt")
         .setAttribute("class", "selection_un");
-      this.dts=this.newdt;
+      this.dts = this.newdt;
       this.Updatediary();
-    }
+    },
   },
   mounted() {
     this.$parent.navigate = true;
     this.$nextTick(() => {
       this.updateContent();
       this.updateCollection();
+      this.updatePassage();
       this.Updatediary();
-  });
+    });
     window.onscroll = function (e) {
-      var vertical = document
-        .getElementsByClassName("introOfTopic")
-        .item(0);
+      var vertical = document.getElementsByClassName("introOfTopic").item(0);
       var pos = vertical.getBoundingClientRect();
       console.log(pos.top);
       if (pos.top < 29) {

@@ -38,6 +38,11 @@ const routes = [
     component: () =>import('../views/Topic/TopicDetail.vue')
   },
   {
+    path: '/topic/diary',
+    name: 'topicdt',
+    component: () =>import('../views/Topic/TopicDt.vue')
+  },
+  {
     path: '/topic/edit',
     name: 'topicDtEditor',
     component: () =>import('../views/editors/TopicEditor.vue')
