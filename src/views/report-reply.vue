@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import qs from "qs";
 export default {
   name: "report-reply",
   data() {
@@ -147,6 +148,14 @@ export default {
       this.dialogFormVisible = false;
       this.form.date1 = '';
       this.form.date2 = '取消后信息将不被保存';
+    },
+    updatereport() {
+      this.$axios.post("/getreport").then((res) => {
+        if(res.data.error === 0) {
+          return;
+        }
+      }
+      )
     }
   }
 }
