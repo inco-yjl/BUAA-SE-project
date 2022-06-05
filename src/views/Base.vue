@@ -22,7 +22,6 @@
         <router-link to="/video"
           ><span class="guide"
             ><img
-              id="videoimg"
               src="@/assets/icon/video.png"
               width="30px"
             />影视</span
@@ -31,7 +30,6 @@
         <router-link to="/GroupHome"
           ><span class="guide"
             ><img
-              id="videoimg"
               src="@/assets/icon/group.png"
               width="30px"
             />小组</span
@@ -75,12 +73,11 @@
           </el-col>
         </span>
 
-        <!--
+        
         <el-drawer
             title="我的消息"
             :visible.sync="drawer"
-            :direction="direction"
-            :before-close="handleClose">
+            :direction="direction">
           <div v-for="per in messages" :key = "per.index">
             <a herf = "">
             <img class = "el-drawer-img" src = "../assets/user/int.jpg">
@@ -88,7 +85,7 @@
             </a>  
           </div>
         </el-drawer>
--->
+
       </div>
     </template>
     <router-view :key="$router.currentRoute.fullPath"></router-view>
@@ -175,7 +172,6 @@ export default {
   width: 100%;
   height: 70px;
   margin-bottom: 0px;
-  padding-top: 0, 0, 0, 0;
   justify-content: flex-start;
   flex-direction: row;
   flex-wrap: nowrap;
