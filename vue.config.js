@@ -7,8 +7,8 @@ module.exports = defineConfig({
   devServer: {
     proxy: {
         '/api/*': {
-            target: 'http://43.138.29.81:8080/api',
-            //target: 'http://127.0.0.1:8081/api',
+            //target: 'http://43.138.29.81:8080/api',
+            target: 'http://127.0.0.1:8081/api',
             // ↑这个就是你的接口地址↑
             changeOrigin: true,
             pathRewrite: {
