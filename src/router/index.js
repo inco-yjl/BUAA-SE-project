@@ -128,6 +128,11 @@ const routes = [
       component: () => import('../views/group/admin.vue')
     },
     {
+      path: '/video',
+      name: 'moviedetail',
+      component: () => import('../views/Video/Video.vue')
+    },
+    {
       path: '/video/movie/detail',
       name: 'moviedetail',
       component: () => import('../views/Video/MovieDetail.vue')
