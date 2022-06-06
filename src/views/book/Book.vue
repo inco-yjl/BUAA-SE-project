@@ -23,26 +23,30 @@
             >
               <div class="flex-book-display">
                 <div class="book-display-line">
-                  <img class="book-display" :src="book.book1.image" />
-                  <div class="book-display-info">
-                    <span class="book-display-title"
-                      >《{{ book.book1.name }}》</span
-                    ><br v-if="book.book1.name.length < 7" />
-                    <span class="book-display-writer">{{
-                      book.book1.author
-                    }}</span>
-                  </div>
+                  <a @click="ToBookDetail(book.book1.id)">
+                    <img class="book-display" :src="book.book1.image" />
+                    <div class="book-display-info">
+                      <span class="book-display-title"
+                        >《{{ book.book1.name }}》</span
+                      ><br v-if="book.book1.name.length < 7" />
+                      <span class="book-display-writer">{{
+                        book.book1.author
+                      }}</span>
+                    </div>
+                  </a>
                 </div>
                 <div class="book-display-line">
-                  <img class="book-display" :src="book.book2.image" />
-                  <div class="book-display-info">
-                    <span class="book-display-title"
-                      >《{{ book.book2.name }}》</span
-                    ><br v-if="book.book2.name.length < 7" />
-                    <span class="book-display-writer">{{
-                      book.book2.author
-                    }}</span>
-                  </div>
+                  <a @click="ToBookDetail(book.book2.id)">
+                    <img class="book-display" :src="book.book2.image" />
+                    <div class="book-display-info">
+                      <span class="book-display-title"
+                        >《{{ book.book2.name }}》</span
+                      ><br v-if="book.book2.name.length < 7" />
+                      <span class="book-display-writer">{{
+                        book.book2.author
+                      }}</span>
+                    </div>
+                  </a>
                 </div>
               </div>
             </div>
@@ -68,25 +72,29 @@
             >
               <div class="flex-book-display">
                 <div class="book-display-line">
-                  <img class="book-display" :src="book.book1.image" />
-                  <div class="over-star">{{book.book1.star}}</div>
-                  <div class="book-display-info">
-                    <span class="book-display-title"
-                      >《{{ book.book1.name }}</span
-                    ><br />
-                    <span class="book-display-writer">{{
-                      book.book1.score
-                    }}</span>
-                  </div>
+                  <a @click="ToBookDetail(book.book1.id)">
+                    <img class="book-display" :src="book.book1.image" />
+                    <div class="over-star">{{ book.book1.star }}</div>
+                    <div class="book-display-info">
+                      <span class="book-display-title"
+                        >《{{ book.book1.name }}</span
+                      ><br />
+                      <span class="book-display-writer">{{
+                        book.book1.score
+                      }}</span>
+                    </div>
+                  </a>
                 </div>
                 <div class="book-display-line">
-                  <img class="book-display" :src="book.book2.image" />
-                  <div class="over-star">{{book.book2.star}}</div>
-                  <div class="book-display-info">
-                    <span class="book-display-title"
-                      >《{{ book.book2.name }}</span
-                    ><br />
-                  </div>
+                  <a @click="ToBookDetail(book.book2.id)">
+                    <img class="book-display" :src="book.book2.image" />
+                    <div class="over-star">{{ book.book2.star }}</div>
+                    <div class="book-display-info">
+                      <span class="book-display-title"
+                        >《{{ book.book2.name }}</span
+                      ><br />
+                    </div>
+                  </a>
                 </div>
               </div>
             </div>
@@ -167,7 +175,11 @@
             </a>
           </div>
           <ul class="book-comment-list hotlist">
-            <li :v-if="passages.length>0" v-for="passage in passages" :key="passage.id">
+            <li
+              :v-if="passages.length > 0"
+              v-for="passage in passages"
+              :key="passage.id"
+            >
               <a @click="ToComment(passage.id)">{{ passage.title }}</a>
             </li>
           </ul>
@@ -248,7 +260,7 @@ export default {
       bookcomments,
       collections,
       passages,
-      loadSuccess
+      loadSuccess,
     };
   },
   components: {
@@ -256,8 +268,14 @@ export default {
     search,
   },
   methods: {
+    ToBookDetail(id) {
+      this.$router.push({
+        name: "bookdetail",
+        query: { id: id },
+      });
+    },
     ToComment(id) {
-      this.$router.push({ name: "bookcomment", query: { id: id },});
+      this.$router.push({ name: "bookcomment", query: { id: id } });
     },
     bookcomment() {
       this.$router.push({ name: "bookcomment" });
@@ -273,8 +291,8 @@ export default {
           if (res.data.errno === 0) {
             this.collections = [];
             var i = 0;
-            for (i = 0; i < 3 && i < res.data.data.length; i++){
-              res.data.data[i].star=parseFloat(res.data.data[i].star);
+            for (i = 0; i < 3 && i < res.data.data.length; i++) {
+              res.data.data[i].star = parseFloat(res.data.data[i].star);
               this.collections.push(res.data.data[i]);
             }
           } else {
@@ -295,14 +313,12 @@ export default {
         .then((res) => {
           console.log(res);
           if (res.data.errno === 0) {
-            this.passages=[];
+            this.passages = [];
             var i;
-            var length=3;
-            if(res.data.data.length<3)
-            length=res.data.data.length;
-            for(i=0;i<length;i++)
-            this.passages.push(res.data.data[i])
-            this.loadSuccess=true;
+            var length = 3;
+            if (res.data.data.length < 3) length = res.data.data.length;
+            for (i = 0; i < length; i++) this.passages.push(res.data.data[i]);
+            this.loadSuccess = true;
           } else {
             this.$message.error("查询失败");
           }
@@ -324,7 +340,7 @@ export default {
             books = res.data.data;
             var i = 0;
             for (i = 0; i < 20; i++) {
-              books[i].star=i/4;
+              books[i].star = i / 4;
               var length = 14 - books[i].name.length;
               if (books[i].name.length > 7 && books[i].author.length > length)
                 books[i].author = books[i].author.substring(0, length) + "…";
@@ -357,7 +373,6 @@ export default {
             books = res.data.data;
             var i = 0;
             for (i = 0; i < 20; i++) {
-              books[i].star = 4.5;
               books[i].name = books[i].name + "》";
               if (books[i].name.length > 6)
                 books[i].name = books[i].name.substring(0, 6) + "…";
@@ -447,15 +462,15 @@ export default {
   width: 120px;
   font-size: 14px;
 }
-.over-star{
+.over-star {
   position: relative;
-  margin-bottom:-55px;
-  top:-52px;
-  left:68px;
-  color:rgb(255, 230, 0);
+  margin-bottom: -55px;
+  top: -52px;
+  left: 68px;
+  color: rgb(255, 230, 0);
   font-size: 40px;
-  font-family: 'Patrick Hand', cursive;
-  text-shadow:3px 1px 1px rgb(0, 0, 0);
+  font-family: "Patrick Hand", cursive;
+  text-shadow: 3px 1px 1px rgb(0, 0, 0);
 }
 .bookpage-title {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
@@ -482,6 +497,7 @@ export default {
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
+  width:352px;
 }
 .aside-slide {
   margin-top: 80px;
@@ -499,6 +515,7 @@ export default {
   position: fixed;
   left: 1260px;
   top: -50px;
+  width:352px;
 }
 .bookpage-comments {
   margin-bottom: 50px;
@@ -640,6 +657,4 @@ a.comment-book-name {
   font-weight: 600;
   color: rgb(2, 98, 182);
 }
-
-
 </style>

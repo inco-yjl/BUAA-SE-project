@@ -102,6 +102,7 @@ export default {
 #login {
   position: absolute;
   top: 0;
+  left:0;
   font-family: "Noto Serif SC", serif;
   width: 100%;
   height: 100vh;

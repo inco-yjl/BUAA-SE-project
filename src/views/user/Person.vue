@@ -21,7 +21,7 @@
             >
           </div>
         </div>
-        <div class="username">IntP</div>
+        <div class="username">{{userName}}</div>
       </div>
       <div class="collection">
         <div class="book-collection collection-1">
@@ -85,40 +85,54 @@ export default {
       tempUrl: "",
       userIcon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
       uploadIcon: false,
-      styleOfIcon:"height:100px;"
+      styleOfIcon:"height:110px;",
+      userName:''
     }
   },
   mounted(){
-    this.updateContent();
+    this.updateUser();
   },
   methods: {
-    updateContent(){
-      var params={
-        resource_id:this.$store.getters.getUser.user.id,
-        resource_type:1
-      }
+      updateUser(){
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
       this.$axios
-        .post("/photo/get_photo", qs.stringify(params))
+        .post("/user/detail", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
+            console.log(res.data);
+            var user = res.data.data;
             var len=this.$axios.defaults.baseURL.length;
-            this.userIcon =this.$axios.defaults.baseURL.substring(0,len-4)+res.data.photo;
+            this.userName = user.name;
+            if(user.image !== "")
+              this.userIcon =this.$axios.defaults.baseURL.substring(0,len-4)+user.image
+            else 
+            this.userIcon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+            console.log(this.userIcon)
             var img = new Image();
             img.src = this.userIcon;
-            if(img.width>img.height)
+             if(img.width>img.height)
               this.styleOfIcon = "height:110px;position: relative; top:0px; left:-"+(img.width-img.height)/img.height*55+"px";
             else  
               this.styleOfIcon = "width:110px;position: relative;  left:0px;top:-"+(img.height-img.width)/img.width*55+"px";
+            user.admin = parseInt(user.admin);
+            switch(user.admin){
+              case 1:
+                this.isAdmin=true;
+                break;
+              default:
+                this.isAdmin=false;
+                break;
+            }
+          } else {
+            this.$message.error(res.data.msg);
           }
-          else{
-            this.userIcon="https://i.imgtg.com/2022/05/08/zDzsM.png";
-            this.styleOfIcon="width:110px;position:relative;left:0px;top:0px;"
-          }
-            
         })
         .catch((error) => {
           console.log(error);
         });
+
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg";
