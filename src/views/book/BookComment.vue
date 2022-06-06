@@ -15,7 +15,7 @@
         <div class="passage-info">
           <div>
             <a class="userOfpassage" href="/otherusers/1">
-              <img class="iconOfuser" :src="usericon" />
+              <img class="iconOfuser" :src="userIcon" :style="styleOfIcon"/>
               <span class="nameOfuser">{{ passage.username }}</span>
             </a>
             <span class="normal">&ensp;评论了</span>
@@ -109,7 +109,7 @@
           <hr />
           <div class="display-publisher">
             <a class="userOfreply" @click="toUser(reply.userid)">
-              <img class="iconOfuser" :src="reply.usericon" /><span
+              <img class="iconOfuser" :src="reply.userIcon" /><span
                 class="nameOfuser"
                 >{{ reply.username }}</span
               >
@@ -125,7 +125,7 @@
             >
               <div class="display-publisher">
                 <a class="userOfreply" @click="toUser(sreply.userid)">
-                  <img class="iconOfuser" :src="reply.usericon" /><span
+                  <img class="iconOfuser" :src="reply.userIcon" /><span
                     class="nameOfuser"
                     >{{ sreply.username }}</span
                   >
@@ -155,13 +155,12 @@ export default {
   data() {
     var id = this.$route.query.id;
     var source = {};
-    var usericon= "https://i.imgtg.com/2022/05/08/zDzsM.png";
     var passage = {};
     var replys = [
       {
         id: 1,
         username: "Puff",
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+        userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
         userid: 1,
         date: "2020-1-1",
         content: "说了一段很有才华的话，好多人点赞",
@@ -169,7 +168,7 @@ export default {
           {
             id: 3,
             username: "是我呀",
-            usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+            userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
             userid: 3,
             date: "2022-4-1",
             replyed_username: "Puff",
@@ -182,7 +181,7 @@ export default {
       {
         id: 2,
         username: "哈哈",
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+        userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
         userid: 2,
         date: "2002-4-1",
         content:
@@ -192,7 +191,7 @@ export default {
           {
             id: 4,
             username: "嗨呀",
-            usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+            userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
             userid: 4,
             date: "2022-4-1",
             replyed_username: "哈哈",
@@ -203,7 +202,7 @@ export default {
           {
             id: 5,
             username: "是我呀",
-            usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
+            userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
             userid: 3,
             date: "2022-4-1",
             replyed_username: "哈哈",
@@ -219,7 +218,7 @@ export default {
     var loadSuccess = false;
     return {
       id,
-      usericon,
+      userIcon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
       passage,
       like,
       Toreply,
@@ -229,9 +228,22 @@ export default {
       source,
       collect,
       loadSuccess,
+      styleOfIcon: "width:30px;"
     };
   },
   methods: {
+    updateIcon(){
+      if(this.passage.icon === "")
+      return;
+      var len=this.$axios.defaults.baseURL.length;
+      this.userIcon =this.$axios.defaults.baseURL.substring(0,len-4)+this.passage.icon;
+      var img = new Image();
+      img.src = this.userIcon;
+      if(img.width>img.height)
+        this.styleOfIcon = "height:30px;position: relative; top:0px; left:-"+(img.width-img.height)/img.height*15+"px";
+      else  
+        this.styleOfIcon = "width:30px;position: relative;  left:0px;top:-"+(img.height-img.width)/img.width*15+"px";
+    },
     async updateComment() {
       var params = {
         article_id: this.$route.query.id
@@ -246,6 +258,9 @@ export default {
             this.passage.star=parseFloat(this.passage.star);
             this.passage.date=this.passage.date.substring(0,10);
             this.source.star=parseFloat(this.source.star);
+            this.passage.like = parseInt(this.passage.like);
+            this.passage.reply = parseInt(this.passage.reply);
+            this.updateIcon();
             this.loadSuccess=true;
           } else {
             this.$message.error("查询失败");
@@ -336,7 +351,6 @@ export default {
   margin-bottom: 10px;
 }
 .iconOfuser {
-  height: 30px;
   margin-right: 5px;
   vertical-align: sub;
 }

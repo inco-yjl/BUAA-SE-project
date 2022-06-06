@@ -34,11 +34,10 @@
 <style scoped>
 
 .topicdiary {
-  width: 1200px;
+  width: 980px;
   text-align: left;
 }
 .diary-display-body {
-  padding-left: 30px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -56,7 +55,7 @@
   position: relative;
   font-size: 18px;
   text-align: left;
-  width: 1000px;
+  width: 900px;
 }
 .topic-origin a {
   font-family: Source Han Sans CN Normal;
@@ -106,8 +105,8 @@ div.diary-origin-pic{
 }
 .diarytext {
   position: relative;
-  top:20px;
-  width: 800px;
+  top:0px;
+  width: 620px;
   margin-left: 30px;
 }
 a.diarytext-origin {

@@ -715,6 +715,7 @@ export default {
     },
   },
   mounted() {
+    this.$parent.updateUser();
     this.updateHotBook();
     this.updateHotMovies();
     this.updateHotTeles();

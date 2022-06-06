@@ -45,14 +45,15 @@
           ></router-link
         >
 
-        <span id="login">
-          <el-col :span="25">
-            <span class="demonstration"
-              ><img src="@/assets/user/int.png" width="30px"
-            /></span>
+        <div id="login">
+
+            <div class="demonstration"
+              ><img :src="userIcon" :style="styleOfIcon"
+            /></div>
+            <div>
             <el-dropdown trigger="click">
               <span class="el-dropdown-link"
-                >用户名<i class="el-icon-arrow-down el-icon--right"></i
+                >{{userName}}<i class="el-icon-arrow-down el-icon--right"></i
               ></span>
               <el-dropdown-menu slot="dropdown">
                 <a href="/person"
@@ -70,8 +71,9 @@
                 >
               </el-dropdown-menu>
             </el-dropdown>
-          </el-col>
-        </span>
+            </div>
+    
+        </div>
 
         
         <el-drawer
@@ -93,6 +95,7 @@
 </template>
 
 <script>
+import qs from 'qs';
 export default {
   data() {
     var messages = [
@@ -140,12 +143,60 @@ export default {
     var navigate = true;
     return {
       navigate,
+      userIcon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
       messages,
       drawer: false,
+      isAdmin:false,
       direction: "rtl",
+      userName:"游客",
+      styleOfIcon:"width:36px"
     };
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.updateUser();
+  });
+  },
   methods: {
+    updateUser(){
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+        .post("/user/detail", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data);
+            var user = res.data.data;
+            var len=this.$axios.defaults.baseURL.length;
+            this.userName = user.name;
+            if(user.image !== "")
+              this.userIcon =this.$axios.defaults.baseURL.substring(0,len-4)+user.image
+            console.log(this.userIcon)
+            var img = new Image();
+            img.src = this.userIcon;
+            if(img.width>img.height)
+              this.styleOfIcon = "height:36px;position: relative; top:0px; left:-"+(img.width-img.height)/img.height*18+"px";
+            else  
+              this.styleOfIcon = "width:36px;position: relative;  left:0px;top:-"+(img.height-img.width)/img.width*18+"px";
+            user.admin = parseInt(user.admin);
+            switch(user.admin){
+              case 1:
+                this.isAdmin=true;
+                break;
+              default:
+                this.isAdmin=false;
+                break;
+            }
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+    },
     // 初始化
     isLogin(msg) {
       this.navigate = false;
@@ -185,11 +236,20 @@ export default {
   right: 0;
 }
 #login {
-  position: relative;
+  position: absolute;
   top: 20px;
-  float: right;
-  margin-right: 0;
-  padding-right: 0;
+  left:1500px;
+  display: flex;
+  flex-wrap: nowrap;
+}
+.demonstration{
+  width:35px;
+  height:35px;
+  margin-right: 5px;
+  border-color: rgb(192, 192, 192);
+  border-style: solid;
+  border-radius: 20px;
+  overflow: hidden;
 }
 #icon {
   position: relative;
@@ -198,7 +258,10 @@ export default {
   margin-right: 200px;
   float: left;
 }
-
+.el-dropdown-link{
+  font-size: 15px;
+  font-weight: 600;
+}
 span.guide {
   position: relative;
   top: 14px;
@@ -241,6 +304,7 @@ button {
   border-radius: 50%;
   overflow: hidden;
 }
+
 </style>
 
 
