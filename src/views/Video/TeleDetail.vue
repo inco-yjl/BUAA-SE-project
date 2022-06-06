@@ -160,7 +160,7 @@
 import search from "@/components/SelectSearch.vue";
 import qs from "qs";
 export default {
-  name: "BookDetail",
+  name: "teledetail",
   components: {
     search,
   },

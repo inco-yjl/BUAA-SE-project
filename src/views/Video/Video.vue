@@ -1,11 +1,25 @@
 <template>
   <div id="bookpage">
     <search></search>
-    <div id="bookpage-body">
-      <div class="bookpage-vertical">
-        <div class="bookpage-hit">
-          <div class="bookpage-title">
-            <img src="@/assets/title/books.png" />热门电影
+    <div id="videopage-body">
+      <div class="videopage-vertical">
+        <div class="videopage-hit">
+          <div class="videopage-title">
+            <img src="@/assets/title/books.png" />
+            <button
+                class="selection_ed"
+                id="select-hot-topic-dt"
+                onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
+                @click="hotTopicdt()"
+            >
+              热门电影</button
+            >/<button
+                class="selection_un"
+                id="select-follow-topic-dt"
+                onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
+                @click="specifyTopicdt()"
+            >热门电视剧
+            </button>  
           </div>
           <VueSlickCarousel
               :dots="true"
@@ -17,40 +31,58 @@
               :touchThreshold="5"
           >
             <div
-                v-for="book in hotbooks"
-                class="bookpage-hit-box"
+                v-for="book in hotmes"
+                class="videopage-hit-box"
                 :key="book.id"
             >
-              <div class="flex-book-display">
-                <div class="book-display-line">
-                  <img class="book-display" :src="book.book1.image" />
-                  <div class="book-display-info">
-                    <span class="book-display-title"
-                    >《{{ book.book1.name }}》</span
-                    ><br v-if="book.book1.name.length < 7" />
-                    <span class="book-display-writer">{{
-                        book.book1.author
-                      }}</span>
-                  </div>
+              <div class="flex-video-display">
+                <div class="video-display-line">
+                  <a @click="ToVideoDetail(book.book1.id)">
+                    <img class="book-display" :src="book.book1.image" />
+                    <div class="book-display-info">
+                      <span class="book-display-title"
+                      >《{{ book.book1.name }}》</span
+                      ><br v-if="book.book1.name.length < 7" />
+                      <span class="book-display-writer">{{
+                          book.book1.director
+                        }}{{book.book1.nation}}</span>
+                    </div>
+                  </a>
                 </div>
-                <div class="book-display-line">
-                  <img class="book-display" :src="book.book2.image" />
-                  <div class="book-display-info">
-                    <span class="book-display-title"
-                    >《{{ book.book2.name }}》</span
-                    ><br v-if="book.book2.name.length < 7" />
-                    <span class="book-display-writer">{{
-                        book.book2.author
-                      }}</span>
-                  </div>
+                <div class="video-display-line">
+                  <a @click="ToVideoDetail(book.book2.id)">
+                    <img class="book-display" :src="book.book2.image" />
+                    <div class="book-display-info">
+                      <span class="book-display-title"
+                      >《{{ book.book2.name }}》</span
+                      ><br v-if="book.book2.name.length < 7" />
+                      <span class="book-display-writer">{{
+                          book.book2.director
+                        }}{{book.book2.nation}}</span>
+                    </div>
+                  </a>
                 </div>
               </div>
             </div>
           </VueSlickCarousel>
         </div>
-        <div class="bookpage-hit">
-          <div class="bookpage-title">
-            <img src="@/assets/title/star.png" />高分榜单
+        <div class="videopage-hit">
+          <div class="videopage-title">
+            <img src="@/assets/title/star.png" />
+            <button
+                class="selection_ed"
+                id="select-hot-topic-dt-point"
+                onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
+                @click="hotTopicdtpoint()"
+            >
+              高分电影</button
+            >/<button
+              class="selection_un"
+              id="select-follow-topic-dt-point"
+              onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
+              @click="specifyTopicdtpoint()"
+          >高分电视剧
+          </button>
           </div>
           <VueSlickCarousel
               :dots="true"
@@ -62,43 +94,50 @@
               :touchThreshold="5"
           >
             <div
-                v-for="book in highbooks"
+                v-for="book in highmes"
                 class="bookpage-hit-box"
                 :key="book.id"
             >
               <div class="flex-book-display">
-                <div class="book-display-line">
-                  <img class="book-display" :src="book.book1.image" />
-                  <div class="over-star">{{book.book1.star}}</div>
-                  <div class="book-display-info">
-                    <span class="book-display-title"
-                    >《{{ book.book1.name }}</span
-                    ><br />
-                    <span class="book-display-writer">{{
-                        book.book1.score
-                      }}</span>
-                  </div>
+                <div class="video-display-line">
+                  <a @click="ToVideoDetailpoint(book.book1.id)">
+                    <img class="book-display" :src="book.book1.image" />
+                    <div class="book-display-info">
+                       <span class="book-display-title"
+                       >《{{ book.book1.name }}》</span
+                       ><br v-if="book.book1.name.length < 7" />
+                      <span class="book-display-writer">{{
+                          book.book1.director
+                        }}
+                      {{book.book1.nation}}</span>
+                    </div>
+                  </a>
                 </div>
-                <div class="book-display-line">
-                  <img class="book-display" :src="book.book2.image" />
-                  <div class="over-star">{{book.book2.star}}</div>
-                  <div class="book-display-info">
-                    <span class="book-display-title"
-                    >《{{ book.book2.name }}</span
-                    ><br />
-                  </div>
+                <div class="video-display-line">
+                  <a @click="ToVideoDetailpoint(book.book2.id)">
+                    <img class="book-display" :src="book.book2.image" />
+                    <div class="book-display-info">
+                       <span class="book-display-title"
+                       >《{{ book.book2.name }}》</span
+                       ><br v-if="book.book2.name.length < 7" />
+                      <span class="book-display-writer">{{
+                          book.book2.director
+                        }}
+                      {{book.book2.nation}}</span>
+                    </div>
+                  </a>
                 </div>
               </div>
             </div>
           </VueSlickCarousel>
         </div>
         <div class="bookpage-comments">
-          <div class="bookpage-title">
-            <img src="@/assets/title/book_comment.png" />热门书评
+          <div class="videopage-title">
+            <img src="@/assets/title/book_comment.png" />热门评论
           </div>
           <div
               class="book-comments-display"
-              v-for="comment in bookcomments"
+              v-for="comment in videocomments"
               :key="comment.id"
           >
             <hr />
@@ -132,22 +171,22 @@
       </div>
       <div class="aside">
         <div class="collection">
-          <div class="bookpage-title">
+          <div class="videopage-title">
             <a href="../user/books">
-              <img src="@/assets/guide/book_collection.png" />已收藏书籍
+              <img src="@/assets/guide/book_collection.png" />我的收藏
             </a>
           </div>
           <div
               class="collection-list"
-              v-for="book in collections"
-              :key="book.id"
+              v-for="video in collections"
+              :key="video.id"
           >
             <a class="collection-item">
-              <img class="collection-img" :src="book.image" />
+              <img class="collection-img" :src="video.image" />
               <div class="collection-info">
-                《{{ book.name }}》
+                《{{ video.name }}》
                 <el-rate
-                    v-model="book.star"
+                    v-model="video.star"
                     disabled
                     show-score
                     text-color="#ff9900"
@@ -155,19 +194,24 @@
                     disabled-void-color="ffffff"
                 >
                 </el-rate>
-                {{ book.author }}
+                {{ video.director }}
+                {{video.year}}&nbsp;{{ video.nation }}
               </div>
             </a>
           </div>
         </div>
         <div class="collection">
-          <div class="bookpage-title">
+          <div class="videopage-title">
             <a href="../user/books">
-              <img src="@/assets/guide/mycomment.png" />我的书评
+              <img src="@/assets/guide/mycomment.png" />我的评论
             </a>
           </div>
           <ul class="book-comment-list hotlist">
-            <li :v-if="passages.length>0" v-for="passage in passages" :key="passage.id">
+            <li
+                :v-if="passages.length > 0"
+                v-for="passage in passages"
+                :key="passage.id"
+            >
               <a @click="ToComment(passage.id)">{{ passage.title }}</a>
             </li>
           </ul>
@@ -184,10 +228,17 @@ import "vue-slick-carousel/dist/vue-slick-carousel.css";
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 import search from "@/components/SelectSearch.vue";
 import qs from "qs";
+import usericon from "@/assets/user/int.png";
+import router from "@/router";
 export default {
   name: "MyComponent",
   data() {
-    var hotbooks = [{}];
+    var hotmes;
+    var hotmoives = [{}];
+    var hottele = [{}];
+    var highmes;
+    var highmoives = [{}];
+    var hightele = [{}];
     var highbooks = [{}];
     var bookcomments = [
       {
@@ -242,13 +293,23 @@ export default {
     var collections = [{}];
     var passages = [{}];
     var loadSuccess = false;
+    var telecollections = [{}];
+    var moviecollections = [{}];
     return {
-      hotbooks,
+      hotmes,
+      hotmoives,
+      hottele,
+      highmes,
+      highmoives,
+      hightele,
+      hotbooks: hotmoives,
       highbooks,
-      bookcomments,
+      videocomments: bookcomments,
       collections,
       passages,
-      loadSuccess
+      loadSuccess,
+      telecollections,
+      moviecollections,
     };
   },
   components: {
@@ -256,8 +317,149 @@ export default {
     search,
   },
   methods: {
+    hotTopicdt() {
+      //获取数据
+      document
+          .getElementById("select-follow-topic-dt")
+          .setAttribute("class", "selection_un");
+      this.hotmes = this.hotmoives;
+      this.collections = this.moviecollections;
+    },
+    specifyTopicdt() {
+      document
+          .getElementById("select-hot-topic-dt")
+          .setAttribute("class", "selection_un");
+      this.hotmes = this.hottele;
+      this.collections = this.telecollections;
+      
+    },
+    hotTopicdtpoint() {
+      //获取数据
+      document
+          .getElementById("select-follow-topic-dt-point")
+          .setAttribute("class", "selection_un");
+      this.highmes = this.highmoives;
+      this.collections = this.moviecollections;
+    },
+    specifyTopicdtpoint() {
+      document
+          .getElementById("select-hot-topic-dt-point")
+          .setAttribute("class", "selection_un");
+      this.highmes = this.hightele;
+      this.collections = this.telecollections;
+    },
+    //this is the function to update the images of books
+    updateButton() {
+      document
+          .getElementsByClassName("selection_un")
+          .item(4)
+          .setAttribute("class", "selection_ed");
+    },
+    Updatediary() {
+      var i = 0;
+      var topic_detail_link = [this.dt[0].id, this.dt[1].id, this.dt[2].id];
+      for (i = 0; i < 3; i++) {
+        document
+            .getElementsByClassName("iconOfuser")
+            .item(i)
+            .setAttribute("src", usericon);
+        document
+            .getElementsByClassName("display-publisher")
+            .item(i)
+            .getElementsByClassName("nameOfuser")
+            .item(0).innerText = this.dt[i].user;
+        var dtText = this.dt[i].passage.substring(0, 300);
+        if (this.dt[i].passage.length > 300) dtText = dtText.concat("(……)");
+        document
+            .getElementsByClassName("diarytext")
+            .item(i)
+            .getElementsByClassName("diarytext-origin")
+            .item(0).innerText = dtText;
+        document.getElementsByClassName("publishtime").item(i).innerText =
+            this.dt[i].date;
+        document
+            .getElementsByClassName("topic-origin")
+            .item(i)
+            .getElementsByClassName("topic-origin-name")
+            .item(0).innerText = this.dt[i].topic;
+        document
+            .getElementsByClassName("diary-origin")
+            .item(i)
+            .setAttribute("href", "topic/" + i);
+        document
+            .getElementsByClassName("diary-origin-pic")
+            .item(i)
+            .getElementsByClassName("diary-pic")
+            .item(0)
+            .setAttribute("src", this.dt[i].img);
+      }
+      document
+          .getElementsByClassName("topic-origin-name")
+          .item(0)
+          .addEventListener("click", function () {
+            router.push({
+              name: "topicdetail",
+              query: { id: topic_detail_link[0] },
+            });
+          });
+      document
+          .getElementsByClassName("topic-origin-name")
+          .item(1)
+          .addEventListener("click", function () {
+            router.push({
+              name: "topicdetail",
+              query: { id: topic_detail_link[1] },
+            });
+          });
+      document
+          .getElementsByClassName("topic-origin-name")
+          .item(2)
+          .addEventListener("click", function () {
+            router.push({
+              name: "topicdetail",
+              query: { id: topic_detail_link[2] },
+            });
+          });
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.changeTopicdt();
+    },
+    changeTopicdt() {},
+    ToVideoDetail(id) {
+      if(this.hotmes === this.hotmoives) {
+        this.$router.push({
+        name: "moviedetail",
+        query: { id: id },
+      }); 
+        this.hotmes = this.hotmoives;
+      }
+      else if(this.hotmes === this.hottele) {
+        this.$router.push({
+          name: "teledetail",
+          query: { id: id },
+        });
+        this.hotmes = this.hottele;
+      }
+    },
+    ToVideoDetailpoint(id) {
+      if(this.highmes === this.highmoives) {
+        this.$router.push({
+          name: "moviedetail",
+          query: { id: id },
+        });
+        this.highmes = this.highmoives;
+      }
+      else if(this.highmes === this.hightele) {
+        this.$router.push({
+          name: "teledetail",
+          query: { id: id },
+        });
+        this.highmes = this.hightele;
+      }
+    },
     ToComment(id) {
-      this.$router.push({ name: "bookcomment", query: { id: id },});
+      this.$router.push({ name: "bookcomment", query: { id: id } });
     },
     bookcomment() {
       this.$router.push({ name: "bookcomment" });
@@ -267,15 +469,15 @@ export default {
         user_id: this.$store.getters.getUser.user.id,
       };
       this.$axios
-          .post("/book/collection", qs.stringify(params))
+          .post("/tele/collection", qs.stringify(params))
           .then((res) => {
             console.log(res);
+            console.log("查询到已收藏的电视剧")
             if (res.data.errno === 0) {
-              this.collections = [];
+              this.telecollections = [];
               var i = 0;
-              for (i = 0; i < 3 && i < res.data.data.length; i++){
-                res.data.data[i].star=parseFloat(res.data.data[i].star);
-                this.collections.push(res.data.data[i]);
+              for (i = 0; i < 3 && i < res.data.data.length; i++) {
+                this.telecollections.push(res.data.data[i]);
               }
             } else {
               this.$message.error("查询失败");
@@ -284,6 +486,27 @@ export default {
           .catch((error) => {
             console.log(error);
           });
+      this.$axios
+          .post("/movie/collection", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            console.log("查询到已收藏的电影")
+            if (res.data.errno === 0) {
+              this.moviecollections = [];
+              var i = 0;
+              for (i = 0; i < 3 && i < res.data.data.length; i++) {
+                this.moviecollections.push(res.data.data[i]);
+              }
+              this.collections = this.moviecollections;
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      this.collections = this.moviecollections;
+      console.log(this.moviecollections);
       this.loaddata = true;
     },
     async updatePassage() {
@@ -295,14 +518,12 @@ export default {
           .then((res) => {
             console.log(res);
             if (res.data.errno === 0) {
-              this.passages=[];
+              this.passages = [];
               var i;
-              var length=3;
-              if(res.data.data.length<3)
-                length=res.data.data.length;
-              for(i=0;i<length;i++)
-                this.passages.push(res.data.data[i])
-              this.loadSuccess=true;
+              var length = 3;
+              if (res.data.data.length < 3) length = res.data.data.length;
+              for (i = 0; i < length; i++) this.passages.push(res.data.data[i]);
+              this.loadSuccess = true;
             } else {
               this.$message.error("查询失败");
             }
@@ -311,31 +532,63 @@ export default {
             console.log(error);
           });
     },
-    async updateHotBook() {
+    async updateHotVideo() {
       var params = {
         num: 20,
       };
       this.$axios
-          .post("/book/hot", qs.stringify(params))
+          .post("/movie/hot", qs.stringify(params))
           .then((res) => {
             if (res.data.errno === 0) {
-              console.log("获取到热门图书");
-              var books = [];
-              books = res.data.data;
+              console.log("获取到热门电影");
+              console.log(res);
+              var movie = [];
+              movie = res.data.data;
               var i = 0;
-              for (i = 0; i < 20; i++) {
-                books[i].star=i/4;
-                var length = 14 - books[i].name.length;
-                if (books[i].name.length > 7 && books[i].author.length > length)
-                  books[i].author = books[i].author.substring(0, length) + "…";
-                if (books[i].author.length > 8)
-                  books[i].author = books[i].author.substring(0, 9) + "…";
+              for (i = 0; i < 10; i++) {
+                var length = 14 - movie[i].name.length;
+                if (movie[i].name.length > 7 && movie[i].director.length > length)
+                  movie[i].director = movie[i].director.substring(0, length - 2) + "…";
+                if (movie[i].director.length > 8)
+                  movie[i].director = movie[i].director.substring(0, 7) + "…";
               }
-              this.hotbooks = [];
-              for (i = 0; i < 20; i = i + 2) {
-                this.hotbooks.push({
-                  book1: books[i],
-                  book2: books[i + 1],
+              this.hotmoives = [];
+              for (i = 0; i < 10; i = i + 2) {
+                this.hotmoives.push({
+                  book1: movie[i],
+                  book2: movie[i + 1],
+                  id: i,
+                });
+              }
+              this.hotmes = this.hotmoives;
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      this.$axios
+          .post("/tele/hot", qs.stringify(params))
+          .then((res) => {
+            if (res.data.errno === 0) {
+              console.log("获取到热门电视剧");
+              console.log(res);
+              var tele = [];
+              tele = res.data.data;
+              var i = 0;
+              for (i = 0; i < 10; i++) {
+                var length = 14 - tele[i].name.length;
+                if (tele[i].name.length > 7 && tele[i].nation.length > length)
+                  tele[i].nation = tele[i].nation.substring(0, length - 2) + "…";
+                if (tele[i].nation.length > 8)
+                  tele[i].nation = tele[i].nation.substring(0, 7) + "…";
+              }
+              this.hottele = [];
+              for (i = 0; i < 10; i = i + 2) {
+                this.hottele.push({
+                  book1: tele[i + 1],
+                  book2: tele[i],
                   id: i,
                 });
               }
@@ -347,26 +600,63 @@ export default {
             console.log(error);
           });
     },
-    async updateHighBook() {
+    async updateHighvideo() {
+      var params = {
+        num: 20,
+      };
       this.$axios
-          .post("/book/high")
+          .post("/movie/high",qs.stringify(params))
           .then((res) => {
             if (res.data.errno === 0) {
-              console.log("获取到高分图书");
-              var books = [];
-              books = res.data.data;
+              console.log("获取到高分电影");
+              console.log(res);
+              var movie = [];
+              movie = res.data.data;
               var i = 0;
-              for (i = 0; i < 20; i++) {
-                books[i].star = 4.5;
-                books[i].name = books[i].name + "》";
-                if (books[i].name.length > 6)
-                  books[i].name = books[i].name.substring(0, 6) + "…";
+              for (i = 0; i < 10; i++) {
+                var length = 14 - movie[i].name.length;
+                if (movie[i].name.length > 7 && movie[i].director.length > length)
+                  movie[i].director = movie[i].director.substring(0, length - 2) + "…";
+                if (movie[i].director.length > 8)
+                  movie[i].director = movie[i].director.substring(0, 7) + "…";
               }
-              this.highbooks = [];
-              for (i = 0; i < 20; i = i + 2) {
-                this.highbooks.push({
-                  book1: books[i],
-                  book2: books[i + 1],
+              this.highmoives = [];
+              for (i = 0; i < 10; i = i + 2) {
+                this.highmoives.push({
+                  book1: movie[i],
+                  book2: movie[i + 1],
+                  id: i,
+                });
+              }
+              this.highmes = this.highmoives;
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      this.$axios
+          .post("/tele/high",qs.stringify(params))
+          .then((res) => {
+            if (res.data.errno === 0) {
+              console.log("获取到高分电视剧");
+              console.log(res);
+              var tele = [];
+              tele = res.data.data;
+              var i = 0;
+              for (i = 0; i < 10; i++) {
+                var length = 14 - tele[i].name.length;
+                if (tele[i].name.length > 7 && tele[i].nation.length > length)
+                  tele[i].nation = tele[i].nation.substring(0, length - 2) + "…";
+                if (tele[i].nation.length > 8)
+                  tele[i].nation = tele[i].nation.substring(0, 7) + "…";
+              }
+              this.hightele = [];
+              for (i = 0; i < 10; i = i + 2) {
+                this.hightele.push({
+                  book1: tele[i],
+                  book2: tele[i + 1],
                   id: i,
                 });
               }
@@ -381,12 +671,12 @@ export default {
   },
   mounted() {
     this.updateCollection();
-    this.updateHotBook();
-    this.updateHighBook();
+    this.updateHotVideo();
+    this.updateHighvideo();
     this.updatePassage();
     window.onscroll = function (e) {
       var vertical = document
-          .getElementsByClassName("bookpage-vertical")
+          .getElementsByClassName("videopage-vertical")
           .item(0);
       var pos = vertical.getBoundingClientRect();
       if (pos.top < 29) {
@@ -402,17 +692,33 @@ export default {
 </script>
 
 <style scoped>
+button.selection_un {
+  background: none;
+  outline: none;
+  color: rgb(96, 94, 94);
+  font-size: 20px;
+  border: none;
+  transition: opacity 0.2s;
+}
+button.selection_ed {
+  background: none;
+  outline: none;
+  font-size: 20px;
+  border: none;
+  color: black;
+  font-weight: bold;
+}
 #bookpage {
   width: 1600px;
   padding-left: 100px;
 }
-#bookpage-body {
+#videopage-body {
   width: 1580px;
   padding-bottom: 50px;
   display: flex;
   flex-wrap: wrap;
 }
-.bookpage-vertical {
+.videopage-vertical {
   padding-top: 20px;
   padding-left: 80px;
   padding-right: 35px;
@@ -424,7 +730,7 @@ export default {
   border-color: rgb(181, 181, 181);
   box-shadow: 0px 2px 3px #888888a6;
 }
-.bookpage-hit {
+.videopage-hit {
   width: 1000px;
   margin-top: 30px;
   margin-bottom: 50px;
@@ -437,7 +743,7 @@ export default {
   border-color: aliceblue;
   border-width: 3px;
 }
-.book-display-line {
+.video-display-line {
   margin-top: 10px;
   margin-bottom: 10px;
   margin-left: 10px;
@@ -447,24 +753,24 @@ export default {
   width: 120px;
   font-size: 14px;
 }
-.over-star{
+.over-star {
   position: relative;
-  margin-bottom:-55px;
-  top:-52px;
-  left:68px;
-  color:rgb(255, 230, 0);
+  margin-bottom: -55px;
+  top: -52px;
+  left: 68px;
+  color: rgb(255, 230, 0);
   font-size: 40px;
-  font-family: 'Patrick Hand', cursive;
-  text-shadow:3px 1px 1px rgb(0, 0, 0);
+  font-family: "Patrick Hand", cursive;
+  text-shadow: 3px 1px 1px rgb(0, 0, 0);
 }
-.bookpage-title {
+.videopage-title {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   text-align: left;
   font-size: 24px;
   font-weight: bold;
   padding-left: 10px;
 }
-.bookpage-title img {
+.videopage-title img {
   height: 37px;
   vertical-align: -20%;
   margin-right: 5px;
@@ -482,6 +788,7 @@ export default {
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
+  width:352px;
 }
 .aside-slide {
   margin-top: 80px;
@@ -499,6 +806,7 @@ export default {
   position: fixed;
   left: 1260px;
   top: -50px;
+  width:352px;
 }
 .bookpage-comments {
   margin-bottom: 50px;
@@ -594,20 +902,20 @@ a.comment-book-name {
 .collection-list a:hover {
   background-color: #91919155;
 }
-.collection .bookpage-title a {
+.collection .videopage-title a {
   font-family: "Noto Serif SC", serif;
   color: black;
   transition: all 0.1s ease;
   text-decoration: none;
   font-size: 22px;
 }
-.collection .bookpage-title a:hover {
+.collection .videopage-title a:hover {
   color: rgb(2, 98, 182);
 }
-.collection .bookpage-title a:hover::after {
+.collection .videopage-title a:hover::after {
   opacity: 1;
 }
-.collection .bookpage-title a:active {
+.collection .videopage-title a:active {
   color: rgb(0, 166, 255);
 }
 .collection-img {
@@ -640,6 +948,4 @@ a.comment-book-name {
   font-weight: 600;
   color: rgb(2, 98, 182);
 }
-
-
 </style>
