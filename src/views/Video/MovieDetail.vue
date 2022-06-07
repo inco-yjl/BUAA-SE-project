@@ -14,9 +14,11 @@
             </button>
           </div>
         </div>
+        
         <div clas="detail-content">
           <div class="detail-info">
             <div><img class="detail-img" :src="movie.image" /></div>
+            
             <div class="info-text">
               <span class="pl">导演：</span
               ><span class="pl2">{{ movie.director }}</span> <br />
@@ -55,8 +57,12 @@
                   <div class="distribute" style="width: 18px"></div>
                 </div>
               </div>
+            
             </div>
           </div>
+          <button  @click="writeComment()" style="position: relative; float: right; right: 100px;">
+            <img src="@/assets/guide/write_dt.png" /><span>撰写评论</span>
+          </button>
           <div class="detail-intro">
             <span class="intro-title">内容简介···</span>
             <div v-html="movie.intro"></div>
@@ -265,6 +271,18 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    writeComment() {
+      if (this.$store.getters.getUser.user.id === -1) {
+        this.$message.error("请先登录");
+        return;
+      }
+      else {
+        this.$router.push({
+          name: "movieeditor",
+          query: { id: this.id },
+        });
+      }
     },
     clickuncollect() {
       if (this.$store.getters.getUser.user.id === -1) {
