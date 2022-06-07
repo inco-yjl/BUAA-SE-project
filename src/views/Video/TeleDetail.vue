@@ -57,6 +57,9 @@
               </div>
             </div>
           </div>
+          <button  @click="writeComment()" style="position: relative; float: right; right: 100px;">
+            <img src="@/assets/guide/write_dt.png" /><span>撰写评论</span>
+          </button>
           <div class="detail-intro">
             <span class="intro-title">内容简介···</span>
             <div v-html="tele.intro"></div>
@@ -75,7 +78,7 @@
             v-for="tele in collections"
             :key="tele.id"
           >
-            <a class="collection-item">
+            <a class="collection-item" @click = "usetocollde(tele.id)">
               <img class="collection-img" :src="tele.image" />
               <div class="collection-info">
                 《{{ tele.name }}》
@@ -144,9 +147,9 @@
                 <span class="publish-info">{{ comment.date }}</span>
               </div>
               <div class="commenttext">
-                <a class="commenttext-origin" @click="Totelecomment">{{
+                {{
                   comment.content
-                }}</a>
+                }}
               </div>
             </div>
           </div>
@@ -227,6 +230,9 @@ export default {
         title: "My nonfiction",
       },
     ];
+    var newdt = [];
+    var hotdt = [];
+    var db = [];
     var collect = false;
     return {
       collections,
@@ -236,9 +242,30 @@ export default {
       id,
       telecomments,
       loadSuccess,
+      newdt,
+      hotdt,
+      db,
     };
   },
   methods: {
+    usetocollde(id) {
+      this.$router.push({
+        name: "teledetail",
+        query: { id: id },
+      });
+    },
+    writeComment() {
+      if (this.$store.getters.getUser.user.id === -1) {
+        this.$message.error("请先登录");
+        return;
+      }
+      else {
+        this.$router.push({
+          name: "teleeditor",
+          query: { id: this.id },
+        });
+      }
+    },
     clickcollect() {
       if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
@@ -328,7 +355,7 @@ export default {
         .post("/tele/detail", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
-            console.log("电影查询成功");
+            console.log("电视剧查询成功");
             this.tele = res.data.data;
             this.loadSuccess = true;
             switch(res.data.collect)
@@ -355,7 +382,7 @@ export default {
       document
         .getElementById("select-hot-comment")
         .setAttribute("class", "selection_un");
-      this.dt = this.newdt;
+      this.db = this.newdt;
       this.Updatediary();
     },
     hotComment() {
@@ -363,13 +390,53 @@ export default {
       document
         .getElementById("select-new-comment")
         .setAttribute("class", "selection_un");
-      this.dt = this.topic.hotdt;
+      this.db = this.hotdt;
       this.Updatediary();
     },
   },
+  getdt() {
+    var params = {
+      tele_id: this.id,
+    };
+    this.$axios
+        .post("/tele/hot_article", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.hotdt = [];
+            console.log(res.data.data);
+            var i=0;
+            for(i=0;i<5 && i<res.data.data.length;i++)
+              this.hotdt.push(res.data.data[i]);
+            this.db = this.hotdt;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    this.$axios
+        .post("/tele/new_article", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.hotdt = [];
+            console.log(res.data.data);
+            var i=0;
+            for(i=0;i<5 && i<res.data.data.length;i++)
+              this.hotdt.push(res.data.data[i]);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  },
+  
   mounted() {
     this.updateContent();
     this.updateCollection();
+    this.getdt();
     window.onscroll = function (e) {
       var vertical = document.getElementsByClassName("detail-vertical").item(0);
       var pos = vertical.getBoundingClientRect();

@@ -178,10 +178,10 @@
           </div>
           <div
               class="collection-list"
-              v-for="video in collections"
+              v-for="(video,index) in collections"
               :key="video.id"
           >
-            <a class="collection-item">
+            <a class="collection-item" @click = "usetocolloction(index)">
               <img class="collection-img" :src="video.image" />
               <div class="collection-info">
                 《{{ video.name }}》
@@ -209,10 +209,10 @@
           <ul class="book-comment-list hotlist">
             <li
                 :v-if="passages.length > 0"
-                v-for="passage in passages"
+                v-for="(passage,index) in passages"
                 :key="passage.id"
             >
-              <a @click="ToComment(passage.id)">{{ passage.title }}</a>
+              <a @click="ToComment(index)">{{ passage.title }}</a>
             </li>
           </ul>
         </div>
@@ -295,6 +295,7 @@ export default {
     var loadSuccess = false;
     var telecollections = [{}];
     var moviecollections = [{}];
+    var ismovie;
     return {
       hotmes,
       hotmoives,
@@ -310,6 +311,7 @@ export default {
       loadSuccess,
       telecollections,
       moviecollections,
+      ismovie,
     };
   },
   components: {
@@ -317,20 +319,35 @@ export default {
     search,
   },
   methods: {
+    usetocolloction(index) {
+      if(this.collections[index].year != null) {
+        this.$router.push({
+          name: "teledetail",
+          query: { id: this.collections[index].id },
+        }); 
+      }
+      else {
+        this.$router.push({
+          name: "moviedetail",
+          query: { id: this.collections[index].id },
+        });
+      }
+    },
+    getcommit() {
+      
+    },
     hotTopicdt() {
       //获取数据
       document
           .getElementById("select-follow-topic-dt")
           .setAttribute("class", "selection_un");
       this.hotmes = this.hotmoives;
-      this.collections = this.moviecollections;
     },
     specifyTopicdt() {
       document
           .getElementById("select-hot-topic-dt")
           .setAttribute("class", "selection_un");
       this.hotmes = this.hottele;
-      this.collections = this.telecollections;
       
     },
     hotTopicdtpoint() {
@@ -339,14 +356,12 @@ export default {
           .getElementById("select-follow-topic-dt-point")
           .setAttribute("class", "selection_un");
       this.highmes = this.highmoives;
-      this.collections = this.moviecollections;
     },
     specifyTopicdtpoint() {
       document
           .getElementById("select-hot-topic-dt-point")
           .setAttribute("class", "selection_un");
       this.highmes = this.hightele;
-      this.collections = this.telecollections;
     },
     //this is the function to update the images of books
     updateButton() {
@@ -458,8 +473,11 @@ export default {
         this.highmes = this.hightele;
       }
     },
-    ToComment(id) {
-      this.$router.push({ name: "bookcomment", query: { id: id } });
+    ToComment(index) {
+      if(index < this.ismovie)
+        this.$router.push({ name: "moviecomment", query: { id: this.passages[index].id } });
+      else
+        this.$router.push({ name: "telecomment", query: { id: this.passages[index].id } });
     },
     bookcomment() {
       this.$router.push({ name: "bookcomment" });
@@ -468,6 +486,7 @@ export default {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
       };
+      this.collections = [];
       this.$axios
           .post("/tele/collection", qs.stringify(params))
           .then((res) => {
@@ -476,8 +495,9 @@ export default {
             if (res.data.errno === 0) {
               this.telecollections = [];
               var i = 0;
-              for (i = 0; i < 3 && i < res.data.data.length; i++) {
-                this.telecollections.push(res.data.data[i]);
+              if(res.data.data.length !== 0)
+              for (i = 0; i < 1 && i < res.data.data.length; i++) {
+                this.collections.push(res.data.data[i]);
               }
             } else {
               this.$message.error("查询失败");
@@ -492,12 +512,11 @@ export default {
             console.log(res);
             console.log("查询到已收藏的电影")
             if (res.data.errno === 0) {
-              this.moviecollections = [];
               var i = 0;
-              for (i = 0; i < 3 && i < res.data.data.length; i++) {
-                this.moviecollections.push(res.data.data[i]);
+              if(res.data.data.length !== 0)
+              for (i = 0; i < 2 && i < res.data.data.length; i++) {
+                this.collections.push(res.data.data[i]);
               }
-              this.collections = this.moviecollections;
             } else {
               this.$message.error("查询失败");
             }
@@ -505,20 +524,36 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-      this.collections = this.moviecollections;
-      console.log(this.moviecollections);
       this.loaddata = true;
     },
     async updatePassage() {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
       };
+      this.passages = [];
       this.$axios
-          .post("/book/mypassage", qs.stringify(params))
+          .post("/movie/mypassage", qs.stringify(params))
           .then((res) => {
             console.log(res);
             if (res.data.errno === 0) {
-              this.passages = [];
+              var i;
+              var length = 3;
+              if (res.data.data.length < 3) length = res.data.data.length;
+              this.ismovie = length;
+              for (i = 0; i < length; i++) this.passages.push(res.data.data[i]);
+              this.loadSuccess = true;
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      this.$axios
+          .post("/tele/mypassage", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
               var i;
               var length = 3;
               if (res.data.data.length < 3) length = res.data.data.length;
@@ -545,7 +580,7 @@ export default {
               var movie = [];
               movie = res.data.data;
               var i = 0;
-              for (i = 0; i < 10; i++) {
+              for (i = 0; i < 20; i++) {
                 var length = 14 - movie[i].name.length;
                 if (movie[i].name.length > 7 && movie[i].director.length > length)
                   movie[i].director = movie[i].director.substring(0, length - 2) + "…";
@@ -553,7 +588,7 @@ export default {
                   movie[i].director = movie[i].director.substring(0, 7) + "…";
               }
               this.hotmoives = [];
-              for (i = 0; i < 10; i = i + 2) {
+              for (i = 0; i < 20; i = i + 2) {
                 this.hotmoives.push({
                   book1: movie[i],
                   book2: movie[i + 1],
@@ -577,7 +612,7 @@ export default {
               var tele = [];
               tele = res.data.data;
               var i = 0;
-              for (i = 0; i < 10; i++) {
+              for (i = 0; i < 20; i++) {
                 var length = 14 - tele[i].name.length;
                 if (tele[i].name.length > 7 && tele[i].nation.length > length)
                   tele[i].nation = tele[i].nation.substring(0, length - 2) + "…";
@@ -585,7 +620,7 @@ export default {
                   tele[i].nation = tele[i].nation.substring(0, 7) + "…";
               }
               this.hottele = [];
-              for (i = 0; i < 10; i = i + 2) {
+              for (i = 0; i < 20; i = i + 2) {
                 this.hottele.push({
                   book1: tele[i + 1],
                   book2: tele[i],
@@ -613,7 +648,7 @@ export default {
               var movie = [];
               movie = res.data.data;
               var i = 0;
-              for (i = 0; i < 10; i++) {
+              for (i = 0; i < 20; i++) {
                 var length = 14 - movie[i].name.length;
                 if (movie[i].name.length > 7 && movie[i].director.length > length)
                   movie[i].director = movie[i].director.substring(0, length - 2) + "…";
@@ -621,7 +656,7 @@ export default {
                   movie[i].director = movie[i].director.substring(0, 7) + "…";
               }
               this.highmoives = [];
-              for (i = 0; i < 10; i = i + 2) {
+              for (i = 0; i < 20; i = i + 2) {
                 this.highmoives.push({
                   book1: movie[i],
                   book2: movie[i + 1],
@@ -645,7 +680,7 @@ export default {
               var tele = [];
               tele = res.data.data;
               var i = 0;
-              for (i = 0; i < 10; i++) {
+              for (i = 0; i < 20; i++) {
                 var length = 14 - tele[i].name.length;
                 if (tele[i].name.length > 7 && tele[i].nation.length > length)
                   tele[i].nation = tele[i].nation.substring(0, length - 2) + "…";
@@ -653,7 +688,7 @@ export default {
                   tele[i].nation = tele[i].nation.substring(0, 7) + "…";
               }
               this.hightele = [];
-              for (i = 0; i < 10; i = i + 2) {
+              for (i = 0; i < 20; i = i + 2) {
                 this.hightele.push({
                   book1: tele[i],
                   book2: tele[i + 1],
@@ -885,7 +920,7 @@ a.comment-book-name {
   color: rgb(157, 157, 157);
 }
 .collection {
-  height: 550px;
+  height: 530px;
 }
 .collection-list a {
   margin-left: 10px;

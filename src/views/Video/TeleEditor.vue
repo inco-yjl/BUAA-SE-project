@@ -2,7 +2,7 @@
   <div id="comment-editor">
     <div id="editor-header">
       <div class="return-to-book">
-        <button @click="backToBook">返回电影页</button>
+        <button @click="backToBook">返回电视剧页</button>
       </div>
       <div class="header-logo"></div>
       <div class="post-book-comment">
@@ -25,8 +25,8 @@
       </div>
       <div id="content-intro">
         <span id="contentname">《{{ book.name }}》<br /></span>
-        <span id="contentintro">作者：{{ book.director }}</span>
-        <span id="contentstar">评分：{{ book.score }}</span>
+        <span id="contentintro">发布时间：{{ book.year }}</span>
+        <span id="contentstar">发布地区：{{ book.nation }}</span>
       </div>
     </div>
 
@@ -166,7 +166,7 @@ const toolbarConfig = {
 };
 
 export default {
-  name: "movieeditor",
+  name: "teleeditor",
   data() {
     var id = this.$route.query.id;
     var book = {};
@@ -186,15 +186,15 @@ export default {
   methods: {
     async updateContent() {
       var params = {
-        movie_id: this.id,
+        tele_id: this.id,
         user_id: this.$store.getters.getUser.user.id,
       };
       console.log("user:" + this.$store.getters.getUser.user.id);
       this.$axios
-          .post("/movie/detail", qs.stringify(params))
+          .post("/tele/detail", qs.stringify(params))
           .then((res) => {
             if (res.data.errno === 0) {
-              console.log("电影查询成功");
+              console.log("电视剧查询成功");
               this.book = res.data.data;
               this.evaluate = parseFloat(res.data.evaluate);
               console.log(this.evaluate);
@@ -214,7 +214,7 @@ export default {
         score: this.evaluate
       };
       this.$axios
-          .post("/movie/star", qs.stringify(params))
+          .post("/tele/star", qs.stringify(params))
           .then((res) => {
             if (res.data.errno === 0) {
               console.log(res.data);
@@ -234,7 +234,7 @@ export default {
     backToBook() {
       this.addNavigation();
       this.$router.push({
-        name: "moviedetail",
+        name: "teledetail",
         query: { id: this.id },
       });
     },
@@ -267,12 +267,12 @@ export default {
       }
       var params = {
         user_id: this.$store.getters.getUser.user.id,
-        movie_id: this.id,
+        tele_id: this.id,
         title:this.title,
         text:this.passage,
       };
       this.$axios
-          .post("/movie/passage", qs.stringify(params))
+          .post("/tele/passage", qs.stringify(params))
           .then((res) => {
             if (res.data.errno === 0) {
               console.log(res.data);
