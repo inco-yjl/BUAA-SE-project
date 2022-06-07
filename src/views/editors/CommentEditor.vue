@@ -29,8 +29,7 @@
         <span id="contentstar">评分：{{ book.score }}</span>
       </div>
     </div>
-
-    <!--2.这里id对应new Vditor('vditor',{...})的第一个参数vidtor-->
+    <div>
     <div id="editor" style="border: 1px solid #ccc">
       <div id="toolbar-container"></div>
       <div id="editor-container">
@@ -40,11 +39,11 @@
         <div id="editor-text-area"></div>
       </div>
     </div>
+</div>
   </div>
 </template>
 <style scoped>
 #comment-editor {
-  height: 1000px;
   padding-bottom: 200px;
   margin-bottom: 200px;
 }
@@ -129,13 +128,15 @@
   left: 20px;
 }
 #editor {
-  position: absolute;
+  position: relative;
   width: 900px;
   left: 400px;
   right: 400px;
-  top: 300px;
-  height: 800px;
+  top: 250px;
   background-color: white;
+}
+#editor-container{
+  min-height:800px;
 }
 #title-container {
   padding: 20px 0;
@@ -151,6 +152,7 @@
 }
 
 #editor-text-area {
+  overflow-y:scroll;
   margin-top: 20px;
 }
 </style>
@@ -302,6 +304,7 @@ export default {
         console.log("html", editor.getHtml());
         this.passage = editor.getHtml();
       };
+      editorConfig.scroll = true;
       const editor = createEditor({
         selector: document.querySelector("#editor-container"),
         config: editorConfig,

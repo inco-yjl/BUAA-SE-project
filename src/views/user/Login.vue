@@ -69,21 +69,20 @@ export default {
       this.$axios
         .post("/login", qs.stringify(this.form))
         .then((res) => {
-          if (res.data.msg === '登录成功') {
+          if (res.data.msg === "登录成功") {
             console.log("获取到登录信息", res);
             this.$message({
               message: "登录成功",
               type: "success",
             });
             console.log(res.data.data);
-            this.$store.dispatch('saveUserInfo', {
-                user: res.data.data
-              });
-              console.log(res.data.data+'已登录');
-              window.open('/home', '_self');
-          }
-          else{
-             this.$message.error(res.data.msg);
+            this.$store.dispatch("saveUserInfo", {
+              user: res.data.data,
+            });
+            console.log(res.data.data + "已登录");
+            window.open("/home", "_self");
+          } else {
+            this.$message.error(res.data.msg);
           }
         })
         .catch((error) => {
@@ -91,9 +90,15 @@ export default {
         });
     },
   },
-
   mounted() {
-    this.removeNavigation();
+    this.$nextTick(() => {
+      if (location.href.indexOf("#reloaded") == -1) {
+        location.href = location.href + "#reloaded";
+        location.reload();
+      }
+
+      this.removeNavigation();
+    });
   },
 };
 </script>
@@ -102,7 +107,7 @@ export default {
 #login {
   position: absolute;
   top: 0;
-  left:0;
+  left: 0;
   font-family: "Noto Serif SC", serif;
   width: 100%;
   height: 100vh;

@@ -21,18 +21,12 @@
         >
         <router-link to="/video"
           ><span class="guide"
-            ><img
-              src="@/assets/icon/video.png"
-              width="30px"
-            />影视</span
+            ><img src="@/assets/icon/video.png" width="30px" />影视</span
           ></router-link
         >
         <router-link to="/GroupHome"
           ><span class="guide"
-            ><img
-              src="@/assets/icon/group.png"
-              width="30px"
-            />小组</span
+            ><img src="@/assets/icon/group.png" width="30px" />小组</span
           ></router-link
         >
         <router-link to="/topic"
@@ -46,16 +40,27 @@
         >
 
         <div id="login">
-
-            <div class="demonstration"
-              ><img :src="userIcon" :style="styleOfIcon"
-            /></div>
-            <div>
+          <div class="demonstration">
+            <img :src="userIcon" :style="styleOfIcon" />
+          </div>
+          <div>
             <el-dropdown trigger="click">
               <span class="el-dropdown-link"
-                >{{userName}}<i class="el-icon-arrow-down el-icon--right"></i
+                >{{ userName }}<i class="el-icon-arrow-down el-icon--right"></i
               ></span>
-              <el-dropdown-menu slot="dropdown">
+              <el-dropdown-menu slot="dropdown" v-if="user_id === -1">
+                <a href="/login"
+                  ><el-dropdown-item icon="el-icon-user-solid"
+                    >登录</el-dropdown-item
+                  ></a
+                >
+              </el-dropdown-menu>
+              <el-dropdown-menu slot="dropdown" v-else>
+                <a href="/person"
+                  ><el-dropdown-item v-if="isAdmin"
+                    >管理员页面</el-dropdown-item
+                  ></a
+                >
                 <a href="/person"
                   ><el-dropdown-item icon="el-icon-user-solid"
                     >个人主页</el-dropdown-item
@@ -71,23 +76,21 @@
                 >
               </el-dropdown-menu>
             </el-dropdown>
-            </div>
-    
+          </div>
         </div>
 
-        
         <el-drawer
-            title="我的消息"
-            :visible.sync="drawer"
-            :direction="direction">
-          <div v-for="per in messages" :key = "per.index">
-            <a herf = "">
-            <img class = "el-drawer-img" src = "../assets/user/int.jpg">
-            <span>{{per.name}} @了你</span>
-            </a>  
+          title="我的消息"
+          :visible.sync="drawer"
+          :direction="direction"
+        >
+          <div v-for="per in messages" :key="per.index">
+            <a herf="">
+              <img class="el-drawer-img" src="../assets/user/int.jpg" />
+              <span>{{ per.name }} @了你</span>
+            </a>
           </div>
         </el-drawer>
-
       </div>
     </template>
     <router-view :key="$router.currentRoute.fullPath"></router-view>
@@ -95,7 +98,7 @@
 </template>
 
 <script>
-import qs from 'qs';
+import qs from "qs";
 export default {
   data() {
     var messages = [
@@ -143,49 +146,77 @@ export default {
     var navigate = true;
     return {
       navigate,
-      userIcon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
+      userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
       messages,
       drawer: false,
-      isAdmin:false,
+      isAdmin: false,
       direction: "rtl",
-      userName:"游客",
-      styleOfIcon:"width:36px"
+      userName: "游客",
+      styleOfIcon: "width:36px",
+      user_id: -1,
     };
   },
   mounted() {
     this.$nextTick(() => {
       this.updateUser();
-  });
+    });
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.updateUser();
+    });
   },
   methods: {
-    updateUser(){
+    updateUser() {
+      var user = this.$store.getters.getUser.user;
+      console.log(user);
+      if (!user || user.id === -1) {
+        this.userIcon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+        var passenger = {
+          id: -1,
+          usenam: '游客'
+        };
+        this.$store.dispatch("saveUserInfo", {
+          user: passenger,
+        });
+        this.user_id = -1;
+        return;
+      }
       var params = {
-        user_id: this.$store.getters.getUser.user.id,
+        user_id: user.id,
       };
+      this.user_id = user.id;
       this.$axios
         .post("/user/detail", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
             console.log(res.data);
             var user = res.data.data;
-            var len=this.$axios.defaults.baseURL.length;
+            var len = this.$axios.defaults.baseURL.length;
             this.userName = user.name;
-            if(user.image !== "")
-              this.userIcon =this.$axios.defaults.baseURL.substring(0,len-4)+user.image
-            console.log(this.userIcon)
+            if (user.image !== "")
+              this.userIcon =
+                this.$axios.defaults.baseURL.substring(0, len - 4) + user.image;
+            console.log(this.userIcon);
             var img = new Image();
             img.src = this.userIcon;
-            if(img.width>img.height)
-              this.styleOfIcon = "height:36px;position: relative; top:0px; left:-"+(img.width-img.height)/img.height*18+"px";
-            else  
-              this.styleOfIcon = "width:36px;position: relative;  left:0px;top:-"+(img.height-img.width)/img.width*18+"px";
+            if (img.width > img.height)
+              this.styleOfIcon =
+                "height:36px;position: relative; top:0px; left:-" +
+                ((img.width - img.height) / img.height) * 18 +
+                "px";
+            else
+              this.styleOfIcon =
+                "width:36px;position: relative;  left:0px;top:-" +
+                ((img.height - img.width) / img.width) * 18 +
+                "px";
             user.admin = parseInt(user.admin);
-            switch(user.admin){
+            switch (user.admin) {
               case 1:
-                this.isAdmin=true;
+                this.isAdmin = true;
                 break;
               default:
-                this.isAdmin=false;
+                this.isAdmin = false;
                 break;
             }
           } else {
@@ -195,7 +226,6 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-
     },
     // 初始化
     isLogin(msg) {
@@ -238,13 +268,13 @@ export default {
 #login {
   position: absolute;
   top: 20px;
-  left:1500px;
+  left: 1500px;
   display: flex;
   flex-wrap: nowrap;
 }
-.demonstration{
-  width:35px;
-  height:35px;
+.demonstration {
+  width: 35px;
+  height: 35px;
   margin-right: 5px;
   border-color: rgb(192, 192, 192);
   border-style: solid;
@@ -258,7 +288,7 @@ export default {
   margin-right: 200px;
   float: left;
 }
-.el-dropdown-link{
+.el-dropdown-link {
   font-size: 15px;
   font-weight: 600;
 }
@@ -304,7 +334,6 @@ button {
   border-radius: 50%;
   overflow: hidden;
 }
-
 </style>
 
 

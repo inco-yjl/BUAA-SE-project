@@ -421,7 +421,7 @@ export default {
   width: 1600px;
   padding-left: 100px;
 }
-#videopage-body {
+#bookpage-body {
   width: 1580px;
   padding-bottom: 50px;
   display: flex;

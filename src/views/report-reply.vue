@@ -8,7 +8,7 @@
         <el-empty description="目前没有需要审核的举报哦，明天再来探索吧！"></el-empty>
       </div>
       <div class = "vertical body-all" v-if = !noreportFormVisible>
-      <div v-for="(mes,index) in message"  :key = "index" class = "repoet-mes" v-if=!noreportFormVisible>
+      <div v-for="(mes,index) in message"  :key = "index" class = "repoet-mes">
         <div v-if="mes.flag === 0" class = "vertical mes-body" >
           <img src = "../assets/user/int.jpg" class = "repoet-img">
           <div class = "div-report">
