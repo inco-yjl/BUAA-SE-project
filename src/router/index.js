@@ -151,7 +151,12 @@ const routes = [
       path: '/reportreply',
       name: 'report-reply',
       component: () => import('../views/report-reply.vue')
-    }
+    },
+    {
+      path: '/movieeditor',
+      name: 'movieeditor',
+      component: () => import('../views/Video/MovieEditor.vue')
+    }  
   ]
 },
 {
