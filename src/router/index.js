@@ -156,7 +156,22 @@ const routes = [
       path: '/movieeditor',
       name: 'movieeditor',
       component: () => import('../views/Video/MovieEditor.vue')
-    }  
+    },
+    {
+      path: '/teleeditor',
+      name: 'teleeditor',
+      component: () => import('../views/Video/TeleEditor.vue')
+    },
+    {
+      path: '/telecomment',
+      name: 'telecomment',
+      component: () => import('../views/Video/TeleComment.vue')
+    },
+    {
+      path: '/moviecomment',
+      name: 'moviecomment',
+      component: () => import('../views/Video/MovieComment.vue')
+    },
   ]
 },
 {

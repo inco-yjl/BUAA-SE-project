@@ -81,7 +81,7 @@
             v-for="movie in collections"
             :key="movie.id"
           >
-            <a class="collection-item">
+            <a class="collection-item" @click = "tomoviedetail(movie.id)">
               <img class="collection-img" :src="movie.image" />
               <div class="collection-info">
                 《{{ movie.name }}》
@@ -234,6 +234,9 @@ export default {
       },
     ];
     var collect = false;
+    var hotdt = [];
+    var newdt = [];
+    var db = [];
     return {
       collections,
       passages,
@@ -242,6 +245,9 @@ export default {
       id,
       moviecomments,
       loadSuccess,
+      hotdt,
+      newdt,
+      db,
     };
   },
   methods: {
@@ -283,6 +289,12 @@ export default {
           query: { id: this.id },
         });
       }
+    },
+    tomoviedetail(id) { 
+      this.$router.push({
+        name: "moviedetail",
+        query: { id: id },
+      });
     },
     clickuncollect() {
       if (this.$store.getters.getUser.user.id === -1) {
@@ -373,7 +385,7 @@ export default {
       document
         .getElementById("select-hot-comment")
         .setAttribute("class", "selection_un");
-      this.dt = this.newdt;
+      this.db = this.newdt;
       this.Updatediary();
     },
     hotComment() {
@@ -381,9 +393,47 @@ export default {
       document
         .getElementById("select-new-comment")
         .setAttribute("class", "selection_un");
-      this.dt = this.topic.hotdt;
+      this.db = this.topic.hotdt;
       this.Updatediary();
     },
+  },
+  getdt() {
+    var params = {
+      movie_id: this.id,
+    };
+    this.$axios
+        .post("/movie/hot_article", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.hotdt = [];
+            console.log(res.data.data);
+            var i=0;
+            for(i=0;i<5 && i<res.data.data.length;i++)
+              this.hotdt.push(res.data.data[i]);
+            this.db = this.hotdt;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    this.$axios
+        .post("/tele/new_article", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.newdt = [];
+            console.log(res.data.data);
+            var i=0;
+            for(i=0;i<5 && i<res.data.data.length;i++)
+              this.newdt.push(res.data.data[i]);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   },
   mounted() {
     this.updateContent();
