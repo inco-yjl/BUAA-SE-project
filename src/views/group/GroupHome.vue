@@ -6,27 +6,41 @@
         <div class="bookpage-title">
         <img src="@/assets/group/hotgroup.png" />最受欢迎
       </div>
-      <div class="group_div" v-for="group in hotgroup">
-        <img :src="group.img" class = "group_div_img" alt="">
-        <div class = "group_div_m">
-          <span>&nbsp;</span>
-          <span class="group_div_m_font_title">{{group.name}}</span>
-          <span class = "group_div_m_font_num">({{group.number}})</span>
-        </div>
-      </div>
+        
+        <div
+            class="collection-list"
+            v-for="group in hotgroup"
+            :key="group.id"
+        >
+          <a class="collection-item" @click = "usetogroupdetail(group.id)">
+            <img class="collection-img" :src="group.img" />
+            <div class="collection-info">
+              {{ group.name }}
+              <div></div>
+              {{ group.number }}人参与
+            </div>
+          </a>
+        </div> 
+        
       </div>
       
       <div class = "bookpage-hit">
         <div class="bookpage-title">
           <img src="@/assets/group/maxgroup.png" />最多人在
         </div>
-        <div class="group_div" v-for="group in maxgroup">
-          <img :src="group.img" class = "group_div_img" alt="">
-          <div class = "group_div_m">
-            <span>&nbsp;</span>
-            <span class="group_div_m_font_title">{{group.name}}</span>
-            <span class = "group_div_m_font_num">({{group.number}})</span>
-          </div>
+        <div
+            class="collection-list"
+            v-for="group in maxgroup"
+            :key="group.id"
+        >
+          <a class="collection-item" @click = "usetogroupdetail(group.id)">
+            <img class="collection-img" :src="group.img" />
+            <div class="collection-info">
+              {{ group.name }}
+              <div></div>
+              {{ group.number }}人参与
+            </div>
+          </a>
         </div>
       </div>
       
@@ -34,82 +48,104 @@
         <div class="bookpage-title">
           <img src="@/assets/group/hotgroup.png" />热门讨论
         </div>
-        <div class="group_div" v-for="group in hotgroup">
-          <img :src="group.img" class = "group_div_img" alt="">
-          <div class = "group_div_m">
-            <span>&nbsp;</span>
-            <span class="group_div_m_font_title">{{group.name}}</span>
-            <span class = "group_div_m_font_num">({{group.number}})</span>
+        <div
+            class="book-comments-display"
+            v-for="comment in groupcommit"
+            :key="comment.id"
+        >
+          <hr />
+          <div class="comment-display-body">
+            <div class="display-publisher">
+              <a class="userOfcomment" href="/otherusers/1">
+                <img class="iconOfuser" :src="comment.usericon" /><span
+                  class="nameOfuser"
+              >{{ comment.username }}</span
+              >
+              </a>
+              <span class="publish-info"
+              >{{ comment.date }}&ensp;发布于<a class="comment-book-name"
+              >{{ comment.groupname }}</a
+              ></span
+              >
+            </div>
+            <div class="comment-origin-pic">
+              <a class="comment-origin" href="javascript:void(0)"
+              ><img class="comment-pic" :src="comment.img" />
+              </a>
+            </div>
+            <div class="commenttext">
+              <a class="commenttext-origin" @click="bookcomment">{{
+                  comment.content
+                }}</a>
+            </div>
           </div>
         </div>
       </div>
       
     </div>
-    <div class = "vertical aside-right">
-      <group-person></group-person>
-      <div class = "groupusually">
-        <h2 style="text-align: left" class = "title">常去的小组</h2>
-        <div>
-          <ul>
-            <li>
-              <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
-                <div class="normal_active"> <span class="massage">能看看你的os吗</span> </div>
-                <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/1.jpg"> </div>
-              </div>
-            </li>
-            <li>
-              <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
-                <div class="normal_active"> <span class="massage">原神</span> </div>
-                <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/2.jpg"> </div>
-              </div>
-            </li>
-            <li>
-              <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
-                <div class="normal_active"> <span class="massage">龙斗士</span> </div>
-                <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/3.jpg"> </div>
-              </div>
-            </li>
-            <li>
-              <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
-                <div class="normal_active"> <span class="massage">双人成行</span> </div>
-                <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/4.jpg"> </div>
-              </div>
-            </li>
-            <li>
-              <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
-                <div class="normal_active"> <span class="massage">想养花花草草</span> </div>
-                <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/5.jpg"> </div>
-              </div>
-            </li>
-            <li>
-              <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
-                <div class="normal_active"> <span class="massage">最伟大的人</span> </div>
-                <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/6.jpg"></div>
-              </div>
-            </li>
-            <li>
-              <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
-                <div class="normal_active"> <span class="massage">希望得到认可</span> </div>
-                <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/1.jpg"> </div>
-              </div>
-            </li>
-            <li>
-              <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
-                <div class="normal_active"> <span class="massage">你也讨厌上课吗</span> </div>
-                <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/2.jpg"></div>
-              </div>
-            </li>
-            <li>
-              <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
-                <div class="normal_active"> <span class="massage">哈哈大笑</span> </div>
-                <div class="heigh_active"> <img class = "hidden_img" src = "@/assets/img/3.jpg"> </div>
-              </div>
-            </li>
-          </ul>
-          <span>&nbsp;</span>
+    <div class="aside">
+      <div class="collection">
+        <div class="bookpage-title">
+          <a href="../GroupHome">
+            <img src="@/assets/guide/book_collection.png" />我加入的小组
+          </a>
+        </div>
+        <div
+            class="collection-list"
+            v-for="group in addgroup"
+            :key="group.id"
+        >
+          <div class = "groupusually">
+            <h5 style="text-align: left" class = "title-aside">我加入的小组</h5>
+            <!--<div v-for="group in addgroup">
+              <ul>
+                <li>
+                  <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
+                    <div class="normal_active"> <span class="massage">{{ group.name }}}</span> </div>
+                    <div class="heigh_active"> <img class = "hidden_img" :src = "group.img"> </div>
+                  </div>
+                </li>
+              </ul>
+              <span>&nbsp;</span>
+            </div>-->
+          </div>
+          <a class="collection-item" @click = "usetogroupdetail(group.id)">
+            <img class="collection-img" :src="group.img" />
+            <div class="collection-info">
+              {{ group.name }}
+              <el-rate
+                  v-model="group.star"
+                  disabled
+                  show-score
+                  text-color="#ff9900"
+                  score-template="{value}"
+                  disabled-void-color="ffffff"
+              >
+              </el-rate>
+              {{ group.number }}人参与
+            </div>
+          </a>
         </div>
       </div>
-    </div>  
+      <div class="collection">
+        <div class="bookpage-title">
+          <a href="../user/books">
+            <img src="@/assets/guide/mycomment.png" />我的讨论
+          </a>
+        </div>
+        <ul class="book-comment-list hotlist">
+          <li
+              :v-if="passages.length > 0"
+              v-for="passage in passages"
+              :key="passage.id"
+          >
+            <a @click="ToComment(passage.id)">{{ passage.title }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+ 
   </div>  
 </template>
 
@@ -120,48 +156,12 @@ import "vue-slick-carousel/dist/vue-slick-carousel.css";
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 import search from "@/components/SelectSearch.vue";
 import groupPerson from "@/components/GroupPerson";
+import qs from "qs";
 
 export default {
   name: "GroupHome",
   data() {
-    var hotgroup = [
-      {
-        name: "原神",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/23/hgcSD.jpg",
-        number: 1440,
-      },
-      {
-        name: "龙族",
-        id: 2,
-        img: "https://i.imgtg.com/2022/05/23/hgdwF.jpg",
-        number: 1337,
-      },
-      {
-        name: "洛圣都",
-        id: 3,
-        img: "https://i.imgtg.com/2022/05/23/hgVn6.jpg",
-        number: 204,
-      },
-      {
-        name: "山水之间",
-        id: 4,
-        img: "https://i.imgtg.com/2022/05/23/hgYDP.jpg ",
-        number: 785,
-      },
-      {
-        name: "高考",
-        id: 5,
-        img: "https://i.imgtg.com/2022/05/23/hgf8b.jpg",
-        number: 7556,
-      },
-      {
-        name: "于此诀别世界",
-        id: 6,
-        img: "https://i.imgtg.com/2022/05/23/hg9kl.jpg",
-        number: 451,
-      },
-    ];
+    var hotgroup = [{}];
     var maxgroup = [
       {
         name: "星空",
@@ -249,9 +249,21 @@ export default {
         number: 10985,
       },
     ];
+    var groupcommit= [
+      {
+        name: "喜羊羊与灰太狼",
+        id: 1,
+        img:  "https://i.imgtg.com/2022/05/23/hmBBx.jpg",
+        content: "ababababababa",
+        usericon: "https://i.imgtg.com/2022/05/23/hmBBx.jpg",
+        username: "inty",
+        date: "06.08"
+      }
+    ]
     return {
       hotgroup,
       maxgroup,
+      groupcommit,
     };
   },
   components: {
@@ -259,8 +271,66 @@ export default {
     search,
     groupPerson,
   },
-  methods: {},
+  methods: {
+    gethootgroupmes() {
+      var params = {
+        num: 6,
+      };
+      console.log("开始获取热门小组")
+      this.$axios
+          .post("/group/hot", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("获取热门小组成功");
+              this.hotgroup = [];
+              var i = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                res.data.data[i].star = parseFloat(res.data.data[i].star);
+                this.hotgroup.push(res.data.data[i]);
+              }
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    usetogroupdetail(id) {
+      this.$router.push({
+        name: "groupdetail",
+        query: { id: id },
+      });
+    },
+    getaddgroup() {
+      var params = {
+        num: 6,
+      };
+      console.log("开始获取热门小组")
+      this.$axios
+          .post("/group/hot", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("获取热门小组成功");
+              this.hotgroup = [];
+              var i = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                res.data.data[i].star = parseFloat(res.data.data[i].star);
+                this.hotgroup.push(res.data.data[i]);
+              }
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    }
+  },
   mounted() {
+    this.gethootgroupmes();
     window.onscroll = function (e) {
       console.log("slide");
       var vertical = document.getElementsByClassName("bookpage-vertical").item(0);
@@ -282,6 +352,323 @@ export default {
 </script>
 
 <style scoped>
+.aside {
+  position:relative;
+  float: left;
+  margin-top: 80px;
+  margin-left: 10px;
+  margin-right: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 25px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  background-color: white;
+  box-shadow: 0px 2px 3px #888888a6;
+  height: 750px;
+  width: 352px;
+}
+.aside-slide {
+  margin-top: 80px;
+  margin-left: 10px;
+  margin-right: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 25px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  background-color: white;
+  box-shadow: 0px 2px 3px #888888a6;
+  height: 750px;
+  position: fixed;
+  left: 1260px;
+  top: -50px;
+  width: 352px;
+}
+.bookpage-comments {
+  margin-bottom: 50px;
+}
+.book-comments-display {
+  width: 1000px;
+}
+.comment-display-body {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 30px;
+}
+.display-publisher {
+  margin-top: 0;
+  padding-top: 0;
+  width: 920px;
+}
+.publish-info {
+  padding-left: 20px;
+  font-weight: 400;
+  color: rgb(157, 157, 157);
+}
+.comment-pic {
+  height: 150px;
+}
+div.comment-origin-pic {
+  position: relative;
+  height: 200px;
+  left: 0;
+  top: 20px;
+  margin-left: 5px;
+}
+.nameOfuser {
+  font-family: Source Han Sans CN Normal;
+  font-size: 17px;
+}
+.comment-content {
+  display: flex;
+  flex-wrap: row;
+}
+.display-publisher a {
+  font-weight: 500;
+  font-size: 22px;
+  color: black;
+  text-decoration: none;
+}
+.display-publisher a:hover {
+  color: rgb(0, 166, 255);
+}
+.iconOfuser {
+  border-radius: 20px;
+  margin-right: 5px;
+  vertical-align: sub;
+}
+.commenttext {
+  width: 800px;
+  margin-left: 30px;
+}
+a.commenttext-origin {
+  position: relative;
+  top: 20px;
+  font-size: 17px;
+  text-decoration: none;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  color: black;
+  transition: 0.3s ease;
+}
+a.commenttext-origin:hover {
+  color: rgb(101, 101, 101);
+  text-decoration: none;
+}
+a.commenttext-origin span {
+  font-size: 20px;
+  font-weight: 600;
+  color: black;
+  transition: 0.3s ease;
+}
+a.commenttext-origin span:hover {
+  text-decoration: underline;
+}
+a.comment-book-name {
+  font-weight: 400;
+  font-size: 17px;
+  color: rgb(157, 157, 157);
+}
+.collection {
+  height: 550px;
+}
+.collection-list a {
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  border-radius: 5px;
+  background-color: #dfdede55;
+  margin-top: 10px;
+  width: 300px;
+}
+.collection-list a:hover {
+  background-color: #91919155;
+}
+.collection .bookpage-title a {
+  font-family: "Noto Serif SC", serif;
+  color: black;
+  transition: all 0.1s ease;
+  text-decoration: none;
+  font-size: 22px;
+}
+.collection .bookpage-title a:hover {
+  color: rgb(2, 98, 182);
+}
+.collection .bookpage-title a:hover::after {
+  opacity: 1;
+}
+.collection .bookpage-title a:active {
+  color: rgb(0, 166, 255);
+}
+.collection-img {
+  width: 85px;
+  margin-right: 20px;
+}
+.collection-item {
+  display: flex;
+}
+.collection-info {
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 30px;
+  font-family: Source Han Sans CN Normal;
+}
+
+.hotlist a {
+  color: rgb(2, 98, 182);
+  font-weight: 500;
+}
+.hotlist a:hover {
+  background-color: rgb(213, 230, 245);
+  font-weight: 600;
+}
+.book-comment-list a {
+  font-size: 18px;
+  font-family: Source Han Sans CN Normal;
+}
+.book-comment-list a:hover {
+  font-weight: 600;
+  color: rgb(2, 98, 182);
+}
+.search-number {
+  margin-top:50px;
+  margin-left: 300px;
+}
+.title-aside {
+  font-size: 26px;
+}
+.comment-display-body {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 30px;
+}
+.display-publisher {
+  margin-top: 0;
+  padding-top: 0;
+  width: 920px;
+}
+.publish-info {
+  padding-left: 20px;
+  font-weight: 400;
+  color: rgb(157, 157, 157);
+}
+.comment-pic {
+  height: 150px;
+}
+div.comment-origin-pic {
+  position: relative;
+  height: 200px;
+  left: 0;
+  top: 20px;
+  margin-left: 5px;
+}
+.nameOfuser {
+  font-family: Source Han Sans CN Normal;
+  font-size: 17px;
+}
+.comment-content {
+  display: flex;
+  flex-wrap: row;
+}
+.display-publisher a {
+  font-weight: 500;
+  font-size: 22px;
+  color: black;
+  text-decoration: none;
+}
+.display-publisher a:hover {
+  color: rgb(0, 166, 255);
+}
+.iconOfuser {
+  height: 30px;
+  margin-right: 5px;
+  vertical-align: sub;
+}
+.commenttext {
+  width: 650px;
+  margin-left: 30px;
+}
+a.commenttext-origin {
+  position: relative;
+  top: 36px;
+  font-size: 17px;
+  text-decoration: none;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  color: black;
+  transition: 0.3s ease;
+}
+a.commenttext-origin:hover {
+  color: gray;
+  text-decoration: none;
+}
+a.comment-book-name {
+  font-weight: 400;
+  font-size: 17px;
+  color: rgb(157, 157, 157);
+}
+.collection {
+  height: 530px;
+}
+.collection-list {
+  width: 960px;
+}
+.collection-list a {
+  position: relative;
+  float: left;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  border-radius: 5px;
+  background-color: #dfdede55;
+  margin-top: 10px;
+  width: 300px;
+  overflow: hidden;
+}
+.collection-list a:hover {
+  background-color: #91919155;
+}
+.collection .videopage-title a {
+  font-family: "Noto Serif SC", serif;
+  color: black;
+  transition: all 0.1s ease;
+  text-decoration: none;
+  font-size: 22px;
+}
+.collection .videopage-title a:hover {
+  color: rgb(2, 98, 182);
+}
+.collection .videopage-title a:hover::after {
+  opacity: 1;
+}
+.collection .videopage-title a:active {
+  color: rgb(0, 166, 255);
+}
+.collection-img {
+  width: 85px;
+  height: 100px;
+  margin-right: 20px;
+  overflow: hidden;
+}
+.collection-item {
+  display: flex;
+}
+.collection-info {
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 30px;
+  font-family: Source Han Sans CN Normal;
+}
+
 .title{
   font-weight: bold;
   font-family: "Adobe 宋体 Std L",serif;

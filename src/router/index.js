@@ -123,9 +123,9 @@ const routes = [
       component: () => import('../views/group/GroupHome.vue')
     },
     {
-      path: '/groupinit',
-      name: 'Groupinit',
-      component: () => import('../views/group/groupinit.vue')
+      path: '/groupdetail',
+      name: 'groupdetail',
+      component: () => import('../views/group/groupdetail.vue')
     },
     {
       path: '/groupadmin',

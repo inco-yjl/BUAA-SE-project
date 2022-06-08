@@ -129,6 +129,192 @@
 
 
 <style scoped>
+.aside {
+  margin-top: 80px;
+  margin-left: 10px;
+  margin-right: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 25px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  background-color: white;
+  box-shadow: 0px 2px 3px #888888a6;
+  height: 750px;
+  width: 352px;
+}
+.aside-slide {
+  margin-top: 80px;
+  margin-left: 10px;
+  margin-right: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 25px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  background-color: white;
+  box-shadow: 0px 2px 3px #888888a6;
+  height: 750px;
+  position: fixed;
+  left: 1260px;
+  top: -50px;
+  width: 352px;
+}
+.bookpage-comments {
+  margin-bottom: 50px;
+}
+.book-comments-display {
+  width: 1000px;
+}
+.comment-display-body {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 30px;
+}
+.display-publisher {
+  margin-top: 0;
+  padding-top: 0;
+  width: 920px;
+}
+.publish-info {
+  padding-left: 20px;
+  font-weight: 400;
+  color: rgb(157, 157, 157);
+}
+.comment-pic {
+  height: 150px;
+}
+div.comment-origin-pic {
+  position: relative;
+  height: 200px;
+  left: 0;
+  top: 20px;
+  margin-left: 5px;
+}
+.nameOfuser {
+  font-family: Source Han Sans CN Normal;
+  font-size: 17px;
+}
+.comment-content {
+  display: flex;
+  flex-wrap: row;
+}
+.display-publisher a {
+  font-weight: 500;
+  font-size: 22px;
+  color: black;
+  text-decoration: none;
+}
+.display-publisher a:hover {
+  color: rgb(0, 166, 255);
+}
+.iconOfuser {
+  border-radius: 20px;
+  margin-right: 5px;
+  vertical-align: sub;
+}
+.commenttext {
+  width: 800px;
+  margin-left: 30px;
+}
+a.commenttext-origin {
+  position: relative;
+  top: 20px;
+  font-size: 17px;
+  text-decoration: none;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  color: black;
+  transition: 0.3s ease;
+}
+a.commenttext-origin:hover {
+  color: rgb(101, 101, 101);
+  text-decoration: none;
+}
+a.commenttext-origin span {
+  font-size: 20px;
+  font-weight: 600;
+  color: black;
+  transition: 0.3s ease;
+}
+a.commenttext-origin span:hover {
+  text-decoration: underline;
+}
+a.comment-book-name {
+  font-weight: 400;
+  font-size: 17px;
+  color: rgb(157, 157, 157);
+}
+.collection {
+  height: 550px;
+}
+.collection-list a {
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  border-radius: 5px;
+  background-color: #dfdede55;
+  margin-top: 10px;
+  width: 300px;
+}
+.collection-list a:hover {
+  background-color: #91919155;
+}
+.collection .bookpage-title a {
+  font-family: "Noto Serif SC", serif;
+  color: black;
+  transition: all 0.1s ease;
+  text-decoration: none;
+  font-size: 22px;
+}
+.collection .bookpage-title a:hover {
+  color: rgb(2, 98, 182);
+}
+.collection .bookpage-title a:hover::after {
+  opacity: 1;
+}
+.collection .bookpage-title a:active {
+  color: rgb(0, 166, 255);
+}
+.collection-img {
+  width: 85px;
+  margin-right: 20px;
+}
+.collection-item {
+  display: flex;
+}
+.collection-info {
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 30px;
+  font-family: Source Han Sans CN Normal;
+}
+
+.hotlist a {
+  color: rgb(2, 98, 182);
+  font-weight: 500;
+}
+.hotlist a:hover {
+  background-color: rgb(213, 230, 245);
+  font-weight: 600;
+}
+.book-comment-list a {
+  font-size: 18px;
+  font-family: Source Han Sans CN Normal;
+}
+.book-comment-list a:hover {
+  font-weight: 600;
+  color: rgb(2, 98, 182);
+}
+.search-number {
+  margin-top:50px;
+  margin-left: 300px;
+}
 .m_div{
   float: left;
   position: relative;
@@ -519,18 +705,19 @@ div.body{
 import search from "@/components/SelectSearch.vue";
 import diary from "@/components/TopicDisplay.vue";
 import App from "@/App.vue";
+import qs from "qs";
 export default {
-  name: "groupinit",
+  name: "groupdetail",
   components: {
     search,
     diary,
     App,
   },
   data() {
-    var id = this.$route.params.id; //根据id来询问
+    var id = this.$route.query.id; //根据id来询问
     var group = {
+      peoplenum: 20,
       name: "龙族",
-      peoplenum: 22,
     };
     var topmes = [
       {
@@ -752,6 +939,42 @@ export default {
         this.ft_color = "#6cf57c";
         this.group.peoplenum--;
       }
+    },
+    getgroupmes() {
+      var params = {
+        group_id: this.id,
+      };
+      this.$axios
+          .post("/group/", qs.stringify(params))
+          .then((res) => {
+            if (res.data.errno === 0)
+            {
+             this.group = res.data.data; 
+            } else {
+              this.$message.error("收藏失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    getarc() {
+      var params = {
+        group_id: this.id,
+      };
+      this.$axios
+          .post("/group/hot_article", qs.stringify(params))
+          .then((res) => {
+            if (res.data.errno === 0)
+            {
+              this.group = res.data.data;
+            } else {
+              this.$message.error("收藏失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     },
     favorthing(e) {
       this.do = !this.do;
