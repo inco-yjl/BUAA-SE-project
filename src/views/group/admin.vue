@@ -43,7 +43,9 @@
             </button>
           </span>
           <div  style="position:relative; float: left; width: 1450px; margin-top: 30px;">
-            <div class = "m_div m_nothead " v-for="mes in heames" :key = "index">
+            <el-empty description="这里什么都没有哦" v-if="(heames === topmes && topempty === true) || (valmes === heames && valempty === true)"></el-empty>
+            <div class = "m_div m_nothead " v-for="mes in heames" :key = "index" v-if="!((heames === topmes && topempty === true) || (valmes === heames && valempty === true))">
+              <div>
               <span class = "title_l font_l " style="color: #444444;">{{mes.name}}</span>
               <span class = "res_l font_l">{{mes.replynumber}}回复</span>
               <span class = "time_l font_l">{{mes.time}}</span>
@@ -52,7 +54,7 @@
                   v-if = "heames === topmes"
                   class="topic-button"
                   :style="{ backgroundColor: bg_color, color: ft_color }"
-                  @click="del()"
+                  @click="deltop()"
               >
                 取消置顶
               </button>
@@ -60,11 +62,11 @@
                   v-if = "heames === valmes"
                   class="topic-button"
                   :style="{ backgroundColor: bg_color, color: ft_color }"
-                  @click="del()"
+                  @click="delvalue()"
               >
                 取消精华
               </button>
-
+              </div>
             </div>
             <span>&nbsp;</span>
           </div>
@@ -86,14 +88,14 @@
               <button
                   class="topic-button"
                   :style="{ backgroundColor: bg_color, color: ft_color }"
-                  @click="del()"
+                  @click="addmes(mes.id,1)"
               >
                 置顶
               </button>
               <button
                   class="topic-button"
                   :style="{ backgroundColor: bg_color, color: ft_color }"
-                  @click="del()"
+                  @click="addmes(mes.id,2)"
               >
                 精华
               </button>
@@ -493,6 +495,7 @@ div.body{
 import search from "@/components/SelectSearch.vue";
 import diary from "@/components/TopicDisplay.vue";
 import App from "@/App.vue";
+import qs from "qs";
 export default {
   name: "groupinit",
   components: {
@@ -501,85 +504,13 @@ export default {
     App,
   },
   data() {
-    var id = this.$route.params.id; //根据id来询问
-    var group = {
+    var id = this.$route.query.id; //根据id来询问
+    var group= {
       name: "龙族",
-      peoplenum: 22,
+      peoplenum: 123,
     };
-    var topmes = [
-      {
-        name: "体育网课！？",
-        id: 2,
-        replynumber: 47,
-        time: "2022-4-13",
-        groupname: "体育场",
-      },
-      {
-        name: "上午核酸人数查询",
-        id: 2,
-        replynumber: 66,
-        time: "2022-4-18",
-        groupname: "校医院",
-      },
-      {
-        name: "软工进度？？？",
-        id: 2,
-        replynumber: 56,
-        time: "2022-4-10",
-        groupname: "se学习小组",
-      },
-      {
-        name: "lab3 2小时 0分！",
-        id: 2,
-        replynumber: 1,
-        time: "2022-4-13",
-        groupname: "se学习小组",
-      },
-      {
-        name: "软工遇到no match",
-        id: 3,
-        replynumber: 534,
-        time: "2022-4-12",
-        groupname: "os学习小组",
-      },
-      {
-        name: "oslab4只得51分可能是因为什么",
-        id: 4,
-        replynumber: 5,
-        time: "2022-4-10",
-        groupname: "os学习小组",
-      },
-    ];
-    var valmes = [
-      {
-        name: "鸭鸭需要送到合一改造",
-        id: 1,
-        replynumber: 451,
-        time: "2022-4-18",
-        groupname: "唐博园",
-      },
-      {
-        name: "lab3 2小时 0分！",
-        id: 2,
-        replynumber: 1,
-        time: "2022-4-13",
-        groupname: "se学习小组",
-      },
-      {
-        name: "软工遇到no match",
-        id: 3,
-        replynumber: 534,
-        time: "2022-4-12",
-        groupname: "os学习小组",
-      },
-      {
-        name: "oslab4只得51分可能是因为什么",
-        id: 4,
-        replynumber: 5,
-        time: "2022-4-10",
-        groupname: "os学习小组",
-      },
-    ];
+    var topmes = [] ;
+    var valmes = [];
     var hotmes = [
       {
         name: "这个bug是因为什么呢",
@@ -693,7 +624,12 @@ export default {
     ];
     var nowmes = hotmes;
     var heames = topmes;
+    var topempty = false;
+    var valempty = false;
     return {
+      topempty,
+      valempty,
+      id,
       heames,
       valmes,
       topmes,
@@ -713,6 +649,180 @@ export default {
     };
   },
   methods: {
+    getgroup() {
+      var params = {
+        group_id: this.id,
+      };
+      this.$axios
+          .post("/group/hot", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("获取小组信息成功");
+              this.group = res.data.data;
+            } else {
+              this.$message.error("查询失败");
+              this.$message.error(res.data.errno);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    getgrouphot() {
+      var params = {
+        group_id: this.id,
+      };
+      this.$axios
+          .post("/group/hot", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("获取小组热门讨论成功");
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                res.data.data[i].star = parseFloat(res.data.data[i].star);
+                this.allmes.push(res.data.data[i]);
+              }
+            } else {
+              this.$message.error("查询失败");
+              this.$message.error(res.data.errno);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    srcmes() {
+      console.log("11");
+      var params = {
+        group_id: this.id,
+        kind: 1,
+      };
+      this.$axios
+          .post("/group/search", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("获取置顶信息成功");
+              this.topmes = [];
+              var i = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                res.data.data[i].star = parseFloat(res.data.data[i].star);
+                this.topmes.push(res.data.data[i]);
+              }
+              this.heames = this.topmes;
+            } 
+            else if(res.data.errno === 1002) {
+              this.topmes = [];
+              this.heames = this.topmes;
+              this.topempty = true;
+            }
+            else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      params = {
+        group_id: this.id,
+        kind: 2,
+      };
+      this.$axios
+          .post("/group/search", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("获取精华信息成功");
+              this.valmes = [];
+              var i = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                res.data.data[i].star = parseFloat(res.data.data[i].star);
+                this.valmes.push(res.data.data[i]);
+              }
+            }
+            else if(res.data.errno === 1002) {
+              this.valmes = [];
+              this.valempty = true;
+            }
+            else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    delmes(id,kind) {
+      var params = {
+        kind: kind,
+        group_id: this.id,
+        article_id: id,
+      };
+      this.$axios
+          .post("/group/delete", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("取消成功");
+              this.valmes = [];
+              var i = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                res.data.data[i].star = parseFloat(res.data.data[i].star);
+                this.valmes.push(res.data.data[i]);
+              }
+              this.$message({
+                message: "取消成功",
+                type: "success",
+              });
+            }
+            else if(res.data.errno === 1002) {
+              this.valmes = [];
+              this.valempty = true;
+            }
+            else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    addmes(id,kind) {
+      var params = {
+        kind: kind,
+        group_id: this.id,
+        article_id: id,
+      };
+      this.$axios
+          .post("/group/add", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("申请成功");
+              this.valmes = [];
+              var i = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                res.data.data[i].star = parseFloat(res.data.data[i].star);
+                this.valmes.push(res.data.data[i]);
+              }
+              this.$message({
+                message: "申请成功",
+                type: "success",
+              });
+            }
+            else if(res.data.errno === 1002) {
+              this.valmes = [];
+              this.valempty = true;
+            }
+            else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
     favor(e) {
       this.liked = !this.liked;
       if (this.liked) {
@@ -811,8 +921,10 @@ export default {
     changeTopicdt() {},
   },
   mounted() {
+    console.log("begin");
+    this.getgrouphot();
+    this.srcmes();
     this.$parent.navigate = true;
-    this.Updatediary();
     this.updateButton();
   },
 };
