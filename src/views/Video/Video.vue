@@ -580,7 +580,7 @@ export default {
               var movie = [];
               movie = res.data.data;
               var i = 0;
-              for (i = 0; i < 20; i++) {
+              for (i = 0; i < 10; i++) {
                 var length = 14 - movie[i].name.length;
                 if (movie[i].name.length > 7 && movie[i].director.length > length)
                   movie[i].director = movie[i].director.substring(0, length - 2) + "…";
@@ -588,7 +588,7 @@ export default {
                   movie[i].director = movie[i].director.substring(0, 7) + "…";
               }
               this.hotmoives = [];
-              for (i = 0; i < 20; i = i + 2) {
+              for (i = 0; i < 10; i = i + 2) {
                 this.hotmoives.push({
                   book1: movie[i],
                   book2: movie[i + 1],
@@ -612,7 +612,7 @@ export default {
               var tele = [];
               tele = res.data.data;
               var i = 0;
-              for (i = 0; i < 20; i++) {
+              for (i = 0; i < 10; i++) {
                 var length = 14 - tele[i].name.length;
                 if (tele[i].name.length > 7 && tele[i].nation.length > length)
                   tele[i].nation = tele[i].nation.substring(0, length - 2) + "…";
@@ -620,7 +620,7 @@ export default {
                   tele[i].nation = tele[i].nation.substring(0, 7) + "…";
               }
               this.hottele = [];
-              for (i = 0; i < 20; i = i + 2) {
+              for (i = 0; i < 10; i = i + 2) {
                 this.hottele.push({
                   book1: tele[i + 1],
                   book2: tele[i],
@@ -648,7 +648,7 @@ export default {
               var movie = [];
               movie = res.data.data;
               var i = 0;
-              for (i = 0; i < 20; i++) {
+              for (i = 0; i < 10; i++) {
                 var length = 14 - movie[i].name.length;
                 if (movie[i].name.length > 7 && movie[i].director.length > length)
                   movie[i].director = movie[i].director.substring(0, length - 2) + "…";
@@ -656,7 +656,7 @@ export default {
                   movie[i].director = movie[i].director.substring(0, 7) + "…";
               }
               this.highmoives = [];
-              for (i = 0; i < 20; i = i + 2) {
+              for (i = 0; i < 10; i = i + 2) {
                 this.highmoives.push({
                   book1: movie[i],
                   book2: movie[i + 1],
@@ -680,7 +680,7 @@ export default {
               var tele = [];
               tele = res.data.data;
               var i = 0;
-              for (i = 0; i < 20; i++) {
+              for (i = 0; i < 10; i++) {
                 var length = 14 - tele[i].name.length;
                 if (tele[i].name.length > 7 && tele[i].nation.length > length)
                   tele[i].nation = tele[i].nation.substring(0, length - 2) + "…";
@@ -688,7 +688,7 @@ export default {
                   tele[i].nation = tele[i].nation.substring(0, 7) + "…";
               }
               this.hightele = [];
-              for (i = 0; i < 20; i = i + 2) {
+              for (i = 0; i < 10; i = i + 2) {
                 this.hightele.push({
                   book1: tele[i],
                   book2: tele[i + 1],
