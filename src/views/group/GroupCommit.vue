@@ -28,6 +28,7 @@
           <span class = "group-name_l font_l" style="color: #444444;">{{mes.groupname}}</span>
           <div style="border-top: 1px solid #d3dce6;width: 1000px;height: 0; float: left; position:relative; top: 3px"></div>
         </div>
+        <report :papapa = 5></report>
         <span>&nbsp;</span>
       </div>
     </div>
@@ -65,9 +66,11 @@
 <script>
 import groupPerson from "@/components/GroupReturn";
 import groupUsuallyCome from "@/components/GroupUsuallyCome";
+import Report from "@/components/report";
 export default {
   name: "groupcommit",
   components: {
+    Report,
     groupPerson,
     groupUsuallyCome,
   },

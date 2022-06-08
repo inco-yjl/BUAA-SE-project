@@ -22,8 +22,12 @@
    </div>
  </template>
  <script>
+ import qs from "qs";
+
  export default {
+   props: ['papapa'],
    data() {
+     var id;
      return {
        dialogTableVisible: false,
        dialogFormVisible: false,
@@ -35,13 +39,23 @@
          delivery: false,
          type: [],
          resource: '',
-         desc: ''
+         desc: '',
+         id,    
        },
        formLabelWidth: '120px'
      };
    },
    methods: {
+     reportpassages() {
+       var pasid = this.papapa;
+     },
      open() {
+       if(this.$store.getters.getUser.user.id === -1) {
+         this.$message({
+           type: 'info',
+           message: '请先登录',
+         });
+       }
        if(this.form.date1.length < 15) {
          this.$message({
            type: 'info',
@@ -49,6 +63,7 @@
          });
          return;
        }
+       console.log(this.papapa);
        this.$prompt('举报标题', '发起举报', {
          confirmButtonText: '确定',
          cancelButtonText: '取消',
@@ -57,11 +72,34 @@
        }).then(({ value }) => {
          this.$message({
            type: 'success',
-           message: '举报成功，感谢您对维护美好环境做出的贡献'
+           message: '举报成功，感谢您对维护美好环境做出的贡献，举报信息上传中'
          });
-         this.dialogFormVisible = false;
-         this.form.date1 = '';
-         this.form.region = '';
+         var params = {
+           report_title: value,
+           report_reason: this.form.date1,
+           reporter_id: this.$store.getters.getUser.user.id,
+           article_id: this.papapa,
+         };
+         console.log(params);
+         this.$axios
+             .post("/addreport",qs.stringify(params))
+             .then((res) => {
+               if (res.data.errno === 0) {
+                 console.log(res.data.data)
+                this.$message({
+                  type: "success",
+                  message: '上传成功',
+                });
+                 this.dialogFormVisible = false;
+                 this.form.date1 = '';
+                 this.form.region = '';
+               } else {
+                 this.$message.error("上传失败");
+               }
+             })
+             .catch((error) => {
+               console.log(error);
+             });
        }).catch(() => {
          this.$message({
            type: 'info',
