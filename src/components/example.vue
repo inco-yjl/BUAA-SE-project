@@ -95,6 +95,6 @@ a.commenttext-origin {
   transition: 0.3s ease;
 }
 a.commenttext-origin:hover {
-  color: gray;
+  color: rgb(101, 101, 101);
   text-decoration: none;
 }

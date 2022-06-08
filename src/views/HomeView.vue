@@ -108,6 +108,104 @@
             </VueSlickCarousel>
           </div>
         </div>
+        <div class="comments">
+          <div id="bookcomment">
+            <span class="homepage-title">
+              <img class="hot" src="@/assets/title/book_comment.png" />热门书评
+              <a href="http://localhost:8080/book" class="Fordetail">
+                &ensp;>&ensp;
+              </a>
+            </span>
+
+            <div
+              v-for="comment in bookcomments"
+              :key="comment.id"
+              class="comment"
+            >
+              <hr />
+              <a class="userOfcomment">
+                <img class="iconOfuser" :src="comment.usericon" /><span
+                  class="nameOfuser"
+                  >{{ comment.username }}</span
+                >
+              </a>
+              <br />
+              <div class="comments-content">
+                <div>
+                  <a
+                    class="comment-origin"
+                    @click="ToBookDetail(comment.bookid)"
+                    ><img class="comments-pic" :src="comment.img"
+                  /></a>
+                </div>
+                <div class="comments-text">
+                  <a class="commentlist" @click="ToComment(comment.id)">
+                    <span class="comment-title"> {{ comment.title }} </span
+                    ><br />{{ comment.content }}</a
+                  >
+                </div>
+                <!-- 路径问题 -->
+              </div>
+            </div>
+            <div class="search-number">
+              <el-pagination
+                @current-change="changBookComment"
+                :page-size="7"
+                layout="prev, pager, next, jumper"
+                :total="bookCommentNum"
+              >
+              </el-pagination>
+            </div>
+          </div>
+
+          <div id="moviecomment">
+            <span class="homepage-title">
+              <img class="hot" src="@/assets/title/movie_comment.png" />热门影评
+              <a href="/video" class="Fordetail"> &ensp;>&ensp; </a>
+            </span>
+            <div
+              v-for="comment in moviecomments"
+              :key="comment.id"
+              class="comment"
+            >
+              <hr />
+              <a class="userOfcomment">
+                <img
+                  class="iconOfuser"
+                  :src="comment.usericon"
+                  :style="comment.thestyle"
+                /><span class="nameOfuser">{{ comment.username }}</span>
+              </a>
+              <br />
+              <div class="comments-content">
+                <div>
+                  <a
+                    class="comment-origin"
+                    @click="ToMovieDetail(comment.movieid)"
+                    ><img class="comments-pic" :src="comment.img"
+                  /></a>
+                </div>
+                <div class="comments-text">
+                  <a class="commentlist" @click="ToComment(comment.id)">
+                    <span class="comment-title"> {{ comment.title }} </span
+                    ><br />{{ comment.content }}</a
+                  >
+                </div>
+                <!-- 路径问题 -->
+              </div>
+            </div>
+            <!--
+            <div class="search-number">
+              <el-pagination
+                @current-change="changeMovieComment"
+                :page-size="3"
+                layout="prev, pager, next, jumper"
+                :total="movieCommentNum"
+              >
+              </el-pagination>
+            </div>-->
+          </div>
+        </div>
       </div>
       <div class="homepage aside">
         <div class="topics hotlist">
@@ -115,18 +213,17 @@
             <img class="hot" src="@/assets/title/fire.png" />热点话题
           </span>
           <ul class="topics hotlist">
-            <li v-for="(topic, index) in hottopics" 
-            :key="index">
+            <li v-for="(topic, index) in hottopics" :key="index">
               <span
-              class="topic-list-item" 
-              :class="{
-              rank1: index === 0, 
-              rank2: index === 1, 
-              rank3: index === 2
-              }">
-              {{index+1}}.
-              <span v-if="index < 10">&ensp;</span></span
-              ><a @click="ToTopicDetail(topic.id)">{{topic.name}}</a>
+                class="topic-list-item"
+                :class="{
+                  rank1: index === 0,
+                  rank2: index === 1,
+                  rank3: index === 2,
+                }"
+              >
+                {{ index + 1 }}. <span v-if="index < 10">&ensp;</span></span
+              ><a @click="ToTopicDetail(topic.id)">{{ topic.name }}</a>
             </li>
           </ul>
         </div>
@@ -138,91 +235,13 @@
             >
           </div>
           <ul>
-            <li v-for="group in hotgroups" :key="group.id"><a>{{group.name}}</a></li>
+            <li v-for="group in hotgroups" :key="group.id">
+              <a>{{ group.name }}</a>
+            </li>
           </ul>
         </div>
       </div>
       <br />
-      <div class="comments">
-        <div id="bookcomment">
-          <span class="homepage-title">
-            <img class="hot" src="@/assets/title/book_comment.png" />热门书评
-            <a href="http://localhost:8080/book" class="Fordetail">
-              &ensp;>&ensp;
-            </a>
-          </span>
-
-          <div
-            v-for="comment in bookcomments"
-            :key="comment.id"
-            class="comment"
-          >
-            <hr />
-            <a class="userOfcomment" href="../views/user/otherusers.vue">
-              <img class="iconOfuser" :src="comment.usericon" /><span
-                class="nameOfuser"
-                >{{ comment.username }}</span
-              >
-            </a>
-            <br />
-            <div class="comments-content">
-              <div>
-                <a class="comment-origin" href="/book/1"
-                  ><img class="comments-pic" :src="comment.img"
-                /></a>
-              </div>
-              <div class="comments-text">
-                <a class="commentlist" href="/book/1/comments/1">{{
-                  comment.content
-                }}</a>
-              </div>
-              <!-- 路径问题 -->
-            </div>
-            <div class="origin">
-              >><a href="http://localhost:8080/group">查看原帖</a>
-            </div>
-          </div>
-        </div>
-
-        <div id="moviecomment">
-          <span class="homepage-title">
-            <img class="hot" src="@/assets/title/movie_comment.png" />热门影评
-            <a href="http://localhost:8080/book" class="Fordetail">
-              &ensp;>&ensp;
-            </a>
-          </span>
-          <div
-            v-for="comment in moviecomments"
-            :key="comment.id"
-            class="comment"
-          >
-            <hr />
-            <a class="userOfcomment" href="../views/user/otherusers.vue">
-              <img class="iconOfuser" :src="comment.usericon" /><span
-                class="nameOfuser"
-                >{{ comment.username }}</span
-              >
-            </a>
-            <br />
-            <div class="comments-content">
-              <div>
-                <a class="comment-origin" href="/book/1"
-                  ><img class="comments-pic" :src="comment.img"
-                /></a>
-              </div>
-              <div class="comments-text">
-                <a class="commentlist" href="/book/1/comments/1">{{
-                  comment.content
-                }}</a>
-              </div>
-              <!-- 路径问题 -->
-            </div>
-            <div class="origin">
-              >><a href="http://localhost:8080/group">查看原帖</a>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -231,6 +250,7 @@
 #home {
   width: 1600px;
   padding-left: 100px;
+  padding-bottom: 100px;
 }
 div.body {
   width: 1580px;
@@ -261,6 +281,25 @@ div.body {
   border-color: rgb(181, 181, 181);
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
+  height: 900px;
+}
+.aside-slide {
+  margin-top: 80px;
+  margin-left: 10px;
+  margin-right: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 25px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  background-color: white;
+  box-shadow: 0px 2px 3px #888888a6;
+  height: 900px;
+  width: 352px;
+  position: fixed;
+  left: 1247px;
+  top: -100px;
 }
 .homepage-title {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
@@ -290,40 +329,26 @@ li {
   font-weight: 600;
 }
 .comments {
-  width: 1550px;
+  width: 1000px;
   margin-bottom: 100px;
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+}
+.comment {
+  padding-left: 75px;
 }
 #bookcomment {
-  width: 750px;
+  width: 1000px;
+  margin-bottom: 50px;
   margin-top: 50px;
   margin-right: 10px;
   text-align: left;
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 25px;
-  padding-bottom: 30px;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgb(181, 181, 181);
-  background-color: white;
-  box-shadow: 0px 2px 3px #888888a6;
 }
 #moviecomment {
-  width: 750px;
+  width: 1000px;
   margin-top: 50px;
   margin-right: 10px;
   text-align: left;
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 25px;
-  padding-bottom: 30px;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgb(181, 181, 181);
-  background-color: white;
-  box-shadow: 0px 2px 3px #888888a6;
 }
 .comments .homepage-title {
   font-size: 30px;
@@ -332,20 +357,23 @@ li {
 .aside .homepage-title {
   margin-left: 70px;
 }
+.aside-slide .homepage-title {
+  margin-left: 70px;
+}
 div.hothit {
   text-align: left;
 }
 .topics li {
   list-style: none;
 }
-.topic-list-item{
-  &.rank1{
+.topic-list-item {
+  &.rank1 {
     color: red;
   }
-  &.rank2{
+  &.rank2 {
     color: rgb(255, 128, 0);
   }
-  &.rank3{
+  &.rank3 {
     color: rgb(255, 195, 44);
   }
 }
@@ -447,6 +475,7 @@ div.origin {
 }
 .iconOfuser {
   height: 30px;
+  border-radius: 20px;
   margin-right: 5px;
   vertical-align: sub;
 }
@@ -463,8 +492,17 @@ a.commentlist {
   transition: 0.2s ease;
 }
 a.commentlist:hover {
-  color: gray;
+  color: rgb(101, 101, 101);
   text-decoration: none;
+}
+a.commentlist span {
+  font-size: 20px;
+  font-weight: 600;
+  color: black;
+  transition: 0.3s ease;
+}
+a.commentlist span:hover {
+  text-decoration: underline;
 }
 .hot-display-line {
   margin-left: 10px;
@@ -483,6 +521,10 @@ a.commentlist:hover {
 .hit-ppt {
   width: 1070px;
   margin-bottom: 20px;
+}
+.search-number {
+  margin-top: 50px;
+  margin-left: 400px;
 }
 </style>
 <script>
@@ -551,6 +593,9 @@ export default {
     var hottopics = [{}];
     var hotgroups = [{}];
     return {
+      bookCommentNum: 0,
+      allBookComments: [],
+      allMovieComments: [],
       bookcomments,
       moviecomments,
       hotbooks,
@@ -568,6 +613,10 @@ export default {
     VueSlickCarousel,
   },
   methods: {
+    ToComment(id) {
+      console.log(id);
+      this.$router.push({ name: "bookcomment", query: { id: id } });
+    },
     //this is the function to update the images of books
     logout() {
       this.$router.replace({ path: "/login" });
@@ -586,7 +635,10 @@ export default {
             var i = 0;
             for (i = 0; i < 10; i++) {
               var length = 17 - this.hotbooks[i].name.length;
-              if (this.hotbooks[i].name.length>=9 && this.hotbooks[i].author.length > length)
+              if (
+                this.hotbooks[i].name.length >= 9 &&
+                this.hotbooks[i].author.length > length
+              )
                 this.hotbooks[i].author =
                   this.hotbooks[i].author.substring(0, length) + "…";
               if (this.hotbooks[i].author.length > 10)
@@ -611,7 +663,7 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("电影查询成功");
-            console.log(res.data.data)
+            console.log(res.data.data);
             this.hotmovies = res.data.data;
             var i = 0;
             for (i = 0; i < 10; i++) {
@@ -659,7 +711,7 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("话题查询成功");
-            console.log(res.data.data)
+            console.log(res.data.data);
             this.hottopics = res.data.data;
           } else {
             this.$message.error("查询失败");
@@ -678,7 +730,7 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("小组查询成功");
-            console.log(res.data.data)
+            console.log(res.data.data);
             this.hotgroups = res.data.data;
           } else {
             this.$message.error("查询失败");
@@ -713,6 +765,74 @@ export default {
         query: { id: id },
       });
     },
+    async updateBookComment() {
+      this.$axios.post("/book/hotpassage").then((res) => {
+        if (res.data.errno === 0) {
+          console.log("获取到热门书评");
+          this.allBookComments = res.data.data;
+          this.bookCommentNum = this.allBookComments.length;
+          var i;
+          for (i = 0; i < this.allBookComments.length; i++) {
+            this.allBookComments[i].content = this.ToText(
+              this.allBookComments[i].content
+            );
+            if (this.allBookComments[i].content.length > 170) {
+              this.allBookComments[i].content =
+                this.allBookComments[i].content.substring(0, 170) + "…";
+              var img = this.displayIcon(this.allBookComments[i].usericon);
+              console.log(img);
+              this.allBookComments[i].usericon = img.icon;
+              this.allBookComments[i].thestyle = img.style;
+              console.log(this.allBookComments[i].content);
+            }
+          }
+          this.changBookComment(1);
+        }
+      });
+    },
+    displayIcon(url) {
+      var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+      var styleOfIcon = "width:30px";
+      if (url !== "") {
+        var len = this.$axios.defaults.baseURL.length;
+        icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
+      }
+      var img = new Image();
+      img.src = icon;
+      if (img.width > img.height)
+        styleOfIcon =
+          "height:30px;position: relative; top:0px; left:-" +
+          ((img.width - img.height) / img.height) * 15 +
+          "px";
+      else
+        styleOfIcon =
+          "width:30px;position: relative;  left:0px;top:-" +
+          ((img.height - img.width) / img.width) * 15 +
+          "px";
+      return { icon: icon, style: styleOfIcon };
+    },
+    ToText(HTML) {
+      var input = HTML;
+      return input
+        .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/[ ]|[&ensp;]/g, "")
+        .replace(/[ ]|[&nbsp;]/g, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/\s+/g, " ")
+        .replace(/ /g, " ")
+        .replace(/>/g, " ");
+    },
+    changBookComment(currentPage) {
+      this.bookcomments = [];
+      var length = this.bookCommentNum - (currentPage - 1) * 3;
+      if (length > 3) length = 3;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.bookcomments.push(this.allBookComments[currentPage * 3 - 3 + i]);
+      }
+      console.log(this.bookcomments);
+    },
   },
   mounted() {
     this.$parent.updateUser();
@@ -721,6 +841,18 @@ export default {
     this.updateHotTeles();
     this.updateHotTopics();
     this.updateHotGroups();
+    this.updateBookComment();
+    window.onscroll = function (e) {
+      var vertical = document.getElementById('vertical');
+      var pos = vertical.getBoundingClientRect();
+      if (pos.top < -20) {
+        var aside = document.getElementsByClassName("aside").item(0);
+        if (aside != null) aside.setAttribute("class", "aside-slide");
+      } else {
+        var aside = document.getElementsByClassName("aside-slide").item(0);
+        if (aside != null) aside.setAttribute("class", "aside");
+      }
+    };
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {

@@ -152,7 +152,7 @@ export default {
       isAdmin: false,
       direction: "rtl",
       userName: "游客",
-      styleOfIcon: "width:36px",
+      styleOfIcon: "height:36px",
       user_id: -1,
     };
   },
@@ -202,12 +202,12 @@ export default {
             img.src = this.userIcon;
             if (img.width > img.height)
               this.styleOfIcon =
-                "height:36px;position: relative; top:0px; left:-" +
+                "height:36px;width:auto;position: relative; top:0px; left:-" +
                 ((img.width - img.height) / img.height) * 18 +
                 "px";
             else
               this.styleOfIcon =
-                "width:36px;position: relative;  left:0px;top:-" +
+                "width:36px;heigh:auto;position: relative;  left:0px;top:-" +
                 ((img.height - img.width) / img.width) * 18 +
                 "px";
             user.admin = parseInt(user.admin);

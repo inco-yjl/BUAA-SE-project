@@ -14,11 +14,11 @@
             </button>
           </div>
         </div>
-        
+
         <div clas="detail-content">
           <div class="detail-info">
             <div><img class="detail-img" :src="movie.image" /></div>
-            
+
             <div class="info-text">
               <span class="pl">导演：</span
               ><span class="pl2">{{ movie.director }}</span> <br />
@@ -38,31 +38,50 @@
               <div>
                 <div class="rate-number">
                   5星
-                  <div class="distribute" style="width: 150px"></div>
+                  <div class="distribute" :style="style5"></div>
+                  &ensp;{{ rankList[4] }}人
                 </div>
                 <div class="rate-number">
                   4星
-                  <div class="distribute" style="width: 100px"></div>
+                  <div class="distribute" :style="style4"></div>
+                  &ensp;{{ rankList[3] }}人
                 </div>
                 <div class="rate-number">
                   3星
-                  <div class="distribute" style="width: 96px"></div>
+                  <div class="distribute" :style="style3"></div>
+                  &ensp;{{ rankList[2] }}人
                 </div>
                 <div class="rate-number">
                   2星
-                  <div class="distribute" style="width: 5px"></div>
+                  <div class="distribute" :style="style2"></div>
+                  &ensp;{{ rankList[1] }}人
                 </div>
                 <div class="rate-number">
                   1星
-                  <div class="distribute" style="width: 18px"></div>
+                  <div class="distribute" :style="style1"></div>
+                  &ensp;{{ rankList[0] }}人
                 </div>
               </div>
-            
             </div>
           </div>
-          <button  @click="writeComment()" style="position: relative; float: right; right: 100px;">
-            <img src="@/assets/guide/write_dt.png" /><span>撰写评论</span>
-          </button>
+          <div class="movie-detail-interact">
+            <div class="evaluate">打个分吧！</div>
+            <el-rate
+              :show-score="true"
+              class="star-button"
+              style="width: 150px"
+              v-model="evaluate"
+              :colors="colors"
+              @change="starTheMovie"
+            >
+            </el-rate>
+            <button>
+              <img src="@/assets/guide/share.png" /><span>分享电影</span>
+            </button>
+            <button @click="writeComment()">
+              <img src="@/assets/guide/write_dt.png" /><span>撰写评论</span>
+            </button>
+          </div>
           <div class="detail-intro">
             <span class="intro-title">内容简介···</span>
             <div v-html="movie.intro"></div>
@@ -81,7 +100,7 @@
             v-for="movie in collections"
             :key="movie.id"
           >
-            <a class="collection-item" @click = "tomoviedetail(movie.id)">
+            <a class="collection-item" @click="tomoviedetail(movie.id)">
               <img class="collection-img" :src="movie.image" />
               <div class="collection-info">
                 《{{ movie.name }}》
@@ -237,6 +256,12 @@ export default {
     var hotdt = [];
     var newdt = [];
     var db = [];
+    var style1;
+    var style2;
+    var style3;
+    var style4;
+    var style5;
+    var rankList = [];
     return {
       collections,
       passages,
@@ -247,6 +272,12 @@ export default {
       loadSuccess,
       hotdt,
       newdt,
+      style1,
+      style2,
+      style3,
+      style4,
+      style5,
+      rankList,
       db,
     };
   },
@@ -282,15 +313,14 @@ export default {
       if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
         return;
-      }
-      else {
+      } else {
         this.$router.push({
           name: "movieeditor",
           query: { id: this.id },
         });
       }
     },
-    tomoviedetail(id) { 
+    tomoviedetail(id) {
       this.$router.push({
         name: "moviedetail",
         query: { id: id },
@@ -336,8 +366,8 @@ export default {
           if (res.data.errno === 0) {
             console.log(res.data.data);
             this.collections = [];
-            var i=0;
-            for(i=0;i<3 && i<res.data.data.length;i++)
+            var i = 0;
+            for (i = 0; i < 3 && i < res.data.data.length; i++)
               this.collections.push(res.data.data[i]);
           } else {
             this.$message.error("查询失败");
@@ -360,17 +390,29 @@ export default {
           if (res.data.errno === 0) {
             console.log("电影查询成功");
             this.movie = res.data.data;
-            this.loadSuccess = true;
-            switch(res.data.collect)
-            {
-                case 1:
-                    this.collect = true;
-                    break;
-                case 0:
-                    this.collect = false;
-                    break;
+            switch (res.data.collect) {
+              case 1:
+                this.collect = true;
+                break;
+              case 0:
+                this.collect = false;
+                break;
             }
-
+            this.rankList = res.data.list;
+            this.evaluate = parseFloat(res.data.evaluate);
+            this.peoplenum = parseInt(res.data.people);
+            var length;
+            length = (res.data.list[0] * 200) / this.peoplenum + 5;
+            this.style1 = "width:" + length + "px";
+            length = (res.data.list[1] * 200) / this.peoplenum + 5;
+            this.style2 = "width:" + length + "px";
+            length = (res.data.list[2] * 200) / this.peoplenum + 5;
+            this.style3 = "width:" + length + "px";
+            length = (res.data.list[3] * 200) / this.peoplenum + 5;
+            this.style4 = "width:" + length + "px";
+            length = (res.data.list[4] * 200) / this.peoplenum + 5;
+            this.style5 = "width:" + length + "px";
+            this.loadSuccess = true;
           } else {
             this.$message.error("查询失败");
           }
@@ -396,21 +438,21 @@ export default {
       this.db = this.topic.hotdt;
       this.Updatediary();
     },
-  },
-  getdt() {
-    var params = {
-      movie_id: this.id,
-    };
-    this.$axios
-        .post("/movie/hot_article", qs.stringify(params))
+    starTheMovie() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+        movie_id: this.id,
+        score: this.evaluate,
+      };
+      this.$axios
+        .post("/movie/star", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
-            this.hotdt = [];
-            console.log(res.data.data);
-            var i=0;
-            for(i=0;i<5 && i<res.data.data.length;i++)
-              this.hotdt.push(res.data.data[i]);
-            this.db = this.hotdt;
+            console.log(res.data);
+            this.$message({
+              message: res.data.msg,
+              type: "success",
+            });
           } else {
             this.$message.error("查询失败");
           }
@@ -418,15 +460,22 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    this.$axios
-        .post("/tele/new_article", qs.stringify(params))
+    },
+    async updatePassage() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+        .post("/movie/mypassage", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
-            this.newdt = [];
-            console.log(res.data.data);
-            var i=0;
-            for(i=0;i<5 && i<res.data.data.length;i++)
-              this.newdt.push(res.data.data[i]);
+            this.passages=[];
+            var i;
+            var length=3;
+            if(res.data.data.length<3)
+            length=res.data.data.length;
+            for(i=0;i<length;i++)
+            this.passages.push(res.data.data[i])
           } else {
             this.$message.error("查询失败");
           }
@@ -434,10 +483,12 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
   },
   mounted() {
     this.updateContent();
     this.updateCollection();
+    this.updatePassage();
     window.onscroll = function (e) {
       var vertical = document.getElementsByClassName("detail-vertical").item(0);
       var pos = vertical.getBoundingClientRect();
@@ -471,7 +522,7 @@ export default {
   padding-bottom: 100px;
   margin-top: 80px;
   width: 1160px;
-  height:auto;
+  height: auto;
   background-color: white;
   border-style: solid;
   border-width: 1px;
@@ -528,6 +579,33 @@ export default {
 .user-buttons button:active {
   top: 2px;
 }
+.movie-detail-interact button {
+  position: relative;
+  left: 700px;
+  top: 20px;
+  background: none;
+  outline: none;
+  font-size: 18px;
+  border: none;
+  transition: opacity 0.2s;
+}
+.movie-detail-interact button :hover {
+  text-decoration: underline;
+}
+.movie-detail-interact img {
+  height: 20px;
+}
+.star-button {
+  position: absolute;
+  left: 740px;
+  top: 672px;
+}
+.evaluate {
+  position: absolute;
+  left: 660px;
+  top: 672px;
+  color: rgb(101, 101, 101);
+}
 .detail-info {
   margin-top: 20px;
   display: flex;
@@ -555,7 +633,7 @@ export default {
 .rate-number {
   display: flex;
   font-size: 15px;
-  color: gray;
+  color: rgb(101, 101, 101);
   line-height: 22px;
   flex-wrap: nowrap;
 }
@@ -613,7 +691,7 @@ export default {
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
-  width:352px;
+  width: 352px;
 }
 .aside-slide {
   margin-top: 80px;
@@ -628,7 +706,7 @@ export default {
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
-  width:352px;
+  width: 352px;
   position: fixed;
   left: 1260px;
   top: -50px;
@@ -790,7 +868,7 @@ a.commenttext-origin {
   transition: 0.3s ease;
 }
 a.commenttext-origin:hover {
-  color: gray;
+  color: rgb(101, 101, 101);
   text-decoration: none;
 }
 </style>

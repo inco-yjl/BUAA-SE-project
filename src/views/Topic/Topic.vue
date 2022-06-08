@@ -520,7 +520,7 @@ a.diarytext-origin {
   transition: 0.3s ease;
 }
 a.diarytext-origin:hover {
-  color: gray;
+  color: rgb(101, 101, 101);
   text-decoration: none;
 }
 button {
@@ -644,6 +644,8 @@ export default {
       var input = HTML;
       return input
         .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/[ ]|[&ensp;]/g, '')
         .replace(/<[^>]+?>/g, "")
         .replace(/\s+/g, " ")
         .replace(/ /g, " ")

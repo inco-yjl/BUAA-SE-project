@@ -1,64 +1,66 @@
 <template>
-  <div id="bookpage">
+  <div id="moviepage">
     <search></search>
     <div id="videopage-body">
       <div class="videopage-vertical">
         <div class="videopage-hit">
           <div class="videopage-title">
-            <img src="@/assets/title/books.png" />
+            <img src="@/assets/title/movie.png" />
             <button
-                class="selection_ed"
-                id="select-hot-topic-dt"
-                onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
-                @click="hotTopicdt()"
+              class="selection_ed"
+              id="select-hot-topic-dt"
+              onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
+              @click="hotTopicdt()"
             >
               热门电影</button
             >/<button
-                class="selection_un"
-                id="select-follow-topic-dt"
-                onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
-                @click="specifyTopicdt()"
-            >热门电视剧
-            </button>  
+              class="selection_un"
+              id="select-follow-topic-dt"
+              onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
+              @click="specifyTopicdt()"
+            >
+              热门电视剧
+            </button>
           </div>
           <VueSlickCarousel
-              :dots="true"
-              :useCSS="true"
-              :infinite="false"
-              :speed="500"
-              :slidesToShow="7"
-              :slidesToScroll="7"
-              :touchThreshold="5"
+            :dots="true"
+            :arrows="true"
+            :useCSS="true"
+            :infinite="false"
+            :speed="500"
+            :slidesToShow="7"
+            :slidesToScroll="7"
+            :touchThreshold="5"
           >
             <div
-                v-for="book in hotmes"
-                class="videopage-hit-box"
-                :key="book.id"
+              v-for="movie in hotmes"
+              class="videopage-hit-box"
+              :key="movie.id"
             >
               <div class="flex-video-display">
                 <div class="video-display-line">
-                  <a @click="ToVideoDetail(book.book1.id)">
-                    <img class="book-display" :src="book.book1.image" />
-                    <div class="book-display-info">
-                      <span class="book-display-title"
-                      >《{{ book.book1.name }}》</span
-                      ><br v-if="book.book1.name.length < 7" />
-                      <span class="book-display-writer">{{
-                          book.book1.director
-                        }}{{book.book1.nation}}</span>
+                  <a @click="ToVideoDetail(movie.movie1.id)">
+                    <img class="movie-display" :src="movie.movie1.image" />
+                    <div class="movie-display-info">
+                      <span class="movie-display-title"
+                        >《{{ movie.movie1.name }}》</span
+                      ><br v-if="movie.movie1.name.length < 7" />
+                      <span class="movie-display-writer"
+                        >{{ movie.movie1.director }}{{ movie.movie1.nation }}</span
+                      >
                     </div>
                   </a>
                 </div>
                 <div class="video-display-line">
-                  <a @click="ToVideoDetail(book.book2.id)">
-                    <img class="book-display" :src="book.book2.image" />
-                    <div class="book-display-info">
-                      <span class="book-display-title"
-                      >《{{ book.book2.name }}》</span
-                      ><br v-if="book.book2.name.length < 7" />
-                      <span class="book-display-writer">{{
-                          book.book2.director
-                        }}{{book.book2.nation}}</span>
+                  <a @click="ToVideoDetail(movie.movie2.id)">
+                    <img class="movie-display" :src="movie.movie2.image" />
+                    <div class="movie-display-info">
+                      <span class="movie-display-title"
+                        >《{{ movie.movie2.name }}》</span
+                      ><br v-if="movie.movie2.name.length < 7" />
+                      <span class="movie-display-writer"
+                        >{{ movie.movie2.director }}{{ movie.movie2.nation }}</span
+                      >
                     </div>
                   </a>
                 </div>
@@ -70,10 +72,10 @@
           <div class="videopage-title">
             <img src="@/assets/title/star.png" />
             <button
-                class="selection_ed"
-                id="select-hot-topic-dt-point"
-                onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
-                @click="hotTopicdtpoint()"
+              class="selection_ed"
+              id="select-hot-topic-dt-point"
+              onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
+              @click="hotTopicdtpoint()"
             >
               高分电影</button
             >/<button
@@ -81,49 +83,44 @@
               id="select-follow-topic-dt-point"
               onclick="this.className=this.className=='selection_un'?'selection_ed':'selection_un'"
               @click="specifyTopicdtpoint()"
-          >高分电视剧
-          </button>
+            >
+              高分电视剧
+            </button>
           </div>
           <VueSlickCarousel
-              :dots="true"
-              :useCSS="true"
-              :infinite="false"
-              :speed="500"
-              :slidesToShow="7"
-              :slidesToScroll="7"
-              :touchThreshold="5"
+            :dots="true"
+            :useCSS="true"
+            :infinite="false"
+            :speed="500"
+            :slidesToShow="7"
+            :slidesToScroll="7"
+            :touchThreshold="5"
           >
             <div
-                v-for="book in highmes"
-                class="bookpage-hit-box"
-                :key="book.id"
+              v-for="movie in highmes"
+              class="moviepage-hit-box"
+              :key="movie.id"
             >
-              <div class="flex-book-display">
+              <div class="flex-movie-display">
                 <div class="video-display-line">
-                  <a @click="ToVideoDetailpoint(book.book1.id)">
-                    <img class="book-display" :src="book.book1.image" />
-                    <div class="book-display-info">
-                       <span class="book-display-title"
-                       >《{{ book.book1.name }}》</span
-                       ><br v-if="book.book1.name.length < 7" />
-                      <span class="book-display-writer">{{
-                          book.book1.director
-                        }}
-                      {{book.book1.nation}}</span>
+                  <a @click="ToVideoDetailpoint(movie.movie1.id)">
+                    <img class="movie-display" :src="movie.movie1.image" />
+                    <div class="over-star">{{ movie.movie1.star }}</div>
+                    <div class="movie-display-info">
+                      <span class="movie-display-title"
+                        >《{{ movie.movie1.name }}</span
+                      ><br />
                     </div>
                   </a>
                 </div>
                 <div class="video-display-line">
-                  <a @click="ToVideoDetailpoint(book.book2.id)">
-                    <img class="book-display" :src="book.book2.image" />
-                    <div class="book-display-info">
-                       <span class="book-display-title"
-                       >《{{ book.book2.name }}》</span
-                       ><br v-if="book.book2.name.length < 7" />
-                      <span class="book-display-writer">{{
-                          book.book2.director
-                        }}
-                      {{book.book2.nation}}</span>
+                  <a @click="ToVideoDetailpoint(movie.movie2.id)">
+                    <img class="movie-display" :src="movie.movie2.image" />
+                    <div class="over-star">{{ movie.movie2.star }}</div>
+                    <div class="movie-display-info">
+                      <span class="movie-display-title"
+                        >《{{ movie.movie2.name }}</span
+                      ><br />
                     </div>
                   </a>
                 </div>
@@ -131,39 +128,43 @@
             </div>
           </VueSlickCarousel>
         </div>
-        <div class="bookpage-comments">
-          <div class="videopage-title">
-            <img src="@/assets/title/book_comment.png" />热门评论
+        <div class="moviepage-comments">
+          <div class="moviepage-title">
+            <img src="@/assets/title/movie_comment.png" />热门影评
           </div>
           <div
-              class="book-comments-display"
-              v-for="comment in videocomments"
-              :key="comment.id"
+            class="movie-comments-display"
+            v-for="comment in moviecomments"
+            :key="comment.id"
           >
             <hr />
             <div class="comment-display-body">
               <div class="display-publisher">
                 <a class="userOfcomment" href="/otherusers/1">
-                  <img class="iconOfuser" :src="comment.usericon" /><span
-                    class="nameOfuser"
-                >{{ comment.username }}</span
-                >
+                  <img
+                    class="iconOfuser"
+                    :src="comment.usericon"
+                    :style="comment.thestyle"
+                  /><span class="nameOfuser">{{ comment.username }}</span>
                 </a>
                 <span class="publish-info"
-                >{{ comment.date }}&ensp;评论了<a class="comment-book-name"
-                >《{{ comment.bookname }}》</a
-                ></span
+                  >{{ comment.date }}&ensp;评论了<a class="comment-movie-name"
+                    >《{{ comment.moviename }}》</a
+                  ></span
                 >
               </div>
               <div class="comment-origin-pic">
-                <a class="comment-origin" href="javascript:void(0)"
-                ><img class="comment-pic" :src="comment.img" />
+                <a class="comment-origin" @click="ToMovieDetail(comment.movieid)"
+                  ><img class="comment-pic" :src="comment.img" />
                 </a>
               </div>
               <div class="commenttext">
-                <a class="commenttext-origin" @click="bookcomment">{{
-                    comment.content
-                  }}</a>
+                <a class="commenttext-origin" @click="ToComment(comment.id)">
+                <span class="comment-title">
+                  {{comment.title}}
+                </span><br>
+                  {{ comment.content }}
+                </a>
               </div>
             </div>
           </div>
@@ -172,45 +173,45 @@
       <div class="aside">
         <div class="collection">
           <div class="videopage-title">
-            <a href="../user/books">
-              <img src="@/assets/guide/book_collection.png" />我的收藏
+            <a href="../user/movies">
+              <img src="@/assets/guide/movie_collection.png" />我的收藏
             </a>
           </div>
           <div
-              class="collection-list"
-              v-for="(video,index) in collections"
-              :key="video.id"
+            class="collection-list"
+            v-for="(video, index) in collections"
+            :key="video.id"
           >
-            <a class="collection-item" @click = "usetocolloction(index)">
+            <a class="collection-item" @click="usetocolloction(index)">
               <img class="collection-img" :src="video.image" />
               <div class="collection-info">
                 《{{ video.name }}》
                 <el-rate
-                    v-model="video.star"
-                    disabled
-                    show-score
-                    text-color="#ff9900"
-                    score-template="{value}"
-                    disabled-void-color="ffffff"
+                  v-model="video.star"
+                  disabled
+                  show-score
+                  text-color="#ff9900"
+                  score-template="{value}"
+                  disabled-void-color="ffffff"
                 >
                 </el-rate>
                 {{ video.director }}
-                {{video.year}}&nbsp;{{ video.nation }}
+                {{ video.year }}&nbsp;{{ video.nation }}
               </div>
             </a>
           </div>
         </div>
         <div class="collection">
           <div class="videopage-title">
-            <a href="../user/books">
+            <a href="../user/movies">
               <img src="@/assets/guide/mycomment.png" />我的评论
             </a>
           </div>
-          <ul class="book-comment-list hotlist">
+          <ul class="movie-comment-list hotlist">
             <li
-                :v-if="passages.length > 0"
-                v-for="(passage,index) in passages"
-                :key="passage.id"
+              :v-if="passages.length > 0"
+              v-for="(passage, index) in passages"
+              :key="passage.id"
             >
               <a @click="ToComment(index)">{{ passage.title }}</a>
             </li>
@@ -228,67 +229,17 @@ import "vue-slick-carousel/dist/vue-slick-carousel.css";
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 import search from "@/components/SelectSearch.vue";
 import qs from "qs";
-import usericon from "@/assets/user/int.png";
-import router from "@/router";
 export default {
   name: "MyComponent",
   data() {
-    var hotmes;
+    var hotmes= [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}];//我也没办法，加载好慢
     var hotmoives = [{}];
     var hottele = [{}];
-    var highmes;
+    var highmes=[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}];
     var highmoives = [{}];
     var hightele = [{}];
-    var highbooks = [{}];
-    var bookcomments = [
-      {
-        id: 1,
-        date: "2022-5-4",
-        userId: 1,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "yjl",
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        bookname: "焦虑的人",
-        bookid: 1,
-        content:
-            "听Jpop不听King Gnu，\
-          就像四大名著不看红楼梦，说明这个人文学造诣和自我修养不足，\
-          他理解不了这种内在的阳春白雪的高雅艺术，他只能看到外表的辞藻堆砌，\
-          参不透其中深奥的精神内核，他整个人的层次就卡在这里了，只能度过一个相对失败的人生。",
-      },
-      {
-        id: 2,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "IntP",
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        bookname: "焦虑的人",
-        bookid: 1,
-        content: "testtest",
-      },
-      {
-        id: 3,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "看看中文",
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        bookname: "焦虑的人",
-        bookid: 1,
-        content: "多搞点",
-      },
-      {
-        id: 4,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "还有好多没写",
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        bookname: "焦虑的人",
-        bookid: 1,
-        content: "多搞点",
-      },
+    var highmovies = [{}];
+    var moviecomments = [
     ];
     var collections = [{}];
     var passages = [{}];
@@ -303,9 +254,9 @@ export default {
       highmes,
       highmoives,
       hightele,
-      hotbooks: hotmoives,
-      highbooks,
-      videocomments: bookcomments,
+      hotmovies: hotmoives,
+      highmovies,
+      moviecomments,
       collections,
       passages,
       loadSuccess,
@@ -320,136 +271,117 @@ export default {
   },
   methods: {
     usetocolloction(index) {
-      if(this.collections[index].year != null) {
+      if (this.collections[index].year != null) {
         this.$router.push({
           name: "teledetail",
           query: { id: this.collections[index].id },
-        }); 
-      }
-      else {
+        });
+      } else {
         this.$router.push({
           name: "moviedetail",
           query: { id: this.collections[index].id },
         });
       }
     },
-    getcommit() {
-      
-    },
+    getcommit() {},
     hotTopicdt() {
       //获取数据
       document
-          .getElementById("select-follow-topic-dt")
-          .setAttribute("class", "selection_un");
+        .getElementById("select-follow-topic-dt")
+        .setAttribute("class", "selection_un");
       this.hotmes = this.hotmoives;
     },
     specifyTopicdt() {
       document
-          .getElementById("select-hot-topic-dt")
-          .setAttribute("class", "selection_un");
+        .getElementById("select-hot-topic-dt")
+        .setAttribute("class", "selection_un");
       this.hotmes = this.hottele;
-      
     },
     hotTopicdtpoint() {
       //获取数据
       document
-          .getElementById("select-follow-topic-dt-point")
-          .setAttribute("class", "selection_un");
+        .getElementById("select-follow-topic-dt-point")
+        .setAttribute("class", "selection_un");
       this.highmes = this.highmoives;
     },
     specifyTopicdtpoint() {
       document
-          .getElementById("select-hot-topic-dt-point")
-          .setAttribute("class", "selection_un");
+        .getElementById("select-hot-topic-dt-point")
+        .setAttribute("class", "selection_un");
       this.highmes = this.hightele;
     },
-    //this is the function to update the images of books
+    //this is the function to update the images of movies
     updateButton() {
       document
-          .getElementsByClassName("selection_un")
-          .item(4)
-          .setAttribute("class", "selection_ed");
+        .getElementsByClassName("selection_un")
+        .item(4)
+        .setAttribute("class", "selection_ed");
     },
-    Updatediary() {
-      var i = 0;
-      var topic_detail_link = [this.dt[0].id, this.dt[1].id, this.dt[2].id];
-      for (i = 0; i < 3; i++) {
-        document
-            .getElementsByClassName("iconOfuser")
-            .item(i)
-            .setAttribute("src", usericon);
-        document
-            .getElementsByClassName("display-publisher")
-            .item(i)
-            .getElementsByClassName("nameOfuser")
-            .item(0).innerText = this.dt[i].user;
-        var dtText = this.dt[i].passage.substring(0, 300);
-        if (this.dt[i].passage.length > 300) dtText = dtText.concat("(……)");
-        document
-            .getElementsByClassName("diarytext")
-            .item(i)
-            .getElementsByClassName("diarytext-origin")
-            .item(0).innerText = dtText;
-        document.getElementsByClassName("publishtime").item(i).innerText =
-            this.dt[i].date;
-        document
-            .getElementsByClassName("topic-origin")
-            .item(i)
-            .getElementsByClassName("topic-origin-name")
-            .item(0).innerText = this.dt[i].topic;
-        document
-            .getElementsByClassName("diary-origin")
-            .item(i)
-            .setAttribute("href", "topic/" + i);
-        document
-            .getElementsByClassName("diary-origin-pic")
-            .item(i)
-            .getElementsByClassName("diary-pic")
-            .item(0)
-            .setAttribute("src", this.dt[i].img);
+    async updateComment() {
+      this.$axios.post("/movie/hotpassage").then((res) => {
+        if (res.data.errno === 0) {
+          console.log("获取到热门书评");
+          this.moviecomments = res.data.data;
+          var i;
+          for (i = 0; i < this.moviecomments.length; i++) {
+            this.moviecomments[i].content = this.ToText(
+              this.moviecomments[i].content
+            );
+            if (this.moviecomments[i].content.length > 170) {
+              this.moviecomments[i].content =
+                this.moviecomments[i].content.substring(0, 170) + "…";
+              var img = this.displayIcon(this.moviecomments[i].usericon);
+              console.log(img);
+              this.moviecomments[i].usericon = img.icon;
+              this.moviecomments[i].thestyle = img.style;
+              console.log(this.moviecomments[i].content);
+            }
+          }
+        }
+      });
+    },
+    displayIcon(url) {
+      var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+      var styleOfIcon = "width:30px";
+      if (url !== "") {
+        var len = this.$axios.defaults.baseURL.length;
+        icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
       }
-      document
-          .getElementsByClassName("topic-origin-name")
-          .item(0)
-          .addEventListener("click", function () {
-            router.push({
-              name: "topicdetail",
-              query: { id: topic_detail_link[0] },
-            });
-          });
-      document
-          .getElementsByClassName("topic-origin-name")
-          .item(1)
-          .addEventListener("click", function () {
-            router.push({
-              name: "topicdetail",
-              query: { id: topic_detail_link[1] },
-            });
-          });
-      document
-          .getElementsByClassName("topic-origin-name")
-          .item(2)
-          .addEventListener("click", function () {
-            router.push({
-              name: "topicdetail",
-              query: { id: topic_detail_link[2] },
-            });
-          });
+      var img = new Image();
+      img.src = icon;
+      if (img.width > img.height)
+        styleOfIcon =
+          "height:30px;position: relative; top:0px; left:-" +
+          ((img.width - img.height) / img.height) * 15 +
+          "px";
+      else
+        styleOfIcon =
+          "width:30px;position: relative;  left:0px;top:-" +
+          ((img.height - img.width) / img.width) * 15 +
+          "px";
+      return { icon: icon, style: styleOfIcon };
     },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.changeTopicdt();
+    ToText(HTML) {
+      var input = HTML;
+      return input
+        .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/[ ]|[&ensp;]/g, "")
+        .replace(/[ ]|[&nbsp;]/g, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/\s+/g, " ")
+        .replace(/ /g, " ")
+        .replace(/>/g, " ");
     },
     changeTopicdt() {},
     ToVideoDetail(id) {
-      if(this.hotmes === this.hotmoives) {
+      if (this.hotmes === this.hotmoives) {
         this.$router.push({
-        name: "moviedetail",
-        query: { id: id },
-      }); 
+          name: "moviedetail",
+          query: { id: id },
+        });
         this.hotmes = this.hotmoives;
-      }
-      else if(this.hotmes === this.hottele) {
+      } else if (this.hotmes === this.hottele) {
         this.$router.push({
           name: "teledetail",
           query: { id: id },
@@ -458,14 +390,13 @@ export default {
       }
     },
     ToVideoDetailpoint(id) {
-      if(this.highmes === this.highmoives) {
+      if (this.highmes === this.highmoives) {
         this.$router.push({
           name: "moviedetail",
           query: { id: id },
         });
         this.highmes = this.highmoives;
-      }
-      else if(this.highmes === this.hightele) {
+      } else if (this.highmes === this.hightele) {
         this.$router.push({
           name: "teledetail",
           query: { id: id },
@@ -474,13 +405,19 @@ export default {
       }
     },
     ToComment(index) {
-      if(index < this.ismovie)
-        this.$router.push({ name: "moviecomment", query: { id: this.passages[index].id } });
+      if (index < this.ismovie)
+        this.$router.push({
+          name: "moviecomment",
+          query: { id: this.passages[index].id },
+        });
       else
-        this.$router.push({ name: "telecomment", query: { id: this.passages[index].id } });
+        this.$router.push({
+          name: "telecomment",
+          query: { id: this.passages[index].id },
+        });
     },
-    bookcomment() {
-      this.$router.push({ name: "bookcomment" });
+    moviecomment() {
+      this.$router.push({ name: "moviecomment" });
     },
     async updateCollection() {
       var params = {
@@ -488,42 +425,44 @@ export default {
       };
       this.collections = [];
       this.$axios
-          .post("/tele/collection", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            console.log("查询到已收藏的电视剧")
-            if (res.data.errno === 0) {
-              this.telecollections = [];
-              var i = 0;
-              if(res.data.data.length !== 0)
+        .post("/tele/collection", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          console.log("查询到已收藏的电视剧");
+          if (res.data.errno === 0) {
+            this.telecollections = [];
+            var i = 0;
+            if (res.data.data.length !== 0)
               for (i = 0; i < 1 && i < res.data.data.length; i++) {
                 this.collections.push(res.data.data[i]);
               }
-            } else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       this.$axios
-          .post("/movie/collection", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            console.log("查询到已收藏的电影")
-            if (res.data.errno === 0) {
-              var i = 0;
-              if(res.data.data.length !== 0)
+        .post("/movie/collection", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          console.log("查询到已收藏的电影");
+          if (res.data.errno === 0) {
+            var i = 0;
+            if (res.data.data.length !== 0)
               for (i = 0; i < 2 && i < res.data.data.length; i++) {
+                res.data.data[i].star = parseFloat(res.data.data[i].star);
                 this.collections.push(res.data.data[i]);
+                console.log(this.collections[i].star)
               }
-            } else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       this.loaddata = true;
     },
     async updatePassage() {
@@ -532,176 +471,176 @@ export default {
       };
       this.passages = [];
       this.$axios
-          .post("/movie/mypassage", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              var i;
-              var length = 3;
-              if (res.data.data.length < 3) length = res.data.data.length;
-              this.ismovie = length;
-              for (i = 0; i < length; i++) this.passages.push(res.data.data[i]);
-              this.loadSuccess = true;
-            } else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        .post("/movie/mypassage", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            var i;
+            var length = 3;
+            if (res.data.data.length < 3) length = res.data.data.length;
+            this.ismovie = length;
+            for (i = 0; i < length; i++) this.passages.push(res.data.data[i]);
+            this.loadSuccess = true;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       this.$axios
-          .post("/tele/mypassage", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              var i;
-              var length = 3;
-              if (res.data.data.length < 3) length = res.data.data.length;
-              for (i = 0; i < length; i++) this.passages.push(res.data.data[i]);
-              this.loadSuccess = true;
-            } else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        .post("/tele/mypassage", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            var i;
+            var length = 3;
+            if (res.data.data.length < 3) length = res.data.data.length;
+            for (i = 0; i < length; i++) this.passages.push(res.data.data[i]);
+            this.loadSuccess = true;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     async updateHotVideo() {
       var params = {
         num: 20,
       };
       this.$axios
-          .post("/movie/hot", qs.stringify(params))
-          .then((res) => {
-            if (res.data.errno === 0) {
-              console.log("获取到热门电影");
-              console.log(res);
-              var movie = [];
-              movie = res.data.data;
-              var i = 0;
-              for (i = 0; i < 20; i++) {
-                var length = 14 - movie[i].name.length;
-                if (movie[i].name.length > 7 && movie[i].director.length > length)
-                  movie[i].director = movie[i].director.substring(0, length - 2) + "…";
-                if (movie[i].director.length > 8)
-                  movie[i].director = movie[i].director.substring(0, 7) + "…";
-              }
-              this.hotmoives = [];
-              for (i = 0; i < 20; i = i + 2) {
-                this.hotmoives.push({
-                  book1: movie[i],
-                  book2: movie[i + 1],
-                  id: i,
-                });
-              }
-              this.hotmes = this.hotmoives;
-            } else {
-              this.$message.error("查询失败");
+        .post("/movie/hot", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("获取到热门电影");
+            console.log(res);
+            var movie = [];
+            movie = res.data.data;
+            var i = 0;
+            for (i = 0; i < 20; i++) {
+              var length = 14 - movie[i].name.length;
+              movie[i].director='[导演]'+movie[i].director;
+              if (movie[i].name.length > 7 && movie[i].director.length > length)
+                movie[i].director =
+                  movie[i].director.substring(0, length - 2) + "…";
+              if (movie[i].director.length > 10)
+                movie[i].director = movie[i].director.substring(0, 9) + "…";
             }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+            this.hotmoives = [];
+            for (i = 0; i < 20; i = i + 2) {
+              this.hotmoives.push({
+                movie1: movie[i],
+                movie2: movie[i + 1],
+                id: i,
+              });
+            }
+            this.hotmes = this.hotmoives;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       this.$axios
-          .post("/tele/hot", qs.stringify(params))
-          .then((res) => {
-            if (res.data.errno === 0) {
-              console.log("获取到热门电视剧");
-              console.log(res);
-              var tele = [];
-              tele = res.data.data;
-              var i = 0;
-              for (i = 0; i < 20; i++) {
-                var length = 14 - tele[i].name.length;
-                if (tele[i].name.length > 7 && tele[i].nation.length > length)
-                  tele[i].nation = tele[i].nation.substring(0, length - 2) + "…";
-                if (tele[i].nation.length > 8)
-                  tele[i].nation = tele[i].nation.substring(0, 7) + "…";
-              }
-              this.hottele = [];
-              for (i = 0; i < 20; i = i + 2) {
-                this.hottele.push({
-                  book1: tele[i + 1],
-                  book2: tele[i],
-                  id: i,
-                });
-              }
-            } else {
-              this.$message.error("查询失败");
+        .post("/tele/hot", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("获取到热门电视剧");
+            console.log(res);
+            var tele = [];
+            tele = res.data.data;
+            var i = 0;
+            for (i = 0; i < 20; i++) {
+              var length = 14 - tele[i].name.length;
+              if (tele[i].name.length > 7 && tele[i].nation.length > length)
+                tele[i].nation = tele[i].nation.substring(0, length - 2) + "…";
+              if (tele[i].nation.length > 8)
+                tele[i].nation = tele[i].nation.substring(0, 7) + "…";
             }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+            this.hottele = [];
+            for (i = 0; i < 20; i = i + 2) {
+              this.hottele.push({
+                movie1: tele[i + 1],
+                movie2: tele[i],
+                id: i,
+              });
+            }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     async updateHighvideo() {
       var params = {
         num: 20,
       };
       this.$axios
-          .post("/movie/high",qs.stringify(params))
-          .then((res) => {
-            if (res.data.errno === 0) {
-              console.log("获取到高分电影");
-              console.log(res);
-              var movie = [];
-              movie = res.data.data;
-              var i = 0;
-              for (i = 0; i < 20; i++) {
-                var length = 14 - movie[i].name.length;
-                if (movie[i].name.length > 7 && movie[i].director.length > length)
-                  movie[i].director = movie[i].director.substring(0, length - 2) + "…";
-                if (movie[i].director.length > 8)
-                  movie[i].director = movie[i].director.substring(0, 7) + "…";
-              }
-              this.highmoives = [];
-              for (i = 0; i < 20; i = i + 2) {
-                this.highmoives.push({
-                  book1: movie[i],
-                  book2: movie[i + 1],
-                  id: i,
-                });
-              }
-              this.highmes = this.highmoives;
-            } else {
-              this.$message.error("查询失败");
+        .post("/movie/high", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("获取到高分电影");
+            console.log(res);
+            var movie = [];
+            movie = res.data.data;
+            var i = 0;
+            for (i = 0; i < 20; i++) {
+              movie[i].name = movie[i].name + "》";
+              if (movie[i].name.length > 6)
+                movie[i].name = movie[i].name.substring(0, 6) + "…";
+              movie.star = parseFloat(movie.star);
             }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+            this.highmoives = [];
+            for (i = 0; i < 20; i = i + 2) {
+              this.highmoives.push({
+                movie1: movie[i],
+                movie2: movie[i + 1],
+                id: i,
+              });
+            }
+            this.highmes = this.highmoives;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       this.$axios
-          .post("/tele/high",qs.stringify(params))
-          .then((res) => {
-            if (res.data.errno === 0) {
-              console.log("获取到高分电视剧");
-              console.log(res);
-              var tele = [];
-              tele = res.data.data;
-              var i = 0;
-              for (i = 0; i < 20; i++) {
-                var length = 14 - tele[i].name.length;
-                if (tele[i].name.length > 7 && tele[i].nation.length > length)
-                  tele[i].nation = tele[i].nation.substring(0, length - 2) + "…";
-                if (tele[i].nation.length > 8)
-                  tele[i].nation = tele[i].nation.substring(0, 7) + "…";
-              }
-              this.hightele = [];
-              for (i = 0; i < 20; i = i + 2) {
-                this.hightele.push({
-                  book1: tele[i],
-                  book2: tele[i + 1],
-                  id: i,
-                });
-              }
-            } else {
-              this.$message.error("查询失败");
+        .post("/tele/high", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("获取到高分电视剧");
+            console.log(res);
+            var tele = [];
+            tele = res.data.data;
+            var i = 0;
+            for (i = 0; i < 20; i++) {
+              tele[i].name = tele[i].name + "》";
+              if (tele[i].name.length > 6)
+                tele[i].name = tele[i].name.substring(0, 6) + "…";
+              tele.star = parseFloat(tele.star);
             }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+            this.hightele = [];
+            for (i = 0; i < 20; i = i + 2) {
+              this.hightele.push({
+                movie1: tele[i],
+                movie2: tele[i + 1],
+                id: i,
+              });
+            }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
   mounted() {
@@ -709,10 +648,11 @@ export default {
     this.updateHotVideo();
     this.updateHighvideo();
     this.updatePassage();
+    this.updateComment();
     window.onscroll = function (e) {
       var vertical = document
-          .getElementsByClassName("videopage-vertical")
-          .item(0);
+        .getElementsByClassName("videopage-vertical")
+        .item(0);
       var pos = vertical.getBoundingClientRect();
       if (pos.top < 29) {
         var aside = document.getElementsByClassName("aside").item(0);
@@ -743,7 +683,7 @@ button.selection_ed {
   color: black;
   font-weight: bold;
 }
-#bookpage {
+#moviepage {
   width: 1600px;
   padding-left: 100px;
 }
@@ -771,7 +711,7 @@ button.selection_ed {
   margin-bottom: 50px;
 }
 
-.book-display {
+.movie-display {
   height: 170px;
   width: 120px;
   border-style: solid;
@@ -784,7 +724,7 @@ button.selection_ed {
   margin-left: 10px;
   margin-right: 10px;
 }
-.book-display-info {
+.movie-display-info {
   width: 120px;
   font-size: 14px;
 }
@@ -823,7 +763,7 @@ button.selection_ed {
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
-  width:352px;
+  width: 352px;
 }
 .aside-slide {
   margin-top: 80px;
@@ -841,12 +781,12 @@ button.selection_ed {
   position: fixed;
   left: 1260px;
   top: -50px;
-  width:352px;
+  width: 352px;
 }
-.bookpage-comments {
+.moviepage-comments {
   margin-bottom: 50px;
 }
-.book-comments-display {
+.movie-comments-display {
   width: 1000px;
 }
 .comment-display-body {
@@ -882,6 +822,18 @@ div.comment-origin-pic {
   display: flex;
   flex-wrap: row;
 }
+.moviepage-title {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  text-align: left;
+  font-size: 24px;
+  font-weight: bold;
+  padding-left: 10px;
+}
+.moviepage-title img {
+  height: 37px;
+  vertical-align: -20%;
+  margin-right: 5px;
+}
 .display-publisher a {
   font-weight: 500;
   font-size: 22px;
@@ -911,10 +863,10 @@ a.commenttext-origin {
   transition: 0.3s ease;
 }
 a.commenttext-origin:hover {
-  color: gray;
+  color: rgb(101, 101, 101);
   text-decoration: none;
 }
-a.comment-book-name {
+a.comment-movie-name {
   font-weight: 400;
   font-size: 17px;
   color: rgb(157, 157, 157);
@@ -975,11 +927,11 @@ a.comment-book-name {
   background-color: rgb(213, 230, 245);
   font-weight: 600;
 }
-.book-comment-list a {
+.movie-comment-list a {
   font-size: 18px;
   font-family: Source Han Sans CN Normal;
 }
-.book-comment-list a:hover {
+.movie-comment-list a:hover {
   font-weight: 600;
   color: rgb(2, 98, 182);
 }

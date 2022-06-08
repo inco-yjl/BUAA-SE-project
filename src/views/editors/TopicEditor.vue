@@ -97,7 +97,7 @@
 </style>
 <script>
 import { createEditor, createToolbar } from "@wangeditor/editor";
-import qs from 'qs';
+import qs from "qs";
 const editorConfig = {};
 
 // 工具栏配置
@@ -111,12 +111,12 @@ export default {
     var id = this.$route.query.id;
     var passage = "";
     var topic;
-    var loadSuccess=false;
+    var loadSuccess = false;
     return {
       id,
       passage,
       topic,
-      loadSuccess
+      loadSuccess,
     };
   },
   methods: {
@@ -128,20 +128,18 @@ export default {
       });
     },
     UploadDt() {
-      if(this.passage.length>10000)
-      {
+      if (this.passage.length > 10000) {
         this.$message.error("字数过多！不得超过10000字");
         return;
       }
-      if(this.passage.length===0)
-      {
+      if (this.passage.length === 0) {
         this.$message.error("请输入动态内容！");
         return;
       }
       var params = {
         user_id: this.$store.getters.getUser.user.id,
         topic_id: this.id,
-        text:this.passage,
+        text: this.passage,
       };
       this.$axios
         .post("/topic/passage", qs.stringify(params))
@@ -161,9 +159,8 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-
     },
-    updateContent(){
+    updateContent() {
       var params = {
         topic_id: this.id,
         user_id: this.$store.getters.getUser.user.id,
@@ -175,14 +172,13 @@ export default {
             console.log("详情查询成功");
             this.topic = res.data.data;
             this.loadSuccess = true;
-            switch(res.data.collect)
-            {
-                case 1:
-                    this.liked = true;
-                    break;
-                case 0:
-                    this.liked = false;
-                    break;
+            switch (res.data.collect) {
+              case 1:
+                this.liked = true;
+                break;
+              case 0:
+                this.liked = false;
+                break;
             }
           } else {
             this.$message.error("查询失败");
@@ -198,17 +194,48 @@ export default {
     removeNavigation() {
       this.$parent.navigate = false;
     },
-     createEditor() {
+    customCheckImageFn(src, alt, url) {
+      if (!src) {
+        return;
+      }
+      return true;
+
+      // 返回值有三种选择：
+      // 1. 返回 true ，说明检查通过，编辑器将正常插入图片
+      // 2. 返回一个字符串，说明检查未通过，编辑器会阻止插入。会 alert 出错误信息（即返回的字符串）
+      // 3. 返回 undefined（即没有任何返回），说明检查未通过，编辑器会阻止插入。但不会提示任何信息
+    },
+    async uploadPic(img) {
+      console.log("update");
+      var params = new FormData();
+      params.append("photo", img);
+      params.append("name", img.name);
+      params.append("resource_id", this.$store.getters.getUser.user.id);
+      params.append("resource_type", 2);
+      this.$axios.post("/photo/upload_photo", params);
+    },
+    changeUrl(url) {
+      var len = this.$axios.defaults.baseURL.length;
+     return this.$axios.defaults.baseURL.substring(0, len - 4) + url;
+    },
+    createEditor() {
       editorConfig.onChange = (editor) => {
         // 当编辑器选区、内容变化时，即触发
         console.log("html", editor.getHtml());
         this.passage = editor.getHtml();
+      };
+      editorConfig.onchangeTimeout = 500;
+      editorConfig.customUploadImg = async function (resultFiles, insertImgFn) {
+        const result = await this.uploadPic(resultFiles[0]);
+        // 上传图片成功后，将图片地址传入到insertImgFn方法中即可
+        if (result.data.errno === 0) insertImgFn(changeUrl(result.data.data.url));
       };
       const editor = createEditor({
         selector: document.querySelector("#editor-container"),
         config: editorConfig,
         mode: "simple", // 或 'simple' 参考下文
       });
+
       // 创建工具栏
       const toolbar = createToolbar({
         editor,
@@ -230,7 +257,7 @@ export default {
   mounted() {
     this.removeNavigation();
     this.updateContent();
-    this.createEditor();  
+    this.createEditor();
   },
 };
 </script>

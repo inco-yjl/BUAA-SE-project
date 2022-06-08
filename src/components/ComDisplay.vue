@@ -71,7 +71,7 @@ a.commentlist{
     transition:.2s ease;
 }
 a.commentlist:hover{
-  color:gray;
+  color: rgb(101, 101, 101);;
   text-decoration: none;
 }
 </style>

@@ -554,7 +554,7 @@ export default {
 .rate-number {
   display: flex;
   font-size: 15px;
-  color: gray;
+  color: rgb(101, 101, 101);
   line-height: 22px;
   flex-wrap: nowrap;
 }
@@ -789,7 +789,7 @@ a.commenttext-origin {
   transition: 0.3s ease;
 }
 a.commenttext-origin:hover {
-  color: gray;
+  color: rgb(101, 101, 101);
   text-decoration: none;
 }
 </style>

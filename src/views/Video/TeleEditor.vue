@@ -129,13 +129,15 @@
   left: 20px;
 }
 #editor {
-  position: absolute;
+  position: relative;
   width: 900px;
   left: 400px;
   right: 400px;
-  top: 300px;
-  height: 800px;
+  top: 250px;
   background-color: white;
+}
+#editor-container{
+  min-height:800px;
 }
 #title-container {
   padding: 20px 0;
@@ -162,7 +164,7 @@ const editorConfig = {};
 
 // 工具栏配置
 const toolbarConfig = {
-  excludeKeys: ["insertVideo", "fullScreen", "codeBlock", "bgColor", "color"],
+  excludeKeys: ["insertVideo", "fullScreen", "codeBlock", "bgColor", "color","group-image"],
 };
 
 export default {

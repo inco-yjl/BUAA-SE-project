@@ -16,21 +16,22 @@
         </div>
         <div class="book-detail-interact">
           <div class="evaluate">打个分吧！</div>
-          <el-rate :show-score="true" 
-          class="star-button" 
-          style="width:150px"
-          v-model="evaluate" 
-          :colors="colors"
-          @change="starTheBook"
-          > 
+          <el-rate
+            :show-score="true"
+            class="star-button"
+            style="width: 150px"
+            v-model="evaluate"
+            :colors="colors"
+            @change="starTheBook"
+          >
           </el-rate>
-            <button>
-              <img src="@/assets/guide/share.png" /><span>分享书籍</span>
-            </button>
-            <button  @click="writeComment()">
-              <img src="@/assets/guide/write_dt.png" /><span>撰写评论</span>
-            </button>
-          </div>
+          <button>
+            <img src="@/assets/guide/share.png" /><span>分享书籍</span>
+          </button>
+          <button @click="writeComment()">
+            <img src="@/assets/guide/write_dt.png" /><span>撰写评论</span>
+          </button>
+        </div>
         <div clas="detail-content">
           <div class="detail-info">
             <div><img class="detail-img" :src="book.image" /></div>
@@ -45,29 +46,34 @@
                   <div class="score">
                     <strong class="num">{{ book.score }}</strong>
                   </div>
-                  <div>{{peoplenum}}人评价</div>
+                  <div>{{ peoplenum }}人评价</div>
                 </div>
               </div>
               <div>
                 <div class="rate-number">
                   5星
-                  <div class="distribute" :style="style5"></div>&ensp;{{rankList[4]}}人
+                  <div class="distribute" :style="style5"></div>
+                  &ensp;{{ rankList[4] }}人
                 </div>
                 <div class="rate-number">
                   4星
-                  <div class="distribute" :style="style4"></div>&ensp;{{rankList[3]}}人
+                  <div class="distribute" :style="style4"></div>
+                  &ensp;{{ rankList[3] }}人
                 </div>
                 <div class="rate-number">
                   3星
-                  <div class="distribute" :style="style3"></div>&ensp;{{rankList[2]}}人
+                  <div class="distribute" :style="style3"></div>
+                  &ensp;{{ rankList[2] }}人
                 </div>
                 <div class="rate-number">
                   2星
-                  <div class="distribute" :style="style2"></div>&ensp;{{rankList[1]}}人
+                  <div class="distribute" :style="style2"></div>
+                  &ensp;{{ rankList[1] }}人
                 </div>
                 <div class="rate-number">
                   1星
-                  <div class="distribute" :style="style1"></div>&ensp;{{rankList[0]}}人
+                  <div class="distribute" :style="style1"></div>
+                  &ensp;{{ rankList[0] }}人
                 </div>
               </div>
             </div>
@@ -90,7 +96,7 @@
             v-for="book in collections"
             :key="book.id"
           >
-            <a class="collection-item">
+            <a class="collection-item" @click="ToBookDetail(book.id)">
               <img class="collection-img" :src="book.image" />
               <div class="collection-info">
                 《{{ book.name }}》
@@ -115,8 +121,12 @@
             </a>
           </div>
           <ul class="book-comment-list hotlist">
-            <li :v-if="passages.length>0" v-for="passage in passages" :key="passage.id">
-              <a>{{ passage.title }}</a>
+            <li
+              :v-if="passages.length > 0"
+              v-for="passage in passages"
+              :key="passage.id"
+            >
+              <a @click="ToComment(passage.id)">{{ passage.title }}</a>
             </li>
           </ul>
         </div>
@@ -159,11 +169,20 @@
                 <span class="publish-info">{{ comment.date }}</span>
               </div>
               <div class="commenttext">
-                <a class="commenttext-origin" @click="Tobookcomment">{{
+                <a class="commenttext-origin" @click="ToComment(comment.id)">{{
                   comment.content
                 }}</a>
               </div>
             </div>
+          </div>
+          <div class="search-number">
+            <el-pagination
+              @current-change="changeComment"
+              :page-size="7"
+              layout="prev, pager, next, jumper"
+              :total="commentNum"
+            >
+            </el-pagination>
           </div>
         </div>
       </div>
@@ -188,45 +207,9 @@ export default {
   data() {
     var id = this.$route.query.id;
     var book = {};
-    var peoplenum=0;
-    var bookcomments = [
-      {
-        id: 1,
-        date: "2022-5-4",
-        userId: 1,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "yjl",
-        content:
-          "听Jpop不听King Gnu，\
-        就像四大名著不看红楼梦，说明这个人文学造诣和自我修养不足，\
-        他理解不了这种内在的阳春白雪的高雅艺术，他只能看到外表的辞藻堆砌，\
-        参不透其中深奥的精神内核，他整个人的层次就卡在这里了，只能度过一个相对失败的人生。",
-      },
-      {
-        id: 2,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "IntP",
-        content: "testtest",
-      },
-      {
-        id: 3,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "看看中文",
-        content: "多搞点",
-      },
-      {
-        id: 4,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "还有好多没写",
-        content: "多搞点",
-      },
-    ];
+    var peoplenum = 0;
+    var bookcomments = [{}];
+    var allComments = [];
     var loadSuccess = false;
     var collections = [{}];
     var passages = [{}];
@@ -236,10 +219,10 @@ export default {
     var style3;
     var style4;
     var style5;
-    var rankList=[];
+    var rankList = [];
     return {
       collections,
-      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
+      colors: ["#99A9BF", "#F7BA2A", "#FF9900"],
       evaluate: 0,
       passages,
       book,
@@ -249,6 +232,8 @@ export default {
       style4,
       style5,
       peoplenum,
+      allComments,
+      commentNum: 0,
       collect,
       rankList,
       id,
@@ -257,6 +242,16 @@ export default {
     };
   },
   methods: {
+    ToComment(id) {
+      console.log(id);
+      this.$router.push({ name: "bookcomment", query: { id: id } });
+    },
+    ToBookDetail(id) {
+      this.$router.push({
+        name: "bookdetail",
+        query: { id: id },
+      });
+    },
     clickcollect() {
       if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
@@ -313,34 +308,29 @@ export default {
       if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
         return;
-      }
-      else {
+      } else {
         this.$router.push({
-        name: "bookeditor",
-        query: { id: this.id },
-      });
+          name: "bookeditor",
+          query: { id: this.id },
+        });
       }
-    },
-    Tobookcomment() {
-      this.$router.push({ name: "bookcomment" });
     },
     async updateCollection() {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
       };
-      console.log(this.$store.getters.getUser.user.id)
+      console.log(this.$store.getters.getUser.user.id);
       this.$axios
         .post("/book/collection", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
             console.log(res.data.data);
             this.collections = [];
-            var i=0;
-            for(i=0;i<3 && i<res.data.data.length;i++){
-              res.data.data[i].star=parseFloat(res.data.data[i].star);
+            var i = 0;
+            for (i = 0; i < 3 && i < res.data.data.length; i++) {
+              res.data.data[i].star = parseFloat(res.data.data[i].star);
               this.collections.push(res.data.data[i]);
             }
-              
           } else {
             this.$message.error("查询失败");
           }
@@ -361,31 +351,30 @@ export default {
           if (res.data.errno === 0) {
             console.log("书籍查询成功");
             this.book = res.data.data;
-            switch(res.data.collect)
-            {
-                case 1:
-                    this.collect = true;
-                    break;
-                case 0:
-                    this.collect = false;
-                    break;
+            switch (res.data.collect) {
+              case 1:
+                this.collect = true;
+                break;
+              case 0:
+                this.collect = false;
+                break;
             }
-          this.rankList=res.data.list;
-          this.evaluate=parseFloat(res.data.evaluate);
-          this.peoplenum=parseInt(res.data.people);
-          var length;
-          length=res.data.list[0]*200/this.peoplenum+5;
-          this.style1="width:"+length+"px";
-          length=res.data.list[1]*200/this.peoplenum+5;
-          this.style2="width:"+length+"px";
-          length=res.data.list[2]*200/this.peoplenum+5;
-          this.style3="width:"+length+"px";
-          length=res.data.list[3]*200/this.peoplenum+5;
-          this.style4="width:"+length+"px";
-          length=res.data.list[4]*200/this.peoplenum+5;
-          this.style5="width:"+length+"px";
+            this.rankList = res.data.list;
+            this.evaluate = parseFloat(res.data.evaluate);
+            this.peoplenum = parseInt(res.data.people);
+            var length;
+            length = (res.data.list[0] * 200) / this.peoplenum + 5;
+            this.style1 = "width:" + length + "px";
+            length = (res.data.list[1] * 200) / this.peoplenum + 5;
+            this.style2 = "width:" + length + "px";
+            length = (res.data.list[2] * 200) / this.peoplenum + 5;
+            this.style3 = "width:" + length + "px";
+            length = (res.data.list[3] * 200) / this.peoplenum + 5;
+            this.style4 = "width:" + length + "px";
+            length = (res.data.list[4] * 200) / this.peoplenum + 5;
+            this.style5 = "width:" + length + "px";
 
-          this.loadSuccess = true;
+            this.loadSuccess = true;
           } else {
             this.$message.error("查询失败");
           }
@@ -394,21 +383,127 @@ export default {
           console.log(error);
         });
     },
+    ToText(HTML) {
+      var input = HTML;
+      return input
+        .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/[ ]|[&ensp;]/g, "")
+        .replace(/[ ]|[&nbsp;]/g, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/\s+/g, " ")
+        .replace(/ /g, " ")
+        .replace(/>/g, " ");
+    },
+    changeComment(currentPage) {
+      this.bookcomments = [];
+      var length = this.commentNum - (currentPage - 1) * 7;
+      if (length > 7) length = 7;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.bookcomments.push(this.allComments[currentPage * 7 - 7 + i]);
+      }
+    },
     newComment() {
       //获取新的数据
       document
         .getElementById("select-hot-comment")
         .setAttribute("class", "selection_un");
-      this.dt = this.newdt;
-      this.Updatediary();
+      var params = {
+        book_id: this.id,
+      };
+      this.$axios
+        .post("/book/article/new", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.data);
+            this.bookcomments = [];
+            var i;
+            var comments = res.data.data;
+            this.commentNum = res.data.data.length;
+            for (i = 0; i < this.commentNum; i++) {
+              comments[i].content = this.ToText(comments[i].content);
+              comments[i].date = comments[i].date.substring(0, 10);
+              if (comments[i].content.length > 170) {
+                comments[i].content =
+                  comments[i].content.substring(0, 170) + "…";
+              }
+              var url = comments[i].usericon;
+              var img = this.displayIcon(url);
+
+              comments[i].usericon = img.icon;
+              comments[i].thestyle = img.style;
+            }
+            this.allComments = comments;
+            this.changeComment(1);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    displayIcon(url) {
+      var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+      var styleOfIcon = "width:30px;border-radius=20px;";
+      if (url !== "") {
+        var len = this.$axios.defaults.baseURL.length;
+        icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
+      }
+      var img = new Image();
+      img.src = icon;
+      if (img.width > img.height)
+        styleOfIcon =
+          "height:30px;position: relative; top:0px; left:-" +
+          ((img.width - img.height) / img.height) * 15 +
+          "px";
+      else
+        styleOfIcon =
+          "width:30px;position: relative;  left:0px;top:-" +
+          ((img.height - img.width) / img.width) * 15 +
+          "px";
+      return { icon: icon, style: styleOfIcon };
     },
     hotComment() {
       //更换标签时获取数据
       document
         .getElementById("select-new-comment")
         .setAttribute("class", "selection_un");
-      this.dt = this.topic.hotdt;
-      this.Updatediary();
+      var params = {
+        book_id: this.id,
+      };
+      this.$axios
+        .post("/book/article/hot", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.data);
+            this.bookcomments = [];
+            var i;
+            var comments = res.data.data;
+            this.commentNum = res.data.data.length;
+            for (i = 0; i < this.commentNum; i++) {
+              comments[i].content = this.ToText(comments[i].content);
+              comments[i].date = comments[i].date.substring(0, 10);
+              if (comments[i].content.length > 170) {
+                comments[i].content =
+                  comments[i].content.substring(0, 170) + "…";
+              }
+              var url = comments[i].usericon;
+              var img = this.displayIcon(url);
+
+              comments[i].usericon = img.icon;
+              comments[i].thestyle = img.style;
+            }
+            this.allComments = comments;
+            this.changeComment(1);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     async updatePassage() {
       var params = {
@@ -418,13 +513,11 @@ export default {
         .post("/book/mypassage", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
-            this.passages=[];
+            this.passages = [];
             var i;
-            var length=3;
-            if(res.data.data.length<3)
-            length=res.data.data.length;
-            for(i=0;i<length;i++)
-            this.passages.push(res.data.data[i])
+            var length = 3;
+            if (res.data.data.length < 3) length = res.data.data.length;
+            for (i = 0; i < length; i++) this.passages.push(res.data.data[i]);
           } else {
             this.$message.error("查询失败");
           }
@@ -434,10 +527,10 @@ export default {
         });
     },
     starTheBook() {
-    var params = {
+      var params = {
         user_id: this.$store.getters.getUser.user.id,
         book_id: this.id,
-        score: this.evaluate
+        score: this.evaluate,
       };
       this.$axios
         .post("/book/star", qs.stringify(params))
@@ -448,7 +541,6 @@ export default {
               message: res.data.msg,
               type: "success",
             });
-            
           } else {
             this.$message.error("查询失败");
           }
@@ -456,13 +548,14 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-  },
+    },
   },
   mounted() {
-    console.log('user'+this.$store.getters.getUser.user.id);
+    console.log("user" + this.$store.getters.getUser.user.id);
     this.updateContent();
     this.updateCollection();
     this.updatePassage();
+    this.hotComment();
     window.onscroll = function (e) {
       var vertical = document.getElementsByClassName("detail-vertical").item(0);
       var pos = vertical.getBoundingClientRect();
@@ -496,7 +589,7 @@ export default {
   padding-bottom: 100px;
   margin-top: 80px;
   width: 1160px;
-  height:auto;
+  height: auto;
   background-color: white;
   border-style: solid;
   border-width: 1px;
@@ -580,7 +673,7 @@ export default {
 .rate-number {
   display: flex;
   font-size: 15px;
-  color: gray;
+  color: rgb(101, 101, 101);
   line-height: 22px;
   flex-wrap: nowrap;
 }
@@ -626,7 +719,7 @@ export default {
 .book-detail-interact button {
   position: relative;
   left: 700px;
-  top:280px;
+  top: 280px;
   background: none;
   outline: none;
   font-size: 18px;
@@ -639,16 +732,16 @@ export default {
 .book-detail-interact img {
   height: 20px;
 }
-.star-button{
+.star-button {
   position: absolute;
   left: 740px;
-  top:672px;
+  top: 672px;
 }
-.evaluate{
+.evaluate {
   position: absolute;
   left: 660px;
-  top:672px;
-  color:gray;
+  top: 672px;
+  color: rgb(101, 101, 101);
 }
 .aside {
   margin-top: 80px;
@@ -665,7 +758,7 @@ export default {
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
-  width:352px;
+  width: 352px;
 }
 .aside-slide {
   margin-top: 80px;
@@ -680,7 +773,7 @@ export default {
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
-  width:352px;
+  width: 352px;
   position: fixed;
   left: 1260px;
   top: -50px;
@@ -823,10 +916,15 @@ button.selection_un {
 .display-publisher a:hover {
   color: rgb(0, 166, 255);
 }
+
 .iconOfuser {
   height: 30px;
   margin-right: 5px;
   vertical-align: sub;
+  border-style: solid;
+  border-color: rgba(244, 244, 244, 0);
+  border-width: 1px;
+  border-radius: 20px;
 }
 .commenttext {
   margin-left: 30px;
@@ -842,7 +940,11 @@ a.commenttext-origin {
   transition: 0.3s ease;
 }
 a.commenttext-origin:hover {
-  color: gray;
+  color: rgb(101, 101, 101);
   text-decoration: none;
+}
+.search-number {
+  margin-top:50px;
+  margin-left: 300px;
 }
 </style>

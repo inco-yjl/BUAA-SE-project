@@ -10,6 +10,7 @@
           <VueSlickCarousel
             :dots="true"
             :useCSS="true"
+            :arrows="true"
             :infinite="false"
             :speed="500"
             :slidesToShow="7"
@@ -79,9 +80,6 @@
                       <span class="book-display-title"
                         >《{{ book.book1.name }}</span
                       ><br />
-                      <span class="book-display-writer">{{
-                        book.book1.score
-                      }}</span>
                     </div>
                   </a>
                 </div>
@@ -113,10 +111,11 @@
             <div class="comment-display-body">
               <div class="display-publisher">
                 <a class="userOfcomment" href="/otherusers/1">
-                  <img class="iconOfuser" :src="comment.usericon" /><span
-                    class="nameOfuser"
-                    >{{ comment.username }}</span
-                  >
+                  <img
+                    class="iconOfuser"
+                    :src="comment.usericon"
+                    :style="comment.thestyle"
+                  /><span class="nameOfuser">{{ comment.username }}</span>
                 </a>
                 <span class="publish-info"
                   >{{ comment.date }}&ensp;评论了<a class="comment-book-name"
@@ -125,14 +124,17 @@
                 >
               </div>
               <div class="comment-origin-pic">
-                <a class="comment-origin" href="javascript:void(0)"
+                <a class="comment-origin" @click="ToBookDetail(comment.bookid)"
                   ><img class="comment-pic" :src="comment.img" />
                 </a>
               </div>
               <div class="commenttext">
-                <a class="commenttext-origin" @click="bookcomment">{{
-                  comment.content
-                }}</a>
+                <a class="commenttext-origin" @click="ToComment(comment.id)">
+                <span class="comment-title">
+                  {{comment.title}}
+                </span><br>
+                  {{ comment.content }}
+                </a>
               </div>
             </div>
           </div>
@@ -150,7 +152,7 @@
             v-for="book in collections"
             :key="book.id"
           >
-            <a class="collection-item">
+            <a class="collection-item" @click="ToBookDetail(book.id)">
               <img class="collection-img" :src="book.image" />
               <div class="collection-info">
                 《{{ book.name }}》
@@ -201,56 +203,7 @@ export default {
   data() {
     var hotbooks = [{}];
     var highbooks = [{}];
-    var bookcomments = [
-      {
-        id: 1,
-        date: "2022-5-4",
-        userId: 1,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "yjl",
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        bookname: "焦虑的人",
-        bookid: 1,
-        content:
-          "听Jpop不听King Gnu，\
-        就像四大名著不看红楼梦，说明这个人文学造诣和自我修养不足，\
-        他理解不了这种内在的阳春白雪的高雅艺术，他只能看到外表的辞藻堆砌，\
-        参不透其中深奥的精神内核，他整个人的层次就卡在这里了，只能度过一个相对失败的人生。",
-      },
-      {
-        id: 2,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "IntP",
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        bookname: "焦虑的人",
-        bookid: 1,
-        content: "testtest",
-      },
-      {
-        id: 3,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "看看中文",
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        bookname: "焦虑的人",
-        bookid: 1,
-        content: "多搞点",
-      },
-      {
-        id: 4,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "还有好多没写",
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        bookname: "焦虑的人",
-        bookid: 1,
-        content: "多搞点",
-      },
-    ];
+    var bookcomments = [];
     var collections = [{}];
     var passages = [{}];
     var loadSuccess = false;
@@ -277,10 +230,9 @@ export default {
     ToComment(id) {
       this.$router.push({ name: "bookcomment", query: { id: id } });
     },
-    bookcomment() {
-      this.$router.push({ name: "bookcomment" });
-    },
     async updateCollection() {
+      var user = this.$store.getters.getUser.user;
+      if (!user || user.id === -1) return;
       var params = {
         user_id: this.$store.getters.getUser.user.id,
       };
@@ -305,6 +257,8 @@ export default {
       this.loaddata = true;
     },
     async updatePassage() {
+      var user = this.$store.getters.getUser.user;
+      if (!user || user.id === -1) return;
       var params = {
         user_id: this.$store.getters.getUser.user.id,
       };
@@ -326,6 +280,62 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    async updateComment() {
+      this.$axios.post("/book/hotpassage").then((res) => {
+        if (res.data.errno === 0) {
+          console.log("获取到热门书评");
+          this.bookcomments = res.data.data;
+          var i;
+          for (i = 0; i < this.bookcomments.length; i++) {
+            this.bookcomments[i].content = this.ToText(
+              this.bookcomments[i].content
+            );
+            if (this.bookcomments[i].content.length > 170) {
+              this.bookcomments[i].content =
+                this.bookcomments[i].content.substring(0, 170) + "…";
+              var img = this.displayIcon(this.bookcomments[i].usericon);
+              console.log(img);
+              this.bookcomments[i].usericon = img.icon;
+              this.bookcomments[i].thestyle = img.style;
+              console.log(this.bookcomments[i].content);
+            }
+          }
+        }
+      });
+    },
+    displayIcon(url) {
+      var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+      var styleOfIcon = "width:30px";
+      if (url !== "") {
+        var len = this.$axios.defaults.baseURL.length;
+        icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
+      }
+      var img = new Image();
+      img.src = icon;
+      if (img.width > img.height)
+        styleOfIcon =
+          "height:30px;position: relative; top:0px; left:-" +
+          ((img.width - img.height) / img.height) * 15 +
+          "px";
+      else
+        styleOfIcon =
+          "width:30px;position: relative;  left:0px;top:-" +
+          ((img.height - img.width) / img.width) * 15 +
+          "px";
+      return { icon: icon, style: styleOfIcon };
+    },
+    ToText(HTML) {
+      var input = HTML;
+      return input
+        .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/[ ]|[&ensp;]/g, "")
+        .replace(/[ ]|[&nbsp;]/g, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/\s+/g, " ")
+        .replace(/ /g, " ")
+        .replace(/>/g, " ");
     },
     async updateHotBook() {
       var params = {
@@ -399,6 +409,7 @@ export default {
     this.updateHotBook();
     this.updateHighBook();
     this.updatePassage();
+    this.updateComment();
     window.onscroll = function (e) {
       var vertical = document
         .getElementsByClassName("bookpage-vertical")
@@ -497,7 +508,7 @@ export default {
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
-  width:352px;
+  width: 352px;
 }
 .aside-slide {
   margin-top: 80px;
@@ -515,7 +526,7 @@ export default {
   position: fixed;
   left: 1260px;
   top: -50px;
-  width:352px;
+  width: 352px;
 }
 .bookpage-comments {
   margin-bottom: 50px;
@@ -566,7 +577,7 @@ div.comment-origin-pic {
   color: rgb(0, 166, 255);
 }
 .iconOfuser {
-  height: 30px;
+  border-radius: 20px;
   margin-right: 5px;
   vertical-align: sub;
 }
@@ -576,7 +587,7 @@ div.comment-origin-pic {
 }
 a.commenttext-origin {
   position: relative;
-  top: 36px;
+  top: 20px;
   font-size: 17px;
   text-decoration: none;
   font-family: Helvetica, Arial, sans-serif;
@@ -585,8 +596,17 @@ a.commenttext-origin {
   transition: 0.3s ease;
 }
 a.commenttext-origin:hover {
-  color: gray;
+  color: rgb(101, 101, 101);
   text-decoration: none;
+}
+a.commenttext-origin span {
+  font-size: 20px;
+  font-weight: 600;
+  color: black;
+  transition: 0.3s ease;
+}
+a.commenttext-origin span:hover {
+  text-decoration: underline;
 }
 a.comment-book-name {
   font-weight: 400;
@@ -656,5 +676,9 @@ a.comment-book-name {
 .book-comment-list a:hover {
   font-weight: 600;
   color: rgb(2, 98, 182);
+}
+.search-number {
+  margin-top:50px;
+  margin-left: 300px;
 }
 </style>

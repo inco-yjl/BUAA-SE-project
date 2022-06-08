@@ -2,9 +2,8 @@
   <div id="searchpage">
     <search-input></search-input>
     <div>
-      <div id="search-book-result" class="search-result">
+      <div id="search-book-result" v-if="hasBook" class="search-result">
         <div class="search-result-title">相关书籍</div>
-
         <div v-for="book in books" :key="book.id" class="search-detail-result">
           <div class="search-result-text">
             <div class="result-origin">
@@ -23,7 +22,7 @@
               </div>
               <div>
                 <span>{{ book.readerNum }}人评价</span> &nbsp;&nbsp;
-                <span>作者：{{ book.writer }}</span
+                <span>作者：{{ book.author }}</span
                 >&nbsp;&nbsp;
                 <span>出版社：{{ book.publisher }}</span>
               </div>
@@ -39,15 +38,16 @@
         </div>
         <div class="search-number">
           <el-pagination
-            @next-click="changeSearchBook()"
+            @current-change="changeSearchBook"
             :page-size="3"
             layout="prev, pager, next, jumper"
             :total="bookNum"
           >
           </el-pagination>
+          <div>{{bookText}}</div>
         </div>
       </div>
-      <div id="search-movie-result" class="search-result">
+      <div id="search-movie-result" v-if="hasMovie" class="search-result">
         <div class="search-result-title">相关电影</div>
         <div
           v-for="movie in movies"
@@ -72,8 +72,8 @@
               <div>
                 <span>({{ movie.year }})</span>&nbsp;&nbsp;
                 <span>{{ movie.watchNum }}人评价</span> &nbsp;&nbsp;
-                <span>导演：[{{ movie.nation }}]</span>
-                <span>{{ movie.director }}</span>
+                <span>导演：
+                {{ movie.director }}</span>
               </div>
             </div>
             <div class="result-intro">{{ movie.intro }}</div>
@@ -87,15 +87,16 @@
         </div>
         <div class="search-number">
           <el-pagination
-            @next-click="changeSearchMovie()"
+            @current-change="changeSearchMovie"
             :page-size="3"
             layout="prev, pager, next, jumper"
             :total="movieNum"
           >
           </el-pagination>
+          <div>{{movieText}}</div>
         </div>
       </div>
-      <div id="search-episode-result" class="search-result">
+      <div id="search-episode-result" v-if="hasTele" class="search-result">
         <div class="search-result-title">相关电视剧</div>
         <div v-for="tele in teles" :key="tele.id" class="search-detail-result">
           <div class="search-result-text">
@@ -130,15 +131,16 @@
         </div>
         <div class="search-number">
           <el-pagination
-            @next-click="changeSearchTele()"
+            @current-change="changeSearchTele"
             :page-size="3"
             layout="prev, pager, next, jumper"
             :total="teleNum"
           >
           </el-pagination>
         </div>
+        <div>{{teleText}}</div>
       </div>
-      <div id="search-group-result" class="search-result">
+      <div id="search-group-result" v-if="hasGroup" class="search-result">
         <div class="search-result-title">相关小组</div>
         <div
           v-for="group in groups"
@@ -173,7 +175,7 @@
           </el-pagination>
         </div>
       </div>
-      <div id="search-topic-result" class="search-result">
+      <div id="search-topic-result" v-if="hasTopic" class="search-result">
         <div class="search-result-title">相关话题</div>
         <div
           v-for="topic in topics"
@@ -212,83 +214,18 @@
 </template>
 <script>
 import searchInput from "@/components/SelectSearch.vue";
+import qs from 'qs';
 export default {
   name: "search",
   components: {
     searchInput,
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.updatecontent();
+    });
+  },
   data() {
-    var bookNum;
-    var movieNum;
-    var teleNum;
-    var groupNum;
-    var topicNum;
-    var books = [
-      {
-        name: "焦虑的人",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        star: 3.5,
-        readerNum: 100,
-        writer: "xxx·xxx",
-        publisher: "某个出版社",
-        intro:
-          "究竟是何种程度的无奈和绝望，迫使一个中年人在新年来临前的早晨，用一把玩具枪抢劫一家无现金银行。\
-        行动失败的劫匪仓皇之中逃进一间位于大楼顶层的待售公寓，里面全都是正在看房子的潜在买家。由此开始，\
-        抢劫案变成了劫持人质案。\n然而事情的发展出乎预料，没有警匪对峙、没有致命一击，漫长的一天过后，八名人质安然无恙得到释放，\
-        劫匪却完全不见踪影。警察对人质逐一展开讯问，却发现他们每个人都有一肚子的抱怨和疑问，\
-        可是谁也说不清楚并且不关心劫匪究竟去了哪里。",
-      },
-      {
-        name: "焦虑的人",
-        id: 2,
-        img: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
-        star: 3.5,
-        readerNum: 100,
-        writer: "xxx·xxx",
-        publisher: "某个出版社",
-        intro:
-          "究竟是何种程度的无奈和绝望，迫使一个中年人在新年来临前的早晨，用一把玩具枪抢劫一家无现金银行。\
-        行动失败的劫匪仓皇之中逃进一间位于大楼顶层的待售公寓，里面全都是正在看房子的潜在买家。由此开始，\
-        抢劫案变成了劫持人质案。\n然而事情的发展出乎预料，没有警匪对峙、没有致命一击，漫长的一天过后，八名人质安然无恙得到释放，\
-        劫匪却完全不见踪影。警察对人质逐一展开讯问，却发现他们每个人都有一肚子的抱怨和疑问，\
-        可是谁也说不清楚并且不关心劫匪究竟去了哪里。",
-      },
-    ];
-    var movies = [
-      {
-        name: "1917",
-        id: 2,
-        nation: "美国",
-        director: "萨姆·门德斯",
-        year: 2019,
-        img: "https://i.imgtg.com/2022/05/12/z9ZmB.webp",
-        watchNum: 2000,
-        star: 4.2,
-        intro:
-          "1917年，第一次世界大战进入最激烈之际，两个年仅16岁的英国士兵接到的命令，需立即赶往死亡前线，向那里的将军传达一个“立刻停止进攻”讯息。\
-         时间只有八小时，武器弹药有限，无人知晓前方敌况：死亡寂静之地、布满尸体的铁丝网、突如其来的敌军、随时毙命的危险境况…… \
-         这一次两 个少年为救1600个人的性命，不完成，毋宁死！",
-      },
-    ];
-    var teles = [
-      {
-        name: "半泽直树",
-        id: 1,
-        nation: "日本",
-        year: 2013,
-        actor: ["堺雅人", "福泽克雄", "松木彩"],
-        img: "https://i.imgtg.com/2022/05/12/z9vVs.webp",
-        watchNum: 300,
-        star: 4.6,
-        intro:
-          "20世纪90年代，背负着悲惨过去的大学毕业生半泽直树（堺雅人 饰）如愿进入产业中央银行，并与同期近藤直弼（泷藤贤一 饰）、\
-        渡真利忍（及川光博 饰）朝着各自心中的目标而努力。看似光鲜的银行家们，在泡沫经济衰退前后身心经历着难以想象的折磨。进入21世纪，\
-        产业中央银行与东京第 一银行合并为东京中央银行，此时半泽任大阪西分店的融资课课长，坚信人性本善的他在履行银行家职责的同时坚守\
-        着普世的道义。高达5亿日元贷款诈骗事件，将半泽逼到事业的悬崖边，也促使他和只重明哲保身、趋炎附势、重利轻义的分行长乃至业内高层彻\
-        底决裂，有如螳臂当车、逆流而上的战斗，半泽能否凭一己之力改变这冷漠腐化的现状？",
-      },
-    ];
     var groups = [
       {
         name: "我们喜欢逛公园",
@@ -311,15 +248,31 @@ export default {
         dtnum: 20,
       },
     ];
+    var allBooks= [];
+    var allMovies = [];
+    var allTeles = [];
     var value = 3.7;
+    var hasMovie = false;
     return {
+      content: "",
+      movieText:"",
+      bookText:"",
+      teleText:"",
+      hasBook: false,
+      hasMovie,
+      hasTele: false,
+      hasTopic: false,
+      hasGroup: false,
       value,
-      books,
-      movies,
-      teles,
+      allBooks,
+      allMovies,
+      allTeles,
+      books: [],
+      movies:[],
+      teles: [],
       topics,
       groups,
-      bookNum: 24,
+      bookNum: 0,
       movieNum: 24,
       teleNum: 24,
       groupNum: 24,
@@ -327,34 +280,161 @@ export default {
     };
   },
   methods: {
-    splitIntro() {
-      var i, j;
-      for (i = 0; i < this.books.length; i++) {
-        if (this.books[i].intro.length > 170)
-          this.books[i].intro = this.books[i].intro.substring(0, 170) + "(……)";
+    updatecontent() {
+      var input = this.$route.query;
+      this.content = input.content;
+      this.hasBook = input.hasBook;
+      this.hasMovie = input.hasMovie;
+      this.hasTele = input.hasTele;
+      this.hasTopic = input.hasTele;
+      this.hasGroup = input.hasTele;
+      this.updateBook();
+      this.updateMovie();
+      this.updateTele();
+    },
+    ToText(HTML) {
+      var input = HTML;
+      return input
+        .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/[ ]|[&ensp;]/g, '')
+        .replace(/<[^>]+?>/g, "")
+        .replace(/\s+/g, " ")
+        .replace(/ /g, " ")
+        .replace(/>/g, " ");
+    },
+    updateBook(){
+      if(!this.hasBook)
+        return;
+      this.allBooks= [];
+      var params = {
+        search_id: '11',
+        search_content: this.content
       }
-      for (i = 0; i < this.movies.length; i++) {
-        if (this.movies[i].intro.length > 170)
-          this.movies[i].intro =
-            this.movies[i].intro.substring(0, 170) + "(……)";
+      this.$axios
+        .post("/search/book_search", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.bookText = "";
+            console.log(res.data);
+            this.bookNum = res.data.data.length;
+            this.allBooks = res.data.data;
+            var i=0;
+            for(i=0;i<this.bookNum;i++) {
+              var text = this.ToText(this.allBooks[i].intro);
+              if(text.length>170)
+                text=text.substring(0,170)+'…';
+              this.allBooks[i].intro = text;
+              console.log(this.allBooks[i].intro)
+              this.allBooks[i].star = parseFloat(this.allBooks[i].star);
+              if(this.allBooks[i].author.length>16)
+                this.allBooks[i].author =this.allBooks[i].author.substring(0,16)+'…';
+            }
+            this.changeSearchBook(1);
+          } else {
+            this.bookText=res.data.msg
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    changeSearchBook(currentPage){
+      this.books = [];
+      var length = this.bookNum - (currentPage - 1)*3;
+      if(length > 3)
+      length = 3;
+      var i=0;
+      for (i=0;i<length;i++){
+        this.books.push(this.allBooks[currentPage*3-3+i]);
       }
-      for (i = 0; i < this.teles.length; i++) {
-        if (this.teles[i].intro.length > 170)
-          this.teles[i].intro = this.teles[i].intro.substring(0, 170) + "(……)";
-          var actor = "";
-        for (j = 0; j < this.teles[i].actor.length; j++) {
-          if (j != 0) actor = actor + "/";
-          actor = actor + this.teles[i].actor[j];
-        }
-        this.teles[i].actor = actor;
+    },
+    updateMovie(){
+      if(!this.hasMovie)
+        return;
+      this.allMovies = [];
+      var params = {
+        search_id: '21',
+        search_content: this.content
       }
-      for (i = 0; i < this.groups.length; i++) {
-        if (this.groups[i].intro.length > 80)
-          this.groups[i].intro = this.groups[i].intro.substring(0, 80) + "(……)";
+      this.$axios
+        .post("/search/movie_search", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.movieText = "";
+            console.log('movie')
+            console.log(res.data);
+            this.movieNum = res.data.data.length;
+            this.allMovies = res.data.data;
+            var i=0;
+            for(i=0;i<this.movieNum ;i++) {
+              var text = this.ToText(this.allMovies[i].intro);
+              if(text.length>170)
+                text=text.substring(0,170)+'…';
+              this.allMovies[i].intro = text;
+              this.allMovies[i].star = parseFloat(this.allMovies[i].star);
+            }
+            this.changeSearchMovie(1);
+          } else {
+            this.movieText=res.data.msg;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    changeSearchMovie(currentPage){
+      this.movies = [];
+      var length = this.movieNum - (currentPage - 1)*3;
+      if(length > 3)
+      length = 3;
+      var i=0;
+      for (i=0;i<length;i++){
+        this.movies.push(this.allMovies[currentPage*3-3+i]);
       }
-      for (i = 0; i < this.topics.length; i++) {
-        if (this.topics[i].intro.length > 50)
-          this.topics[i].intro = this.topics[i].intro.substring(0, 50) + "(……)";
+    },
+    updateTele(){
+      if(!this.hasTele)
+        return;
+      this.allTeles = [];
+      var params = {
+        search_id: '31',
+        search_content: this.content
+      }
+      this.$axios
+        .post("/search/tele_search", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.teleText = "";
+            this.teleNum = res.data.data.length;
+            this.allTeles = res.data.data;
+            var i=0;
+            for(i=0;i<this.teleNum ;i++) {
+              var text = this.ToText(this.allTeles[i].intro);
+              if(text.length>170)
+                text=text.substring(0,170)+'…';
+              this.allTeles[i].intro = text;
+              this.allTeles[i].star = parseFloat(this.allTeles[i].star);
+              if(this.allTeles[i].actor.length>16)
+                this.allTeles[i].actor = this.allTeles[i].actor.substring(0,16)+'…';
+            }
+            this.changeSearchTele(1);
+          } else if (res.data.errno === 200 ){
+            this.teleText = res.data.msg;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    changeSearchTele(currentPage){
+      this.teles = [];
+      var length = this.teleNum - (currentPage - 1)*3;
+      if(length > 3)
+      length = 3;
+      var i=0;
+      for (i=0;i<length;i++){
+        this.teles.push(this.allTeles[currentPage*3-3+i]);
       }
     },
     upDateLink() {
@@ -379,7 +459,6 @@ export default {
     },
   },
   mounted() {
-    this.splitIntro();
   },
 };
 </script>

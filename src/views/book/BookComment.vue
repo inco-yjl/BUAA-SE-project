@@ -3,14 +3,6 @@
     <search></search>
     <div class="passage-body">
       <div v-if="loadSuccess" class="content-body">
-          <div id="collect-button" class="user-buttons">
-            <button v-if="collect" @click="clickuncollect()">
-              <img src="@/assets/guide/collected.png" />
-            </button>
-            <button v-else @click="clickcollect()">
-              <img src="@/assets/guide/collect.png" />
-            </button>
-          </div>
         <div class="title">{{ passage.title }}</div>
         <div class="passage-info">
           <div>
@@ -214,7 +206,6 @@ export default {
     ];
     var like = false;
     var Toreply = false;
-    var collect = false;
     var loadSuccess = false;
     return {
       id,
@@ -226,7 +217,6 @@ export default {
       text: "",
       textarea: "",
       source,
-      collect,
       loadSuccess,
       styleOfIcon: "width:30px;"
     };
@@ -279,12 +269,6 @@ export default {
       //
       this.passage.like--;
       this.like = false;
-    },
-    clickcollect(){
-        this.collect = true;
-    },
-    clickuncollect(){
-        this.collect =false;
     },
     clickreply() {
       if (this.Toreply === false) this.Toreply = true;
