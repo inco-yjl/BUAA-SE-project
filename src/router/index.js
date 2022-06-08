@@ -193,7 +193,7 @@ const routes = [
 {
   path:'/admin/uploadtopic',
   component: () => import('../views/admin/UploadTopic.vue'),
-}
+},
 ]
 
 const router = new VueRouter({
