@@ -78,6 +78,7 @@
   background: none;
   position: absolute;
   top: 5px;
+  outline: none;
   right: 5px;
   margin-top: 0;
   height: 40px;
@@ -87,6 +88,10 @@
 }
 
 .post-tele-comment button:hover {
+  outline: none;
+  font-weight: bold;
+}
+.post-tele-comment button:active {
   outline: none;
   font-weight: bold;
 }
@@ -278,7 +283,7 @@ export default {
         text:this.passage,
       };
       this.$axios
-          .post("/tele/passage", qs.stringify(params))
+          .post("/tele/commentTele", qs.stringify(params))
           .then((res) => {
             if (res.data.errno === 0) {
               console.log(res.data);

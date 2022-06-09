@@ -9,7 +9,7 @@
     </ul>
     <!-- 轮播图片 -->
     <div class="carousel-inner">
-      <div class="carousel-item active">
+      <div class="carousel-item active"><a @click="ToBookDetail(9)">
         <transition name="ppt-intro">
           <div v-show="showHover1 === true" class="title">
             热门剧集 高分原著
@@ -21,7 +21,7 @@
           @mouseout="showHover1 = false"
           src="@/assets/ppt/book1.png"
         />
-      </div>
+      </a></div>
       <div class="carousel-item">
         <transition name="ppt-intro">
           <div v-show="showHover2 === true" class="title">
@@ -126,5 +126,13 @@ export default {
       showHover3,
     };
   },
+  methods:{
+    ToBookDetail(id) {
+      this.$router.push({
+        name: "bookdetail",
+        query: { id: id },
+      });
+    },
+  }
 };
 </script>

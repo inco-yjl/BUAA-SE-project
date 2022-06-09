@@ -27,7 +27,7 @@
             <p id="topic-intro-content" v-html="topic.intro"></p>
           </div>
           <div class="topic-detail-interact">
-            <button class="share-topic">
+            <button @click="share" class="share-topic">
               <img src="@/assets/guide/share.png" /><span>分享话题</span>
             </button>
             <button class="write-dt" @click="writeTopicDt">
@@ -196,6 +196,7 @@ button.selection_ed {
 
 .hotlist a:hover {
   background-color: rgb(213, 230, 245);
+  color: rgb(2, 98, 182);
   font-weight: 600;
 }
 .aside {
@@ -509,6 +510,20 @@ export default {
     };
   },
   methods: {
+    share(){
+            var domUrl = document.createElement("input");
+            domUrl.value = window.location.href;
+            domUrl.id = "creatDom";
+            document.body.appendChild(domUrl);
+            domUrl.select(); // 选择对象
+            document.execCommand('Copy', 'false', null );
+            let creatDom = document.getElementById("creatDom");
+            creatDom.parentNode.removeChild(creatDom);
+            this.$message({
+                message: '复制成功',
+                type: 'success'
+            });
+        },
     displayIcon(url) {
       var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
       if (url !== "") {

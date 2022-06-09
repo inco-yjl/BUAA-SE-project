@@ -90,7 +90,7 @@
             </button>
             <span>{{ passage.reply }}</span>
           </div>
-          <button>
+          <button @click="share">
             <img id="like" src="@/assets/guide/share.png" />
           </button>
         </div>
@@ -141,32 +141,40 @@
           show-word-limit
         >
         </el-input>
+        <el-button @click="Topreply()">提交</el-button>
       </div>
       <div class="reply-block">
         <div class="title">回复</div>
-        <div class="reply-display" v-for="reply in replys" :key="reply.id">
+        <div
+          class="reply-display"
+          v-for="reply in replys"
+          :key="reply.reply_id"
+        >
           <hr />
           <div class="display-publisher">
-            <a class="userOfreply" @click="toUser(reply.userid)">
-              <img class="iconOfuser" :src="reply.userIcon" /><span
+            <a class="userOfreply" @click="toUser(reply.author_id)">
+              <img class="iconOfuser" :src="displayIcon(reply.usericon)" /><span
                 class="nameOfuser"
-                >{{ reply.username }}</span
+                >{{ reply.author_name }}</span
               >
             </a>
             <span class="publishtime">{{ reply.date }}</span>
           </div>
           <div class="reply-content">
-            {{ reply.content }}
+            {{ reply.text }}
+            <button @click="replyTo(reply)">
+              <img src="@/assets/guide/sreply.png" />
+            </button>
             <div
               class="sreply-display"
-              v-for="sreply in reply.reply"
+              v-for="sreply in reply.children"
               :key="sreply.id"
             >
               <div class="display-publisher">
                 <a class="userOfreply" @click="toUser(sreply.userid)">
-                  <img class="iconOfuser" :src="reply.userIcon" /><span
+                  <img class="iconOfuser" :src="displayIcon(reply.usericon)" /><span
                     class="nameOfuser"
-                    >{{ sreply.username }}</span
+                    >{{ sreply.author_name }}</span
                   >
                 </a>
                 <span class="publishtime">{{ reply.date }}</span>
@@ -175,7 +183,10 @@
                 <a class="replied-user" @click="toUser(sreply.replyed_userid)">
                   @{{ sreply.replyed_username }}
                 </a>
-                {{ sreply.content }}
+                {{ sreply.text
+                }}<button @click="replyTo(sreply)">
+                  <img src="@/assets/guide/sreply.png" />
+                </button>
               </div>
             </div>
           </div>
@@ -195,62 +206,7 @@ export default {
     var id = this.$route.query.id;
     var source = {};
     var passage = {};
-    var replys = [
-      {
-        id: 1,
-        username: "Puff",
-        userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        userid: 1,
-        date: "2020-1-1",
-        content: "说了一段很有才华的话，好多人点赞",
-        reply: [
-          {
-            id: 3,
-            username: "是我呀",
-            userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-            userid: 3,
-            date: "2022-4-1",
-            replyed_username: "Puff",
-            replyed_userid: 1,
-            content:
-              "正确的，直接的，中肯的，雅致的，客观的，完整的，立体的，全面的，辩证的，形而上学的，雅俗共赏的，一针见血‌‌​​‌‌​​​​‌‌‌​​​‌‌​​的，直击要害的",
-          },
-        ],
-      },
-      {
-        id: 2,
-        username: "哈哈",
-        userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        userid: 2,
-        date: "2002-4-1",
-        content:
-          "凑一百字废话哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈凑一百字废话哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈\
-凑一百字废话哈哈哈哈哈哈",
-        reply: [
-          {
-            id: 4,
-            username: "嗨呀",
-            userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-            userid: 4,
-            date: "2022-4-1",
-            replyed_username: "哈哈",
-            replyed_userid: 1,
-            content:
-              "正确的，直接的，中肯的，雅致的，客观的，完整的，立体的，全面的，辩证的，形而上学的，雅俗共赏的，一针见血‌‌​​‌‌​​​​‌‌‌​​​‌‌​​的，直击要害的",
-          },
-          {
-            id: 5,
-            username: "是我呀",
-            userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-            userid: 3,
-            date: "2022-4-1",
-            replyed_username: "哈哈",
-            replyed_userid: 1,
-            content: "确实",
-          },
-        ],
-      },
-    ];
+    var replys = [];
     var jubao = {
       title: "",
       content: "",
@@ -272,12 +228,91 @@ export default {
       source,
       loadSuccess,
       trydelete: false,
-      textarea: "",
       jubao,
       dialogFormVisible: false,
     };
   },
   methods: {
+    share(){
+            var domUrl = document.createElement("input");
+            domUrl.value = window.location.href;
+            domUrl.id = "creatDom";
+            document.body.appendChild(domUrl);
+            domUrl.select(); // 选择对象
+            document.execCommand('Copy', 'false', null );
+            let creatDom = document.getElementById("creatDom");
+            creatDom.parentNode.removeChild(creatDom);
+            this.$message({
+                message: '复制成功',
+                type: 'success'
+            });
+        },
+    replyTo(reply) {
+      var params = {
+        article_id: this.id,
+        author_id: this.$store.getters.getUser.user.id,
+        text: this.textarea,
+        reply_to: reply.reply_id,
+      };
+      this.$axios
+        .post("/passage/reply", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.$message({
+              type: "success",
+              message: res.data.msg,
+            });
+            this.textarea="";
+            this.updateReply();
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
+    },
+    updateReply() {
+      var params = {
+        article_id: this.id,
+      };
+      this.$axios.post("/passage/get_reply", qs.stringify(params)).then((res) => {
+        if (res.data.errno === 0) {
+          console.log(res.data.data)
+          this.replys = res.data.data;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    displayIcon(url) {
+      var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+      if (url !== "") {
+        var len = this.$axios.defaults.baseURL.length;
+        icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
+      }
+      console.log(icon);
+      return icon;
+    },
+    Topreply() {
+      var params = {
+        article_id: this.id,
+        author_id: this.$store.getters.getUser.user.id,
+        text: this.textarea,
+        reply_to: 0,
+      };
+      this.$axios
+        .post("/passage/reply", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.$message({
+              type: "success",
+              message: res.data.msg,
+            });
+            this.textarea="";
+            this.updateReply();
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
+    },
     ToBookDetail(id) {
       this.$router.push({
         name: "bookdetail",
@@ -568,11 +603,10 @@ export default {
   mounted() {
     this.updateComment();
     this.updateLike();
+    this.updateReply();
     window.onscroll = function (e) {
-      console.log("slide");
       var vertical = document.getElementsByClassName("content-body").item(0);
       var pos = vertical.getBoundingClientRect();
-      console.log(pos.top);
       if (pos.top < 29) {
         var aside = document.getElementsByClassName("aside").item(0);
         if (aside != null) aside.setAttribute("class", "aside-slide");
@@ -748,6 +782,34 @@ a.replied-user {
   margin-left: 20px;
   padding-bottom: 20px;
 }
+
+.reply-content img {
+  height: 20px;
+}
+.reply-content button {
+  border-radius: 40px;
+  background: none;
+  border: none;
+  outline: none;
+  position: relative;
+  z-index: 0;
+  margin-left: 20px;
+}
+.reply-content button::before {
+  position: absolute;
+  content: "";
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  z-index: -1;
+}
+.reply-content button:hover::before {
+  top: 0;
+  height: 100%;
+}
+
+.reply-content button:active {
+  top: 2px;
+}
 .sreply-display {
   margin-top: 5px;
   padding-top: 5px;
@@ -813,7 +875,7 @@ a.replied-user {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
-  height:140px;
+  height: 140px;
 }
 .source-book a:hover {
   background-color: #91919155;

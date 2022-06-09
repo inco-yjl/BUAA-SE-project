@@ -53,7 +53,7 @@
           <div class="page-number">
             <el-pagination
               @current-change="changeBook"
-              :page-size="9"
+              :page-size="6"
               layout="prev, pager, next, jumper"
               :total="bookcollectNum"
             >
@@ -89,7 +89,7 @@
           <div class="page-number">
             <el-pagination
               @current-change="changeMovie"
-              :page-size="9"
+              :page-size="6"
               layout="prev, pager, next, jumper"
               :total="moviecollectNum"
             >
@@ -125,9 +125,51 @@
           <div class="page-number">
             <el-pagination
               @current-change="changeTele"
-              :page-size="9"
+              :page-size="6"
               layout="prev, pager, next, jumper"
               :total="telecollectNum"
+            >
+            </el-pagination>
+          </div>
+        </div>
+        <div class="moviecomment-collection collection-4">
+          <div class="title">
+            <img src="@/assets/title/book_comment.png" />我的书评
+          </div>
+          <ul class="book-comment-list hotlist">
+            <li
+              :v-if="bookCommentsNum > 0"
+              v-for="passage in tempbookComments"
+              :key="passage.id"
+            >
+              <a @click="ToComment(passage.id)">{{ passage.title }}</a>
+            </li>
+          </ul>
+          <div class="page-number-left">
+            <el-pagination
+              @current-change="changebookComment"
+              :page-size="3"
+              layout="prev, pager, next, jumper"
+              :total="bookCommentsNum"
+            >
+            </el-pagination>
+          </div>
+        </div>
+         <div class="moviecomment-collection collection-5">
+          <div class="title">
+            <img src="@/assets/title/movie_comment.png" />我的影评
+          </div>
+          <ul class="comment-list hotlist">
+            <li v-for="passage in tempmovieComments" :key="passage.id">
+              <a @click="Tomoviecomment(passage.id)">{{ passage.title }}</a>
+            </li>
+          </ul>
+          <div class="page-number-left">
+            <el-pagination
+              @current-change="changemovieComment"
+              :page-size="3"
+              layout="prev, pager, next, jumper"
+              :total="movieCommentsNum"
             >
             </el-pagination>
           </div>
@@ -147,12 +189,19 @@ export default {
       bookcollections,
       moviecollections,
       telecollections,
+      booktempcomments:[],
       tempmoviecollections:[],
+      tempbookComments:[],
+      tempmovieComments:[],
+      bookcomments:[],
+      moviecomments:[],
       tempbookcollections: [],
       temptelecollections: [],
       bookcollectNum: 0,
       moviecollectNum:0,
       telecollectNum:0,
+      bookCommentsNum:0,
+      movieCommentsNum:0,
       imageUrl: "",
       tempUrl: "",
       userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
@@ -165,39 +214,63 @@ export default {
     this.updateUser();
     this.updateBookCollection();
     this.updateVideoCollection();
+    this.updateBookComments();
+    this.updateMovieComments();
   },
   methods: {
     changeBook(currentPage) {
       this.tempbookcollections = [];
-      var length = this.bookcollectNum - (currentPage - 1) * 9;
-      if (length > 9) length = 9;
+      var length = this.bookcollectNum - (currentPage - 1) * 6;
+      if (length > 6) length = 6;
       var i = 0;
       for (i = 0; i < length; i++) {
         this.tempbookcollections.push(
-          this.bookcollections[currentPage * 9 - 9 + i]
+          this.bookcollections[currentPage * 6 - 6 + i]
         );
       }
       console.log(this.tempbookcollections);
     },
     changeMovie(currentPage) {
       this.tempmoviecollections = [];
-      var length = this.moviecollectNum - (currentPage - 1) * 9;
-      if (length > 9) length = 9;
+      var length = this.moviecollectNum - (currentPage - 1) * 6;
+      if (length > 6) length = 6;
       var i = 0;
       for (i = 0; i < length; i++) {
         this.tempmoviecollections.push(
-          this.moviecollections[currentPage * 9 - 9 + i]
+          this.moviecollections[currentPage * 6 - 6 + i]
         );
       }
     },
     changeTele(currentPage) {
       this.temptelecollections = [];
-      var length = this.telecollectNum - (currentPage - 1) * 9;
-      if (length > 9) length = 9;
+      var length = this.telecollectNum - (currentPage - 1) * 6;
+      if (length > 6) length = 6;
       var i = 0;
       for (i = 0; i < length; i++) {
         this.temptelecollections.push(
-          this.telecollections[currentPage * 9 - 9 + i]
+          this.telecollections[currentPage * 6 - 6 + i]
+        );
+      }
+    },
+    changebookComment(currentPage){
+      this.tempbookComments = [];
+      var length = this.bookCommentsNum- (currentPage - 1) * 3;
+      if (length > 3) length = 3;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.tempbookComments.push(
+          this.bookcomments[currentPage * 3 - 3 + i]
+        );
+      }
+    },
+    changemovieComment(currentPage){
+      this.tempmovieComments = [];
+      var length = this.movieCommentsNum- (currentPage - 1) * 3;
+      if (length > 3) length = 3;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.tempmovieComments.push(
+          this.moviecomments[currentPage * 3 - 3 + i]
         );
       }
     },
@@ -234,6 +307,48 @@ export default {
           console.log(error);
         });
       this.loaddata = true;
+    },
+    async updateBookComments() {
+      if(!this.$store.getters.getUser || this.$store.getters.getUser.user.id===-1) return;
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+        .post("/book/mypassage", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            this.bookCommentsNum = res.data.data.length;
+            this.bookcomments = res.data.data;
+            this.changebookComment(1);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    async updateMovieComments() {
+      if(!this.$store.getters.getUser || this.$store.getters.getUser.user.id===-1) return;
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+        .post("/movie/mypassage", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            this.movieCommentsNum = res.data.data.length;
+            this.moviecomments = res.data.data;
+            this.changemovieComment(1);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     async updateVideoCollection() {
       var params = {
@@ -548,5 +663,14 @@ export default {
   width: 100px;
   height: 100px;
   display: block;
+}
+.hotlist a {
+  color: rgb(2, 98, 182);
+  font-weight: 500;
+}
+.hotlist a:hover {
+  background-color: rgb(213, 230, 245);
+  color: rgb(2, 98, 182);
+  font-weight: 600;
 }
 </style>

@@ -937,6 +937,7 @@ a.comment-movie-name {
 }
 .hotlist a:hover {
   background-color: rgb(213, 230, 245);
+  color: rgb(2, 98, 182);
   font-weight: 600;
 }
 .movie-comment-list a {

@@ -26,6 +26,7 @@
               prefix-icon
             ></el-input>
           </el-form-item>
+          <a class="send-button" @click="sendCode()">发送验证码</a>
            <el-form-item prop="validword">
             <el-input
               v-model="user.validword"
@@ -60,14 +61,42 @@ export default {
     removeNavigation(){
             this.$parent.navigate=false;
     },
+    sendCode(){
+      var params ={
+        email:this.user.email,
+        name:this.user.username,
+        password_1:this.user.password_1,
+        password_2:this.user.password_2
+      }
+      this.$axios.post('/get_code', qs.stringify(params))
+        .then(res => {
+          console.log(res);
+          if (res.data.errno === 1000) {
+            this.$message.success(res.data.msg);
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    },
     register: function () {
-      this.$axios.post('/register', qs.stringify(this.user))
+      if(this.user.password_1!==this.user.password_2)
+      this.$message.error("两次输入的密码不同");
+      var params = {
+        email:this.user.email,
+        name:this.user.username,
+        password:this.user.password_1,
+        code:this.user.validword
+      }
+      this.$axios.post('/register', qs.stringify(params))
         .then(res => {
           console.log(res);
           if (res.data.errno === 0) {
             this.$message.success("注册成功");
             setTimeout(() => {
-              window.open('/login', '_self');
+              window.open('/login', '_self',left=0);
             }, 1000);
           } else {
             this.$message.error(res.data.msg);
@@ -128,4 +157,5 @@ export default {
   cursor: pointer;
   float:right;
 }
+
 </style>

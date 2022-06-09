@@ -28,7 +28,7 @@
                   >申请成为管理员</span
                 >
               </button>
-              <button class="share-topic">
+              <button class="share-topic" @click="share">
                 <img src="@/assets/guide/share.png" /><span>分享小组</span>
               </button>
               <button class="write-dt" @click = "usetonewpassage()">
@@ -373,6 +373,20 @@ export default {
     };
   },
   methods: {
+    share(){
+            var domUrl = document.createElement("input");
+            domUrl.value = window.location.href;
+            domUrl.id = "creatDom";
+            document.body.appendChild(domUrl);
+            domUrl.select(); // 选择对象
+            document.execCommand('Copy', 'false', null );
+            let creatDom = document.getElementById("creatDom");
+            creatDom.parentNode.removeChild(creatDom);
+            this.$message({
+                message: '复制成功',
+                type: 'success'
+            });
+        },
     usetonewpassage() {
       this.$router.push({
         name: "groupcomment",
@@ -991,6 +1005,7 @@ a.comment-book-name {
 }
 .hotlist a:hover {
   background-color: rgb(213, 230, 245);
+  color: rgb(2, 98, 182);
   font-weight: 600;
 }
 .book-comment-list a {

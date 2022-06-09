@@ -219,6 +219,7 @@ export default {
     VueSlickCarousel,
     search,
   },
+  
   methods: {
     ToBookDetail(id) {
       this.$router.push({
@@ -654,6 +655,7 @@ a.comment-book-name {
 }
 .hotlist a:hover {
   background-color: rgb(213, 230, 245);
+  color: rgb(2, 98, 182);
   font-weight: 600;
 }
 .book-comment-list a {

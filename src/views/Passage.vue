@@ -43,7 +43,7 @@
             </button>
             <span>{{ passage.reply }}</span>
           </div>
-          <button>
+          <button @click="share()">
             <img id="like" src="@/assets/guide/share.png" />
           </button>
         </div>

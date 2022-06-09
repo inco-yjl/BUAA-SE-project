@@ -203,6 +203,7 @@ div.body {
 }
 .hotlist a:hover {
   background-color: rgb(213, 230, 245);
+  color: rgb(2, 98, 182);
   font-weight: 600;
 }
 #passage-list a {
@@ -221,7 +222,7 @@ div.body {
   border-color: rgb(181, 181, 181);
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
-  height: 636px;
+  height: 700px;
 }
 .aside-slide {
   margin-top: 80px;
@@ -240,7 +241,7 @@ div.body {
   position: fixed;
   left: 1220px;
   top: -50px;
-  height: 636px;
+  height: 700px;
 }
 #change_topic {
   padding-left: 0;
@@ -572,7 +573,6 @@ export default {
   },
 
   data() {
-    var dtamount = 18;
     var topic_circle = [{}];
     var hottopics = [{}];
     var passages = [{}];
@@ -586,7 +586,7 @@ export default {
       hotamount:0,
       collectamount:0,
       passages,
-      dtamount,
+      dtamount:0,
       topic_circle,
       hottopics,
       liked: false,
@@ -675,6 +675,7 @@ export default {
             console.log(res.data.data);
             var passages = res.data.data;
             this.hotamount = passages.length;
+            this.dtamount = this.hotamount;
             this.hotdt = [];
             for (var i = 0; i < passages.length; i++) {
               var hasimg = true;

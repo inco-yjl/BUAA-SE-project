@@ -36,6 +36,7 @@
             /></a>
           </div>
         </div>
+        <div>{{ bookText }}</div>
         <div class="search-number">
           <el-pagination
             @current-change="changeSearchBook"
@@ -44,7 +45,6 @@
             :total="bookNum"
           >
           </el-pagination>
-          <div>{{bookText}}</div>
         </div>
       </div>
       <div id="search-movie-result" v-if="hasMovie" class="search-result">
@@ -72,8 +72,7 @@
               <div>
                 <span>({{ movie.year }})</span>&nbsp;&nbsp;
                 <span>{{ movie.watchNum }}人评价</span> &nbsp;&nbsp;
-                <span>导演：
-                {{ movie.director }}</span>
+                <span>导演： {{ movie.director }}</span>
               </div>
             </div>
             <div class="result-intro">{{ movie.intro }}</div>
@@ -85,6 +84,7 @@
             /></a>
           </div>
         </div>
+        <div>{{ movieText }}</div>
         <div class="search-number">
           <el-pagination
             @current-change="changeSearchMovie"
@@ -93,7 +93,6 @@
             :total="movieNum"
           >
           </el-pagination>
-          <div>{{movieText}}</div>
         </div>
       </div>
       <div id="search-episode-result" v-if="hasTele" class="search-result">
@@ -129,6 +128,7 @@
             /></a>
           </div>
         </div>
+        <div>{{ teleText }}</div>
         <div class="search-number">
           <el-pagination
             @current-change="changeSearchTele"
@@ -138,7 +138,6 @@
           >
           </el-pagination>
         </div>
-        <div>{{teleText}}</div>
       </div>
       <div id="search-group-result" v-if="hasGroup" class="search-result">
         <div class="search-result-title">相关小组</div>
@@ -149,14 +148,13 @@
         >
           <div class="search-result-text">
             <div class="result-origin">
-              <a>《{{ group.name }}》</a>
+              <a> 《{{ group.name }}》 </a>
             </div>
             <div class="result-info">
               <div>
                 <span>{{ group.member }}名小组成员</span> &nbsp;&nbsp;
               </div>
             </div>
-            <div class="result-intro">{{ group.intro }}</div>
           </div>
 
           <div class="search-img">
@@ -165,15 +163,45 @@
             /></a>
           </div>
         </div>
+        <div>{{ groupText }}</div>
         <div class="search-number">
           <el-pagination
-            @next-click="changeSearchGroup()"
+            @current-change="changeSearchGroup()"
             :page-size="3"
             layout="prev, pager, next, jumper"
             :total="groupNum"
           >
           </el-pagination>
+          <div
+            class="passage-block"
+            v-for="passage in topmes"
+            :key="passage.id"
+          >
+            <hr />
+            <div class="passage-display-body">
+              <div class="display-publisher">
+                <a class="userOfdiary" href="/otherusers/1">
+                  <img class="iconOfuser" :src="passage.usericon" /><span
+                    class="nameOfuser"
+                    >{{ passage.username }}</span
+                  >
+                </a>
+                <span class="publishtime">{{ passage.date }}</span>
+              </div>
+              <div class="passage-content">
+                <a>{{ passage.title }}</a>
+              </div>
+            </div>
+          </div>
         </div>
+        <div>{{ tieText }}</div>
+        <el-pagination
+          @current-change="changeSearchTie()"
+          :page-size="3"
+          layout="prev, pager, next, jumper"
+          :total="tieNum"
+        >
+        </el-pagination>
       </div>
       <div id="search-topic-result" v-if="hasTopic" class="search-result">
         <div class="search-result-title">相关话题</div>
@@ -186,25 +214,70 @@
             <div class="result-origin">
               <a>《{{ topic.name }}》</a>
             </div>
-            <div class="result-info">
-              <div>
-                <span
-                  >{{ topic.browsetime }}次浏览·{{ topic.dtnum }}篇动态·{{
-                    topic.peoplenum
-                  }}人关注</span
-                >
-                &nbsp;&nbsp;
-              </div>
-            </div>
             <div class="result-intro">{{ topic.intro }}</div>
           </div>
         </div>
+        <div>{{ topicText }}</div>
         <div class="search-number">
           <el-pagination
-            @next-click="changeSearchTopic()"
+            @current-change="changeSearchTopic"
             :page-size="3"
             layout="prev, pager, next, jumper"
             :total="topicNum"
+          >
+          </el-pagination>
+        </div>
+        <div class="search-result-title">相关动态</div>
+        <div class="topic-display" v-for="(dt, index) in dts" :key="index">
+          <div class="block">
+            <span class="demonstration">
+              <div class="topicdiary">
+                <hr />
+                <div class="diary-display-body">
+                  <div class="display-publisher">
+                    <a class="userOfdiary" href="/otherusers/1">
+                      <img class="iconOfuser" :src="dt.usericon" /><span
+                        class="nameOfuser"
+                        >{{ dt.user }}</span
+                      >
+                    </a>
+                    <span class="normal">&ensp;来自话题</span>
+                    <span class="normal">
+                      <a
+                        class="topic-origin-name"
+                        @click="ToTopicDetail(dt.topicid)"
+                        >{{ dt.topic }}</a
+                      ></span
+                    >
+                    <span class="normal">{{ dt.date }}</span>
+                  </div>
+                  <div class="diarytext">
+                    <a class="diarytext-origin" @click="ToTopicDt(dt.id)">{{
+                      dt.passage
+                    }}</a>
+                  </div>
+                  <div class="diary-origin-pic">
+                    <a class="diary-origin" href="javascript:void(0)"
+                      ><img
+                        v-if="dt.hasimg"
+                        class="diary-pic"
+                        :style="dt.thestyle"
+                        :src="dt.img"
+                      />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </span>
+          </div>
+        </div>
+        <div>{{ dtText }}</div>
+        <div class="search-number">
+          <el-pagination
+            @current-change="changeSearchDt"
+            :page-size="3"
+            layout="prev, pager, next, jumper"
+            :total="dtNum"
           >
           </el-pagination>
         </div>
@@ -214,7 +287,7 @@
 </template>
 <script>
 import searchInput from "@/components/SelectSearch.vue";
-import qs from 'qs';
+import qs from "qs";
 export default {
   name: "search",
   components: {
@@ -226,38 +299,24 @@ export default {
     });
   },
   data() {
-    var groups = [
-      {
-        name: "我们喜欢逛公园",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/16/zwYOl.jpg",
-        member: 100,
-        intro:
-          "公园，心天地。凑字数看看多少字合适哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈\
-        哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈",
-      },
-    ];
-    var topics = [
-      {
-        name: "寻找春日气息",
-        id: 1,
-        intro:
-          "哈哈，春天来了！为了让画面好看，这里要写长一点，但是不能写的太长，",
-        browsetime: 1000,
-        peoplenum: 22,
-        dtnum: 20,
-      },
-    ];
-    var allBooks= [];
+    var allBooks = [];
     var allMovies = [];
     var allTeles = [];
+    var allTopics = [];
+    var allDts = [];
+    var allGroups = [];
+    var allTies = [];
     var value = 3.7;
     var hasMovie = false;
     return {
       content: "",
-      movieText:"",
-      bookText:"",
-      teleText:"",
+      movieText: "",
+      bookText: "",
+      teleText: "",
+      dtText: "",
+      topicText: "",
+      groupText: "",
+      tieText: "",
       hasBook: false,
       hasMovie,
       hasTele: false,
@@ -265,18 +324,26 @@ export default {
       hasGroup: false,
       value,
       allBooks,
+      allDts,
       allMovies,
       allTeles,
+      allTopics,
+      allGroups,
+      allTies,
       books: [],
-      movies:[],
+      movies: [],
       teles: [],
-      topics,
-      groups,
+      topics: [],
+      groups: [],
+      dts: [],
+      ties: [],
       bookNum: 0,
       movieNum: 24,
       teleNum: 24,
       groupNum: 24,
       topicNum: 24,
+      dtNum: 0,
+      tieNum: 0,
     };
   },
   methods: {
@@ -286,122 +353,117 @@ export default {
       this.hasBook = input.hasBook;
       this.hasMovie = input.hasMovie;
       this.hasTele = input.hasTele;
-      this.hasTopic = input.hasTele;
-      this.hasGroup = input.hasTele;
+      this.hasTopic = input.hasTopic;
+      this.hasGroup = input.hasGroup;
       this.updateBook();
       this.updateMovie();
       this.updateTele();
+      this.updateTopic();
+      this.updateDt();
+      this.updateGroup();
+      this.updateTie();
     },
     ToText(HTML) {
       var input = HTML;
       return input
         .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
         .replace(/<[^>]+?>/g, "")
-        .replace(/[ ]|[&ensp;]/g, '')
-        .replace(/[ ]|[&nbsp;]/g, '')
+        .replace(/[ ]|[&ensp;]/g, "")
+        .replace(/[ ]|[&nbsp;]/g, "")
         .replace(/<[^>]+?>/g, "")
         .replace(/\s+/g, " ")
         .replace(/ /g, " ")
         .replace(/>/g, " ");
     },
-    updateBook(){
-      if(!this.hasBook)
-        return;
-      this.allBooks= [];
+    updateBook() {
+      if (!this.hasBook) return;
+      this.allBooks = [];
       var params = {
-        search_id: '11',
-        search_content: this.content
-      }
+        search_id: "11",
+        search_content: this.content,
+      };
       this.$axios
         .post("/search/book_search", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
             this.bookText = "";
-            console.log(res.data);
             this.bookNum = res.data.data.length;
             this.allBooks = res.data.data;
-            var i=0;
-            for(i=0;i<this.bookNum;i++) {
+            var i = 0;
+            for (i = 0; i < this.bookNum; i++) {
               var text = this.ToText(this.allBooks[i].intro);
-              if(text.length>170)
-                text=text.substring(0,170)+'…';
+              if (text.length > 170) text = text.substring(0, 170) + "…";
               this.allBooks[i].intro = text;
-              console.log(this.allBooks[i].intro)
               this.allBooks[i].star = parseFloat(this.allBooks[i].star);
-              if(this.allBooks[i].author.length>16)
-                this.allBooks[i].author =this.allBooks[i].author.substring(0,16)+'…';
+              if (this.allBooks[i].author.length > 16)
+                this.allBooks[i].author =
+                  this.allBooks[i].author.substring(0, 16) + "…";
             }
             this.changeSearchBook(1);
           } else {
-            this.bookText=res.data.msg
+            this.bookText = res.data.msg;
           }
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    changeSearchBook(currentPage){
+    changeSearchBook(currentPage) {
       this.books = [];
-      var length = this.bookNum - (currentPage - 1)*3;
-      if(length > 3)
-      length = 3;
-      var i=0;
-      for (i=0;i<length;i++){
-        this.books.push(this.allBooks[currentPage*3-3+i]);
+      var length = this.bookNum - (currentPage - 1) * 3;
+      if (length > 3) length = 3;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.books.push(this.allBooks[currentPage * 3 - 3 + i]);
       }
     },
-    updateMovie(){
-      if(!this.hasMovie)
-        return;
+    updateMovie() {
+      if (!this.hasMovie) return;
       this.allMovies = [];
       var params = {
-        search_id: '21',
-        search_content: this.content
-      }
+        search_id: "21",
+        search_content: this.content,
+      };
       this.$axios
         .post("/search/movie_search", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
             this.movieText = "";
-            console.log('movie')
-            console.log(res.data);
+            console.log("movie");
             this.movieNum = res.data.data.length;
             this.allMovies = res.data.data;
-            var i=0;
-            for(i=0;i<this.movieNum ;i++) {
+            var i = 0;
+            for (i = 0; i < this.movieNum; i++) {
               var text = this.ToText(this.allMovies[i].intro);
-              if(text.length>170)
-                text=text.substring(0,170)+'…';
+              if (text.length > 170) text = text.substring(0, 170) + "…";
               this.allMovies[i].intro = text;
               this.allMovies[i].star = parseFloat(this.allMovies[i].star);
             }
             this.changeSearchMovie(1);
           } else {
-            this.movieText=res.data.msg;
+            this.movieText = res.data.msg;
           }
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    changeSearchMovie(currentPage){
+    changeSearchMovie(currentPage) {
       this.movies = [];
-      var length = this.movieNum - (currentPage - 1)*3;
-      if(length > 3)
-      length = 3;
-      var i=0;
-      for (i=0;i<length;i++){
-        this.movies.push(this.allMovies[currentPage*3-3+i]);
+      var length = this.movieNum - (currentPage - 1) * 3;
+      if (length > 3) length = 3;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.movies.push(this.allMovies[currentPage * 3 - 3 + i]);
       }
     },
-    updateTele(){
-      if(!this.hasTele)
-        return;
+    updateTele() {
+      if (!this.hasTele) return;
       this.allTeles = [];
       var params = {
-        search_id: '31',
-        search_content: this.content
-      }
+        search_id: "31",
+        search_content: this.content,
+      };
       this.$axios
         .post("/search/tele_search", qs.stringify(params))
         .then((res) => {
@@ -409,18 +471,18 @@ export default {
             this.teleText = "";
             this.teleNum = res.data.data.length;
             this.allTeles = res.data.data;
-            var i=0;
-            for(i=0;i<this.teleNum ;i++) {
+            var i = 0;
+            for (i = 0; i < this.teleNum; i++) {
               var text = this.ToText(this.allTeles[i].intro);
-              if(text.length>170)
-                text=text.substring(0,170)+'…';
+              if (text.length > 170) text = text.substring(0, 170) + "…";
               this.allTeles[i].intro = text;
               this.allTeles[i].star = parseFloat(this.allTeles[i].star);
-              if(this.allTeles[i].actor.length>16)
-                this.allTeles[i].actor = this.allTeles[i].actor.substring(0,16)+'…';
+              if (this.allTeles[i].actor.length > 16)
+                this.allTeles[i].actor =
+                  this.allTeles[i].actor.substring(0, 16) + "…";
             }
             this.changeSearchTele(1);
-          } else if (res.data.errno === 200 ){
+          } else if (res.data.errno === 200) {
             this.teleText = res.data.msg;
           }
         })
@@ -428,15 +490,216 @@ export default {
           console.log(error);
         });
     },
-    changeSearchTele(currentPage){
+    changeSearchTele(currentPage) {
       this.teles = [];
-      var length = this.teleNum - (currentPage - 1)*3;
-      if(length > 3)
-      length = 3;
-      var i=0;
-      for (i=0;i<length;i++){
-        this.teles.push(this.allTeles[currentPage*3-3+i]);
+      var length = this.teleNum - (currentPage - 1) * 3;
+      if (length > 3) length = 3;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.teles.push(this.allTeles[currentPage * 3 - 3 + i]);
       }
+    },
+    updateTopic() {
+      if (!this.hasTopic) return;
+      this.allTopics = [];
+      var params = {
+        search_id: "41",
+        search_content: this.content,
+      };
+      this.$axios
+        .post("/search/topic_search", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.topicText = "";
+            console.log(res.data.data);
+            this.topicNum = res.data.data.length;
+            this.allTopics = res.data.data;
+            var i = 0;
+            for (i = 0; i < this.topicNum; i++) {
+              var text = this.ToText(this.allTopics[i].intro);
+              if (text.length > 170) text = text.substring(0, 170) + "…";
+              this.allTopics[i].intro = text;
+            }
+            this.changeSearchTopic(1);
+          } else {
+            this.topicText = res.data.msg;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    changeSearchTopic(currentPage) {
+      this.topics = [];
+      var length = this.topicNum - (currentPage - 1) * 3;
+      if (length > 3) length = 3;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.topics.push(this.allTopics[currentPage * 3 - 3 + i]);
+      }
+    },
+    getimgsrc(htmlstr) {
+      let reg = /<img.+?src=('|")?([^'"]+)('|")?(?:\s+|>)/g;
+      let arr = [];
+      var tem;
+      while ((tem = reg.exec(htmlstr))) {
+        arr.push(tem[2]);
+      }
+      return arr;
+    },
+    displayIcon(url) {
+      var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+      if (url !== "") {
+        var len = this.$axios.defaults.baseURL.length;
+        icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
+      }
+      console.log(icon);
+      return icon;
+    },
+    getStyle(url) {
+      if (!url) return;
+      var img = new Image();
+      img.src = url;
+      if (img.width / img.height > 1.5) return "height:180px;width:auto";
+      else return "width:270px;height:auto";
+    },
+    updateDt() {
+      if (!this.hasTopic) return;
+      this.allDts = [];
+      var params = {
+        search_id: "61",
+        search_content: this.content,
+      };
+      this.$axios
+        .post("/search/article_search", qs.stringify(params))
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.errno === 0) {
+            console.log("dt");
+            console.log(res.data);
+            this.dtNum = res.data.data.length;
+            var passages = res.data.data;
+            var i = 0;
+            for (var i = 0; i < this.dtNum; i++) {
+              var hasimg = true;
+              var imgs = this.getimgsrc(passages[i].content);
+              if (imgs.length == 0) hasimg = false;
+              passages[i].content = this.ToText(passages[i].content);
+              if (passages[i].content.length > 170) {
+                passages[i].content =
+                  passages[i].content.substring(0, 170) + "…";
+              }
+              this.allDts.push({
+                usericon: this.displayIcon(passages[i].usericon),
+                user: passages[i].username,
+                userid: passages[i].userid,
+                date: passages[i].date.substring(0, 10),
+                hasimg: hasimg,
+                img: imgs[0],
+                topic: passages[i].topic,
+                topicid: passages[i].topicid,
+                thestyle: this.getStyle(imgs[0]),
+                id: passages[i].id,
+                passage: passages[i].content,
+              });
+              this.changeSearchDt(1);
+            }
+          } else {
+            this.dtText = res.data.msg;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    changeSearchDt(currentPage) {
+      this.dts = [];
+      var length = this.dtNum - (currentPage - 1) * 3;
+      if (length > 3) length = 3;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.dts.push(this.allDts[currentPage * 3 - 3 + i]);
+      }
+    },
+    updateGroup() {
+      if (!this.hasGroup) return;
+      this.allGroups = [];
+      var params = {
+        search_id: "51",
+        search_content: this.content,
+      };
+      this.$axios
+        .post("/search/group_search", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.groupTextText = "";
+            this.groupNum = res.data.data.length;
+            this.allGroups = res.data.data;
+            this.changeSearchGroup(1);
+          } else {
+            this.bookText = res.data.msg;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    changeSearchGroup(currentPage) {
+      this.groups = [];
+      var length = this.groupNum - (currentPage - 1) * 3;
+      if (length > 3) length = 3;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.groups.push(this.allGroups[currentPage * 3 - 3 + i]);
+      }
+      console.log(this.groups);
+    },
+    changeSearchTie() {
+      this.ties = [];
+      var length = this.tieNum - (currentPage - 1) * 3;
+      if (length > 3) length = 3;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.groups.push(this.allTies[currentPage * 3 - 3 + i]);
+      }
+      console.log(this.ties);
+    },
+    updateTie() {
+      if (!this.hasGroup) return;
+      this.allGroups = [];
+      var params = {
+        search_id: "62",
+        search_content: this.content,
+      };
+      this.$axios
+        .post("/search/article_search", qs.stringify(params))
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.errno === 0) {
+            this.tieText = "";
+            console.log("tie");
+            console.log(res.data);
+            this.tieNum = res.data.data.length;
+            var passages = res.data.data;
+            var i = 0;
+            for (var i = 0; i < this.tieNum; i++) {
+              this.allDts.push({
+                usericon: this.displayIcon(passages[i].usericon),
+                username: passages[i].username,
+                userid: passages[i].userid,
+                date: passages[i].date.substring(0, 10),
+                title: passages[i].title,
+                id: passages[i].id,
+              });
+              this.changeSearchTie(1);
+            }
+          } else {
+            this.tieText = res.data.msg;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     upDateLink() {
       document
@@ -459,8 +722,7 @@ export default {
         });
     },
   },
-  mounted() {
-  },
+  mounted() {},
 };
 </script>
 <style scoped>
@@ -558,5 +820,109 @@ export default {
 }
 .search-number {
   margin-left: 150px;
+}
+.topicdiary {
+  width: 980px;
+  text-align: left;
+}
+.diary-display-body {
+  display: flex;
+  flex-wrap: wrap;
+}
+.display-publisher {
+  margin-top: 0;
+  padding-top: 0;
+  width: 820px;
+}
+.publishtime {
+  padding-left: 20px;
+  font-weight: 400;
+  color: rgb(157, 157, 157);
+}
+.topic-origin {
+  position: relative;
+  font-size: 18px;
+  text-align: left;
+  width: 500px;
+}
+.topic-origin a {
+  font-family: Source Han Sans CN Normal;
+  color: black;
+  text-decoration: none;
+  padding-left: 5px;
+  text-decoration: none;
+}
+.topic-origin a:hover {
+  font-family: Source Han Sans CN Normal;
+  color: rgb(31, 169, 255);
+}
+.diary-pic {
+  height: 200px;
+  align-content: middle;
+}
+div.diary-origin-pic {
+  position: relative;
+  left: 0;
+  top: -50px;
+  margin-left: 20px;
+  border-radius: 5px;
+  height: 180px;
+  width: 270px;
+  overflow: hidden;
+}
+.diary-content {
+  display: flex;
+  flex-wrap: row;
+}
+.display-publisher {
+  color: rgb(157, 157, 157);
+  margin-bottom: 10px;
+  margin-bottom: 10px;
+}
+.display-publisher a {
+  font-weight: 500;
+  font-size: 22px;
+  color: black;
+  text-decoration: none;
+}
+.display-publisher a:hover {
+  color: rgb(0, 166, 255);
+}
+.iconOfuser {
+  height: 30px;
+  margin-right: 5px;
+  vertical-align: sub;
+}
+a.topic-origin-name {
+  color: rgb(157, 157, 157);
+  font-weight: 500;
+  font-size: 16px;
+  color: black;
+  text-decoration: none;
+}
+a.topic-origin-name :hover {
+  color: rgb(0, 166, 255);
+}
+.nameOfuser {
+  font-size: 17px;
+  font-family: Source Han Sans CN Normal;
+}
+.diarytext {
+  position: relative;
+  top: 0px;
+  width: 620px;
+  margin-left: 30px;
+}
+a.diarytext-origin {
+  font-size: 16px;
+  text-decoration: none;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  color: black;
+  transition: 0.3s ease;
+}
+a.diarytext-origin:hover {
+  color: rgb(101, 101, 101);
+  text-decoration: none;
 }
 </style>

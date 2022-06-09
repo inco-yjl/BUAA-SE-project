@@ -75,7 +75,7 @@
               @change="starTheMovie"
             >
             </el-rate>
-            <button>
+            <button @click="share">
               <img src="@/assets/guide/share.png" /><span>分享电影</span>
             </button>
             <button @click="writeComment()">
@@ -263,6 +263,20 @@ export default {
     };
   },
   methods: {
+    share(){
+            var domUrl = document.createElement("input");
+            domUrl.value = window.location.href;
+            domUrl.id = "creatDom";
+            document.body.appendChild(domUrl);
+            domUrl.select(); // 选择对象
+            document.execCommand('Copy', 'false', null );
+            let creatDom = document.getElementById("creatDom");
+            creatDom.parentNode.removeChild(creatDom);
+            this.$message({
+                message: '复制成功',
+                type: 'success'
+            });
+        },
     clickcollect() {
       if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
@@ -348,8 +362,12 @@ export default {
             console.log(res.data.data);
             this.collections = [];
             var i = 0;
-            for (i = 0; i < 3 && i < res.data.data.length; i++)
+            for (i = 0; i < 3 && i < res.data.data.length; i++){
+              res.data.data[i].star=parseFloat(res.data.data[i].star);
               this.collections.push(res.data.data[i]);
+
+            }
+              
           } else {
             this.$message.error("查询失败");
           }
@@ -839,6 +857,7 @@ export default {
 }
 .hotlist a:hover {
   background-color: rgb(213, 230, 245);
+  color: rgb(2, 98, 182);
   font-weight: 600;
 }
 .-comment-list a {
