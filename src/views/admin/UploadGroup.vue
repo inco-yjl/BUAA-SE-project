@@ -94,7 +94,7 @@ export default {
 <style scoped>
 #groupupload {
   position: absolute;
-  top: 0;
+  top: 70px;
   font-family: "Noto Serif SC", serif;
   width: 100%;
   height: 100vh;

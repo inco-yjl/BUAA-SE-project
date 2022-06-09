@@ -1,39 +1,40 @@
 <template>
 <div class = "body">
-  <a id="tobook" href="@/views/admin/uploadbook"
+  <a href="../admin/uploadbook"
   ><span class="guide" style="margin-right: 50px"
   ><img class = "img"
       alt="logo" style="margin-right: 5px"
       src="@/assets/icon/upload1.png"
       width="50px" />上传图书</span
   ></a>
-  <a href="@/views/admin/uploadmovie"
+  
+  <a href="../admin/uploadmovie"
   ><span class="guide" style="margin-right: 50px"
   ><img class = "img" style="margin-right: 5px"
       id="bookimg"
       src="@/assets/icon/upload2.png"
       width="30px"
   />上传电影</span
-  ></a
-  >
-  <a href="@/views/admin/uploadtele"
+  ></a>
+  
+  <a href="../admin/uploadtele"
   ><span class="guide" style="margin-right: 50px"
   ><img class = "img" style="margin-right: 5px" src="@/assets/icon/upload3.png" width="30px" />上传电视剧</span
   ></a>
-  <a href="@/views/admin/uploadtopic" 
+  
+  <a href="../admin/uploadtopic" 
   ><span class="guide" style="margin-right: 50px"
   ><img class = "img" style="margin-right: 5px" src="@/assets/icon/uoload4.png" width="30px" />上传话题</span
-  ></a
-  >
-  <a href="@/views/admin/uploadgroup"
+  ></a>
+  
+  <a href="../admin/uploadgroup"
   ><span class="guide" style="margin-right: 50px"
   ><img class = "img"
       id="videoimg"
       src="@/assets/icon/upload5.png"
       width="30px"
   />新建小组</span
-  ></a
-  >
+  ></a>
 </div>
 </template>
 

@@ -7,47 +7,47 @@
       <el-form :model="form" ref="form" class="form">
         <el-form-item prop="name">
           <el-input
-            placeholder="书名"
-            v-model="form.name"
-            autocomplete="off"
+              placeholder="书名"
+              v-model="form.name"
+              autocomplete="off"
           ></el-input>
         </el-form-item>
         <el-form-item prop="author">
           <el-input
-            placeholder="作者"
-            v-model="form.author"
-            autocomplete="off"
+              placeholder="作者"
+              v-model="form.author"
+              autocomplete="off"
           ></el-input>
         </el-form-item>
         <el-form-item prop="img">
           <el-input
-            type="textarea"
-            placeholder="书籍封面"
-            autosize
-            v-model="form.img"
-            autocomplete="off"
+              type="textarea"
+              placeholder="书籍封面"
+              autosize
+              v-model="form.img"
+              autocomplete="off"
           >
           </el-input>
         </el-form-item>
         <el-form-item prop="press">
           <el-input
-            placeholder="出版社"
-            v-model="form.press"
-            autocomplete="off"
+              placeholder="出版社"
+              v-model="form.press"
+              autocomplete="off"
           ></el-input>
         </el-form-item>
         <el-form-item prop="intro">
           <el-input
-            type="textarea"
-            placeholder="书籍简介"
-            :autosize="{ minRows: 2, maxRows: 4 }"
-            v-model="form.intro"
-            autocomplete="off"
+              type="textarea"
+              placeholder="书籍简介"
+              :autosize="{ minRows: 2, maxRows: 4 }"
+              v-model="form.intro"
+              autocomplete="off"
           >
           </el-input>
         </el-form-item>
         <el-form-item class="btn_login">
-          <el-button type="primary" @click="upload">上&nbsp;&nbsp;传</el-button>
+          <el-button type="primary" @click="upload()">上&nbsp;&nbsp;传</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -127,7 +127,7 @@ export default {
 <style scoped>
 #bookupload {
   position: absolute;
-  top: 0;
+  top: 70px;
   font-family: "Noto Serif SC", serif;
   width: 100%;
   height: 100vh;
