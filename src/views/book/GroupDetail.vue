@@ -79,7 +79,7 @@
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="passage.usericon" /><span
+                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
                       class="nameOfuser"
                       >{{ passage.username }}</span
                     >
@@ -109,7 +109,7 @@
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="passage.usericon" /><span
+                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
                       class="nameOfuser"
                   >{{ passage.username }}</span
                   >
@@ -147,7 +147,7 @@
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="passage.usericon" /><span
+                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
                       class="nameOfuser"
                   >{{ passage.username }}</span
                   >
@@ -178,7 +178,7 @@
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="passage.usericon" /><span
+                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
                       class="nameOfuser"
                   >{{ passage.username }}</span
                   >
@@ -216,7 +216,7 @@
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="passage.usericon" /><span
+                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
                       class="nameOfuser"
                   >{{ passage.username }}</span
                   >
@@ -253,7 +253,7 @@
               <div class="collection-info">
                 {{ group.name }}
                 <div></div>
-                {{ group.number }}人参与
+                {{ group.member }}人参与
               </div>
             </a>
           </div>
@@ -361,6 +361,16 @@ export default {
     };
   },
   methods: {
+    displayIcon(url) {
+      console.log("testurl");
+      console.log(url);
+      var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+      if (url !== "") {
+        var len = this.$axios.defaults.baseURL.length;
+        icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
+      }
+      return icon;
+    },
     toadmin() {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
@@ -737,10 +747,12 @@ i   },
     },
     getaddgroup() {
       var params = {
+        user_id: this.$store.getters.getUser.user.id, 
       };
       this.$axios
           .post("/group/mygroup", qs.stringify(params))
           .then((res) => {
+            console.log("test.......");
             console.log(res);
             if (res.data.errno === 0) {
               console.log("13215645646");

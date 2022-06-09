@@ -1,5 +1,6 @@
 <template>
   <div class = "body">
+    <admin></admin>
     <div class = "body-box">
       <div class = "title">
         <h2>举报审理</h2>
@@ -70,8 +71,12 @@
 
 <script>
 import qs from "qs";
+import admin from "@/components/admin.vue";
 export default {
   name: "report-reply",
+  components: {
+    admin
+  },
   data() {
     var message = [
       {
@@ -134,7 +139,7 @@ export default {
       var special = 0;
       var i;
       for(i = 0;i < this.message.length;i++) {
-        if(this.message[i].flag === 0) {
+        if(this.message[i].result === 0) {
           special = 1;
           break; 
         }
@@ -144,14 +149,14 @@ export default {
       }
       var tmp;
       if(this.dialogFormVisible === true) {
-        tmp = 1;
+        tmp = '1';
       }
       else {
-        tmp = 2;
+        tmp = '2';
       }
       var params = {
-        type: tmp,
-        report_id: this.message[index].reporterid,
+        type: '1',
+        report_id: this.message[index].report_id, 
       };
       this.$axios
           .post("/deal_report", qs.stringify(params))
@@ -179,6 +184,7 @@ export default {
       var params = {
       };
       this.$axios.get("/getreport").then((res) => {
+          console.log("test1111");
           console.log(res.data.data);
           var i = 0;
           this.message = [];
@@ -215,7 +221,7 @@ export default {
   font-size: 20px;
 }
 .body {
-  width: 1000px;
+  width: 1550px;
   position: absolute;
 }
 .body-box {

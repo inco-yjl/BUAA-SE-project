@@ -56,7 +56,7 @@
                 >
               </el-dropdown-menu>
               <el-dropdown-menu slot="dropdown" v-else>
-                <a href="/person"
+                <a href="/admin/uploadbook"
                   ><el-dropdown-item v-if="isAdmin"
                     >管理员页面</el-dropdown-item
                   ></a

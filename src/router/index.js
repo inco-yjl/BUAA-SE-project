@@ -148,11 +148,6 @@ const routes = [
       component: () => import('../views/Video/TeleDetail.vue')
     },
     {
-      path: '/reportreply',
-      name: 'report-reply',
-      component: () => import('../views/report-reply.vue')
-    },
-    {
       path: '/movieeditor',
       name: 'movieeditor',
       component: () => import('../views/Video/MovieEditor.vue')
@@ -179,6 +174,11 @@ const routes = [
     },
   ]
 },
+  {
+    path: '/reportreply',
+    name: 'report-reply',
+    component: () => import('../views/report-reply.vue')
+  },
 {
   path:'/admin/uploadbook',
   component: () => import('../views/admin/UploadBook.vue'),
