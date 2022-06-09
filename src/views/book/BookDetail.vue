@@ -169,7 +169,11 @@
                 <span class="publish-info">{{ comment.date }}</span>
               </div>
               <div class="commenttext">
-                <a class="commenttext-origin" @click="ToComment(comment.id)">{{
+                <a class="commenttext-origin" @click="ToComment(comment.id)">
+                <span class="comment-title">
+                  {{comment.title}}
+                </span><br>
+                {{
                   comment.content
                 }}</a>
               </div>
@@ -779,6 +783,7 @@ export default {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
+  height:140px;
 }
 .collection-list a:hover {
   background-color: #91919155;
@@ -807,8 +812,8 @@ export default {
   display: flex;
 }
 .collection-info {
-  margin-top: 0px;
-  font-size: 16px;
+  margin:auto;
+  font-size: 15px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
 }
@@ -927,6 +932,15 @@ a.commenttext-origin {
 a.commenttext-origin:hover {
   color: rgb(101, 101, 101);
   text-decoration: none;
+}
+a.commenttext-origin span {
+  font-size: 20px;
+  font-weight: 600;
+  color: black;
+  transition: 0.3s ease;
+}
+a.commenttext-origin span:hover {
+  text-decoration: underline;
 }
 .search-number {
   margin-top:50px;

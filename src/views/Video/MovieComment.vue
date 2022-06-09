@@ -41,25 +41,15 @@
         title="删除文章"
         :visible.sync="trydelete"
         width="300px"
-         @close="trydelete = false"
+        @close="trydelete = false"
       >
         <span>确认要删除？</span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="trydelete = false">取 消</el-button>
-          <el-button type="primary" @click="deleteNow()"
-            >确 定</el-button
-          >
+          <el-button type="primary" @click="deleteNow()">确 定</el-button>
         </span>
       </el-dialog>
       <div v-if="loadSuccess" class="content-body">
-        <div id="collect-button" class="user-buttons">
-          <button v-if="collect" @click="clickuncollect()">
-            <img src="@/assets/guide/collected.png" />
-          </button>
-          <button v-else @click="clickcollect()">
-            <img src="@/assets/guide/collect.png" />
-          </button>
-        </div>
         <div class="title">{{ passage.title }}</div>
         <div class="passage-info">
           <div>
@@ -107,7 +97,7 @@
       </div>
       <div class="aside">
         <div class="source-book">
-          <a class="source-item">
+          <a class="source-item" @click="ToMovieDetail(source.id)">
             <img class="source-img" :src="source.img" />
             <div v-if="loadSuccess" class="source-info">
               《{{ source.name }}》({{ source.year }})
@@ -126,19 +116,19 @@
         </div>
         <div class="recommend-passage">
           <div class="title">本电影推荐评论</div>
-          <!--   <ul class="recommend-list">
-              <li><a>焦虑它如影随形</a></li>
-              <li><a> 不对抗的人生</a></li>
-              <li><a>再写一个</a></li>
-            </ul> -->
+          <ul class="recommend-list">
+            <li v-for="passage in recommends" :key="passage.id">
+              <a @click="ToComment(passage.id)">{{ passage.title }}</a>
+            </li>
+          </ul>
         </div>
         <div class="recommend-passage">
-          <!-- <div class="title">该用户其他书评</div>
-            <ul class="recommend-list">
-              <li><a>我们不再爱电影</a></li>
-              <li><a> 满船清梦压星河</a></li>
-              <li><a>再写一个</a></li>
-            </ul> -->
+          <div class="title">该用户其他影评</div>
+          <ul class="recommend-list">
+            <li v-for="passage in passages" :key="passage.id">
+              <a @click="ToComment(passage.id)">{{ passage.title }}</a>
+            </li>
+          </ul>
         </div>
       </div>
       <div v-if="Toreply === false" class="reply-input">
@@ -268,7 +258,6 @@ export default {
     ];
     var like = false;
     var Toreply = false;
-    var collect = false;
     var loadSuccess = false;
     return {
       id,
@@ -277,20 +266,81 @@ export default {
       like,
       Toreply,
       replys,
-      trydelete:false,
+      trydelete: false,
       text: "",
+      recommends: [],
+      passages: [],
       textarea: "",
       source,
-      collect,
       jubao,
       loadSuccess,
       dialogFormVisible: false,
     };
   },
   methods: {
+    ToComment(id) {
+      this.$router.push({ name: "moviecomment", query: { id: id } });
+    },
+    ToMovieDetail(id) {
+      this.$router.push({
+        name: "moviedetail",
+        query: { id: id },
+      });
+    },
+    updateRelate() {
+      var params = {
+        user_id: this.passage.user_id,
+      };
+      this.$axios
+        .post("/movie/mypassage", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.passages = [];
+            var i;
+            var length = 3;
+            if (res.data.data.length < 3) length = res.data.data.length;
+            for (i = 0; i < length; i++) {
+              if (res.data.data[i].id != this.id)
+                this.passages.push(res.data.data[i]);
+            }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      params = {
+        movie_id: this.source.id,
+      };
+      console.log(this.source.id)
+      this.$axios
+        .post("/movie/recommend", qs.stringify(params))
+        .then((res) => {
+          console.log('recommend')
+          if (res.data.errno === 0) {
+            this.recommends = [];
+            var i;
+            var length = 3;
+            if (res.data.data.length < 3) length = res.data.data.length;
+            for (i = 0; i < length; i++) {
+              if (res.data.data[i].id != this.id)
+                this.recommends.push(res.data.data[i]);
+            }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     deleteArticle() {
       var author = this.passage.user_id;
-      if(!this.$store.getters.getUser || this.$store.getters.getUser.user.id===-1){
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
         this.$message.error("请先登录！");
         return;
       }
@@ -318,20 +368,19 @@ export default {
           console.log(error);
         });
     },
-    deleteNow(){
+    deleteNow() {
       var params = {
-        article_id:this.id
-      }
+        article_id: this.id,
+      };
       this.$axios
         .post("/passage/delete", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
-              this.$message({
+            this.$message({
               type: "success",
-              message:
-                res.data.msg
+              message: res.data.msg,
             });
-              this.$router.push({name:'video'});
+            this.$router.push({ name: "video" });
           } else {
             this.$message.error(res.data.msg);
           }
@@ -361,7 +410,6 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("查询到详情");
-            console.log(res.data.data);
             this.dialogFormVisible = false;
             this.$message({
               type: "success",
@@ -381,7 +429,10 @@ export default {
       console.log("close");
     },
     jubaoForm() {
-      if(!this.$store.getters.getUser || this.$store.getters.getUser.user.id===-1){
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
         this.$message.error("请先登录！");
         return;
       }
@@ -394,6 +445,32 @@ export default {
       this.userIcon =
         this.$axios.defaults.baseURL.substring(0, len - 4) + this.passage.icon;
     },
+    updateLike() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      )
+        return;
+      var user = this.$store.getters.getUser.user;
+      var params = {
+        user_id: user.id,
+        article_id: this.id,
+      };
+      this.$axios
+        .post("/passage/iflike", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            var iflike = parseInt(res.data.data);
+            if (iflike === 1) this.like = true;
+            else this.like = false;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     async updateComment() {
       var params = {
         article_id: this.$route.query.id,
@@ -403,16 +480,17 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("查询到详情");
-            console.log(res.data.data);
             this.passage = res.data.data.passage;
             this.source = res.data.data.resource;
             this.passage.star = parseFloat(this.passage.star);
             this.passage.date = this.passage.date.substring(0, 10);
             this.source.star = parseFloat(this.source.star);
             this.passage.like = parseInt(this.passage.like);
+            this.like
             this.passage.reply = parseInt(this.passage.reply);
             this.updateIcon();
             this.loadSuccess = true;
+            this.updateRelate();
           } else {
             this.$message.error("查询失败");
           }
@@ -422,20 +500,60 @@ export default {
         });
     },
     clicklike() {
-      // 数据post
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.passage.like++;
       this.like = true;
+      var user = this.$store.getters.getUser.user;
+      var params = {
+        user_id: user.id,
+        article_id: this.id,
+      };
+      this.$axios
+        .post("/passage/like", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.msg);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     clickunlike() {
-      //
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.passage.like--;
       this.like = false;
-    },
-    clickcollect() {
-      this.collect = true;
-    },
-    clickuncollect() {
-      this.collect = false;
+      var user = this.$store.getters.getUser.user;
+      var params = {
+        user_id: user.id,
+        article_id: this.id,
+      };
+      this.$axios
+        .post("/passage/unlike", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.msg);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     clickreply() {
       if (this.Toreply === false) this.Toreply = true;
@@ -450,6 +568,7 @@ export default {
   },
   mounted() {
     this.updateComment();
+    this.updateLike();
     window.onscroll = function (e) {
       console.log("slide");
       var vertical = document.getElementsByClassName("content-body").item(0);
@@ -546,10 +665,7 @@ export default {
   font-size: 17px !important;
   line-height: 32px !important;
 }
-#collect-button {
-  position: absolute;
-  left: 400px;
-}
+
 .user-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -682,8 +798,8 @@ a.replied-user {
   margin-right: 20px;
 }
 .source-info {
-  margin-top: 20px;
-  font-size: 16px;
+  margin:auto;
+  font-size: 15px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
 }
@@ -698,6 +814,7 @@ a.replied-user {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
+  height:140px;
 }
 .source-book a:hover {
   background-color: #91919155;

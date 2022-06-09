@@ -614,6 +614,7 @@ a.comment-book-name {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
+  height:140px;
 }
 .collection-list a:hover {
   background-color: #91919155;
@@ -642,12 +643,11 @@ a.comment-book-name {
   display: flex;
 }
 .collection-info {
-  margin-top: 0px;
-  font-size: 16px;
+  margin:auto;
+  font-size: 15px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
 }
-
 .hotlist a {
   color: rgb(2, 98, 182);
   font-weight: 500;
