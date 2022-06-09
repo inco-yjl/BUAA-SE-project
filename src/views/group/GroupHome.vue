@@ -15,7 +15,7 @@
             <div class="collection-info">
               {{ group.name }}
               <div></div>
-              {{ group.number }}人参与
+              {{ group.member }}人参与
             </div>
           </a>
         </div>
@@ -70,7 +70,7 @@
             </div>
             <div class="commenttext">
               <a class="commenttext-origin" >{{
-                comment.content
+                comment.content.changeToPlainText
               }}</a>
             </div>
           </div>

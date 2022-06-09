@@ -260,19 +260,8 @@
         </div>
         <div class="collection">
           <div class="bookpage-title">
-            <a href="../user/books">
-              <img src="@/assets/guide/mycomment.png" />我的讨论
-            </a>
           </div>
-          <ul class="book-comment-list hotlist">
-            <li
-                :v-if="passages.length > 0"
-                v-for="passage in passages"
-                :key="passage.id"
-            >
-              <a @click="ToComment(passage.id)">{{ passage.title }}</a>
-            </li>
-          </ul>
+          
         </div>
       </div>
     </div>
@@ -289,7 +278,7 @@ export default {
   },
   data() {
     var id = this.$route.query.id;
-    var isadmin = true;
+    var isadmin = false;
     var group = {
       peoplenum: 20,
       name: "龙族",
@@ -394,15 +383,16 @@ export default {
             console.log(error);
           });
     },
-    addgroup() {
+    addgroupt() {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
         group_id: this.id,
-        type: 1,
+        type: '1',
       }
       this.$axios
           .post("/group/dealGroup", qs.stringify(params))
           .then((res) => {
+            console.log("测试加入小组");
             console.log(res);
             if (res.data.errno === 0) {
               this.$message({
@@ -421,7 +411,7 @@ export default {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
         group_id: this.id,
-        type: 2,
+        type: '2',
       }
       this.$axios
           .post("/group/dealGroup", qs.stringify(params))
@@ -485,21 +475,6 @@ i   },
       this.innew = false;
       this.inval = true;
     },
-    join() {
-      this.$set(this.group,'join',true);
-      this.flag = true;
-      this.group.member++;
-      this.addgroup();
-      this.$forceUpdate();
-    },
-    quit() {
-      this.$set(this.group,'join',false);
-      console.log(this.group.join);
-      this.flag = false;
-      this.group.member--;
-      this.delgroup();
-      this.$forceUpdate();
-    },
     getgroup() {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
@@ -508,20 +483,21 @@ i   },
       this.$axios
           .post("/group/detail", qs.stringify(params))
           .then((res) => {
+            console.log("查询小组信息");
             console.log(res);
             var i = 0;
-            
-            for(i = 0;i < res.data.manager.length;i++) {
-              if(this.$store.getters.getUser.user.id === res.data.manager.user_id) {
-                this.isadmin = true;
-                break;    
-              }
-            }
             if (res.data.errno === 0) {
               console.log("获取小组信息成功");
               console.log(res.data.data);
-              var i = 0;
               this.group = res.data.data;
+              for(i = 0;i < 2;i++) {
+                console.log(this.$store.getters.getUser.user.id);
+                console.log(res.data.data.manager[i].user_id);
+                if(this.$store.getters.getUser.user.id === res.data.data.manager[i].user_id) {
+                  this.isadmin = true;
+                  break;
+                }
+              }
             } else {
               this.$message.error("查询失败");
             }
@@ -612,7 +588,6 @@ i   },
               var j = 0;
               var flag = 0;
               console.log("test");
-              console.log(this.topmes[0].id);
               for (i = 0; i < 6 && i < res.data.data.length; i++) {
                 flag = 0;
                 for(j = 0;j < this.topmes.length;j++) {
@@ -769,6 +744,7 @@ i   },
             console.log(res);
             if (res.data.errno === 0) {
               console.log("13215645646");
+              console.log(res.data.data);
               this.addgroup = [];
               var i = 0;
               for (i = 0; i < 6 && i < res.data.data.length; i++) {
@@ -852,6 +828,21 @@ i   },
           .catch((error) => {
             console.log(error);
           });
+    },
+    join() {
+      this.$set(this.group,'join',true);
+      this.flag = true;
+      this.group.member++;
+      this.addgroupt();
+      this.$forceUpdate();
+    },
+    quit() {
+      this.$set(this.group,'join',false);
+      console.log(this.group.join);
+      this.flag = false;
+      this.group.member--;
+      this.delgroup();
+      this.$forceUpdate();
     },
   },
   mounted() {
