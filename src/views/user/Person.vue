@@ -61,6 +61,73 @@
           </div>
         </div>
       </div>
+      <div class="collection">
+        <div class="bookpage-title" >
+          <div class="title">
+            <img src="@/assets/guide/book_collection.png" />我加入的小组
+          </div>
+        </div>
+        <div class="collection-list" v-for="group in addgroup" :key="group.id">
+          
+            <!--<div v-for="group in addgroup">
+              <ul>
+                <li>
+                  <div onmouseout = "this.className = 'normal'" onmouseover="this.className = 'heigh'" class = "normal">
+                    <div class="normal_active"> <span class="massage">{{ group.name }}}</span> </div>
+                    <div class="heigh_active"> <img class = "hidden_img" :src = "group.img"> </div>
+                  </div>
+                </li>
+              </ul>
+              <span>&nbsp;</span>
+            </div>-->
+          
+          <a class="collection-item" @click="usetogroupdetail(group.id)">
+            <img class="collection-img" :src="group.img" />
+            <div class="collection-info">
+              {{ group.name }}
+              <el-rate
+                  v-model="group.star"
+                  disabled
+                  show-score
+                  text-color="#ff9900"
+                  score-template="{value}"
+                  disabled-void-color="ffffff"
+              >
+              </el-rate>
+              {{ group.member }}人参与
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="collection">
+        <div class="videopage-title">
+          <div class="title">
+            <img id="collection-guide" src="@/assets/guide/movie_collection.png" />我的收藏
+          </div>
+        </div>
+        <div
+            class="collection-list"
+            v-for="(video, index) in collectionst"
+            :key="video.id"
+        >
+          <a class="collection-item" @click="usetocolloction(index)">
+            <img class="collection-img" :src="video.image" />
+            <div class="collection-info">
+              《{{ video.name }}》({{ video.year }})
+              <el-rate
+                  v-model="video.star"
+                  disabled
+                  show-score
+                  text-color="#ff9900"
+                  score-template="{value}"
+                  disabled-void-color="ffffff"
+              >
+              </el-rate>
+              {{ video.info }}
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -75,12 +142,15 @@ export default {
       author: "xxxxx",
       image: "https://i.imgtg.com/2022/05/12/zl9oa.jpg",
     };
-
+    var addgroup = [];
     var collections = [];
+    var collectionst = [];
     var i = 0;
     for (i = 0; i < 9; i++) collections.push(book);
     return {
+      addgroup,
       collections,
+      collectionst,
       imageUrl: "",
       tempUrl: "",
       userIcon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
@@ -93,6 +163,30 @@ export default {
     this.updateUser();
   },
   methods: {
+    getaddgroup() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+          .post("/group/mygroup", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("13215645646");
+              this.addgroup = [];
+              var i = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                this.addgroup.push(res.data.data[i]);
+              }
+            }
+            else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
       updateUser(){
       var params = {
         user_id: this.$store.getters.getUser.user.id,
@@ -178,11 +272,238 @@ export default {
         this.uploadIcon = false;
         this.imageUrl = null;
     },
+    async updateCollection() {
+      if(!this.$store.getters.getUser || this.$store.getters.getUser.user.id===-1) return;
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+          .post("/book/collection", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              this.collections = [];
+              var i = 0;
+              for (i = 0; i < 3 && i < res.data.data.length; i++) {
+                res.data.data[i].star = parseFloat(res.data.data[i].star);
+                this.collections.push(res.data.data[i]);
+                if(this.collections[i].author.length>11)
+                  this.collections[i].author = this.collections[i].author.substring(0,10)+'…'
+              }
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+      this.collectionst = [];
+      this.$axios
+          .post("/tele/collection", qs.stringify(params))
+          .then((res) => {
+            console.log("查询到已收藏的电视剧");
+            if (res.data.errno === 0) {
+              var i = 0;
+              if (res.data.data.length !== 0)
+                for (i = 0; i < 1 && i < res.data.data.length; i++) {
+                  this.collectionst.push(res.data.data[i]);
+                }
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+      this.$axios
+          .post("/movie/collection", qs.stringify(params))
+          .then((res) => {
+            console.log("查询到已收藏的电影");
+            if (res.data.errno === 0) {
+              var i = 0;
+              if (res.data.data.length !== 0)
+                for (i = 0; i < 2 && i < res.data.data.length; i++) {
+                  this.collectionst.push(res.data.data[i]);
+                }
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    usetocolloction(index) {
+      if (this.collections[index].year != null) {
+        this.$router.push({
+          name: "teledetail",
+          query: { id: this.collections[index].id },
+        });
+      } else {
+        this.$router.push({
+          name: "moviedetail",
+          query: { id: this.collections[index].id },
+        });
+      }
+    },
+  },
+  mounted() {
+    this.updateCollection();
+    this.getaddgroup();
   },
 };
 </script>
 
 <style scoped>
+.collection-img {
+  width: 150px;
+  height: 150px;
+}
+.videopage-title {
+  width: 300px;
+}
+.bookpage-title{
+  width: 300px;
+  height: 100px;
+}
+.vertical {
+  padding-top: 20px;
+  padding-left: 40px;
+  padding-right: 35px;
+  margin-top: 20px;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  box-shadow: 0px 2px 3px #888888a6;
+  padding-bottom: 20px;
+}
+.page-nav{
+  height: 60px;
+  width:100%;
+  line-height: 60px;
+  text-align: center;
+  overflow: hidden;
+}
+.page-nav>ul{
+  overflow: hidden;
+  margin: 0 30%;
+  width:80%;
+}
+.page-nav>ul>li{
+  float: left;
+  list-style-type: none;
+  margin-right:20px;
+}
+
+
+.title{
+  width: 600px;
+  font-weight: bold;
+  font-family: "Adobe 宋体 Std L",serif;
+  font-size: 30px;
+}
+#group-body{
+  position: absolute;
+  top: 150px;
+  height: 700px;
+  width: 1590px;
+  left: 100px;
+}
+.head_title{
+  position: relative;
+  width: 1590px;
+  height: 70px;
+}
+.left{
+  float: left;
+  position: relative;
+  width: 1050px;
+  height: 100%;
+  font-style: initial;
+  top: 30px;
+}
+.right{
+  float: left;
+  position: relative;
+  width: 400px;
+  height: 100%;
+  left: 50px;
+}
+.groupusually{
+  float: left;
+  position: relative;
+  top: 30px;
+  width: 100%;
+}
+.normal_active{
+  height: 40px;
+  overflow: hidden;
+  transition: 0.5s;
+}
+.heigh_active {
+  height: 300px;
+  overflow: hidden;
+  transition: 0.5s;
+}
+.heigh{
+  height: 300px;
+  overflow: hidden;
+  transition: 0.5s;
+}
+.normal {
+  height: 40px;
+  overflow: hidden;
+  transition: 0.5s;
+}
+.massage{
+  font-size: 20px;
+  font-family: "Adobe 宋体 Std L",serif;
+  font-weight: bold;
+}
+.hidden_img{
+  height: 300px;
+  width: 200px;
+}
+.title_l{
+  width: 525px;
+  position: relative;
+  float: left;
+}
+.group-name_l{
+  width: 150px;
+  position: relative;
+  float: left;
+}
+.res_l{
+  width: 125px;
+  position: relative;
+  float: left;
+}
+.time_l{
+  width: 200px;
+  position: relative;
+  float: left;
+}
+.font_l{
+  font-size: 20px;
+  font-family: "Adobe 宋体 Std L",serif;
+  font-weight: bold;
+}
+.blue{
+  color: #2C8DF4;
+}
+.m_div{
+  float: left;
+  position: relative;
+  height: 50px;
+}
+.m_nothead{
+  position: relative;
+  float: left;
+}
 #personpage {
   width: 1600px;
   padding-left: 100px;
@@ -276,7 +597,7 @@ export default {
   vertical-align: -20%;
   margin-right: 5px;
 }
-.collection-list a {
+.collection a {
   margin-left: 10px;
   margin-right: 10px;
   padding-top: 10px;

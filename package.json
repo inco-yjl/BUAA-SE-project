@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build-development": "vue-cli-service build --mode development",
     "build-production": "vue-cli-service build --mode production",
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --host = 43.138.29.81",
     "build": "vue-cli-service build"
   },
   "dependencies": {
