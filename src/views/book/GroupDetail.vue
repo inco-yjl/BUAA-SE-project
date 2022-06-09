@@ -281,9 +281,11 @@
 <script>
 import search from "@/components/SelectSearch.vue";
 import qs from "qs";
+import admin from "@/components/admin.vue"
 export default {
   components: {
     search,
+    admin,
   },
   data() {
     var id = this.$route.query.id;

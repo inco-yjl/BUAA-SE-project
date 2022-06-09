@@ -1,5 +1,7 @@
 <template>
-  <div id="teleupload">
+  <div>
+    <admin></admin>
+    <div id="teleupload">
     <div class="wrap">
       <h1 id="upload-title">上传电视剧</h1>
       <el-form :model="form" ref="form" class="form">
@@ -60,12 +62,16 @@
       </el-form>
     </div>
   </div>
+    </div>
 </template>
 <script>
 import qs from "qs";
+import admin from "@/components/admin.vue";
 export default {
   name: "Login",
-
+  components: {
+    admin,
+  },
   data() {
     var form = {
       name: "",

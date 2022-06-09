@@ -9,10 +9,10 @@
       </div>
       <div class = "vertical body-all" v-if = !noreportFormVisible>
       <div v-for="(mes,index) in message"  :key = "index" class = "repoet-mes">
-        <div v-if="mes.flag === 0" class = "vertical mes-body" >
+        <div v-if="mes.result === 0" class = "vertical-t mes-body" >
           <img src = "../assets/user/int.jpg" class = "repoet-img">
           <div class = "div-report">
-            <span style="position: relative; top: 10px">&nbsp;&nbsp;&nbsp;&nbsp;{{mes.reporterid}}发起的举报</span>
+            <span style="position: relative; top: 10px">&nbsp;&nbsp;&nbsp;{{mes.reporter_name}}&nbsp;</span>
             <el-button class = "el-button--primary bo-re" @click = "dialogFormVisible = true">驳回</el-button>
             <el-button class = "el-button--primary bo-re" @click = "dialogFormVisiblere = true">通过</el-button>
             <el-dialog title="致举报人" :visible.sync="dialogFormVisible">
@@ -53,14 +53,13 @@
             </el-dialog>  
           </div>
           <div class = "report-mes">
-            <div class = "div-title">原文</div>
+            <el-button class = "" style="margin-left: 500px" @click = "topassage(index)">点此查看原文</el-button>
             <div class = "div-title-mes">
-              <span>{{mes.reportermes}}</span>
             </div>
           </div>
           <div class = "report-m">
-            <h5>{{mes.reporttitle}}</h5>
-            <a class="commenttext-origin" @click="Tobookcomment">{{mes.reportmes}}</a>
+            <h5>{{mes.report_title}}</h5>
+            <a class="commenttext-origin" @click="Tobookcomment">{{mes.report_reason}}</a>
           </div>  
         </div>
       </div>  
@@ -131,7 +130,7 @@ export default {
       this.form.date1 = '';
       this.form.date2 = '取消后信息将不被保存';
       this.dialogFormVisible = false;
-      this.message[index].flag = 1;
+      this.message[index].result = 1;
       var special = 0;
       var i;
       for(i = 0;i < this.message.length;i++) {
@@ -143,6 +142,31 @@ export default {
       if(special === 0) {
        this.noreportFormVisible = true; 
       }
+      var params = {
+        type: 1,
+        report_id: this.message[index].reporterid,
+      };
+      if(this.dialogFormVisible === true) {
+        params.type = 1;
+      }
+      else {
+        params.type = 2;
+      }
+      this.$axios
+          .post("/deal_report", qs.stringify(params))
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.$message({
+                message: "处理成功",
+                type: "success",
+              });
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     },
     reload() {
       this.dialogFormVisible = false;
@@ -150,14 +174,31 @@ export default {
       this.form.date2 = '取消后信息将不被保存';
     },
     updatereport() {
-      this.$axios.post("/getreport").then((res) => {
-        if(res.data.error === 0) {
-          return;
-        }
+      var params = {
+      };
+      this.$axios.get("/getreport").then((res) => {
+          console.log(res.data.data);
+          var i = 0;
+          this.message = [];
+          for (i = 0; i < res.data.data.length; i++) {
+            this.message.push(res.data.data[i]);
+          }
+          console.log(this.message);
       }
-      )
+      ).catch((error) => {
+        console.log(error);
+      });
+    },
+    topassage(index) {
+      this.$router.push({
+        name: "bookdetail",
+        query: { id: this.message[index].article_id },
+      });
     }
-  }
+  },
+  mounted() {
+    this.updatereport();
+  },
 }
 </script>
 
@@ -192,6 +233,17 @@ export default {
   border-width: 1px;
   border-color: rgb(181, 181, 181);
   box-shadow: 0px 2px 3px #888888a6;
+}
+.vertical-t {
+  padding-top: 20px;
+  padding-left: 40px;
+  padding-right: 35px;
+  margin-top: 20px;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+
 }
 .title{
   position: relative;

@@ -1,4 +1,6 @@
 <template>
+  <div>
+    <admin></admin> 
   <div id="bookupload">
     <div class="wrap">
       <h1 id="upload-title">上传书籍</h1>
@@ -50,12 +52,16 @@
       </el-form>
     </div>
   </div>
+  </div>  
 </template>
 <script>
 import qs from "qs";
+import admin from "@/components/admin.vue";
 export default {
   name: "Login",
-
+  components: {
+    admin,
+  },
   data() {
     var form = {
       name: "",
@@ -117,6 +123,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 #bookupload {
   position: absolute;

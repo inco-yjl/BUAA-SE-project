@@ -1,5 +1,7 @@
 <template>
-  <div id="groupupload">
+  <div>
+    <admin></admin>
+    <div id="groupupload">
     <div class="wrap">
       <h1 id="upload-title">创建小组</h1>
       <el-form :model="form" ref="form" class="form">
@@ -27,12 +29,16 @@
       </el-form>
     </div>
   </div>
+  </div>  
 </template>
 <script>
 import qs from "qs";
+import admin from "@/components/admin.vue";
 export default {
   name: "Login",
-
+  components: {
+    admin,
+  },
   data() {
     var form = {
       name: "",
