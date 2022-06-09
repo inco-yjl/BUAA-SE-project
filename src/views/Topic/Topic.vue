@@ -57,23 +57,14 @@
                           >{{ dt.user }}</span
                         >
                       </a>
-                      <span class="publishtime">{{ dt.date }}</span>
-                    </div>
-                    <div class="topic-origin">
-                      <button
-                        @click="favor"
-                        class="topic-button"
-                        :style="{ backgroundColor: bg_color, color: ft_color }"
-                        @mouseenter="change()"
-                        @mouseleave="goback()"
-                      >
-                        {{ content }}
-                      </button>
-                      来自话题<a
+                      <span class="normal">&ensp;来自话题</span>
+                      <span class="normal">
+                      <a
                         class="topic-origin-name"
                         @click="ToTopicDetail(dt.topicid)"
                         >{{ dt.topic }}</a
-                      >
+                      ></span>
+                      <span class="normal">{{ dt.date }}</span>
                     </div>
                     <div class="diarytext">
                       <a class="diarytext-origin" @click="ToTopicDt(dt.id)">{{
@@ -151,6 +142,7 @@
 
 
 <style scoped>
+
 button.selection_un {
   background: none;
   outline: none;
@@ -314,7 +306,7 @@ div.title {
 }
 .collection {
   position: relative;
-  left:-17px;
+  left: -17px;
   text-align: left;
   height: 260px;
   padding-bottom: 0px;
@@ -482,7 +474,7 @@ div.title {
 div.diary-origin-pic {
   position: relative;
   left: 0;
-  top:-50px;
+  top: -50px;
   margin-left: 20px;
   border-radius: 5px;
   height: 180px;
@@ -492,6 +484,10 @@ div.diary-origin-pic {
 .diary-content {
   display: flex;
   flex-wrap: row;
+}
+.display-publisher{
+  color: rgb(157, 157, 157);
+    margin-bottom: 10px;  margin-bottom: 10px;
 }
 .display-publisher a {
   font-weight: 500;
@@ -506,6 +502,16 @@ div.diary-origin-pic {
   height: 30px;
   margin-right: 5px;
   vertical-align: sub;
+}
+a.topic-origin-name {
+  color: rgb(157, 157, 157);
+  font-weight: 500;
+  font-size:16px;
+  color: black;
+  text-decoration: none;
+}
+a.topic-origin-name :hover {
+  color: rgb(0, 166, 255);
 }
 .nameOfuser {
   font-size: 17px;
@@ -558,8 +564,6 @@ button {
 </style>
 <script>
 import search from "@/components/SelectSearch.vue";
-import usericon from "@/assets/user/int.png";
-import router from "@/router";
 import qs from "qs";
 export default {
   name: "topic",
@@ -579,6 +583,8 @@ export default {
       hotdt: [],
       allDts: [],
       collection,
+      hotamount:0,
+      collectamount:0,
       passages,
       dtamount,
       topic_circle,
@@ -599,7 +605,7 @@ export default {
         this.dts.push(this.allDts[currentPage * 3 - 3 + i]);
       }
     },
-    favor(e) {
+    favor(id) {
       this.liked = !this.liked;
       if (this.liked) {
         this.content = "已关注";
@@ -668,7 +674,7 @@ export default {
             console.log("热动态查询成功");
             console.log(res.data.data);
             var passages = res.data.data;
-            this.dtamount = passages.length;
+            this.hotamount = passages.length;
             this.hotdt = [];
             for (var i = 0; i < passages.length; i++) {
               var hasimg = true;
@@ -683,7 +689,7 @@ export default {
                 usericon: this.displayIcon(passages[i].usericon),
                 user: passages[i].username,
                 userid: passages[i].userid,
-                date: passages[i].date,
+                date: passages[i].date.substring(0,10),
                 hasimg: hasimg,
                 img: imgs[0],
                 topic: passages[i].topic,
@@ -695,6 +701,50 @@ export default {
             }
             this.allDts = this.hotdt;
             this.changeTopicdt(1);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    requestCollectDt() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+        .post("/topic/collectpassage",qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("关注查询成功");
+            console.log(res.data.data);
+            var passages = res.data.data;
+            this.collectDt = [];
+            this.collectamount = passages.length;
+            for (var i = 0; i < passages.length; i++) {
+              var hasimg = true;
+              var imgs = this.getimgsrc(passages[i].content);
+              if (imgs.length == 0) hasimg = false;
+              passages[i].content = this.ToText(passages[i].content);
+              if (passages[i].content.length > 170) {
+                passages[i].content =
+                  passages[i].content.substring(0, 170) + "…";
+              }
+              this.collectDt.push({
+                usericon: this.displayIcon(passages[i].usericon),
+                user: passages[i].username,
+                userid: passages[i].userid,
+                date: passages[i].date.substring(0,10),
+                hasimg: hasimg,
+                img: imgs[0],
+                topic: passages[i].topic,
+                topicid: passages[i].topicid,
+                thestyle: this.getStyle(imgs[0]),
+                id: passages[i].id,
+                passage: passages[i].content,
+              });
+            }
           } else {
             this.$message.error("查询失败");
           }
@@ -779,9 +829,10 @@ export default {
     hotTopicdt() {
       //更换标签时获取数据
       document
-        .getElementById("select-new-topic-dt")
+        .getElementById("select-follow-topic-dt")
         .setAttribute("class", "selection_un");
       this.allDts = this.hotdt;
+      this.dtamount = this.hotamount;
       this.changeTopicdt(1);
     },
     specifyTopicdt() {
@@ -789,6 +840,7 @@ export default {
         .getElementById("select-hot-topic-dt")
         .setAttribute("class", "selection_un");
       this.allDts = this.collectDt;
+      this.dtamount =this.collectamount;
       this.changeTopicdt(1);
     },
     //this is the function to update the images of books
@@ -829,7 +881,7 @@ export default {
       for (i = 0; i < length; i++) {
         this.dts.push(this.allDts[currentPage * 3 - 3 + i]);
       }
-      console.log(dts);
+      console.log(this.dts)
     },
   },
   mounted() {
@@ -839,10 +891,10 @@ export default {
     this.updatePassage();
     this.updateHotTopics();
     this.requestHotDt();
+    this.requestCollectDt();
     window.onscroll = function (e) {
       var vertical = document.getElementsByClassName("flex_box").item(0);
       var pos = vertical.getBoundingClientRect();
-      console.log(pos.top);
       if (pos.top < 29) {
         var aside = document.getElementsByClassName("aside").item(0);
         if (aside != null) aside.setAttribute("class", "aside-slide");
