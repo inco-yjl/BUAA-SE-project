@@ -23,7 +23,7 @@
             </div>
            
             <div class="group-detail-interact">
-              <button v-if="!isadmin">
+              <button v-if="!isadmin" @click = "toadmin()">
                 <img src="@/assets/group/apply.png" /><span
                   >申请成为管理员</span
                 >
@@ -372,6 +372,74 @@ export default {
     };
   },
   methods: {
+    toadmin() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+        group_id: this.id,
+      }
+      this.$axios
+          .post("/group/group_manager", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              this.$message({
+                message: "成功成为管理员",
+                type: "success",
+              });
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    addgroup() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+        group_id: this.id,
+        type: 1,
+      }
+      this.$axios
+          .post("/group/dealGroup", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              this.$message({
+                message: "加入成功",
+                type: "success",
+              });
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    delgroup() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+        group_id: this.id,
+        type: 2,
+      }
+      this.$axios
+          .post("/group/dealGroup", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              this.$message({
+                message: "退出成功",
+                type: "success",
+              });
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
     usetonewpassage() {
       this.$router.push({
         name: "groupcomment",
@@ -421,6 +489,7 @@ i   },
       this.$set(this.group,'join',true);
       this.flag = true;
       this.group.member++;
+      this.addgroup();
       this.$forceUpdate();
     },
     quit() {
@@ -428,6 +497,7 @@ i   },
       console.log(this.group.join);
       this.flag = false;
       this.group.member--;
+      this.delgroup();
       this.$forceUpdate();
     },
     getgroup() {
