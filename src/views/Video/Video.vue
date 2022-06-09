@@ -184,7 +184,7 @@
             <a class="collection-item" @click="usetocolloction(index)">
               <img class="collection-img" :src="video.image" />
               <div class="collection-info">
-                《{{ video.name }}》
+                《{{ video.name }}》({{ video.year }})
                 <el-rate
                   v-model="video.star"
                   disabled
@@ -194,7 +194,7 @@
                   disabled-void-color="ffffff"
                 >
                 </el-rate>
-                ({{ video.year }}){{ video.info }}
+                {{ video.info }}
               </div>
             </a>
           </div>
@@ -896,6 +896,7 @@ a.comment-movie-name {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
+  height:140px;
 }
 .collection-list a:hover {
   background-color: #91919155;
@@ -924,8 +925,8 @@ a.comment-movie-name {
   display: flex;
 }
 .collection-info {
-  margin-top: 0px;
-  font-size: 16px;
+  margin:auto;
+  font-size: 15px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
 }

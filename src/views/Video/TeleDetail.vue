@@ -57,9 +57,24 @@
               </div>
             </div>
           </div>
-          <button  @click="writeComment()" style="position: relative; float: right; right: 100px;">
-            <img src="@/assets/guide/write_dt.png" /><span>撰写评论</span>
-          </button>
+          <div class="tele-detail-interact">
+            <div class="evaluate">打个分吧！</div>
+            <el-rate
+              :show-score="true"
+              class="star-button"
+              style="width: 150px"
+              v-model="evaluate"
+              :colors="colors"
+              @change="starTheMovie"
+            >
+            </el-rate>
+            <button>
+              <img src="@/assets/guide/share.png" /><span>分享剧集</span>
+            </button>
+            <button @click="writeComment()">
+              <img src="@/assets/guide/write_dt.png" /><span>撰写评论</span>
+            </button>
+          </div>
           <div class="detail-intro">
             <span class="intro-title">内容简介···</span>
             <div v-html="tele.intro"></div>
@@ -99,7 +114,7 @@
         <div class="collection">
           <div class="detail-title">
             <a href="../user/teles">
-              <img src="@/assets/guide/mycomment.png" />我的影评
+              <img src="@/assets/guide/mycomment.png" />我的剧评
             </a>
           </div>
           <ul class="comment-list hotlist">
@@ -526,6 +541,33 @@ export default {
 
 .user-buttons button:active {
   top: 2px;
+}
+.evaluate {
+  position: absolute;
+  left: 660px;
+  top: 672px;
+  color: rgb(101, 101, 101);
+}
+.tele-detail-interact button {
+  position: relative;
+  left: 700px;
+  top: 20px;
+  background: none;
+  outline: none;
+  font-size: 18px;
+  border: none;
+  transition: opacity 0.2s;
+}
+.tele-detail-interact button :hover {
+  text-decoration: underline;
+}
+.tele-detail-interact img {
+  height: 20px;
+}
+.star-button {
+  position: absolute;
+  left: 740px;
+  top: 672px;
 }
 .detail-info {
   margin-top: 20px;

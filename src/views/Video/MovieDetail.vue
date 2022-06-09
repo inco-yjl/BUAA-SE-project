@@ -169,9 +169,15 @@
                 <span class="publish-info">{{ comment.date }}</span>
               </div>
               <div class="commenttext">
-                <a class="commenttext-origin" @click="Tomoviecomment(comment.id)">{{
-                  comment.content
-                }}</a>
+                <a
+                  class="commenttext-origin"
+                  @click="Tomoviecomment(comment.id)"
+                >
+                  <span class="comment-title">
+                    {{ comment.title }} </span
+                  ><br />
+                  {{ comment.content }}</a
+                >
               </div>
             </div>
           </div>
@@ -236,15 +242,15 @@ export default {
     return {
       collections,
       passages,
-      peoplenum:0,
+      peoplenum: 0,
       movie,
       collect,
       id,
       moviecomments,
-      allComments:[],
+      allComments: [],
       colors: ["#99A9BF", "#F7BA2A", "#FF9900"],
       evaluate: 0,
-      commentNum:0,
+      commentNum: 0,
       loadSuccess,
       hotdt,
       newdt,
@@ -329,7 +335,7 @@ export default {
         });
     },
     Tomoviecomment(id) {
-      this.$router.push({ name: "moviecomment",query:{id:id} });
+      this.$router.push({ name: "moviecomment", query: { id: id } });
     },
     async updateCollection() {
       var params = {
@@ -490,7 +496,7 @@ export default {
                   comments[i].content.substring(0, 170) + "…";
               }
               var url = comments[i].usericon;
-              console.log('url');
+              console.log("url");
               console.log(url);
               var img = this.displayIcon(url);
 
@@ -792,6 +798,7 @@ export default {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
+  height:140px;
 }
 .collection-list a:hover {
   background-color: #91919155;
@@ -820,8 +827,8 @@ export default {
   display: flex;
 }
 .collection-info {
-  margin-top: 20px;
-  font-size: 16px;
+  margin: auto;
+  font-size: 15px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
 }
@@ -918,7 +925,7 @@ button.selection_un {
 }
 .iconOfuser {
   height: 40px;
-  width:40px;
+  width: 40px;
   border-radius: 20px;
   margin-right: 5px;
   vertical-align: sub;
@@ -940,8 +947,17 @@ a.commenttext-origin:hover {
   color: rgb(101, 101, 101);
   text-decoration: none;
 }
+a.commenttext-origin span {
+  font-size: 20px;
+  font-weight: 600;
+  color: black;
+  transition: 0.3s ease;
+}
+a.commenttext-origin span:hover {
+  text-decoration: underline;
+}
 .search-number {
-  margin-top:50px;
+  margin-top: 50px;
   margin-left: 300px;
 }
 </style>

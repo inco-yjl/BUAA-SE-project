@@ -2,6 +2,53 @@
   <div class="passage">
     <search></search>
     <div class="passage-body">
+      <el-dropdown class="more-action">
+        <span class="el-dropdown-link">
+          <img src="@/assets/guide/more.png" />
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item
+            ><a @click="deleteArticle()">删除</a></el-dropdown-item
+          >
+          <el-dropdown-item><a @click="jubaoForm()">举报</a></el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <el-dialog
+        title="发起举报"
+        :visible.sync="dialogFormVisible"
+        width="800px"
+        @close="closeForm()"
+      >
+        <el-form :model="jubao">
+          <el-form-item label="标题">
+            <el-input v-model="jubao.title" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="正文">
+            <el-input
+              type="textarea"
+              :rows="2"
+              placeholder="请输入举报理由"
+              v-model="jubao.content"
+            >
+            </el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="commitjubao()">确 定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog
+        title="删除文章"
+        :visible.sync="trydelete"
+        width="300px"
+        @close="trydelete = false"
+      >
+        <span>确认要删除？</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="trydelete = false">取 消</el-button>
+          <el-button type="primary" @click="deleteNow()">确 定</el-button>
+        </span>
+      </el-dialog>
       <div v-if="loadSuccess" class="content-body">
         <div class="title">{{ passage.title }}</div>
         <div class="passage-info">
@@ -204,6 +251,10 @@ export default {
         ],
       },
     ];
+    var jubao = {
+      title: "",
+      content: "",
+    };
     var like = false;
     var Toreply = false;
     var loadSuccess = false;
@@ -220,6 +271,10 @@ export default {
       textarea: "",
       source,
       loadSuccess,
+      trydelete: false,
+      textarea: "",
+      jubao,
+      dialogFormVisible: false,
     };
   },
   methods: {
@@ -276,6 +331,110 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    deleteArticle() {
+      var author = this.passage.user_id;
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
+        return;
+      }
+      var user = this.$store.getters.getUser.user;
+      var isadmin;
+      var params = {
+        user_id: user.id,
+      };
+      this.$axios
+        .post("/user/isadmin", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            isadmin = parseInt(res.data.data);
+            console.log(isadmin);
+            if (user.id != author && isadmin === 0) {
+              this.$message.error("你没有权限！");
+              return;
+            }
+            this.trydelete = true;
+          } else {
+            this.$message.error("举报失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    deleteNow() {
+      var params = {
+        article_id: this.id,
+      };
+      this.$axios
+        .post("/passage/delete", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.$message({
+              type: "success",
+              message: res.data.msg,
+            });
+            this.$router.push({ name: "book" });
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    commitjubao() {
+      if (!this.jubao.title) {
+        this.$message.error("请输入标题");
+        return;
+      }
+      if (this.jubao.content.length < 15) {
+        this.$message.error("举报理由不得少于15字");
+        return;
+      }
+      var params = {
+        report_title: this.jubao.title,
+        report_reason: this.jubao.content,
+        user_id: this.$store.getters.getUser.user.id,
+        article_id: this.id,
+      };
+      console.log(params);
+      this.$axios
+        .post("/addreport", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("查询到详情");
+            this.dialogFormVisible = false;
+            this.$message({
+              type: "success",
+              message:
+                "举报成功，感谢您对维护美好环境做出的贡献，举报信息上传中",
+            });
+          } else {
+            this.$message.error("举报失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    closeForm() {
+      this.dialogFormVisible = false;
+      console.log("close");
+    },
+    jubaoForm() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
+        return;
+      }
+      this.dialogFormVisible = true;
+      console.log("open");
     },
     updateIcon() {
       if (this.passage.icon === "") return;
@@ -638,8 +797,8 @@ a.replied-user {
   margin-right: 20px;
 }
 .source-info {
-  margin-top: 20px;
-  font-size: 16px;
+  margin: auto;
+  font-size: 15px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
 }
@@ -654,6 +813,7 @@ a.replied-user {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
+  height:140px;
 }
 .source-book a:hover {
   background-color: #91919155;
@@ -686,5 +846,14 @@ blockquote:before {
 }
 blockquote p {
   display: inline;
+}
+.more-action {
+  position: absolute;
+  left: 1165px;
+  top: 315px;
+}
+.more-action img {
+  height: 30px;
+  width: 30px;
 }
 </style>
