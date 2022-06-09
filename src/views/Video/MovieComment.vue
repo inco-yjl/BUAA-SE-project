@@ -647,7 +647,7 @@ export default {
 }
 .passage-text {
   margin-top: 10px;
-  padding-bottom: 100px;
+  padding-bottom:50px;
   padding-left: 30px;
   padding-right: 60px;
 }

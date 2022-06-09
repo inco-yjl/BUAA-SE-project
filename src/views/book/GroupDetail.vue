@@ -14,11 +14,9 @@
           </div>
           <div class="user-buttons">
             <div id="join-button">
-              <button v-if="group.join" @click="quit()">
-                <img src="@/assets/group/quit.png" />
-              </button>
-              <button v-else @click="join()">
-                <img src="@/assets/group/join.png" />
+              <button  @click="quit()">
+                <img v-if="join === true" src="@/assets/group/quit.png" />
+                <img v-else src="@/assets/group/join.png" />
               </button>
             </div>
             <div class="group-detail-interact">
@@ -167,6 +165,7 @@ export default {
     var allPassages = [];
     return {
       group,
+      join:group.join,
       allPassages,
       topPassage,
       passageNum: 0,
@@ -174,10 +173,11 @@ export default {
   },
   methods: {
     join() {
-      this.group.join = true;
+      this.join = ! this.join;
     },
     quit() {
-      this.group.join = false;
+      this.group.join = !this.group.join
+
     },
   },
 };

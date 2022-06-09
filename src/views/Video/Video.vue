@@ -269,7 +269,7 @@ export default {
   },
   methods: {
     usetocolloction(index) {
-      if (this.collections[index].year != null) {
+      if (index < this.ismovie){
         this.$router.push({
           name: "teledetail",
           query: { id: this.collections[index].id },

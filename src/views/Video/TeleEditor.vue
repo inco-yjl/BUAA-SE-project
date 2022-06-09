@@ -1,32 +1,32 @@
 <template>
   <div id="comment-editor">
     <div id="editor-header">
-      <div class="return-to-book">
-        <button @click="backToBook">返回电视剧页</button>
+      <div class="return-to-tele">
+        <button @click="backToTele">返回电视剧页</button>
       </div>
       <div class="header-logo"></div>
-      <div class="post-book-comment">
+      <div class="post-tele-comment">
         <button @click="UploadComment">发布</button>
       </div>
     </div>
     <div class="content-info">
       <div class="content-img">
-        <a href="../book/1">
-          <img id="comment-pic" :src="book.image" />
+        <a href="../tele/1">
+          <img id="comment-pic" :src="tele.image" />
         </a>
         <el-rate
             :show-score="true"
             style="width: 150px"
             v-model="evaluate"
             :colors="colors"
-            @change="starTheBook"
+            @change="starTheTele"
         >
         </el-rate>
       </div>
       <div id="content-intro">
-        <span id="contentname">《{{ book.name }}》<br /></span>
-        <span id="contentintro">发布时间：{{ book.year }}</span>
-        <span id="contentstar">发布地区：{{ book.nation }}</span>
+        <span id="contentname">《{{ tele.name }}》<br /></span>
+        <span id="contentintro">发布时间：{{ tele.year }}</span>
+        <span id="contentstar">发布地区：{{ tele.nation }}</span>
       </div>
     </div>
 
@@ -44,7 +44,6 @@
 </template>
 <style scoped>
 #comment-editor {
-  height: 1000px;
   padding-bottom: 200px;
   margin-bottom: 200px;
 }
@@ -64,18 +63,18 @@
   background-size: 50px 50px;
   background-image: url("@/assets/icon/logo.png");
 }
-.return-to-book button {
+.return-to-tele button {
   background: none;
   outline: none;
   border: none;
   color: black;
 }
-.return-to-book button:hover {
+.return-to-tele button:hover {
   outline: none;
   font-weight: bold;
 }
 
-.post-book-comment button {
+.post-tele-comment button {
   background: none;
   position: absolute;
   top: 5px;
@@ -85,6 +84,11 @@
   transition: all 0.2s ease;
   border: none;
   color: black;
+}
+
+.post-tele-comment button:hover {
+  outline: none;
+  font-weight: bold;
 }
 .contentinfo {
   position: absolute;
@@ -171,13 +175,13 @@ export default {
   name: "teleeditor",
   data() {
     var id = this.$route.query.id;
-    var book = {};
+    var tele = {};
     var title = "请输入标题...";
     var passage = "";
     var score = 0.0;
     return {
       id,
-      book,
+      tele,
       title,
       passage,
       colors: ["#99A9BF", "#F7BA2A", "#FF9900"],
@@ -197,7 +201,7 @@ export default {
           .then((res) => {
             if (res.data.errno === 0) {
               console.log("电视剧查询成功");
-              this.book = res.data.data;
+              this.tele = res.data.data;
               this.evaluate = parseFloat(res.data.evaluate);
               console.log(this.evaluate);
               this.loadSuccess = true;
@@ -209,10 +213,10 @@ export default {
             console.log(error);
           });
     },
-    starTheBook() {
+    starTheTele() {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
-        book_id: this.id,
+        tele_id: this.id,
         score: this.evaluate
       };
       this.$axios
@@ -233,7 +237,7 @@ export default {
             console.log(error);
           });
     },
-    backToBook() {
+    backToTele() {
       this.addNavigation();
       this.$router.push({
         name: "teledetail",
@@ -282,7 +286,7 @@ export default {
                 message: res.data.msg,
                 type: "success",
               });
-              this.backToBook();
+              this.backToTele();
             } else {
               this.$message.error("发布失败");
             }

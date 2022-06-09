@@ -15,12 +15,7 @@
       <p class="topic-intro">简介:{{ topic.intro }}</p>
     </div>
     <!--2.这里id对应new Vditor('vditor',{...})的第一个参数vidtor-->
-    <div id="editor" style="border: 1px solid #ccc">
-      <div id="toolbar-container"></div>
-      <div id="editor-container">
-        <div id="editor-text-area"></div>
-      </div>
-    </div>
+    <div id="editor"></div>
   </div>
 </template>
 <style scoped>
@@ -95,20 +90,11 @@
   left: 400px;
   right: 400px;
   top: 300px;
-  height: 800px;
-  background-color: white;
 }
 </style>
 <script>
-import { createEditor, createToolbar } from "@wangeditor/editor";
+import Editor from "wangeditor";
 import qs from "qs";
-const editorConfig = {};
-
-// 工具栏配置
-const toolbarConfig = {
-  excludeKeys: ["insertVideo", "fullScreen", "codeBlock", "bgColor", "color"],
-};
-
 export default {
   name: "editor",
   data() {
@@ -121,6 +107,8 @@ export default {
       passage,
       topic,
       loadSuccess,
+      editor: "",
+      picture: [],
     };
   },
   methods: {
@@ -132,6 +120,7 @@ export default {
       });
     },
     UploadDt() {
+      this.passage = this.editor.txt.html();
       if (this.passage.length > 10000) {
         this.$message.error("字数过多！不得超过10000字");
         return;
@@ -154,8 +143,8 @@ export default {
               message: res.data.msg,
               type: "success",
             });
+            this.uploadImg(res.data.data);
             this.backToTopic();
-            console.log(res.data.data);
           } else {
             this.$message.error("发布失败");
           }
@@ -164,7 +153,31 @@ export default {
           console.log(error);
         });
     },
+    uploadImg(id) {
+      for (var i = 0; i < this.picture.length; i++) {
+        var url = this.picture[i];
+        var params = {
+          article_id:id,
+          url:url
+        }
+        if (this.passage.indexOf(url) !== -1) {
+          this.$axios
+            .post("/photo/saveinnerPhoto", qs.stringify(params))
+            .then((res) => {
+              if (res.data.errno === 0) {
+                console.log(res);
+              } else {
+                this.$message.error("存储失败");
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      }
+    },
     updateContent() {
+      this.picture = [];
       var params = {
         topic_id: this.id,
         user_id: this.$store.getters.getUser.user.id,
@@ -198,70 +211,75 @@ export default {
     removeNavigation() {
       this.$parent.navigate = false;
     },
-    customCheckImageFn(src, alt, url) {
-      if (!src) {
-        return;
+    changeurl(url) {
+      var icon;
+      if (url !== "") {
+        var len = this.$axios.defaults.baseURL.length;
+        icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
       }
-      return true;
-
-      // 返回值有三种选择：
-      // 1. 返回 true ，说明检查通过，编辑器将正常插入图片
-      // 2. 返回一个字符串，说明检查未通过，编辑器会阻止插入。会 alert 出错误信息（即返回的字符串）
-      // 3. 返回 undefined（即没有任何返回），说明检查未通过，编辑器会阻止插入。但不会提示任何信息
+      this.picture.push(icon);
+      return icon;
     },
-    async uploadPic(img) {
+    upload(params) {
       console.log("update");
-      var params = new FormData();
-      params.append("photo", img);
-      params.append("name", img.name);
-      params.append("resource_id", this.$store.getters.getUser.user.id);
-      params.append("resource_type", 2);
-      this.$axios.post("/photo/upload_photo", params);
     },
-    changeUrl(url) {
-      var len = this.$axios.defaults.baseURL.length;
-     return this.$axios.defaults.baseURL.substring(0, len - 4) + url;
-    },
-    createEditor() {
-      editorConfig.onChange = (editor) => {
-        // 当编辑器选区、内容变化时，即触发
-        console.log("html", editor.getHtml());
-        this.passage = editor.getHtml();
+    async initEditor() {
+      this.editor = new Editor("#editor"); /* 括号里面的对应的是html里div的id */
+      /* 配置菜单栏 */
+      this.editor.config.excludeMenus = [
+        "emoticon",
+        "video",
+        "foreColor",
+        "backColor",
+        "table",
+        "code",
+        "fontSize",
+        "fontName",
+      ];
+      this.editor.config.uploadImgMaxLength = 5;
+      this.editor.config.uploadImgMaxSize =
+        3 * 1024 * 1024; /* 将图片大小限制为 3M 默认为5M / 
+        /* 自定义图片上传（支持跨域和非跨域上传，简单操作）*/
+      this.editor.config.customUploadImg = async (files, insert) => {
+        /* files 是 input 中选中的文件列表 */
+        var params = new FormData();
+        var img = files[0];
+        params.append("photo", img);
+        params.append("name", img.name);
+        params.append("resource_id", this.$store.getters.getUser.user.id);
+        params.append("resource_type", 2);
+        var url;
+        this.$axios
+          .post("/photo/upload_photo", params)
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              url = this.changeurl(res.data.data.url);
+              this.$message({
+                message: res.data.msg,
+                type: "success",
+              });
+              insert(url);
+            } else {
+              this.$message.error("上传失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        /* upload方法是后台提供的上传图片的接口 */
+        /* insert 是编辑器自带的 获取图片 url 后，插入到编辑器的方法 上传代码返回结果之后，将图片插入到编辑器中*/
       };
-      editorConfig.onchangeTimeout = 500;
-      editorConfig.customUploadImg = async function (resultFiles, insertImgFn) {
-        const result = await this.uploadPic(resultFiles[0]);
-        // 上传图片成功后，将图片地址传入到insertImgFn方法中即可
-        if (result.data.errno === 0) insertImgFn(changeUrl(result.data.data.url));
+      this.editor.config.onchange = (html) => {
+        /* html 即变化之后的内容 */
       };
-      const editor = createEditor({
-        selector: document.querySelector("#editor-container"),
-        config: editorConfig,
-        mode: "simple", // 或 'simple' 参考下文
-      });
-
-      // 创建工具栏
-      const toolbar = createToolbar({
-        editor,
-        selector: document.querySelector("#toolbar-container"),
-        config: toolbarConfig,
-        mode: "simple", // 或 'simple' 参考下文
-      });
-      console.log(toolbar.getConfig().toolbarKeys);
-      document
-        .getElementById("editor-text-area")
-        .addEventListener("click", (e) => {
-          if (e.target.id === "editor-text-area") {
-            editor.blur();
-            editor.focus(true); // focus 到末尾
-          }
-        });
+      this.editor.create();
     },
   },
   mounted() {
     this.removeNavigation();
     this.updateContent();
-    this.createEditor();
+    this.initEditor();
   },
 };
 </script>

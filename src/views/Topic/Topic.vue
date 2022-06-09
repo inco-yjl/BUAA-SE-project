@@ -44,7 +44,7 @@
               </button>
             </span>
           </div>
-          <div class="topic-display">
+          <div class="topic-display" v-for="(dt, index) in dts" :key="index">
             <div class="block">
               <span class="demonstration">
                 <div class="topicdiary">
@@ -52,11 +52,12 @@
                   <div class="diary-display-body">
                     <div class="display-publisher">
                       <a class="userOfdiary" href="/otherusers/1">
-                        <img class="iconOfuser" /><span
+                        <img class="iconOfuser" :src="dt.usericon" /><span
                           class="nameOfuser"
-                        ></span>
+                          >{{ dt.user }}</span
+                        >
                       </a>
-                      <span class="publishtime"></span>
+                      <span class="publishtime">{{ dt.date }}</span>
                     </div>
                     <div class="topic-origin">
                       <button
@@ -70,32 +71,34 @@
                       </button>
                       来自话题<a
                         class="topic-origin-name"
-                        href="javascript:void(0)"
-                      ></a>
+                        @click="ToTopicDetail(dt.topicid)"
+                        >{{ dt.topic }}</a
+                      >
+                    </div>
+                    <div class="diarytext">
+                      <a class="diarytext-origin" @click="ToTopicDt(dt.id)">{{
+                        dt.passage
+                      }}</a>
                     </div>
                     <div class="diary-origin-pic">
                       <a class="diary-origin" href="javascript:void(0)"
-                        ><img class="diary-pic" />
+                        ><img
+                          v-if="dt.hasimg"
+                          class="diary-pic"
+                          :style="dt.thestyle"
+                          :src="dt.img"
+                        />
                       </a>
-                    </div>
-                    <div class="diarytext">
-                      <a
-                        class="diarytext-origin"
-                        href="/topic/1/comments/1"
-                      ></a>
                     </div>
                   </div>
                 </div>
-                <diary></diary>
-                <diary></diary>
               </span>
             </div>
           </div>
           <div class="topic-page-number">
             <el-pagination
-              @next-click="handleCurrentChange(this.currentPage + 1)"
               :page-size="3"
-              @current-change="handleCurrentChange"
+              @current-change="changeTopicdt"
               layout="prev, pager, next, jumper"
               :total="dtamount"
             >
@@ -115,7 +118,6 @@
               <a @click="ToTopicDetail(collect.id)">{{ collect.name }}</a>
             </li>
           </ul>
-          <br />
           <div class="title">
             <a href="../user/topics">
               <img src="@/assets/guide/mycomment.png" />已发布动态
@@ -227,7 +229,7 @@ div.body {
   border-color: rgb(181, 181, 181);
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
-  height:636px;
+  height: 636px;
 }
 .aside-slide {
   margin-top: 80px;
@@ -242,11 +244,11 @@ div.body {
   border-color: rgb(181, 181, 181);
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
-  height:636px;
+  height: 636px;
   position: fixed;
   left: 1220px;
   top: -50px;
-  height:636px;
+  height: 636px;
 }
 #change_topic {
   padding-left: 0;
@@ -311,6 +313,8 @@ div.title {
   right: 40px;
 }
 .collection {
+  position: relative;
+  left:-17px;
   text-align: left;
   height: 260px;
   padding-bottom: 0px;
@@ -357,6 +361,7 @@ div.title {
   line-height: 24px;
   font-size: 17px;
   text-align: left;
+  margin-top: 12px;
   border-radius: 20px;
   border-width: 4px;
   padding: 15px;
@@ -422,7 +427,7 @@ div.title {
   margin-left: 400px;
   padding-bottom: 40px;
 }
-.flex_box{
+.flex_box {
   margin-left: 20px;
   padding-top: 40px;
   padding-left: 10px;
@@ -457,7 +462,7 @@ div.title {
   position: relative;
   font-size: 18px;
   text-align: left;
-  width: 900px;
+  width: 500px;
 }
 .topic-origin a {
   font-family: Source Han Sans CN Normal;
@@ -477,6 +482,7 @@ div.title {
 div.diary-origin-pic {
   position: relative;
   left: 0;
+  top:-50px;
   margin-left: 20px;
   border-radius: 5px;
   height: 180px;
@@ -552,7 +558,6 @@ button {
 </style>
 <script>
 import search from "@/components/SelectSearch.vue";
-import diary from "@/components/TopicDisplay.vue";
 import usericon from "@/assets/user/int.png";
 import router from "@/router";
 import qs from "qs";
@@ -560,49 +565,19 @@ export default {
   name: "topic",
   components: {
     search,
-    diary,
   },
 
   data() {
     var dtamount = 18;
-    var dt = [
-      {
-        user: "yjl",
-        passage:
-          "既然如何， 我们都知道，只要有意义，那么就必须慎重考虑。\
-         所谓前端，关键是前端需要如何写。 一般来讲，我们都必须务必慎重的考虑考虑。\
-          前端因何而发生?这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 \
-          培根在不经意间这样说过，深窥自己的心，而后发觉一切的奇迹在你自己。带着这句话，我们还要更加慎重的审视这个问题：\
-           总结的来说， 我认为， 那么， 一般来讲，我们都必须务必慎重的考虑考虑。 我们不得不面对一个非常尴尬的事实，那就是，\
-            本人也是经过了深思熟虑，在每个日日夜夜思考这个问题。 现在，解决前端的问题，是非常非常重要的。",
-        date: "2022-4-30",
-        topic: "寻找春日气息",
-        id: 1,
-        img: "https://i.imgtg.com/2022/05/10/zSkWF.jpg",
-      },
-      {
-        user: "intp",
-        passage: "懒得想了",
-        date: "2022-5-10",
-        topic: "一起去看海",
-        id: 2,
-        img: "https://i.imgtg.com/2022/05/10/zSxy6.jpg",
-      },
-      {
-        user: "bot",
-        passage: "testtest",
-        date: "2002-6-7",
-        topic: "游戏中的难忘瞬间",
-        id: 3,
-        img: "https://i.imgtg.com/2022/05/10/zShob.jpg",
-      },
-    ];
     var topic_circle = [{}];
     var hottopics = [{}];
     var passages = [{}];
     var collection = [];
     return {
-      dt,
+      dts: [],
+      collectDt: [],
+      hotdt: [],
+      allDts: [],
       collection,
       passages,
       dtamount,
@@ -615,6 +590,15 @@ export default {
     };
   },
   methods: {
+    changeTopicdt(currentPage) {
+      this.dts = [];
+      var length = this.dtNum - (currentPage - 1) * 3;
+      if (length > 3) length = 3;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.dts.push(this.allDts[currentPage * 3 - 3 + i]);
+      }
+    },
     favor(e) {
       this.liked = !this.liked;
       if (this.liked) {
@@ -645,11 +629,79 @@ export default {
       return input
         .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
         .replace(/<[^>]+?>/g, "")
-        .replace(/[ ]|[&ensp;]/g, '')
+        .replace(/[ ]|[&ensp;]/g, "")
         .replace(/<[^>]+?>/g, "")
         .replace(/\s+/g, " ")
         .replace(/ /g, " ")
         .replace(/>/g, " ");
+    },
+    getimgsrc(htmlstr) {
+      let reg = /<img.+?src=('|")?([^'"]+)('|")?(?:\s+|>)/g;
+      let arr = [];
+      var tem;
+      while ((tem = reg.exec(htmlstr))) {
+        arr.push(tem[2]);
+      }
+      return arr;
+    },
+    displayIcon(url) {
+      var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+      if (url !== "") {
+        var len = this.$axios.defaults.baseURL.length;
+        icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
+      }
+      console.log(icon);
+      return icon;
+    },
+    getStyle(url) {
+      if (!url) return;
+      var img = new Image();
+      img.src = url;
+      if (img.width / img.height > 1.5) return "height:180px;width:auto";
+      else return "width:270px;height:auto";
+    },
+    requestHotDt() {
+      this.$axios
+        .post("/topic/hotpassage")
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("热动态查询成功");
+            console.log(res.data.data);
+            var passages = res.data.data;
+            this.dtamount = passages.length;
+            this.hotdt = [];
+            for (var i = 0; i < passages.length; i++) {
+              var hasimg = true;
+              var imgs = this.getimgsrc(passages[i].content);
+              if (imgs.length == 0) hasimg = false;
+              passages[i].content = this.ToText(passages[i].content);
+              if (passages[i].content.length > 170) {
+                passages[i].content =
+                  passages[i].content.substring(0, 170) + "…";
+              }
+              this.hotdt.push({
+                usericon: this.displayIcon(passages[i].usericon),
+                user: passages[i].username,
+                userid: passages[i].userid,
+                date: passages[i].date,
+                hasimg: hasimg,
+                img: imgs[0],
+                topic: passages[i].topic,
+                topicid: passages[i].topicid,
+                thestyle: this.getStyle(imgs[0]),
+                id: passages[i].id,
+                passage: passages[i].content,
+              });
+            }
+            this.allDts = this.hotdt;
+            this.changeTopicdt(1);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     randomTopic() {
       this.$axios
@@ -725,15 +777,19 @@ export default {
         });
     },
     hotTopicdt() {
-      //获取数据
+      //更换标签时获取数据
       document
-        .getElementById("select-follow-topic-dt")
+        .getElementById("select-new-topic-dt")
         .setAttribute("class", "selection_un");
+      this.allDts = this.hotdt;
+      this.changeTopicdt(1);
     },
     specifyTopicdt() {
       document
         .getElementById("select-hot-topic-dt")
         .setAttribute("class", "selection_un");
+      this.allDts = this.collectDt;
+      this.changeTopicdt(1);
     },
     //this is the function to update the images of books
     updateButton() {
@@ -764,85 +820,25 @@ export default {
           console.log(error);
         });
     },
-    Updatediary() {
+
+    changeTopicdt(currentPage) {
+      this.dts = [];
+      var length = this.dtamount - (currentPage - 1) * 3;
+      if (length > 3) length = 3;
       var i = 0;
-      var topic_detail_link = [this.dt[0].id, this.dt[1].id, this.dt[2].id];
-      for (i = 0; i < 3; i++) {
-        document
-          .getElementsByClassName("iconOfuser")
-          .item(i)
-          .setAttribute("src", usericon);
-        document
-          .getElementsByClassName("display-publisher")
-          .item(i)
-          .getElementsByClassName("nameOfuser")
-          .item(0).innerText = this.dt[i].user;
-        var dtText = this.dt[i].passage.substring(0, 300);
-        if (this.dt[i].passage.length > 300) dtText = dtText.concat("(……)");
-        document
-          .getElementsByClassName("diarytext")
-          .item(i)
-          .getElementsByClassName("diarytext-origin")
-          .item(0).innerText = dtText;
-        document.getElementsByClassName("publishtime").item(i).innerText =
-          this.dt[i].date;
-        document
-          .getElementsByClassName("topic-origin")
-          .item(i)
-          .getElementsByClassName("topic-origin-name")
-          .item(0).innerText = this.dt[i].topic;
-        document
-          .getElementsByClassName("diary-origin")
-          .item(i)
-          .setAttribute("href", "topic/" + i);
-        document
-          .getElementsByClassName("diary-origin-pic")
-          .item(i)
-          .getElementsByClassName("diary-pic")
-          .item(0)
-          .setAttribute("src", this.dt[i].img);
+      for (i = 0; i < length; i++) {
+        this.dts.push(this.allDts[currentPage * 3 - 3 + i]);
       }
-      document
-        .getElementsByClassName("topic-origin-name")
-        .item(0)
-        .addEventListener("click", function () {
-          router.push({
-            name: "topicdetail",
-            query: { id: topic_detail_link[0] },
-          });
-        });
-      document
-        .getElementsByClassName("topic-origin-name")
-        .item(1)
-        .addEventListener("click", function () {
-          router.push({
-            name: "topicdetail",
-            query: { id: topic_detail_link[1] },
-          });
-        });
-      document
-        .getElementsByClassName("topic-origin-name")
-        .item(2)
-        .addEventListener("click", function () {
-          router.push({
-            name: "topicdetail",
-            query: { id: topic_detail_link[2] },
-          });
-        });
+      console.log(dts);
     },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.changeTopicdt();
-    },
-    changeTopicdt() {},
   },
   mounted() {
-    this.Updatediary();
     this.updateButton();
     this.randomTopic();
     this.updateCollection();
     this.updatePassage();
     this.updateHotTopics();
+    this.requestHotDt();
     window.onscroll = function (e) {
       var vertical = document.getElementsByClassName("flex_box").item(0);
       var pos = vertical.getBoundingClientRect();

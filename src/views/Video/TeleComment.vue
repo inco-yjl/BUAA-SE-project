@@ -2,20 +2,59 @@
   <div class="passage">
     <search></search>
     <div class="passage-body">
-      <div v-if="loadSuccess" class="content-body">
-        <div id="collect-button" class="user-buttons">
-          <button v-if="collect" @click="clickuncollect()">
-            <img src="@/assets/guide/collected.png" />
-          </button>
-          <button v-else @click="clickcollect()">
-            <img src="@/assets/guide/collect.png" />
-          </button>
+      <el-dropdown class="more-action">
+        <span class="el-dropdown-link">
+          <img src="@/assets/guide/more.png" />
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item
+            ><a @click="deleteArticle()">删除</a></el-dropdown-item
+          >
+          <el-dropdown-item><a @click="jubaoForm()">举报</a></el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <el-dialog
+        title="发起举报"
+        :visible.sync="dialogFormVisible"
+        width="800px"
+        @close="closeForm()"
+      >
+        <el-form :model="jubao">
+          <el-form-item label="标题">
+            <el-input v-model="jubao.title" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="正文">
+            <el-input
+              type="textarea"
+              :rows="2"
+              placeholder="请输入举报理由"
+              v-model="jubao.content"
+            >
+            </el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="commitjubao()">确 定</el-button>
         </div>
+      </el-dialog>
+      <el-dialog
+        title="删除文章"
+        :visible.sync="trydelete"
+        width="300px"
+        @close="trydelete = false"
+      >
+        <span>确认要删除？</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="trydelete = false">取 消</el-button>
+          <el-button type="primary" @click="deleteNow()">确 定</el-button>
+        </span>
+      </el-dialog>
+      <div v-if="loadSuccess" class="content-body">
         <div class="title">{{ passage.title }}</div>
         <div class="passage-info">
           <div>
             <a class="userOfpassage" href="/otherusers/1">
-              <img class="iconOfuser" :src="userIcon"/>
+              <img class="iconOfuser" :src="userIcon" />
               <span class="nameOfuser">{{ passage.username }}</span>
             </a>
             <span class="normal">&ensp;评论了</span>
@@ -24,12 +63,12 @@
           </div>
           <div class="rate">
             <el-rate
-                v-model="passage.star"
-                disabled
-                show-score
-                text-color="#ff9900"
-                score-template="{value}"
-                disabled-void-color="ffffff"
+              v-model="passage.star"
+              disabled
+              show-score
+              text-color="#ff9900"
+              score-template="{value}"
+              disabled-void-color="ffffff"
             >
             </el-rate>
           </div>
@@ -58,48 +97,48 @@
       </div>
       <div class="aside">
         <div class="source-book">
-          <a class="source-item">
+          <a class="source-item" @click="ToTeleDetail(source.id)">
             <img class="source-img" :src="source.img" />
             <div v-if="loadSuccess" class="source-info">
               《{{ source.name }}》
               <el-rate
-                  v-model="source.star"
-                  disabled
-                  show-score
-                  text-color="#ff9900"
-                  score-template="{value}"
-                  disabled-void-color="ffffff"
+                v-model="source.star"
+                disabled
+                show-score
+                text-color="#ff9900"
+                score-template="{value}"
+                disabled-void-color="ffffff"
               >
               </el-rate>
-              {{ source.writer }}
+              ({{ source.year }})[{{ source.nation }}]
             </div>
           </a>
         </div>
         <div class="recommend-passage">
-         <div class="title">本电视剧推荐评论</div>
-          <!--   <ul class="recommend-list">
-              <li><a>焦虑它如影随形</a></li>
-              <li><a> 不对抗的人生</a></li>
-              <li><a>再写一个</a></li>
-            </ul> -->
+          <div class="title">本剧集推荐评论</div>
+          <ul class="recommend-list">
+            <li v-for="passage in recommends" :key="passage.id">
+              <a @click="ToComment(passage.id)">{{ passage.title }}</a>
+            </li>
+          </ul>
         </div>
         <div class="recommend-passage">
-        <!-- <div class="title">该用户其他书评</div>
+          <div class="title">该用户其他剧评</div>
           <ul class="recommend-list">
-            <li><a>我们不再爱电影</a></li>
-            <li><a> 满船清梦压星河</a></li>
-            <li><a>再写一个</a></li>
-          </ul> -->
+            <li v-for="passage in passages" :key="passage.id">
+              <a @click="ToComment(passage.id)">{{ passage.title }}</a>
+            </li>
+          </ul>
         </div>
       </div>
       <div v-if="Toreply === false" class="reply-input">
         <el-input
-            type="textarea"
-            placeholder="请输入回复"
-            rows="6"
-            v-model="textarea"
-            maxlength="100"
-            show-word-limit
+          type="textarea"
+          placeholder="请输入回复"
+          rows="6"
+          v-model="textarea"
+          maxlength="100"
+          show-word-limit
         >
         </el-input>
       </div>
@@ -111,24 +150,24 @@
             <a class="userOfreply" @click="toUser(reply.userid)">
               <img class="iconOfuser" :src="reply.userIcon" /><span
                 class="nameOfuser"
-            >{{ reply.username }}</span
-            >
+                >{{ reply.username }}</span
+              >
             </a>
             <span class="publishtime">{{ reply.date }}</span>
           </div>
           <div class="reply-content">
             {{ reply.content }}
             <div
-                class="sreply-display"
-                v-for="sreply in reply.reply"
-                :key="sreply.id"
+              class="sreply-display"
+              v-for="sreply in reply.reply"
+              :key="sreply.id"
             >
               <div class="display-publisher">
                 <a class="userOfreply" @click="toUser(sreply.userid)">
                   <img class="iconOfuser" :src="reply.userIcon" /><span
                     class="nameOfuser"
-                >{{ sreply.username }}</span
-                >
+                    >{{ sreply.username }}</span
+                  >
                 </a>
                 <span class="publishtime">{{ reply.date }}</span>
               </div>
@@ -157,6 +196,10 @@ export default {
     var id = this.$route.query.id;
     var source = {};
     var passage = {};
+    var jubao = {
+      title: "",
+      content: "",
+    };
     var replys = [
       {
         id: 1,
@@ -175,7 +218,7 @@ export default {
             replyed_username: "Puff",
             replyed_userid: 1,
             content:
-                "正确的，直接的，中肯的，雅致的，客观的，完整的，立体的，全面的，辩证的，形而上学的，雅俗共赏的，一针见血‌‌​​‌‌​​​​‌‌‌​​​‌‌​​的，直击要害的",
+              "正确的，直接的，中肯的，雅致的，客观的，完整的，立体的，全面的，辩证的，形而上学的，雅俗共赏的，一针见血‌‌​​‌‌​​​​‌‌‌​​​‌‌​​的，直击要害的",
           },
         ],
       },
@@ -186,7 +229,7 @@ export default {
         userid: 2,
         date: "2002-4-1",
         content:
-            "凑一百字废话哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈凑一百字废话哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈\
+          "凑一百字废话哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈凑一百字废话哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈\
   凑一百字废话哈哈哈哈哈哈",
         reply: [
           {
@@ -198,7 +241,7 @@ export default {
             replyed_username: "哈哈",
             replyed_userid: 1,
             content:
-                "正确的，直接的，中肯的，雅致的，客观的，完整的，立体的，全面的，辩证的，形而上学的，雅俗共赏的，一针见血‌‌​​‌‌​​​​‌‌‌​​​‌‌​​的，直击要害的",
+              "正确的，直接的，中肯的，雅致的，客观的，完整的，立体的，全面的，辩证的，形而上学的，雅俗共赏的，一针见血‌‌​​‌‌​​​​‌‌‌​​​‌‌​​的，直击要害的",
           },
           {
             id: 5,
@@ -215,72 +258,304 @@ export default {
     ];
     var like = false;
     var Toreply = false;
-    var collect = false;
     var loadSuccess = false;
     return {
       id,
-      userIcon:"https://i.imgtg.com/2022/05/08/zDzsM.png",
+      userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
       passage,
       like,
       Toreply,
       replys,
+      trydelete: false,
       text: "",
+      recommends: [],
+      passages: [],
       textarea: "",
       source,
-      collect,
+      jubao,
       loadSuccess,
+      dialogFormVisible: false,
     };
   },
   methods: {
-    updateIcon(){
-      if(this.passage.icon === "")
+    ToComment(id) {
+      this.$router.push({ name: "telecomment", query: { id: id } });
+    },
+    ToTeleDetail(id) {
+      this.$router.push({
+        name: "teledetail",
+        query: { id: id },
+      });
+    },
+    updateRelate() {
+      var params = {
+        user_id: this.passage.user_id,
+      };
+      this.$axios
+        .post("/tele/mypassage", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.passages = [];
+            var i;
+            var length = 3;
+            if (res.data.data.length < 3) length = res.data.data.length;
+            for (i = 0; i < length; i++) {
+              if (res.data.data[i].id != this.id)
+                this.passages.push(res.data.data[i]);
+            }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      params = {
+        tele_id: this.source.id,
+      };
+      console.log(this.source.id)
+      this.$axios
+        .post("/tele/recommend", qs.stringify(params))
+        .then((res) => {
+          console.log('recommend')
+          if (res.data.errno === 0) {
+            this.recommends = [];
+            var i;
+            var length = 3;
+            if (res.data.data.length < 3) length = res.data.data.length;
+            for (i = 0; i < length; i++) {
+              if (res.data.data[i].id != this.id)
+                this.recommends.push(res.data.data[i]);
+            }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    deleteArticle() {
+      var author = this.passage.user_id;
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
         return;
-      var len=this.$axios.defaults.baseURL.length;
-      this.userIcon =this.$axios.defaults.baseURL.substring(0,len-4)+this.passage.icon;
-      var img = new Image();
-      img.src = this.userIcon;
+      }
+      var user = this.$store.getters.getUser.user;
+      var isadmin;
+      var params = {
+        user_id: user.id,
+      };
+      this.$axios
+        .post("/user/isadmin", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            isadmin = parseInt(res.data.data);
+            console.log(isadmin);
+            if (user.id != author && isadmin === 0) {
+              this.$message.error("你没有权限！");
+              return;
+            }
+            this.trydelete = true;
+          } else {
+            this.$message.error("举报失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    deleteNow() {
+      var params = {
+        article_id: this.id,
+      };
+      this.$axios
+        .post("/passage/delete", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.$message({
+              type: "success",
+              message: res.data.msg,
+            });
+            this.$router.push({ name: "video" });
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    commitjubao() {
+      if (!this.jubao.title) {
+        this.$message.error("请输入标题");
+        return;
+      }
+      if (this.jubao.content.length < 15) {
+        this.$message.error("举报理由不得少于15字");
+        return;
+      }
+      var params = {
+        report_title: this.jubao.title,
+        report_reason: this.jubao.content,
+        user_id: this.$store.getters.getUser.user.id,
+        article_id: this.id,
+      };
+      console.log(params);
+      this.$axios
+        .post("/addreport", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("查询到详情");
+            this.dialogFormVisible = false;
+            this.$message({
+              type: "success",
+              message:
+                "举报成功，感谢您对维护美好环境做出的贡献，举报信息上传中",
+            });
+          } else {
+            this.$message.error("举报失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    closeForm() {
+      this.dialogFormVisible = false;
+      console.log("close");
+    },
+    jubaoForm() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
+        return;
+      }
+      this.dialogFormVisible = true;
+      console.log("open");
+    },
+    updateIcon() {
+      if (this.passage.icon === "") return;
+      var len = this.$axios.defaults.baseURL.length;
+      this.userIcon =
+        this.$axios.defaults.baseURL.substring(0, len - 4) + this.passage.icon;
+    },
+    updateLike() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      )
+        return;
+      var user = this.$store.getters.getUser.user;
+      var params = {
+        user_id: user.id,
+        article_id: this.id,
+      };
+      this.$axios
+        .post("/passage/iflike", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log('like');
+            var iflike = parseInt(res.data.data);
+            console.log(iflike)
+            if (iflike === 1) this.like = true;
+            else this.like = false;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     async updateComment() {
       var params = {
-        tele_id: this.$route.query.id,
+        article_id: this.$route.query.id,
       };
       this.$axios
-          .post("/passage/telecomment",qs.stringify(params))
-          .then((res) => {
-            if (res.data.errno === 0) {
-              console.log(res.data.data)
-              this.passage=res.data.data.passage;
-              this.source=res.data.data.resource;
-              this.passage.star=parseFloat(this.passage.star);
-              this.passage.date=this.passage.date.substring(0,10);
-              this.source.star=parseFloat(this.source.star);
-              this.passage.like = parseInt(this.passage.like);
-              this.passage.reply = parseInt(this.passage.reply);
-              this.updateIcon();
-              this.loadSuccess=true;
-            } else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        .post("/passage/telecomment", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("查询到详情");
+            this.passage = res.data.data.passage;
+            this.source = res.data.data.resource;
+            this.passage.star = parseFloat(this.passage.star);
+            this.passage.date = this.passage.date.substring(0, 10);
+            this.source.star = parseFloat(this.source.star);
+            this.passage.like = parseInt(this.passage.like);
+            this.like
+            this.passage.reply = parseInt(this.passage.reply);
+            this.updateIcon();
+            this.loadSuccess = true;
+            this.updateRelate();
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     clicklike() {
-      // 数据post
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.passage.like++;
       this.like = true;
+      var user = this.$store.getters.getUser.user;
+      var params = {
+        user_id: user.id,
+        article_id: this.id,
+      };
+      this.$axios
+        .post("/passage/like", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.msg);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     clickunlike() {
-      //
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.passage.like--;
       this.like = false;
-    },
-    clickcollect(){
-      this.collect = true;
-    },
-    clickuncollect(){
-      this.collect =false;
+      var user = this.$store.getters.getUser.user;
+      var params = {
+        user_id: user.id,
+        article_id: this.id,
+      };
+      this.$axios
+        .post("/passage/unlike", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.msg);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     clickreply() {
       if (this.Toreply === false) this.Toreply = true;
@@ -295,6 +570,7 @@ export default {
   },
   mounted() {
     this.updateComment();
+    this.updateLike();
     window.onscroll = function (e) {
       console.log("slide");
       var vertical = document.getElementsByClassName("content-body").item(0);
@@ -302,13 +578,10 @@ export default {
       console.log(pos.top);
       if (pos.top < 29) {
         var aside = document.getElementsByClassName("aside").item(0);
-        if(aside!=null)
-          aside.setAttribute("class", "aside-slide");
-      }
-      else{
+        if (aside != null) aside.setAttribute("class", "aside-slide");
+      } else {
         var aside = document.getElementsByClassName("aside-slide").item(0);
-        if(aside!=null)
-          aside.setAttribute("class", "aside");
+        if (aside != null) aside.setAttribute("class", "aside");
       }
     };
   },
@@ -347,6 +620,8 @@ export default {
   margin-bottom: 10px;
 }
 .iconOfuser {
+  height: 30px;
+  width: 30px;
   margin-right: 5px;
   vertical-align: sub;
 }
@@ -374,7 +649,7 @@ export default {
 }
 .passage-text {
   margin-top: 10px;
-  padding-bottom: 100px;
+  padding-bottom: 50px;
   padding-left: 30px;
   padding-right: 60px;
 }
@@ -387,11 +662,14 @@ export default {
 .passage-text >>> {
   font-size: 17px;
   line-height: 32px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
-#collect-button{
-  position: absolute;
-  left:400px;
+.passage-text >>> span {
+  font-size: 17px !important;
+  line-height: 32px !important;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif!important;
 }
+
 .user-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -524,8 +802,8 @@ a.replied-user {
   margin-right: 20px;
 }
 .source-info {
-  margin-top: 20px;
-  font-size: 16px;
+  margin:auto;
+  font-size: 15px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
 }
@@ -540,6 +818,7 @@ a.replied-user {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
+  height:140px;
 }
 .source-book a:hover {
   background-color: #91919155;
@@ -552,5 +831,14 @@ a.replied-user {
   background-color: rgb(213, 230, 245);
   color: rgb(2, 98, 182);
   font-weight: 600;
+}
+.more-action {
+  position: absolute;
+  left: 1165px;
+  top: 315px;
+}
+.more-action img {
+  height: 30px;
+  width: 30px;
 }
 </style>

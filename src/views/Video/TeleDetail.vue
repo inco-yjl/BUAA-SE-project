@@ -30,29 +30,34 @@
                   <div class="score">
                     <strong class="num">{{ tele.score }}</strong>
                   </div>
-                  <div>123人评价</div>
+                  <div>{{ peoplenum }}人评价</div>
                 </div>
               </div>
               <div>
                 <div class="rate-number">
                   5星
-                  <div class="distribute" style="width: 150px"></div>
+                  <div class="distribute" :style="style5"></div>
+                  &ensp;{{ rankList[4] }}人
                 </div>
                 <div class="rate-number">
                   4星
-                  <div class="distribute" style="width: 100px"></div>
+                  <div class="distribute" :style="style4"></div>
+                  &ensp;{{ rankList[3] }}人
                 </div>
                 <div class="rate-number">
                   3星
-                  <div class="distribute" style="width: 96px"></div>
+                  <div class="distribute" :style="style3"></div>
+                  &ensp;{{ rankList[2] }}人
                 </div>
                 <div class="rate-number">
                   2星
-                  <div class="distribute" style="width: 5px"></div>
+                  <div class="distribute" :style="style2"></div>
+                  &ensp;{{ rankList[1] }}人
                 </div>
                 <div class="rate-number">
                   1星
-                  <div class="distribute" style="width: 18px"></div>
+                  <div class="distribute" :style="style1"></div>
+                  &ensp;{{ rankList[0] }}人
                 </div>
               </div>
             </div>
@@ -65,7 +70,7 @@
               style="width: 150px"
               v-model="evaluate"
               :colors="colors"
-              @change="starTheMovie"
+              @change="starTheTele"
             >
             </el-rate>
             <button>
@@ -93,7 +98,7 @@
             v-for="tele in collections"
             :key="tele.id"
           >
-            <a class="collection-item" @click = "usetocollde(tele.id)">
+            <a class="collection-item" @click="toteledetail(tele.id)">
               <img class="collection-img" :src="tele.image" />
               <div class="collection-info">
                 《{{ tele.name }}》
@@ -106,7 +111,7 @@
                   disabled-void-color="ffffff"
                 >
                 </el-rate>
-                ({{tele.year}})[{{ tele.nation }}]
+                ({{ tele.year }}){{ tele.info }}
               </div>
             </a>
           </div>
@@ -119,7 +124,7 @@
           </div>
           <ul class="comment-list hotlist">
             <li v-for="passage in passages" :key="passage.id">
-              <a>{{ passage.title }}</a>
+              <a @click="Totelecomment(passage.id)">{{ passage.title }}</a>
             </li>
           </ul>
         </div>
@@ -162,11 +167,24 @@
                 <span class="publish-info">{{ comment.date }}</span>
               </div>
               <div class="commenttext">
-                {{
-                  comment.content
-                }}
+                <a
+                  class="commenttext-origin"
+                  @click="Totelecomment(comment.id)"
+                >
+                  <span class="comment-title"> {{ comment.title }} </span><br />
+                  {{ comment.content }}</a
+                >
               </div>
             </div>
+          </div>
+          <div class="search-number">
+            <el-pagination
+              @current-change="changeComment"
+              :page-size="7"
+              layout="prev, pager, next, jumper"
+              :total="commentNum"
+            >
+            </el-pagination>
           </div>
         </div>
       </div>
@@ -191,44 +209,7 @@ export default {
   data() {
     var id = this.$route.query.id;
     var tele = {};
-    var telecomments = [
-      {
-        id: 1,
-        date: "2022-5-4",
-        userId: 1,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "yjl",
-        content:
-          "听Jpop不听King Gnu，\
-        就像四大名著不看红楼梦，说明这个人文学造诣和自我修养不足，\
-        他理解不了这种内在的阳春白雪的高雅艺术，他只能看到外表的辞藻堆砌，\
-        参不透其中深奥的精神内核，他整个人的层次就卡在这里了，只能度过一个相对失败的人生。",
-      },
-      {
-        id: 2,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "IntP",
-        content: "testtest",
-      },
-      {
-        id: 3,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "看看中文",
-        content: "多搞点",
-      },
-      {
-        id: 4,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "还有好多没写",
-        content: "多搞点",
-      },
-    ];
+    var telecomments = [];
     var loadSuccess = false;
     var collections = [{}];
     var passages = [
@@ -245,42 +226,39 @@ export default {
         title: "My nonfiction",
       },
     ];
-    var newdt = [];
-    var hotdt = [];
-    var db = [];
     var collect = false;
+    var hotdt = [];
+    var newdt = [];
+    var style1;
+    var style2;
+    var style3;
+    var style4;
+    var style5;
+    var rankList = [];
     return {
       collections,
       passages,
+      peoplenum: 0,
       tele,
       collect,
       id,
       telecomments,
+      allComments: [],
+      colors: ["#99A9BF", "#F7BA2A", "#FF9900"],
+      evaluate: 0,
+      commentNum: 0,
       loadSuccess,
-      newdt,
       hotdt,
-      db,
+      newdt,
+      style1,
+      style2,
+      style3,
+      style4,
+      style5,
+      rankList,
     };
   },
   methods: {
-    usetocollde(id) {
-      this.$router.push({
-        name: "teledetail",
-        query: { id: id },
-      });
-    },
-    writeComment() {
-      if (this.$store.getters.getUser.user.id === -1) {
-        this.$message.error("请先登录");
-        return;
-      }
-      else {
-        this.$router.push({
-          name: "teleeditor",
-          query: { id: this.id },
-        });
-      }
-    },
     clickcollect() {
       if (this.$store.getters.getUser.user.id === -1) {
         this.$message.error("请先登录");
@@ -307,6 +285,23 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    writeComment() {
+      if (this.$store.getters.getUser.user.id === -1) {
+        this.$message.error("请先登录");
+        return;
+      } else {
+        this.$router.push({
+          name: "teleeditor",
+          query: { id: this.id },
+        });
+      }
+    },
+    toteledetail(id) {
+      this.$router.push({
+        name: "teledetail",
+        query: { id: id },
+      });
     },
     clickuncollect() {
       if (this.$store.getters.getUser.user.id === -1) {
@@ -335,8 +330,8 @@ export default {
           console.log(error);
         });
     },
-    Totelecomment() {
-      this.$router.push({ name: "telecomment" });
+    Totelecomment(id) {
+      this.$router.push({ name: "telecomment", query: { id: id } });
     },
     async updateCollection() {
       var params = {
@@ -348,9 +343,11 @@ export default {
           if (res.data.errno === 0) {
             console.log(res.data.data);
             this.collections = [];
-            var i=0;
-            for(i=0;i<3 && i<res.data.data.length;i++)
+            var i = 0;
+            for (i = 0; i < 3 && i < res.data.data.length; i++) {
               this.collections.push(res.data.data[i]);
+              this.collections[i].star = parseFloat(this.collections[i].star);
+            }
           } else {
             this.$message.error("查询失败");
           }
@@ -370,19 +367,31 @@ export default {
         .post("/tele/detail", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
-            console.log("电视剧查询成功");
+            console.log("电影查询成功");
             this.tele = res.data.data;
-            this.loadSuccess = true;
-            switch(res.data.collect)
-            {
-                case 1:
-                    this.collect = true;
-                    break;
-                case 0:
-                    this.collect = false;
-                    break;
+            switch (res.data.collect) {
+              case 1:
+                this.collect = true;
+                break;
+              case 0:
+                this.collect = false;
+                break;
             }
-
+            this.rankList = res.data.list;
+            this.evaluate = parseFloat(res.data.evaluate);
+            this.peoplenum = parseInt(res.data.people);
+            var length;
+            length = (res.data.list[0] * 200) / this.peoplenum + 5;
+            this.style1 = "width:" + length + "px";
+            length = (res.data.list[1] * 200) / this.peoplenum + 5;
+            this.style2 = "width:" + length + "px";
+            length = (res.data.list[2] * 200) / this.peoplenum + 5;
+            this.style3 = "width:" + length + "px";
+            length = (res.data.list[3] * 200) / this.peoplenum + 5;
+            this.style4 = "width:" + length + "px";
+            length = (res.data.list[4] * 200) / this.peoplenum + 5;
+            this.style5 = "width:" + length + "px";
+            this.loadSuccess = true;
           } else {
             this.$message.error("查询失败");
           }
@@ -392,66 +401,166 @@ export default {
         });
       this.loaddata = true;
     },
+    ToText(HTML) {
+      var input = HTML;
+      return input
+        .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/[ ]|[&ensp;]/g, "")
+        .replace(/[ ]|[&nbsp;]/g, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/\s+/g, " ")
+        .replace(/ /g, " ")
+        .replace(/>/g, " ");
+    },
+    changeComment(currentPage) {
+      this.telecomments = [];
+      var length = this.commentNum - (currentPage - 1) * 7;
+      if (length > 7) length = 7;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.telecomments.push(this.allComments[currentPage * 7 - 7 + i]);
+      }
+    },
     newComment() {
       //获取新的数据
       document
         .getElementById("select-hot-comment")
         .setAttribute("class", "selection_un");
-      this.db = this.newdt;
-      this.Updatediary();
+      var params = {
+        tele_id: this.id,
+      };
+      this.$axios
+        .post("/tele/article/new", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.data);
+            this.telecomments = [];
+            var i;
+            var comments = res.data.data;
+            this.commentNum = res.data.data.length;
+            for (i = 0; i < this.commentNum; i++) {
+              comments[i].content = this.ToText(comments[i].content);
+              comments[i].date = comments[i].date.substring(0, 10);
+              if (comments[i].content.length > 170) {
+                comments[i].content =
+                  comments[i].content.substring(0, 170) + "…";
+              }
+              var url = comments[i].usericon;
+              var img = this.displayIcon(url);
+
+              comments[i].usericon = img.icon;
+            }
+            this.allComments = comments;
+            this.changeComment(1);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    displayIcon(url) {
+      var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+      if (url !== "") {
+        var len = this.$axios.defaults.baseURL.length;
+        icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
+      }
+      return { icon: icon };
     },
     hotComment() {
       //更换标签时获取数据
       document
         .getElementById("select-new-comment")
         .setAttribute("class", "selection_un");
-      this.db = this.hotdt;
-      this.Updatediary();
+      var params = {
+        tele_id: this.id,
+      };
+      this.$axios
+        .post("/tele/article/hot", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log("hotarticle");
+            console.log(res.data.data);
+            this.telecomments = [];
+            var i;
+            var comments = res.data.data;
+            this.commentNum = res.data.data.length;
+            for (i = 0; i < this.commentNum; i++) {
+              comments[i].content = this.ToText(comments[i].content);
+              comments[i].date = comments[i].date.substring(0, 10);
+              if (comments[i].content.length > 170) {
+                comments[i].content =
+                  comments[i].content.substring(0, 170) + "…";
+              }
+              var url = comments[i].usericon;
+              console.log("url");
+              console.log(url);
+              var img = this.displayIcon(url);
+
+              comments[i].usericon = img.icon;
+            }
+            this.allComments = comments;
+            this.changeComment(1);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    starTheTele() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+        tele_id: this.id,
+        score: this.evaluate,
+      };
+      this.$axios
+        .post("/tele/star", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data);
+            this.$message({
+              message: res.data.msg,
+              type: "success",
+            });
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    async updatePassage() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+        .post("/tele/mypassage", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.passages = [];
+            var i;
+            var length = 3;
+            if (res.data.data.length < 3) length = res.data.data.length;
+            for (i = 0; i < length; i++) this.passages.push(res.data.data[i]);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
-  getdt() {
-    var params = {
-      tele_id: this.id,
-    };
-    this.$axios
-        .post("/tele/hot_article", qs.stringify(params))
-        .then((res) => {
-          if (res.data.errno === 0) {
-            this.hotdt = [];
-            console.log(res.data.data);
-            var i=0;
-            for(i=0;i<5 && i<res.data.data.length;i++)
-              this.hotdt.push(res.data.data[i]);
-            this.db = this.hotdt;
-          } else {
-            this.$message.error("查询失败");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    this.$axios
-        .post("/tele/new_article", qs.stringify(params))
-        .then((res) => {
-          if (res.data.errno === 0) {
-            this.hotdt = [];
-            console.log(res.data.data);
-            var i=0;
-            for(i=0;i<5 && i<res.data.data.length;i++)
-              this.hotdt.push(res.data.data[i]);
-          } else {
-            this.$message.error("查询失败");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-  },
-  
   mounted() {
     this.updateContent();
     this.updateCollection();
-    this.getdt();
+    this.updatePassage();
+    this.hotComment();
     window.onscroll = function (e) {
       var vertical = document.getElementsByClassName("detail-vertical").item(0);
       var pos = vertical.getBoundingClientRect();
@@ -485,7 +594,7 @@ export default {
   padding-bottom: 100px;
   margin-top: 80px;
   width: 1160px;
-  height:auto;
+  height: auto;
   background-color: white;
   border-style: solid;
   border-width: 1px;
@@ -514,6 +623,7 @@ export default {
 }
 .detail-img {
   width: 150px;
+  height: 230px;
 }
 .user-buttons img {
   height: 30px;
@@ -654,7 +764,7 @@ export default {
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
-  width:352px;
+  width: 352px;
 }
 .aside-slide {
   margin-top: 80px;
@@ -669,7 +779,7 @@ export default {
   background-color: white;
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
-  width:352px;
+  width: 352px;
   position: fixed;
   left: 1260px;
   top: -50px;
@@ -688,6 +798,7 @@ export default {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
+  height: 140px;
 }
 .collection-list a:hover {
   background-color: #91919155;
@@ -716,7 +827,7 @@ export default {
   display: flex;
 }
 .collection-info {
-  margin-top: 20px;
+  margin: auto;
   font-size: 16px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
@@ -813,7 +924,9 @@ button.selection_un {
   color: rgb(0, 166, 255);
 }
 .iconOfuser {
-  height: 30px;
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
   margin-right: 5px;
   vertical-align: sub;
 }
@@ -833,5 +946,18 @@ a.commenttext-origin {
 a.commenttext-origin:hover {
   color: rgb(101, 101, 101);
   text-decoration: none;
+}
+a.commenttext-origin span {
+  font-size: 20px;
+  font-weight: 600;
+  color: black;
+  transition: 0.3s ease;
+}
+a.commenttext-origin span:hover {
+  text-decoration: underline;
+}
+.search-number {
+  margin-top: 50px;
+  margin-left: 300px;
 }
 </style>

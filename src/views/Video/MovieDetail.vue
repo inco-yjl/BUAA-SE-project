@@ -32,7 +32,7 @@
                   <div class="score">
                     <strong class="num">{{ movie.score }}</strong>
                   </div>
-                  <div>123人评价</div>
+                   <div>{{ peoplenum }}人评价</div>
                 </div>
               </div>
               <div>

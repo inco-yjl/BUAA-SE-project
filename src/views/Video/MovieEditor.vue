@@ -1,32 +1,32 @@
 <template>
   <div id="comment-editor">
     <div id="editor-header">
-      <div class="return-to-book">
-        <button @click="backToBook">返回电影页</button>
+      <div class="return-to-movie">
+        <button @click="backToMovie">返回电影页</button>
       </div>
       <div class="header-logo"></div>
-      <div class="post-book-comment">
+      <div class="post-movie-comment">
         <button @click="UploadComment">发布</button>
       </div>
     </div>
     <div class="content-info">
       <div class="content-img">
-        <a href="../book/1">
-          <img id="comment-pic" :src="book.image" />
+        <a href="../movie/1">
+          <img id="comment-pic" :src="movie.image" />
         </a>
         <el-rate
             :show-score="true"
             style="width: 150px"
             v-model="evaluate"
             :colors="colors"
-            @change="starTheBook"
+            @change="starTheMovie"
         >
         </el-rate>
       </div>
       <div id="content-intro">
-        <span id="contentname">《{{ book.name }}》<br /></span>
-        <span id="contentintro">作者：{{ book.director }}</span>
-        <span id="contentstar">评分：{{ book.score }}</span>
+        <span id="contentname">《{{ movie.name }}》<br /></span>
+        <span id="contentintro">作者：{{ movie.director }}</span>
+        <span id="contentstar">评分：{{ movie.score }}</span>
       </div>
     </div>
 
@@ -63,18 +63,18 @@
   background-size: 50px 50px;
   background-image: url("@/assets/icon/logo.png");
 }
-.return-to-book button {
+.return-to-movie button {
   background: none;
   outline: none;
   border: none;
   color: black;
 }
-.return-to-book button:hover {
+.return-to-movie button:hover {
   outline: none;
   font-weight: bold;
 }
 
-.post-book-comment button {
+.post-movie-comment button {
   background: none;
   position: absolute;
   top: 5px;
@@ -86,7 +86,7 @@
   color: black;
 }
 
-.post-book-comment button:hover {
+.post-movie-comment button:hover {
   outline: none;
   font-weight: bold;
 }
@@ -175,13 +175,13 @@ export default {
   name: "movieeditor",
   data() {
     var id = this.$route.query.id;
-    var book = {};
+    var movie = {};
     var title = "请输入标题...";
     var passage = "";
     var score = 0.0;
     return {
       id,
-      book,
+      movie,
       title,
       passage,
       colors: ["#99A9BF", "#F7BA2A", "#FF9900"],
@@ -201,7 +201,7 @@ export default {
           .then((res) => {
             if (res.data.errno === 0) {
               console.log("电影查询成功");
-              this.book = res.data.data;
+              this.movie = res.data.data;
               this.evaluate = parseFloat(res.data.evaluate);
               console.log(this.evaluate);
               this.loadSuccess = true;
@@ -213,10 +213,10 @@ export default {
             console.log(error);
           });
     },
-    starTheBook() {
+    starTheMovie() {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
-        book_id: this.id,
+        movie_id: this.id,
         score: this.evaluate
       };
       this.$axios
@@ -237,7 +237,7 @@ export default {
             console.log(error);
           });
     },
-    backToBook() {
+    backToMovie() {
       this.addNavigation();
       this.$router.push({
         name: "moviedetail",
@@ -286,7 +286,7 @@ export default {
                 message: res.data.msg,
                 type: "success",
               });
-              this.backToBook();
+              this.backToMovie();
             } else {
               this.$message.error("发布失败");
             }

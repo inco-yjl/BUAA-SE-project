@@ -194,6 +194,10 @@ const routes = [
   path:'/admin/uploadtopic',
   component: () => import('../views/admin/UploadTopic.vue'),
 },
+{
+  path:'/uploadimg',
+  component: () => import('../views/editors/upload.vue'),
+}
 ]
 
 const router = new VueRouter({

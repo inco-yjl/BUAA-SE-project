@@ -160,11 +160,6 @@ export default {
       this.updateUser();
     });
   },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.updateUser();
-    });
-  },
   methods: {
     updateUser() {
       if(!this.$store.getters.getUser || this.$store.getters.getUser.user.id===-1)
