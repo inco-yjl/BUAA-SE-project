@@ -132,46 +132,67 @@
             </el-pagination>
           </div>
         </div>
-        <div class="moviecomment-collection collection-4">
-          <div class="title">
-            <img src="@/assets/title/book_comment.png" />我的书评
+        <div class="comment-list">
+          <div class="bookcomment-collection collection-4">
+            <div class="title">
+              <img src="@/assets/title/book_comment.png" />我的书评
+            </div>
+            <ul class="book-comment-list hotlist">
+              <li
+                :v-if="bookCommentsNum > 0"
+                v-for="passage in tempbookComments"
+                :key="passage.id"
+              >
+                <a @click="ToComment(passage.id)">{{ passage.title }}</a>
+              </li>
+            </ul>
+            <div class="page-number-left">
+              <el-pagination
+                @current-change="changebookComment"
+                :page-size="3"
+                layout="prev, pager, next, jumper"
+                :total="bookCommentsNum"
+              >
+              </el-pagination>
+            </div>
           </div>
-          <ul class="book-comment-list hotlist">
-            <li
-              :v-if="bookCommentsNum > 0"
-              v-for="passage in tempbookComments"
-              :key="passage.id"
-            >
-              <a @click="ToComment(passage.id)">{{ passage.title }}</a>
-            </li>
-          </ul>
-          <div class="page-number-left">
-            <el-pagination
-              @current-change="changebookComment"
-              :page-size="3"
-              layout="prev, pager, next, jumper"
-              :total="bookCommentsNum"
-            >
-            </el-pagination>
+          <div class="moviecomment-collection collection-5">
+            <div class="title">
+              <img src="@/assets/title/movie_comment.png" />我的影评
+            </div>
+            <ul class="movie-comment-list hotlist">
+              <li v-for="passage in tempmovieComments" :key="passage.id">
+                <a @click="Tomoviecomment(passage.id)">{{ passage.title }}</a>
+              </li>
+            </ul>
+            <div class="page-number-left">
+              <el-pagination
+                @current-change="changemovieComment"
+                :page-size="3"
+                layout="prev, pager, next, jumper"
+                :total="movieCommentsNum"
+              >
+              </el-pagination>
+            </div>
           </div>
-        </div>
-         <div class="moviecomment-collection collection-5">
-          <div class="title">
-            <img src="@/assets/title/movie_comment.png" />我的影评
-          </div>
-          <ul class="comment-list hotlist">
-            <li v-for="passage in tempmovieComments" :key="passage.id">
-              <a @click="Tomoviecomment(passage.id)">{{ passage.title }}</a>
-            </li>
-          </ul>
-          <div class="page-number-left">
-            <el-pagination
-              @current-change="changemovieComment"
-              :page-size="3"
-              layout="prev, pager, next, jumper"
-              :total="movieCommentsNum"
-            >
-            </el-pagination>
+          <div class="telecomment-collection collection-6">
+            <div class="title">
+              <img src="@/assets/title/tele_comment.png" />我的剧评
+            </div>
+            <ul class="tele-comment-list hotlist">
+              <li v-for="passage in tempteleComments" :key="passage.id">
+                <a @click="Totelecomment(passage.id)">{{ passage.title }}</a>
+              </li>
+            </ul>
+            <div class="page-number-left">
+              <el-pagination
+                @current-change="changeteleComment"
+                :page-size="3"
+                layout="prev, pager, next, jumper"
+                :total="teleCommentsNum"
+              >
+              </el-pagination>
+            </div>
           </div>
         </div>
       </div>
@@ -189,19 +210,22 @@ export default {
       bookcollections,
       moviecollections,
       telecollections,
-      booktempcomments:[],
-      tempmoviecollections:[],
-      tempbookComments:[],
-      tempmovieComments:[],
-      bookcomments:[],
-      moviecomments:[],
+      booktempcomments: [],
+      tempmoviecollections: [],
+      tempbookComments: [],
+      tempmovieComments: [],
+      tempteleComments: [],
+      bookcomments: [],
+      moviecomments: [],
+      telecomments:[],
       tempbookcollections: [],
       temptelecollections: [],
       bookcollectNum: 0,
-      moviecollectNum:0,
-      telecollectNum:0,
-      bookCommentsNum:0,
-      movieCommentsNum:0,
+      moviecollectNum: 0,
+      telecollectNum: 0,
+      bookCommentsNum: 0,
+      movieCommentsNum: 0,
+      teleCommentsNum:0,
       imageUrl: "",
       tempUrl: "",
       userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
@@ -216,6 +240,7 @@ export default {
     this.updateVideoCollection();
     this.updateBookComments();
     this.updateMovieComments();
+    this.updateTeleComments();
   },
   methods: {
     changeBook(currentPage) {
@@ -252,25 +277,34 @@ export default {
         );
       }
     },
-    changebookComment(currentPage){
+    changebookComment(currentPage) {
       this.tempbookComments = [];
-      var length = this.bookCommentsNum- (currentPage - 1) * 3;
+      var length = this.bookCommentsNum - (currentPage - 1) * 3;
       if (length > 3) length = 3;
       var i = 0;
       for (i = 0; i < length; i++) {
-        this.tempbookComments.push(
-          this.bookcomments[currentPage * 3 - 3 + i]
-        );
+        this.tempbookComments.push(this.bookcomments[currentPage * 3 - 3 + i]);
       }
     },
-    changemovieComment(currentPage){
+    changemovieComment(currentPage) {
       this.tempmovieComments = [];
-      var length = this.movieCommentsNum- (currentPage - 1) * 3;
+      var length = this.movieCommentsNum - (currentPage - 1) * 3;
       if (length > 3) length = 3;
       var i = 0;
       for (i = 0; i < length; i++) {
         this.tempmovieComments.push(
           this.moviecomments[currentPage * 3 - 3 + i]
+        );
+      }
+    },
+    changeteleComment(currentPage) {
+      this.tempteleComments = [];
+      var length = this.teleCommentsNum - (currentPage - 1) * 3;
+      if (length > 3) length = 3;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.tempteleComments.push(
+          this.telecomments[currentPage * 3 - 3 + i]
         );
       }
     },
@@ -309,7 +343,11 @@ export default {
       this.loaddata = true;
     },
     async updateBookComments() {
-      if(!this.$store.getters.getUser || this.$store.getters.getUser.user.id===-1) return;
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      )
+        return;
       var params = {
         user_id: this.$store.getters.getUser.user.id,
       };
@@ -330,7 +368,11 @@ export default {
         });
     },
     async updateMovieComments() {
-      if(!this.$store.getters.getUser || this.$store.getters.getUser.user.id===-1) return;
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      )
+        return;
       var params = {
         user_id: this.$store.getters.getUser.user.id,
       };
@@ -342,6 +384,31 @@ export default {
             this.movieCommentsNum = res.data.data.length;
             this.moviecomments = res.data.data;
             this.changemovieComment(1);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    async updateTeleComments() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      )
+        return;
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+        .post("/tele/mypassage", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            this.teleCommentsNum = res.data.data.length;
+            this.telecomments = res.data.data;
+            this.changeteleComment(1);
           } else {
             this.$message.error("查询失败");
           }
@@ -516,6 +583,19 @@ export default {
   box-shadow: 0px 2px 3px #888888a6;
   display: flex;
 }
+.comment-list{
+  display: flex;
+  margin-top:50px;
+}
+.bookcomment-collection{
+  width:400px;
+}
+.moviecomment-collection{
+  width:330px;
+}
+.moviecomment-collection .title{
+  width:300px;
+}
 .icon img {
   position: relative;
   left: -40px;
@@ -559,16 +639,15 @@ export default {
   padding-right: 100px;
   padding-top: 50px;
   padding-bottom: 30px;
-  width: 1200px!important;
+  width: 1200px !important;
   background-color: white;
   border-style: solid;
   border-width: 1px;
   border-color: rgb(181, 181, 181);
   box-shadow: 0px 2px 3px #888888a6;
-
 }
 .collection-1 {
-  width:1000px;
+  width: 1000px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -593,8 +672,8 @@ export default {
   vertical-align: -20%;
   margin-right: 5px;
 }
-.collection{
-  width:1000px;
+.collection {
+  width: 1000px;
 }
 .collection-list a {
   margin-left: 10px;

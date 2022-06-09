@@ -132,7 +132,7 @@
       <div class="comment-block">
         <div class="title comment-hit">
           <span
-            ><img src="@/assets/title/movie_comment.png" />
+            ><img src="@/assets/title/tele_comment.png" />
             <button
               class="selection_ed"
               id="select-hot-comment"
