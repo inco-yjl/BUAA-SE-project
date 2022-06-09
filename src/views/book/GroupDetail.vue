@@ -23,7 +23,7 @@
             </div>
            
             <div class="group-detail-interact">
-              <button>
+              <button v-if="!isadmin">
                 <img src="@/assets/group/apply.png" /><span
                   >申请成为管理员</span
                 >
@@ -31,7 +31,7 @@
               <button class="share-topic">
                 <img src="@/assets/guide/share.png" /><span>分享小组</span>
               </button>
-              <button class="write-dt">
+              <button class="write-dt" @click = "usetonewpassage()">
                 <img src="@/assets/guide/write_dt.png" /><span>发布帖子</span>
               </button>
             </div>
@@ -89,7 +89,15 @@
                 <div class="passage-content">
                   <a>{{ passage.title }}</a>
                 </div>
-                <div class="top-icon"><img src="@/assets/group/top.png" /></div>
+                <button
+                    v-if = "isadmin"
+                    class="topic-button"
+                    :style="{ backgroundColor: bg_color, color: ft_color }"
+                    @click="delmes(passage.id,1)"
+                >
+                  取消置顶
+                </button>
+                <div class="top-icon" style="margin-left: 50px; margin-right: 20px"><img src="@/assets/group/top.png" /></div>
               </div>
             </div>
             <div
@@ -111,6 +119,22 @@
                 <div class="passage-content">
                   <a>{{ passage.title }}</a>
                 </div>
+                <button
+                    v-if = "isadmin"
+                    class="topic-button"
+                    :style="{ backgroundColor: bg_color, color: ft_color }"
+                    @click="addmes(passage.id,1)"
+                >
+                  置顶
+                </button>
+                <button
+                    v-if = "isadmin"
+                    class="topic-button"
+                    :style="{ backgroundColor: bg_color, color: ft_color }"
+                    @click="addmes(passage.id,2)"
+                >
+                  精华
+                </button>
                 <div class="top-icon"></div>
               </div>
             </div>
@@ -133,14 +157,23 @@
                 <div class="passage-content">
                   <a>{{ passage.title }}</a>
                 </div>
-                <div class="top-icon"><img src="@/assets/group/top.png" /></div>
+                <button
+                    v-if = "isadmin"
+                    class="topic-button"
+                    :style="{ backgroundColor: bg_color, color: ft_color }"
+                    @click="delmes(passage.id,1)"
+                >
+                  取消置顶
+                </button>
+                <div class="top-icon" style="margin-left: 50px; margin-right: 20px"><img src="@/assets/group/top.png" /></div>
               </div>
+       
             </div>
             <div
                 class="passage-block"
                 v-for="passage in newpassage"
                 :key="passage.id"
-                v-if = "inhot && !(topempty && hotempty)">
+                v-if = "innew && !(topempty && newempty)">
               <hr />
               <div class="passage-display-body">
                 <div class="display-publisher">
@@ -155,6 +188,22 @@
                 <div class="passage-content">
                   <a>{{ passage.title }}</a>
                 </div>
+                <button
+                    v-if = "isadmin"
+                    class="topic-button"
+                    :style="{ backgroundColor: bg_color, color: ft_color }"
+                    @click="addmes(passage.id,1)"
+                >
+                  置顶
+                </button>
+                <button
+                    v-if = "isadmin"
+                    class="topic-button"
+                    :style="{ backgroundColor: bg_color, color: ft_color }"
+                    @click="addmes(passage.id,2)"
+                >
+                  精华
+                </button>
                 <div class="top-icon"></div>
               </div>
             </div>
@@ -177,7 +226,15 @@
                 <div class="passage-content">
                   <a>{{ passage.title }}</a>
                 </div>
-                <div class="top-icon"><img src="@/assets/group/star.png" /></div>
+                <button
+                    v-if = "isadmin"
+                    class="topic-button"
+                    :style="{ backgroundColor: bg_color, color: ft_color }"
+                    @click="delmes(passage.id,2)"
+                >
+                  取消精华
+                </button>
+                <div class="top-icon" style="margin-right: 20px;margin-left: 50px"><img src="@/assets/group/star.png" /></div>
               </div>
             </div>
           </div>
@@ -230,6 +287,7 @@ export default {
   },
   data() {
     var id = this.$route.query.id;
+    var isadmin = true;
     var group = {
       peoplenum: 20,
       name: "龙族",
@@ -283,7 +341,13 @@ export default {
     var newempty = false;
     var hotempty = false;
     var addgroup = [];
+    var bg_color = "#f2fef0";
+    var ft_color = "#6cf57c";
+    var onefinish = false;
     return {
+      bg_color,
+      ft_color,
+      isadmin,
       addgroup,
       id,
       inhot,
@@ -302,9 +366,22 @@ export default {
       hotpassage,
       newpassage,
       passageNum: 0,
+      onefinish,
     };
   },
   methods: {
+    usetonewpassage() {
+      this.$router.push({
+        name: "groupcomment",
+        query: { id: this.id },
+      });
+    },
+    usetogroupdetail(id) {
+      this.$router.push({
+        name: "groupdetail",
+        query: { id: this.id },
+      });
+i   },
     hotPassage() {
       document
           .getElementById("select-new-topic-dt")
@@ -360,6 +437,14 @@ export default {
           .post("/group/detail", qs.stringify(params))
           .then((res) => {
             console.log(res);
+            var i = 0;
+            
+            for(i = 0;i < res.data.manager.length;i++) {
+              if(this.$store.getters.getUser.user.id === res.data.manager.user_id) {
+                this.isadmin = true;
+                break;    
+              }
+            }
             if (res.data.errno === 0) {
               console.log("获取小组信息成功");
               console.log(res.data.data);
@@ -395,6 +480,7 @@ export default {
                 this.topmes = [];
                 this.topempty = true;
               }
+              this.passageNum += res.data.data.length;
             }
             else if(res.data.errno === 1002) {
               this.topmes = [];
@@ -427,6 +513,7 @@ export default {
                 this.valmes = [];
                 this.valempty = true;
               }
+              this.passageNum += res.data.data.length;
             }
             else if(res.data.errno === 1002) {
               this.valmes = [];
@@ -439,8 +526,6 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-    },
-    hotmes() {
       var params = {
         group_id: this.id,
       }
@@ -452,14 +537,31 @@ export default {
               console.log("获取热门信息成功");
               this.hotpassage = [];
               var i = 0;
+              var j = 0;
+              var flag = 0;
+              console.log("test");
+              console.log(this.topmes[0].id);
               for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                res.data.data[i].star = parseFloat(res.data.data[i].star);
-                this.hotpassage.push(res.data.data[i]);
+                flag = 0;
+                for(j = 0;j < this.topmes.length;j++) {
+                  if(this.topmes[j].id === res.data.data[i].id) {
+                    flag = 1;
+                    break;
+                  }
+                }
+                for(j = 0;j < this.valmes.length;j++) {
+                  if(this.valmes[j].id === res.data.data[i].id) {
+                    flag = 1;
+                    break;
+                  }
+                }
+                if(!flag)
+                  this.hotpassage.push(res.data.data[i]);
               }
               if(res.data.data.length === 0) {
-                this.hotpassage = [];
                 this.hotempty = true;
               }
+              this.passageNum += this.hotpassage.length;
             }
             else {
               this.$message.error("查询失败");
@@ -495,6 +597,96 @@ export default {
           .catch((error) => {
             console.log(error);
           });
+      this.onefinish = true;
+    },
+    hotmes() {
+      var params = {
+        group_id: this.id,
+      }
+      this.$axios
+          .post("/group/hot_article", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("获取热门信息成功");
+              this.hotpassage = [];
+              var i = 0;
+              var j = 0;
+              var flag = 0;
+              console.log("test");
+              console.log(this.topmes[0].id);
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                flag = 0;
+                for(j = 0;j < this.topmes.length;j++) {
+                  if(this.topmes[j].id === res.data.data[i].id) {
+                    flag = 1;
+                    break; 
+                  }
+                }
+                for(j = 0;j < this.valmes.length;j++) {
+                  if(this.valmes[j].id === res.data.data[i].id) {
+                    flag = 1;
+                    break;
+                  }
+                }
+                if(!flag)
+                  this.hotpassage.push(res.data.data[i]);
+              }
+              if(res.data.data.length === 0) {
+                this.hotempty = true;
+              }
+              this.passageNum += this.hotpassage.length;
+            }
+            else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      var params = {
+        group_id: this.id,
+      }
+      this.$axios
+          .post("/group/new_article", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("获取热门信息成功");
+              this.newpassage = [];
+              var i = 0;
+              var j = 0;
+              var flag = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                flag = 0;
+                for(j = 0;j < this.topmes.length;j++) {
+                  if(this.topmes[j].id === res.data.data[i].id) {
+                    flag = 1;
+                    break;
+                  }
+                }
+                for(j = 0;j < this.valmes.length;j++) {
+                  if(this.valmes[j].id === res.data.data[i].id) {
+                    flag = 1;
+                    break;
+                  }
+                }
+                if(!flag)
+                  this.newpassage.push(res.data.data[i]);
+              }
+              if(res.data.data.length === 0) {
+                this.newpassage = [];
+                this.newempty = true;
+              }
+              
+            }
+            else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     },
     getaddgroup() {
       var params = {
@@ -518,18 +710,105 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-    }
+    },
+    delmes(id,kind) {
+      var params = {
+        kind: kind,
+        group_id: this.id,
+        article_id: id,
+      };
+      this.$axios
+          .post("/group/delete", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("取消成功");
+              this.valmes = [];
+              var i = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                res.data.data[i].star = parseFloat(res.data.data[i].star);
+                this.valmes.push(res.data.data[i]);
+              }
+              this.$message({
+                message: "取消成功",
+                type: "success",
+              });
+            }
+            else if(res.data.errno === 1002) {
+              this.valmes = [];
+              this.valempty = true;
+            }
+            else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    addmes(id,kind) {
+      var params = {
+        kind: kind,
+        group_id: this.id,
+        article_id: id,
+      };
+      this.$axios
+          .post("/group/add", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("申请成功");
+              this.valmes = [];
+              var i = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                res.data.data[i].star = parseFloat(res.data.data[i].star);
+                this.valmes.push(res.data.data[i]);
+              }
+              this.$message({
+                message: "申请成功",
+                type: "success",
+              });
+            }
+            else if(res.data.errno === 1002) {
+              this.valmes = [];
+              this.valempty = true;
+            }
+            else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
   },
   mounted() {
     this.getgroup();
     this.srcmes();
-    this.hotmes();
     this.getaddgroup();
+    while(!this.onefinish);
+    this.hotmes();
   },
 };
 </script>
 
 <style scoped>
+.topic-button {
+  position: relative;
+  height: 60px;
+  width: 130px;
+  color: #47ff5d;
+  background: #f2fef0;
+  border: #c4fbc9 solid;
+  border-radius: 20px;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: -10px;
+  margin-bottom: -10px;
+  -webkit-transform: scale(0.7);
+}
 .groupPagebody {
   padding-left: 100px;
 }
@@ -1054,7 +1333,7 @@ a.comment-book-name {
   margin-right: 20px;
 }
 .passage-content {
-  width: 600px;
+  width: 200px;
   margin-top: 2px;
 }
 .top-icon img{
