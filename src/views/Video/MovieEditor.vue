@@ -85,6 +85,11 @@
   border: none;
   color: black;
 }
+
+.post-book-comment button:hover {
+  outline: none;
+  font-weight: bold;
+}
 .contentinfo {
   position: absolute;
   left: 200px;
@@ -273,7 +278,7 @@ export default {
         text:this.passage,
       };
       this.$axios
-          .post("/movie/passage", qs.stringify(params))
+          .post("/movie/commentMovie", qs.stringify(params))
           .then((res) => {
             if (res.data.errno === 0) {
               console.log(res.data);

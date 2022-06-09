@@ -298,6 +298,7 @@ export default {
         .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
         .replace(/<[^>]+?>/g, "")
         .replace(/[ ]|[&ensp;]/g, '')
+        .replace(/[ ]|[&nbsp;]/g, '')
         .replace(/<[^>]+?>/g, "")
         .replace(/\s+/g, " ")
         .replace(/ /g, " ")

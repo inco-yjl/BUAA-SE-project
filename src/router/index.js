@@ -125,7 +125,7 @@ const routes = [
     {
       path: '/groupdetail',
       name: 'groupdetail',
-      component: () => import('../views/group/groupdetail.vue')
+      component: () => import('../views/book/GroupDetail.vue')
     },
     {
       path: '/groupadmin',
@@ -193,7 +193,7 @@ const routes = [
 {
   path:'/admin/uploadtopic',
   component: () => import('../views/admin/UploadTopic.vue'),
-}
+},
 ]
 
 const router = new VueRouter({

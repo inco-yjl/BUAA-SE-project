@@ -15,7 +15,7 @@
         <div class="passage-info">
           <div>
             <a class="userOfpassage" href="/otherusers/1">
-              <img class="iconOfuser" :src="userIcon" :style="styleOfIcon"/>
+              <img class="iconOfuser" :src="userIcon"/>
               <span class="nameOfuser">{{ passage.username }}</span>
             </a>
             <span class="normal">&ensp;评论了</span>
@@ -229,7 +229,6 @@ export default {
       source,
       collect,
       loadSuccess,
-      styleOfIcon: "width:30px;"
     };
   },
   methods: {
@@ -240,10 +239,6 @@ export default {
       this.userIcon =this.$axios.defaults.baseURL.substring(0,len-4)+this.passage.icon;
       var img = new Image();
       img.src = this.userIcon;
-      if(img.width>img.height)
-        this.styleOfIcon = "height:30px;position: relative; top:0px; left:-"+(img.width-img.height)/img.height*15+"px";
-      else
-        this.styleOfIcon = "width:30px;position: relative;  left:0px;top:-"+(img.height-img.width)/img.width*15+"px";
     },
     async updateComment() {
       var params = {

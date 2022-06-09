@@ -85,6 +85,10 @@
   border: none;
   color: black;
 }
+.post-topic-dt button :hover {
+  outline: none;
+  font-weight: bold;
+}
 #editor {
   position: relative;
   width: 900px;

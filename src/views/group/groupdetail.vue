@@ -8,15 +8,14 @@
             <img src = "https://i.imgtg.com/2022/05/23/hmqft.jpg" alt="" style="height: 150px; width: 100px; position: relative; float: left; margin-right: 20px">
             <img src="@/assets/title/topic-intro.png" />
             <span class="topic-name">{{ group.name }}
-            <button
-                @click="favor"
-                class="topic-button"
-                :style="{ backgroundColor: bg_color, color: ft_color }"
-                @mouseenter="change()"
-                @mouseleave="goback()"
-            >
-                {{ content }}
+            <div id="join-button">
+            <button v-if="liked" @click="favor()">
+              <img src="@/assets/group/quit.png" />
             </button>
+            <button v-else @click="fovor()">
+              <img src="@/assets/group/join.png" />
+            </button>
+          </div>
             <button v-if = " content == '已加入'"
                 @click="favorthing"
                 class="topic-button"
@@ -708,7 +707,7 @@ import diary from "@/components/TopicDisplay.vue";
 import App from "@/App.vue";
 import qs from "qs";
 export default {
-  name: "groupdetail",
+  name: "groupdeta",
   components: {
     search,
     diary,
@@ -928,7 +927,6 @@ export default {
       group,
       liked: false,
       do:false,
-      content: "加入小组",
       dothing: "申请成为管理员",
       bg_color: "#f2fef0",
       ft_color: "#47ff5d",
@@ -1000,14 +998,8 @@ export default {
     favor(e) {
       this.liked = !this.liked;
       if (this.liked) {
-        this.content = "已加入";
-        this.bg_color = "#6cf57c";
-        this.ft_color = "#f2fef0";
         this.group.peoplenum++;
       } else {
-        this.content = "+加入小组";
-        this.bg_color = "#f2fef0";
-        this.ft_color = "#6cf57c";
         this.group.peoplenum--;
       }
     },

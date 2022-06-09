@@ -126,7 +126,7 @@
           </div>
           <ul class="comment-list hotlist">
             <li v-for="passage in passages" :key="passage.id">
-              <a>{{ passage.title }}</a>
+              <a @click="Tomoviecomment(passage.id)">{{ passage.title }}</a>
             </li>
           </ul>
         </div>
@@ -169,11 +169,20 @@
                 <span class="publish-info">{{ comment.date }}</span>
               </div>
               <div class="commenttext">
-                <a class="commenttext-origin" @click="Tomoviecomment">{{
+                <a class="commenttext-origin" @click="Tomoviecomment(comment.id)">{{
                   comment.content
                 }}</a>
               </div>
             </div>
+          </div>
+          <div class="search-number">
+            <el-pagination
+              @current-change="changeComment"
+              :page-size="7"
+              layout="prev, pager, next, jumper"
+              :total="commentNum"
+            >
+            </el-pagination>
           </div>
         </div>
       </div>
@@ -198,44 +207,7 @@ export default {
   data() {
     var id = this.$route.query.id;
     var movie = {};
-    var moviecomments = [
-      {
-        id: 1,
-        date: "2022-5-4",
-        userId: 1,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "yjl",
-        content:
-          "听Jpop不听King Gnu，\
-        就像四大名著不看红楼梦，说明这个人文学造诣和自我修养不足，\
-        他理解不了这种内在的阳春白雪的高雅艺术，他只能看到外表的辞藻堆砌，\
-        参不透其中深奥的精神内核，他整个人的层次就卡在这里了，只能度过一个相对失败的人生。",
-      },
-      {
-        id: 2,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "IntP",
-        content: "testtest",
-      },
-      {
-        id: 3,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "看看中文",
-        content: "多搞点",
-      },
-      {
-        id: 4,
-        date: "2022-5-4",
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "还有好多没写",
-        content: "多搞点",
-      },
-    ];
+    var moviecomments = [];
     var loadSuccess = false;
     var collections = [{}];
     var passages = [
@@ -255,7 +227,6 @@ export default {
     var collect = false;
     var hotdt = [];
     var newdt = [];
-    var db = [];
     var style1;
     var style2;
     var style3;
@@ -265,10 +236,15 @@ export default {
     return {
       collections,
       passages,
+      peoplenum:0,
       movie,
       collect,
       id,
       moviecomments,
+      allComments:[],
+      colors: ["#99A9BF", "#F7BA2A", "#FF9900"],
+      evaluate: 0,
+      commentNum:0,
       loadSuccess,
       hotdt,
       newdt,
@@ -278,7 +254,6 @@ export default {
       style4,
       style5,
       rankList,
-      db,
     };
   },
   methods: {
@@ -353,8 +328,8 @@ export default {
           console.log(error);
         });
     },
-    Tomoviecomment() {
-      this.$router.push({ name: "moviecomment" });
+    Tomoviecomment(id) {
+      this.$router.push({ name: "moviecomment",query:{id:id} });
     },
     async updateCollection() {
       var params = {
@@ -422,21 +397,114 @@ export default {
         });
       this.loaddata = true;
     },
+    ToText(HTML) {
+      var input = HTML;
+      return input
+        .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/[ ]|[&ensp;]/g, "")
+        .replace(/[ ]|[&nbsp;]/g, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/\s+/g, " ")
+        .replace(/ /g, " ")
+        .replace(/>/g, " ");
+    },
+    changeComment(currentPage) {
+      this.moviecomments = [];
+      var length = this.commentNum - (currentPage - 1) * 7;
+      if (length > 7) length = 7;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.moviecomments.push(this.allComments[currentPage * 7 - 7 + i]);
+      }
+    },
     newComment() {
       //获取新的数据
       document
         .getElementById("select-hot-comment")
         .setAttribute("class", "selection_un");
-      this.db = this.newdt;
-      this.Updatediary();
+      var params = {
+        movie_id: this.id,
+      };
+      this.$axios
+        .post("/movie/article/new", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.data);
+            this.moviecomments = [];
+            var i;
+            var comments = res.data.data;
+            this.commentNum = res.data.data.length;
+            for (i = 0; i < this.commentNum; i++) {
+              comments[i].content = this.ToText(comments[i].content);
+              comments[i].date = comments[i].date.substring(0, 10);
+              if (comments[i].content.length > 170) {
+                comments[i].content =
+                  comments[i].content.substring(0, 170) + "…";
+              }
+              var url = comments[i].usericon;
+              var img = this.displayIcon(url);
+
+              comments[i].usericon = img.icon;
+            }
+            this.allComments = comments;
+            this.changeComment(1);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    displayIcon(url) {
+      var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+      if (url !== "") {
+        var len = this.$axios.defaults.baseURL.length;
+        icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
+      }
+      return { icon: icon };
     },
     hotComment() {
       //更换标签时获取数据
       document
         .getElementById("select-new-comment")
         .setAttribute("class", "selection_un");
-      this.db = this.topic.hotdt;
-      this.Updatediary();
+      var params = {
+        movie_id: this.id,
+      };
+      this.$axios
+        .post("/movie/article/hot", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.data);
+            this.moviecomments = [];
+            var i;
+            var comments = res.data.data;
+            this.commentNum = res.data.data.length;
+            for (i = 0; i < this.commentNum; i++) {
+              comments[i].content = this.ToText(comments[i].content);
+              comments[i].date = comments[i].date.substring(0, 10);
+              if (comments[i].content.length > 170) {
+                comments[i].content =
+                  comments[i].content.substring(0, 170) + "…";
+              }
+              var url = comments[i].usericon;
+              console.log('url');
+              console.log(url);
+              var img = this.displayIcon(url);
+
+              comments[i].usericon = img.icon;
+            }
+            this.allComments = comments;
+            this.changeComment(1);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     starTheMovie() {
       var params = {
@@ -469,13 +537,11 @@ export default {
         .post("/movie/mypassage", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
-            this.passages=[];
+            this.passages = [];
             var i;
-            var length=3;
-            if(res.data.data.length<3)
-            length=res.data.data.length;
-            for(i=0;i<length;i++)
-            this.passages.push(res.data.data[i])
+            var length = 3;
+            if (res.data.data.length < 3) length = res.data.data.length;
+            for (i = 0; i < length; i++) this.passages.push(res.data.data[i]);
           } else {
             this.$message.error("查询失败");
           }
@@ -489,6 +555,7 @@ export default {
     this.updateContent();
     this.updateCollection();
     this.updatePassage();
+    this.hotComment();
     window.onscroll = function (e) {
       var vertical = document.getElementsByClassName("detail-vertical").item(0);
       var pos = vertical.getBoundingClientRect();
@@ -850,7 +917,9 @@ button.selection_un {
   color: rgb(0, 166, 255);
 }
 .iconOfuser {
-  height: 30px;
+  height: 40px;
+  width:40px;
+  border-radius: 20px;
   margin-right: 5px;
   vertical-align: sub;
 }
@@ -870,5 +939,9 @@ a.commenttext-origin {
 a.commenttext-origin:hover {
   color: rgb(101, 101, 101);
   text-decoration: none;
+}
+.search-number {
+  margin-top:50px;
+  margin-left: 300px;
 }
 </style>

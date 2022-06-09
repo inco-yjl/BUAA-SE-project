@@ -6,7 +6,7 @@
         <div class="passage-info">
           <div v-if="loadSuccess">
             <a class="userOfpassage" href="/otherusers/1">
-              <img class="iconOfuser" :src="userIcon" :style="styleOfIcon"/>
+              <img class="iconOfuser" :src="userIcon"/>
               <span class="nameOfuser">{{ passage.username }}</span>
             </a>
             <span class="normal">&ensp;在话题</span>
@@ -198,7 +198,6 @@ export default {
       text: "",
       textarea: "",
       loadSuccess:false,
-      styleOfIcon: "width:30px;"
     };
   },
   mounted() {
@@ -210,12 +209,6 @@ export default {
       return;
       var len=this.$axios.defaults.baseURL.length;
       this.userIcon =this.$axios.defaults.baseURL.substring(0,len-4)+this.passage.icon;
-      var img = new Image();
-      img.src = this.userIcon;
-      if(img.width>img.height)
-        this.styleOfIcon = "height:30px;position: relative; top:0px; left:-"+(img.width-img.height)/img.height*15+"px";
-      else  
-        this.styleOfIcon = "width:30px;position: relative;  left:0px;top:-"+(img.height-img.width)/img.width*15+"px";
     },
     async updateContent() {
       var params = {

@@ -114,7 +114,6 @@
                   <img
                     class="iconOfuser"
                     :src="comment.usericon"
-                    :style="comment.thestyle"
                   /><span class="nameOfuser">{{ comment.username }}</span>
                 </a>
                 <span class="publish-info"
@@ -231,8 +230,7 @@ export default {
       this.$router.push({ name: "bookcomment", query: { id: id } });
     },
     async updateCollection() {
-      var user = this.$store.getters.getUser.user;
-      if (!user || user.id === -1) return;
+      if(!this.$store.getters.getUser || this.$store.getters.getUser.user.id===-1) return;
       var params = {
         user_id: this.$store.getters.getUser.user.id,
       };
@@ -246,6 +244,8 @@ export default {
             for (i = 0; i < 3 && i < res.data.data.length; i++) {
               res.data.data[i].star = parseFloat(res.data.data[i].star);
               this.collections.push(res.data.data[i]);
+              if(this.collections[i].author.length>11)
+              this.collections[i].author = this.collections[i].author.substring(0,10)+'…'
             }
           } else {
             this.$message.error("查询失败");
@@ -257,8 +257,7 @@ export default {
       this.loaddata = true;
     },
     async updatePassage() {
-      var user = this.$store.getters.getUser.user;
-      if (!user || user.id === -1) return;
+      if(!this.$store.getters.getUser || this.$store.getters.getUser.user.id===-1) return;
       var params = {
         user_id: this.$store.getters.getUser.user.id,
       };
@@ -297,7 +296,6 @@ export default {
               var img = this.displayIcon(this.bookcomments[i].usericon);
               console.log(img);
               this.bookcomments[i].usericon = img.icon;
-              this.bookcomments[i].thestyle = img.style;
               console.log(this.bookcomments[i].content);
             }
           }
@@ -306,24 +304,11 @@ export default {
     },
     displayIcon(url) {
       var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
-      var styleOfIcon = "width:30px";
       if (url !== "") {
         var len = this.$axios.defaults.baseURL.length;
         icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
       }
-      var img = new Image();
-      img.src = icon;
-      if (img.width > img.height)
-        styleOfIcon =
-          "height:30px;position: relative; top:0px; left:-" +
-          ((img.width - img.height) / img.height) * 15 +
-          "px";
-      else
-        styleOfIcon =
-          "width:30px;position: relative;  left:0px;top:-" +
-          ((img.height - img.width) / img.width) * 15 +
-          "px";
-      return { icon: icon, style: styleOfIcon };
+      return { icon: icon  };
     },
     ToText(HTML) {
       var input = HTML;
@@ -577,6 +562,8 @@ div.comment-origin-pic {
   color: rgb(0, 166, 255);
 }
 .iconOfuser {
+  height:30px;
+  width:30px;
   border-radius: 20px;
   margin-right: 5px;
   vertical-align: sub;
@@ -655,7 +642,7 @@ a.comment-book-name {
   display: flex;
 }
 .collection-info {
-  margin-top: 20px;
+  margin-top: 0px;
   font-size: 16px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
