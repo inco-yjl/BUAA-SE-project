@@ -96,7 +96,7 @@
           </div>
           <div class="topic-page-number">
             <el-pagination
-              @next-click="changeTopicdt"
+              @current-change="changeTopicdt"
               :page-size="3"
               layout="prev, pager, next, jumper"
               :total="dtNum"

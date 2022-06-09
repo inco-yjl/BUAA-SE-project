@@ -33,7 +33,7 @@
             <div class="collection-info">
               {{ group.name }}
               <div></div>
-              {{ group.number }}人参与
+              {{ group.member }}人参与
             </div>
           </a>
         </div>
@@ -69,7 +69,7 @@
               </a>
             </div>
             <div class="commenttext">
-              <a class="commenttext-origin" @click="bookcomment">{{
+              <a class="commenttext-origin" >{{
                 comment.content
               }}</a>
             </div>
@@ -112,7 +112,7 @@
                 disabled-void-color="ffffff"
               >
               </el-rate>
-              {{ group.number }}人参与
+              {{ group.member }}人参与
             </div>
           </a>
         </div>
@@ -150,6 +150,7 @@ export default {
   name: "GroupHome",
   data() {
     var hotgroup = [{}];
+    var addgroup = [{}];
     var maxgroup = [
       {
         name: "星空",
@@ -252,6 +253,7 @@ export default {
       hotgroup,
       maxgroup,
       groupcommit,
+      addgroup,
     };
   },
   components: {
@@ -293,32 +295,82 @@ export default {
     },
     getaddgroup() {
       var params = {
+      };
+      this.$axios
+          .post("/group/mygroup", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("13215645646");
+              this.addgroup = [];
+              var i = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                this.addgroup.push(res.data.data[i]);
+              }
+            }
+            else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    getmaxgroup() {
+      var params = {
         num: 6,
       };
-      console.log("开始获取热门小组");
       this.$axios
-        .post("/group/hot", qs.stringify(params))
-        .then((res) => {
-          console.log(res);
-          if (res.data.errno === 0) {
-            console.log("获取热门小组成功");
-            this.hotgroup = [];
-            var i = 0;
-            for (i = 0; i < 6 && i < res.data.data.length; i++) {
-              res.data.data[i].star = parseFloat(res.data.data[i].star);
-              this.hotgroup.push(res.data.data[i]);
+          .post("/group/biggroup", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("13215645646");
+              this.maxgroup = [];
+              var i = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                this.maxgroup.push(res.data.data[i]);
+              }
             }
-          } else {
-            this.$message.error("查询失败");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+            else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     },
+    gethotcommit() {
+      var params = {
+        num: 6,
+      };
+      this.$axios
+          .post("/group/hotpassage", qs.stringify(params))
+          .then((res) => {
+            console.log("biebbl");
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("13215645646");
+              this.groupcommit = [];
+              var i = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                this.groupcommit.push(res.data.data[i]);
+              }
+            }
+            else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    }
   },
   mounted() {
     this.gethootgroupmes();
+    this.getaddgroup();
+    this.getmaxgroup();
+    this.gethotcommit();
     window.onscroll = function (e) {
       console.log("slide");
       var vertical = document
@@ -339,6 +391,11 @@ export default {
 </script>
 
 <style scoped>
+.publishtime {
+  padding-left: 20px;
+  font-weight: 400;
+  color: rgb(157, 157, 157);
+}
 .groupPagebody {
   padding-left: 100px;
 }

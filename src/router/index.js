@@ -172,6 +172,11 @@ const routes = [
       name: 'moviecomment',
       component: () => import('../views/Video/MovieComment.vue')
     },
+    {
+      path: '/groupcomment',
+      name: 'groupcomment',
+      component: () => import('../views/group/GroupComment.vue')
+    },
   ]
 },
 {

@@ -61,7 +61,8 @@
             </button>
           </span>
           <div  style="position:relative; float: left; width: 1450px; margin-top: 30px;">
-            <div class = "m_div m_nothead " v-for="mes in heames" :key = "index">
+            <el-empty description="这里什么都没有哦" v-if="(heames === topmes && topempty === true) || (valmes === heames && valempty === true)"></el-empty>
+            <div class = "m_div m_nothead " v-for="mes in heames" :key = "index" v-if="!(heames === topmes && topempty === true) || (valmes === heames && valempty === true)">
               <span class = "title_l font_l " style="color: #444444;">{{mes.name}}</span>
               <span class = "res_l font_l">{{mes.replynumber}}回复</span>
               <span class = "time_l font_l">{{mes.time}}</span>
@@ -706,7 +707,7 @@ import diary from "@/components/TopicDisplay.vue";
 import App from "@/App.vue";
 import qs from "qs";
 export default {
-  name: "groupdetail",
+  name: "groupdeta",
   components: {
     search,
     diary,
@@ -905,7 +906,17 @@ export default {
     ];
     var nowmes = hotmes;
     var heames = topmes;
+    var topempty = false;
+    var valempty = false;
+    var hotempty = false;
+    var newempty = false;
+    var allempty = false;
     return {
+      topempty,
+      valempty,
+      hotempty,
+      newempty,
+      allempty,
       heames,
       valmes,
       topmes,
@@ -924,7 +935,67 @@ export default {
     };
   },
   methods: {
-    favor() {
+    srcmes() {
+      var params = {
+        group_id: this.id,
+        kind: 1,
+      };
+      this.$axios
+          .post("/group/search", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("获取置顶信息成功");
+              this.topmes = [];
+              var i = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                res.data.data[i].star = parseFloat(res.data.data[i].star);
+                this.topmes.push(res.data.data[i]);
+              }
+              this.heames = this.topmes;
+            }
+            else if(res.data.errno === 1002) {
+              this.topmes = [];
+              this.heames = this.topmes;
+              this.topempty = true;
+            }
+            else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      params = {
+        group_id: this.id,
+        kind: 2,
+      };
+      this.$axios
+          .post("/group/search", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              console.log("获取精华信息成功");
+              this.valmes = [];
+              var i = 0;
+              for (i = 0; i < 6 && i < res.data.data.length; i++) {
+                res.data.data[i].star = parseFloat(res.data.data[i].star);
+                this.valmes.push(res.data.data[i]);
+              }
+            }
+            else if(res.data.errno === 1002) {
+              this.valmes = [];
+              this.valempty = true;
+            }
+            else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    favor(e) {
       this.liked = !this.liked;
       if (this.liked) {
         this.group.peoplenum++;
@@ -1051,6 +1122,7 @@ export default {
     changeTopicdt() {},
   },
   mounted() {
+    this.srcmes();
     this.$parent.navigate = true;
     this.Updatediary();
     this.updateButton();
