@@ -80,7 +80,8 @@
             全部讨论
           </span>
           <div  style="position:relative; float: left; width: 1450px; margin-top: 30px;">
-            <div class = "m_div m_nothead " v-for="mes in allmes" :key = "index">
+            <el-empty description="这里什么都没有哦" v-if="allempty"></el-empty>
+            <div class = "m_div m_nothead " v-for="mes in allmes" :key = "index" v-if = "!allempty">
               <span class = "title_l font_l" style="color: #444444;">{{mes.name}}</span>
               <span class = "res_l font_l">{{mes.replynumber}}回复</span>
               <span class = "time_l font_l">{{mes.time}}</span>
@@ -626,9 +627,11 @@ export default {
     var heames = topmes;
     var topempty = false;
     var valempty = false;
+    var allempty = true;
     return {
       topempty,
       valempty,
+      allempty,
       id,
       heames,
       valmes,
