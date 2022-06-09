@@ -144,7 +144,6 @@
                   <img
                     class="iconOfuser"
                     :src="comment.usericon"
-                    :style="comment.thestyle"
                   /><span class="nameOfuser">{{ comment.username }}</span>
                 </a>
                 <span class="publish-info"
@@ -174,7 +173,7 @@
         <div class="collection">
           <div class="videopage-title">
             <a href="../user/movies">
-              <img src="@/assets/guide/movie_collection.png" />我的收藏
+              <img id="collection-guide" src="@/assets/guide/movie_collection.png" />我的收藏
             </a>
           </div>
           <div
@@ -195,8 +194,7 @@
                   disabled-void-color="ffffff"
                 >
                 </el-rate>
-                {{ video.director }}
-                {{ video.year }}&nbsp;{{ video.nation }}
+                ({{ video.year }}){{ video.info }}
               </div>
             </a>
           </div>
@@ -211,9 +209,9 @@
             <li
               :v-if="passages.length > 0"
               v-for="(passage, index) in passages"
-              :key="passage.id"
+              :key="index"
             >
-              <a @click="ToComment(index)">{{ passage.title }}</a>
+              <a @click="ToWhichComment(index)">{{ passage.title }}</a>
             </li>
           </ul>
         </div>
@@ -283,6 +281,12 @@ export default {
         });
       }
     },
+    ToComment(id){
+      this.$router.push({
+          name: "moviecomment",
+          query: { id: id },
+        });
+    },
     getcommit() {},
     hotTopicdt() {
       //获取数据
@@ -320,7 +324,8 @@ export default {
     async updateComment() {
       this.$axios.post("/movie/hotpassage").then((res) => {
         if (res.data.errno === 0) {
-          console.log("获取到热门书评");
+          console.log("获取到热门影评");
+          console.log(res.data);
           this.moviecomments = res.data.data;
           var i;
           for (i = 0; i < this.moviecomments.length; i++) {
@@ -331,10 +336,7 @@ export default {
               this.moviecomments[i].content =
                 this.moviecomments[i].content.substring(0, 170) + "…";
               var img = this.displayIcon(this.moviecomments[i].usericon);
-              console.log(img);
               this.moviecomments[i].usericon = img.icon;
-              this.moviecomments[i].thestyle = img.style;
-              console.log(this.moviecomments[i].content);
             }
           }
         }
@@ -342,24 +344,17 @@ export default {
     },
     displayIcon(url) {
       var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
-      var styleOfIcon = "width:30px";
       if (url !== "") {
         var len = this.$axios.defaults.baseURL.length;
         icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
       }
-      var img = new Image();
-      img.src = icon;
-      if (img.width > img.height)
-        styleOfIcon =
-          "height:30px;position: relative; top:0px; left:-" +
-          ((img.width - img.height) / img.height) * 15 +
-          "px";
-      else
-        styleOfIcon =
-          "width:30px;position: relative;  left:0px;top:-" +
-          ((img.height - img.width) / img.width) * 15 +
-          "px";
-      return { icon: icon, style: styleOfIcon };
+      return { icon: icon };
+    },
+    ToMovieDetail(id){
+      this.$router.push({
+          name: "moviedetail",
+          query: { id: id },
+        });
     },
     ToText(HTML) {
       var input = HTML;
@@ -373,7 +368,6 @@ export default {
         .replace(/ /g, " ")
         .replace(/>/g, " ");
     },
-    changeTopicdt() {},
     ToVideoDetail(id) {
       if (this.hotmes === this.hotmoives) {
         this.$router.push({
@@ -404,7 +398,7 @@ export default {
         this.highmes = this.hightele;
       }
     },
-    ToComment(index) {
+    ToWhichComment(index) {
       if (index < this.ismovie)
         this.$router.push({
           name: "moviecomment",
@@ -416,9 +410,6 @@ export default {
           query: { id: this.passages[index].id },
         });
     },
-    moviecomment() {
-      this.$router.push({ name: "moviecomment" });
-    },
     async updateCollection() {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
@@ -427,7 +418,6 @@ export default {
       this.$axios
         .post("/tele/collection", qs.stringify(params))
         .then((res) => {
-          console.log(res);
           console.log("查询到已收藏的电视剧");
           if (res.data.errno === 0) {
             this.telecollections = [];
@@ -446,7 +436,6 @@ export default {
       this.$axios
         .post("/movie/collection", qs.stringify(params))
         .then((res) => {
-          console.log(res);
           console.log("查询到已收藏的电影");
           if (res.data.errno === 0) {
             var i = 0;
@@ -469,15 +458,15 @@ export default {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
       };
+      
       this.passages = [];
       this.$axios
         .post("/movie/mypassage", qs.stringify(params))
         .then((res) => {
-          console.log(res);
           if (res.data.errno === 0) {
             var i;
-            var length = 3;
-            if (res.data.data.length < 3) length = res.data.data.length;
+            var length = 2;
+            if (res.data.data.length < 2) length = res.data.data.length;
             this.ismovie = length;
             for (i = 0; i < length; i++) this.passages.push(res.data.data[i]);
             this.loadSuccess = true;
@@ -491,11 +480,11 @@ export default {
       this.$axios
         .post("/tele/mypassage", qs.stringify(params))
         .then((res) => {
-          console.log(res);
+          console.log("查询到我的剧评")
           if (res.data.errno === 0) {
             var i;
-            var length = 3;
-            if (res.data.data.length < 3) length = res.data.data.length;
+            var length = 2;
+            if (res.data.data.length < 2) length = res.data.data.length;
             for (i = 0; i < length; i++) this.passages.push(res.data.data[i]);
             this.loadSuccess = true;
           } else {
@@ -515,13 +504,18 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("获取到热门电影");
-            console.log(res);
             var movie = [];
             movie = res.data.data;
             var i = 0;
             for (i = 0; i < 20; i++) {
               var length = 14 - movie[i].name.length;
               movie[i].director='[导演]'+movie[i].director;
+              if(movie[i].name.length>14)
+              {
+                movie[i].name =  movie[i].name.substring(0,14)+'…';
+                movie[i].director = '';
+                continue;
+              }
               if (movie[i].name.length > 7 && movie[i].director.length > length)
                 movie[i].director =
                   movie[i].director.substring(0, length - 2) + "…";
@@ -549,12 +543,16 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("获取到热门电视剧");
-            console.log(res);
             var tele = [];
             tele = res.data.data;
             var i = 0;
             for (i = 0; i < 20; i++) {
               var length = 14 - tele[i].name.length;
+              if(tele[i].name.length>14){
+                tele[i].name = tele[i].name.substring(0,14)+'…';
+                tele[i].nation = '';
+                continue;
+              }
               if (tele[i].name.length > 7 && tele[i].nation.length > length)
                 tele[i].nation = tele[i].nation.substring(0, length - 2) + "…";
               if (tele[i].nation.length > 8)
@@ -585,7 +583,6 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("获取到高分电影");
-            console.log(res);
             var movie = [];
             movie = res.data.data;
             var i = 0;
@@ -616,7 +613,6 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("获取到高分电视剧");
-            console.log(res);
             var tele = [];
             tele = res.data.data;
             var i = 0;
@@ -750,6 +746,10 @@ button.selection_ed {
   vertical-align: -20%;
   margin-right: 5px;
 }
+#collection-guide{
+  height:37px;
+  vertical-align: -30%;
+}
 .aside {
   margin-top: 80px;
   margin-left: 10px;
@@ -845,6 +845,8 @@ div.comment-origin-pic {
 }
 .iconOfuser {
   height: 30px;
+  width:30px;
+  border-radius: 20px;
   margin-right: 5px;
   vertical-align: sub;
 }
@@ -854,7 +856,7 @@ div.comment-origin-pic {
 }
 a.commenttext-origin {
   position: relative;
-  top: 36px;
+  top: 26px;
   font-size: 17px;
   text-decoration: none;
   font-family: Helvetica, Arial, sans-serif;
@@ -865,6 +867,15 @@ a.commenttext-origin {
 a.commenttext-origin:hover {
   color: rgb(101, 101, 101);
   text-decoration: none;
+}
+a.commenttext-origin span {
+  font-size: 20px;
+  font-weight: 600;
+  color: black;
+  transition: 0.3s ease;
+}
+a.commenttext-origin span:hover {
+  text-decoration: underline;
 }
 a.comment-movie-name {
   font-weight: 400;
@@ -913,7 +924,7 @@ a.comment-movie-name {
   display: flex;
 }
 .collection-info {
-  margin-top: 20px;
+  margin-top: 0px;
   font-size: 16px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;

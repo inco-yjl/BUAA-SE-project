@@ -73,7 +73,10 @@
   outline: none;
   font-weight: bold;
 }
-
+.post-book-comment button:hover {
+  outline: none;
+  font-weight: bold;
+}
 .post-book-comment button {
   background: none;
   position: absolute;
@@ -259,7 +262,7 @@ export default {
       }
       if(this.passage.length>10000)
       {
-        this.$message.error("字数过多！不得超过10000字");
+        this.$message.error("字数过多！");
         return;
       }
       if(this.passage.length<25)

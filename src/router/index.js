@@ -125,7 +125,7 @@ const routes = [
     {
       path: '/groupdetail',
       name: 'groupdetail',
-      component: () => import('../views/group/groupdetail.vue')
+      component: () => import('../views/book/GroupDetail.vue')
     },
     {
       path: '/groupadmin',

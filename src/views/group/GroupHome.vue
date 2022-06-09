@@ -1,40 +1,17 @@
 <template>
-  <div class = "body">
+  <div class="groupPagebody">
     <search></search>
-    <div class = "aside-left vertical">
-      <div class = "bookpage-hit">
+    <div class="aside-left vertical">
+      <div class="bookpage-hit">
         <div class="bookpage-title">
-        <img src="@/assets/group/hotgroup.png" />最受欢迎
-      </div>
-        
-        <div
-            class="collection-list"
-            v-for="group in hotgroup"
-            :key="group.id"
-        >
-          <a class="collection-item" @click = "usetogroupdetail(group.id)">
-            <img class="collection-img" :src="group.img" />
-            <div class="collection-info">
-              {{ group.name }}
-              <div></div>
-              {{ group.number }}人参与
-            </div>
-          </a>
-        </div> 
-        
-      </div>
-      
-      <div class = "bookpage-hit">
-        <div class="bookpage-title">
-          <img src="@/assets/group/maxgroup.png" />最多人在
+          <img src="@/assets/title/groups.png" />最受欢迎
         </div>
-        <div
-            class="collection-list"
-            v-for="group in maxgroup"
-            :key="group.id"
-        >
-          <a class="collection-item" @click = "usetogroupdetail(group.id)">
-            <img class="collection-img" :src="group.img" />
+
+        <div class="collection-list" v-for="group in hotgroup" :key="group.id">
+          <a class="collection-item" @click="usetogroupdetail(group.id)">
+            <div class="img-block">
+              <img class="collection-img" :src="group.img" />
+            </div>
             <div class="collection-info">
               {{ group.name }}
               <div></div>
@@ -43,45 +20,62 @@
           </a>
         </div>
       </div>
-      
-      <div class = "bookpage-hit">
+
+      <div class="bookpage-hit">
         <div class="bookpage-title">
-          <img src="@/assets/group/hotgroup.png" />热门讨论
+          <img src="@/assets/group/biggroup.png" />最多人在
+        </div>
+        <div class="collection-list" v-for="group in maxgroup" :key="group.id">
+          <a class="collection-item" @click="usetogroupdetail(group.id)">
+            <div class="img-block">
+              <img class="collection-img" :src="group.img" />
+            </div>
+            <div class="collection-info">
+              {{ group.name }}
+              <div></div>
+              {{ group.number }}人参与
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="bookpage-hit">
+        <div class="bookpage-title">
+          <img src="@/assets/group/popular.png" />热门讨论
         </div>
         <div
-            class="book-comments-display"
-            v-for="comment in groupcommit"
-            :key="comment.id"
+          class="book-comments-display"
+          v-for="comment in groupcommit"
+          :key="comment.id"
         >
           <hr />
-          <div class="comment-display-body">
+          <div class="comment-display-groupPage">
             <div class="display-publisher">
               <a class="userOfcomment" href="/otherusers/1">
                 <img class="iconOfuser" :src="comment.usericon" /><span
                   class="nameOfuser"
-              >{{ comment.username }}</span
-              >
+                  >{{ comment.username }}</span
+                >
               </a>
               <span class="publish-info"
-              >{{ comment.date }}&ensp;发布于<a class="comment-book-name"
-              >{{ comment.groupname }}</a
-              ></span
+                >{{ comment.date }}&ensp;发布于<a class="comment-book-name">{{
+                  comment.groupname
+                }}</a></span
               >
             </div>
             <div class="comment-origin-pic">
               <a class="comment-origin" href="javascript:void(0)"
-              ><img class="comment-pic" :src="comment.img" />
+                ><img class="comment-pic" :src="comment.img" />
               </a>
             </div>
             <div class="commenttext">
               <a class="commenttext-origin" @click="bookcomment">{{
-                  comment.content
-                }}</a>
+                comment.content
+              }}</a>
             </div>
           </div>
         </div>
       </div>
-      
     </div>
     <div class="aside">
       <div class="collection">
@@ -90,13 +84,9 @@
             <img src="@/assets/guide/book_collection.png" />我加入的小组
           </a>
         </div>
-        <div
-            class="collection-list"
-            v-for="group in addgroup"
-            :key="group.id"
-        >
-          <div class = "groupusually">
-            <h5 style="text-align: left" class = "title-aside">我加入的小组</h5>
+        <div class="collection-list" v-for="group in addgroup" :key="group.id">
+          <div class="groupusually">
+            <h5 style="text-align: left" class="title-aside">我加入的小组</h5>
             <!--<div v-for="group in addgroup">
               <ul>
                 <li>
@@ -109,17 +99,17 @@
               <span>&nbsp;</span>
             </div>-->
           </div>
-          <a class="collection-item" @click = "usetogroupdetail(group.id)">
+          <a class="collection-item" @click="usetogroupdetail(group.id)">
             <img class="collection-img" :src="group.img" />
             <div class="collection-info">
               {{ group.name }}
               <el-rate
-                  v-model="group.star"
-                  disabled
-                  show-score
-                  text-color="#ff9900"
-                  score-template="{value}"
-                  disabled-void-color="ffffff"
+                v-model="group.star"
+                disabled
+                show-score
+                text-color="#ff9900"
+                score-template="{value}"
+                disabled-void-color="ffffff"
               >
               </el-rate>
               {{ group.number }}人参与
@@ -135,18 +125,16 @@
         </div>
         <ul class="book-comment-list hotlist">
           <li
-              :v-if="passages.length > 0"
-              v-for="passage in passages"
-              :key="passage.id"
+            :v-if="passages.length > 0"
+            v-for="passage in passages"
+            :key="passage.id"
           >
             <a @click="ToComment(passage.id)">{{ passage.title }}</a>
           </li>
         </ul>
       </div>
     </div>
-
- 
-  </div>  
+  </div>
 </template>
 
 <script>
@@ -249,17 +237,17 @@ export default {
         number: 10985,
       },
     ];
-    var groupcommit= [
+    var groupcommit = [
       {
         name: "喜羊羊与灰太狼",
         id: 1,
-        img:  "https://i.imgtg.com/2022/05/23/hmBBx.jpg",
+        img: "https://i.imgtg.com/2022/05/23/hmBBx.jpg",
         content: "ababababababa",
         usericon: "https://i.imgtg.com/2022/05/23/hmBBx.jpg",
         username: "inty",
-        date: "06.08"
-      }
-    ]
+        date: "06.08",
+      },
+    ];
     return {
       hotgroup,
       maxgroup,
@@ -276,26 +264,26 @@ export default {
       var params = {
         num: 6,
       };
-      console.log("开始获取热门小组")
+      console.log("开始获取热门小组");
       this.$axios
-          .post("/group/hot", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              console.log("获取热门小组成功");
-              this.hotgroup = [];
-              var i = 0;
-              for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                res.data.data[i].star = parseFloat(res.data.data[i].star);
-                this.hotgroup.push(res.data.data[i]);
-              }
-            } else {
-              this.$message.error("查询失败");
+        .post("/group/hot", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            console.log("获取热门小组成功");
+            this.hotgroup = [];
+            var i = 0;
+            for (i = 0; i < 6 && i < res.data.data.length; i++) {
+              res.data.data[i].star = parseFloat(res.data.data[i].star);
+              this.hotgroup.push(res.data.data[i]);
             }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     usetogroupdetail(id) {
       this.$router.push({
@@ -307,53 +295,67 @@ export default {
       var params = {
         num: 6,
       };
-      console.log("开始获取热门小组")
+      console.log("开始获取热门小组");
       this.$axios
-          .post("/group/hot", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              console.log("获取热门小组成功");
-              this.hotgroup = [];
-              var i = 0;
-              for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                res.data.data[i].star = parseFloat(res.data.data[i].star);
-                this.hotgroup.push(res.data.data[i]);
-              }
-            } else {
-              this.$message.error("查询失败");
+        .post("/group/hot", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            console.log("获取热门小组成功");
+            this.hotgroup = [];
+            var i = 0;
+            for (i = 0; i < 6 && i < res.data.data.length; i++) {
+              res.data.data[i].star = parseFloat(res.data.data[i].star);
+              this.hotgroup.push(res.data.data[i]);
             }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-    }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   mounted() {
     this.gethootgroupmes();
     window.onscroll = function (e) {
       console.log("slide");
-      var vertical = document.getElementsByClassName("bookpage-vertical").item(0);
+      var vertical = document
+        .getElementsByClassName("bookpage-vertical")
+        .item(0);
       var pos = vertical.getBoundingClientRect();
       console.log(pos.top);
       if (pos.top < 29) {
         var aside = document.getElementsByClassName("aside").item(0);
-        if(aside!=null)
-          aside.setAttribute("class", "aside-slide");
-      }
-      else{
+        if (aside != null) aside.setAttribute("class", "aside-slide");
+      } else {
         var aside = document.getElementsByClassName("aside-slide").item(0);
-        if(aside!=null)
-          aside.setAttribute("class", "aside");
+        if (aside != null) aside.setAttribute("class", "aside");
       }
     };
   },
-}
+};
 </script>
 
 <style scoped>
+.groupPagebody {
+  padding-left: 100px;
+}
+#vertical {
+  padding-top: 20px;
+  padding-left: 40px;
+  padding-right: 35px;
+  padding-bottom: 60px;
+  margin-top: 80px;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(181, 181, 181);
+  box-shadow: 0px 2px 3px #888888a6;
+}
 .aside {
-  position:relative;
+  position: relative;
   float: left;
   margin-top: 80px;
   margin-left: 10px;
@@ -506,6 +508,13 @@ a.comment-book-name {
 .collection .bookpage-title a:active {
   color: rgb(0, 166, 255);
 }
+.img-block{
+  display: inline;
+  height:85px;
+  width:85px;
+  overflow: hidden;
+  margin-right: 20px;
+}
 .collection-img {
   width: 85px;
   margin-right: 20px;
@@ -537,7 +546,7 @@ a.comment-book-name {
   color: rgb(2, 98, 182);
 }
 .search-number {
-  margin-top:50px;
+  margin-top: 50px;
   margin-left: 300px;
 }
 .title-aside {
@@ -669,18 +678,18 @@ a.comment-book-name {
   font-family: Source Han Sans CN Normal;
 }
 
-.title{
+.title {
   font-weight: bold;
-  font-family: "Adobe 宋体 Std L",serif;
+  font-family: "Adobe 宋体 Std L", serif;
   font-size: 30px;
 }
-.body{
+.body {
   width: 1600px;
   height: 1000px;
   position: absolute;
   padding-left: 100px;
 }
-.aside-left{
+.aside-left {
   float: left;
   position: relative;
   width: 1100px;
@@ -721,7 +730,7 @@ a.comment-book-name {
   font-weight: bold;
   padding-left: 10px;
 }
-.group_div{
+.group_div {
   position: relative;
   float: left;
   width: 300px;
@@ -730,9 +739,8 @@ a.comment-book-name {
   height: 160px;
   margin-left: 20px;
   margin-top: 20px;
-
 }
-.group_div_img{
+.group_div_img {
   position: relative;
   float: left;
   top: 20px;
@@ -748,9 +756,9 @@ a.comment-book-name {
   left: 20px;
   top: 20px;
 }
-.group_div_m_font_title{
+.group_div_m_font_title {
   font-size: 23px;
-  font-family: "宋体",sans-serif;
+  font-family: "宋体", sans-serif;
   width: 100%;
   position: relative;
   float: left;
@@ -758,9 +766,9 @@ a.comment-book-name {
   left: 10px;
   line-height: 20px;
 }
-.group_div_m_font_num{
+.group_div_m_font_num {
   font-size: 20px;
-  font-family: "宋体",sans-serif;
+  font-family: "宋体", sans-serif;
   width: 100%;
   position: relative;
   float: left;
@@ -768,13 +776,13 @@ a.comment-book-name {
   left: 10px;
   color: #d3dce6;
 }
-.groupusually{
+.groupusually {
   float: left;
   position: relative;
   top: 30px;
   width: 100%;
 }
-.normal_active{
+.normal_active {
   height: 40px;
   overflow: hidden;
   transition: 0.5s;
@@ -784,7 +792,7 @@ a.comment-book-name {
   overflow: hidden;
   transition: 0.5s;
 }
-.heigh{
+.heigh {
   height: 300px;
   overflow: hidden;
   transition: 0.5s;
@@ -794,49 +802,49 @@ a.comment-book-name {
   overflow: hidden;
   transition: 0.5s;
 }
-.massage{
+.massage {
   font-size: 20px;
-  font-family: "Adobe 宋体 Std L",serif;
+  font-family: "Adobe 宋体 Std L", serif;
   font-weight: bold;
 }
-.hidden_img{
+.hidden_img {
   height: 300px;
   width: 200px;
 }
-.title_l{
+.title_l {
   width: 525px;
   position: relative;
   float: left;
 }
-.group-name_l{
+.group-name_l {
   width: 150px;
   position: relative;
   float: left;
 }
-.res_l{
+.res_l {
   width: 125px;
   position: relative;
   float: left;
 }
-.time_l{
+.time_l {
   width: 200px;
   position: relative;
   float: left;
 }
-.font_l{
+.font_l {
   font-size: 20px;
-  font-family: "Adobe 宋体 Std L",serif;
+  font-family: "Adobe 宋体 Std L", serif;
   font-weight: bold;
 }
-.blue{
-  color: #2C8DF4;
+.blue {
+  color: #2c8df4;
 }
-.m_div{
+.m_div {
   float: left;
   position: relative;
   height: 50px;
 }
-.m_nothead{
+.m_nothead {
   position: relative;
   float: left;
 }

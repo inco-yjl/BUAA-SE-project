@@ -173,7 +173,6 @@
                 <img
                   class="iconOfuser"
                   :src="comment.usericon"
-                  :style="comment.thestyle"
                 /><span class="nameOfuser">{{ comment.username }}</span>
               </a>
               <br />
@@ -194,16 +193,16 @@
                 <!-- 路径问题 -->
               </div>
             </div>
-            <!--
+
             <div class="search-number">
               <el-pagination
-                @current-change="changeMovieComment"
+                @current-change="changMovieComment"
                 :page-size="3"
                 layout="prev, pager, next, jumper"
                 :total="movieCommentNum"
               >
               </el-pagination>
-            </div>-->
+            </div>
           </div>
         </div>
       </div>
@@ -250,7 +249,7 @@
 #home {
   width: 1600px;
   padding-left: 100px;
-  padding-bottom: 100px;
+  padding-bottom: 36px;
 }
 div.body {
   width: 1580px;
@@ -334,19 +333,20 @@ li {
   display: flex;
   flex-wrap: wrap;
 }
+
 .comment {
   padding-left: 75px;
 }
 #bookcomment {
   width: 1000px;
-  margin-bottom: 50px;
+  margin-bottom: 0px;
   margin-top: 50px;
   margin-right: 10px;
   text-align: left;
 }
 #moviecomment {
   width: 1000px;
-  margin-top: 50px;
+  margin-top: 20px;
   margin-right: 10px;
   text-align: left;
 }
@@ -443,6 +443,7 @@ img.hot.books {
   font-family: Source Han Sans CN Normal;
 }
 .comments-pic {
+  margin-top: 7px;
   height: 120px;
   width: 90px;
 }
@@ -475,6 +476,7 @@ div.origin {
 }
 .iconOfuser {
   height: 30px;
+  width: 30px;
   border-radius: 20px;
   margin-right: 5px;
   vertical-align: sub;
@@ -533,8 +535,6 @@ import powerpoint from "@/components/PowerPoint";
 import search from "@/components/SelectSearch.vue";
 import commentDisplay from "@/components/ComDisplay.vue";
 //load the img needed
-import bookImg1 from "@/assets/books/Zissc.jpg";
-import bookImg2 from "@/assets/books/Jiaoldr.jpg";
 import "element-ui/lib/theme-chalk/index.css";
 import VueSlickCarousel from "vue-slick-carousel";
 import "vue-slick-carousel/dist/vue-slick-carousel.css";
@@ -545,48 +545,8 @@ export default {
   name: "home",
   data() {
     var loaddata = false;
-    var bookcomments = [
-      {
-        id: 1,
-        userId: 1,
-        title: "标题",
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "yjl",
-        img: bookImg1,
-        content:
-          "听Jpop不听King Gnu，\
-        就像四大名著不看红楼梦，说明这个人文学造诣和自我修养不足，\
-        他理解不了这种内在的阳春白雪的高雅艺术，他只能看到外表的辞藻堆砌，\
-        参不透其中深奥的精神内核，他整个人的层次就卡在这里了，只能度过一个相对失败的人生。",
-      },
-      {
-        id: 2,
-        userId: 2,
-        title: "标题",
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "IntP",
-        img: bookImg2,
-        content: "testtest",
-      },
-    ];
-    var moviecomments = [
-      {
-        id: 1,
-        userId: 1,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "yjl",
-        img: "https://i.imgtg.com/2022/05/12/z9ZmB.webp",
-        content: "没什么可说的",
-      },
-      {
-        id: 2,
-        userId: 2,
-        usericon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
-        username: "IntP",
-        img: bookImg2,
-        content: "testtest",
-      },
-    ];
+    var bookcomments = []
+    var moviecomments = [];
     var hotbooks = [{}];
     var hotmovies = [{}];
     var hotteles = [{}];
@@ -594,6 +554,7 @@ export default {
     var hotgroups = [{}];
     return {
       bookCommentNum: 0,
+      movieCommentNum:0,
       allBookComments: [],
       allMovieComments: [],
       bookcomments,
@@ -629,8 +590,6 @@ export default {
         .post("/book/hot", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
-            console.log("书籍查询成功");
-            //console.log(res.data.data)
             this.hotbooks = res.data.data;
             var i = 0;
             for (i = 0; i < 10; i++) {
@@ -662,8 +621,6 @@ export default {
         .post("/movie/hot", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
-            console.log("电影查询成功");
-            console.log(res.data.data);
             this.hotmovies = res.data.data;
             var i = 0;
             for (i = 0; i < 10; i++) {
@@ -692,7 +649,6 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("电视剧查询成功");
-            //console.log(res.data.data)
             this.hotteles = res.data.data;
           } else {
             this.$message.error("查询失败");
@@ -711,7 +667,6 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("话题查询成功");
-            console.log(res.data.data);
             this.hottopics = res.data.data;
           } else {
             this.$message.error("查询失败");
@@ -730,7 +685,6 @@ export default {
         .then((res) => {
           if (res.data.errno === 0) {
             console.log("小组查询成功");
-            console.log(res.data.data);
             this.hotgroups = res.data.data;
           } else {
             this.$message.error("查询失败");
@@ -782,7 +736,6 @@ export default {
               var img = this.displayIcon(this.allBookComments[i].usericon);
               console.log(img);
               this.allBookComments[i].usericon = img.icon;
-              this.allBookComments[i].thestyle = img.style;
               console.log(this.allBookComments[i].content);
             }
           }
@@ -790,26 +743,36 @@ export default {
         }
       });
     },
+    async updateMovieComment() {
+      this.$axios.post("/movie/hotpassage").then((res) => {
+        if (res.data.errno === 0) {
+          console.log("获取到热门影评");
+          console.log(res.data);
+          this.allMovieComments = res.data.data;
+          this.movieCommentNum = this.allMovieComments.length;
+          var i;
+          for (i = 0; i < this.movieCommentNum; i++) {
+            this.allMovieComments[i].content = this.ToText(
+              this.allMovieComments[i].content
+            );
+            if (this.allMovieComments[i].content.length > 170) {
+              this.allMovieComments[i].content =
+                this.allMovieComments[i].content.substring(0, 170) + "…";
+              var img = this.displayIcon(this.allMovieComments[i].usericon);
+              this.allMovieComments[i].usericon = img.icon;
+            }
+          }
+          this.changMovieComment(1);
+        }
+      });
+    },
     displayIcon(url) {
       var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
-      var styleOfIcon = "width:30px";
       if (url !== "") {
         var len = this.$axios.defaults.baseURL.length;
         icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
       }
-      var img = new Image();
-      img.src = icon;
-      if (img.width > img.height)
-        styleOfIcon =
-          "height:30px;position: relative; top:0px; left:-" +
-          ((img.width - img.height) / img.height) * 15 +
-          "px";
-      else
-        styleOfIcon =
-          "width:30px;position: relative;  left:0px;top:-" +
-          ((img.height - img.width) / img.width) * 15 +
-          "px";
-      return { icon: icon, style: styleOfIcon };
+      return { icon: icon };
     },
     ToText(HTML) {
       var input = HTML;
@@ -831,7 +794,15 @@ export default {
       for (i = 0; i < length; i++) {
         this.bookcomments.push(this.allBookComments[currentPage * 3 - 3 + i]);
       }
-      console.log(this.bookcomments);
+    },
+    changMovieComment(currentPage) {
+      this.moviecomments = [];
+      var length = this.movieCommentNum - (currentPage - 1) * 3;
+      if (length > 3) length = 3;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.moviecomments.push(this.allMovieComments[currentPage * 3 - 3 + i]);
+      }
     },
   },
   mounted() {
@@ -842,6 +813,7 @@ export default {
     this.updateHotTopics();
     this.updateHotGroups();
     this.updateBookComment();
+    this.updateMovieComment();
     window.onscroll = function (e) {
       var vertical = document.getElementById('vertical');
       var pos = vertical.getBoundingClientRect();

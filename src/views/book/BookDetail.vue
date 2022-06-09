@@ -330,6 +330,8 @@ export default {
             for (i = 0; i < 3 && i < res.data.data.length; i++) {
               res.data.data[i].star = parseFloat(res.data.data[i].star);
               this.collections.push(res.data.data[i]);
+              if(this.collections[i].author.length>11)
+              this.collections[i].author = this.collections[i].author.substring(0,10)+'…'
             }
           } else {
             this.$message.error("查询失败");
@@ -432,7 +434,6 @@ export default {
               var img = this.displayIcon(url);
 
               comments[i].usericon = img.icon;
-              comments[i].thestyle = img.style;
             }
             this.allComments = comments;
             this.changeComment(1);
@@ -446,24 +447,11 @@ export default {
     },
     displayIcon(url) {
       var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
-      var styleOfIcon = "width:30px;border-radius=20px;";
       if (url !== "") {
         var len = this.$axios.defaults.baseURL.length;
         icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
       }
-      var img = new Image();
-      img.src = icon;
-      if (img.width > img.height)
-        styleOfIcon =
-          "height:30px;position: relative; top:0px; left:-" +
-          ((img.width - img.height) / img.height) * 15 +
-          "px";
-      else
-        styleOfIcon =
-          "width:30px;position: relative;  left:0px;top:-" +
-          ((img.height - img.width) / img.width) * 15 +
-          "px";
-      return { icon: icon, style: styleOfIcon };
+      return { icon: icon };
     },
     hotComment() {
       //更换标签时获取数据
@@ -493,7 +481,6 @@ export default {
               var img = this.displayIcon(url);
 
               comments[i].usericon = img.icon;
-              comments[i].thestyle = img.style;
             }
             this.allComments = comments;
             this.changeComment(1);
@@ -820,7 +807,7 @@ export default {
   display: flex;
 }
 .collection-info {
-  margin-top: 20px;
+  margin-top: 0px;
   font-size: 16px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
@@ -901,7 +888,7 @@ button.selection_un {
 }
 .nameOfuser {
   font-family: Source Han Sans CN Normal;
-  font-size: 17px;
+  font-size: 20px;
 }
 .comment-content {
   display: flex;
@@ -918,13 +905,11 @@ button.selection_un {
 }
 
 .iconOfuser {
-  height: 30px;
+  height:40px;
+  width: 40px;
+  border-radius: 20px;
   margin-right: 5px;
   vertical-align: sub;
-  border-style: solid;
-  border-color: rgba(244, 244, 244, 0);
-  border-width: 1px;
-  border-radius: 20px;
 }
 .commenttext {
   margin-left: 30px;

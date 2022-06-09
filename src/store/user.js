@@ -2,7 +2,8 @@ const key = 'user'
 const user = {
     state() {
         return {
-            user: null
+            user: null,
+            admin: 0,
         }
     },
     getters: {
@@ -21,7 +22,7 @@ const user = {
         $_removeStorage (state) {
             state.user = null
             localStorage.removeItem(key)
-        }
+        },
     },
     actions: {
         saveUserInfo({ commit }, data) {

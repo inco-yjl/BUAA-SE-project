@@ -60,7 +60,6 @@ export default {
     passanger() {
       this.addNavigation();
       const _this = this;
-      this.$store.getters.getUser.user.id = -1;
       this.$router.replace({
         path: "/home",
       });

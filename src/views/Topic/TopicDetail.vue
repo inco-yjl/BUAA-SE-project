@@ -460,14 +460,12 @@ button {
 <script>
 import search from "@/components/SelectSearch.vue";
 import diary from "@/components/TopicDisplay.vue";
-import App from "@/App.vue";
 import qs from "qs";
 export default {
   name: "topic",
   components: {
     search,
     diary,
-    App,
   },
   data() {
     var id = this.$route.query.id; //根据id来询问
