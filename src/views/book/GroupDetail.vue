@@ -319,7 +319,6 @@ export default {
       },
     ];
     var allPassages = [];
-    var flag = group.join;
     var inhot = true;
     var innew = false;
     var inval = false;
@@ -335,6 +334,7 @@ export default {
     var bg_color = "#f2fef0";
     var ft_color = "#6cf57c";
     var onefinish = false;
+    var flag = false;
     return {
       bg_color,
       ft_color,
@@ -779,6 +779,13 @@ i   },
               var i = 0;
               for (i = 0; i < 6 && i < res.data.data.length; i++) {
                 this.addgroup.push(res.data.data[i]);
+                console.log(res.data.data[i].id );
+                console.log(this.id);
+                if(res.data.data[i].id == this.id)  {               
+                  console.log(this.flag);
+                  this.flag = true; 
+                  console.log(this.flag);
+                }
               }
             }
           else {
