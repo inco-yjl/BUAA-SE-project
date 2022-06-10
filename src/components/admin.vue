@@ -29,11 +29,19 @@
   
   <a href="../admin/uploadgroup"
   ><span class="guide" style="margin-right: 50px"
-  ><img class = "img"
+  ><img class = "img" style="margin-right: 5px"
       id="videoimg"
       src="@/assets/icon/upload5.png"
       width="30px"
   />新建小组</span
+  ></a>
+  <a href="../reportreply"
+  ><span class="guide" style="margin-right: 50px"
+  ><img class = "img" style="margin-right: 5px"
+        id="videoimg"
+        src="@/assets/icon/upload6.png"
+        width="30px"
+  />审核举报</span
   ></a>
 </div>
 </template>

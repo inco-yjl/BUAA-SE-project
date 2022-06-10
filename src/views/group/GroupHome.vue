@@ -15,7 +15,7 @@
             <div class="collection-info">
               {{ group.name }}
               <div></div>
-              {{ group.number }}人参与
+              {{ group.member }}人参与
             </div>
           </a>
         </div>
@@ -63,15 +63,10 @@
                 }}</a></span
               >
             </div>
-            <div class="comment-origin-pic">
-              <a class="comment-origin" href="javascript:void(0)"
-                ><img class="comment-pic" :src="comment.img" />
-              </a>
-            </div>
+
             <div class="commenttext">
-              <a class="commenttext-origin" >{{
-                comment.content
-              }}</a>
+              <a class="commenttext-origin" >
+                {{comment.content}}</a> 
             </div>
           </div>
         </div>
@@ -81,12 +76,11 @@
       <div class="collection">
         <div class="bookpage-title">
           <a href="../GroupHome">
-            <img src="@/assets/guide/book_collection.png" />我加入的小组
+            <img src="@/assets/group/collect.png" />我加入的小组
           </a>
         </div>
         <div class="collection-list" v-for="group in addgroup" :key="group.id">
           <div class="groupusually">
-            <h5 style="text-align: left" class="title-aside">我加入的小组</h5>
             <!--<div v-for="group in addgroup">
               <ul>
                 <li>
@@ -262,6 +256,18 @@ export default {
     groupPerson,
   },
   methods: {
+    ToText(HTML) {
+      var input = HTML;
+      return input
+          .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
+          .replace(/<[^>]+?>/g, "")
+          .replace(/[ ]|[&ensp;]/g, "")
+          .replace(/[ ]|[&nbsp;]/g, "")
+          .replace(/<[^>]+?>/g, "")
+          .replace(/\s+/g, " ")
+          .replace(/ /g, " ")
+          .replace(/>/g, " ");
+    },
     gethootgroupmes() {
       var params = {
         num: 6,
@@ -295,6 +301,7 @@ export default {
     },
     getaddgroup() {
       var params = {
+        user_id: this.$store.getters.getUser.user.id,
       };
       this.$axios
           .post("/group/mygroup", qs.stringify(params))
@@ -355,6 +362,9 @@ export default {
               var i = 0;
               for (i = 0; i < 6 && i < res.data.data.length; i++) {
                 this.groupcommit.push(res.data.data[i]);
+              }
+              for(i = 0;i < this.groupcommit.length;i++) {
+                this.groupcommit[i].content = this.ToText(this.groupcommit[i].content);
               }
             }
             else {

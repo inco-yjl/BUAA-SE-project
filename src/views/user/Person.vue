@@ -132,6 +132,44 @@
             </el-pagination>
           </div>
         </div>
+        <div class="group-collection">
+          <div class="bookpage-title">
+            <div class="title">
+              <img src="@/assets/group/collect.png" />我加入的小组
+            </div>
+          </div>
+          <div
+            class="collection-list"
+            v-for="group in tempgroupcollections"
+            :key="group.id"
+          >
+            <a class="collection-item" @click="ToGroupDetail(group.id)">
+              <img class="collection-img" :src="group.img" />
+              <div class="collection-info">
+                {{ group.name }}
+                <el-rate
+                  v-model="group.star"
+                  disabled
+                  show-score
+                  text-color="#ff9900"
+                  score-template="{value}"
+                  disabled-void-color="ffffff"
+                >
+                </el-rate>
+                {{ group.member }}人参与
+              </div>
+            </a>
+          </div>
+          <div class="page-number">
+            <el-pagination
+              @current-change="changeGroup"
+              :page-size="6"
+              layout="prev, pager, next, jumper"
+              :total="groupNum"
+            >
+            </el-pagination>
+          </div>
+        </div>
         <div class="comment-list">
           <div class="bookcomment-collection collection-4">
             <div class="title">
@@ -210,14 +248,16 @@ export default {
       bookcollections,
       moviecollections,
       telecollections,
+      groupcollections:[],
       booktempcomments: [],
       tempmoviecollections: [],
       tempbookComments: [],
       tempmovieComments: [],
       tempteleComments: [],
+      tempgroupcollections: [],
       bookcomments: [],
       moviecomments: [],
-      telecomments:[],
+      telecomments: [],
       tempbookcollections: [],
       temptelecollections: [],
       bookcollectNum: 0,
@@ -225,7 +265,8 @@ export default {
       telecollectNum: 0,
       bookCommentsNum: 0,
       movieCommentsNum: 0,
-      teleCommentsNum:0,
+      teleCommentsNum: 0,
+      groupNum: 0,
       imageUrl: "",
       tempUrl: "",
       userIcon: "https://i.imgtg.com/2022/05/08/zDzsM.png",
@@ -241,8 +282,40 @@ export default {
     this.updateBookComments();
     this.updateMovieComments();
     this.updateTeleComments();
+    this.updateGroup();
   },
   methods: {
+    updateGroup() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+      };
+      this.$axios
+        .post("/group/mygroup", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            this.groupcollections = res.data.data;
+            this.groupNum = res.data.data.length;
+            this.changeGroup(1);
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    changeGroup(currentPage) {
+      this.tempgroupcollections = [];
+      var length = this.groupNum - (currentPage - 1) * 6;
+      if (length > 6) length = 6;
+      var i = 0;
+      for (i = 0; i < length; i++) {
+        this.tempgroupcollections.push(
+          this.groupcollections[currentPage * 6 - 6 + i]
+        );
+      }
+    },
     changeBook(currentPage) {
       this.tempbookcollections = [];
       var length = this.bookcollectNum - (currentPage - 1) * 6;
@@ -303,9 +376,7 @@ export default {
       if (length > 3) length = 3;
       var i = 0;
       for (i = 0; i < length; i++) {
-        this.tempteleComments.push(
-          this.telecomments[currentPage * 3 - 3 + i]
-        );
+        this.tempteleComments.push(this.telecomments[currentPage * 3 - 3 + i]);
       }
     },
     async updateBookCollection() {
@@ -583,18 +654,18 @@ export default {
   box-shadow: 0px 2px 3px #888888a6;
   display: flex;
 }
-.comment-list{
+.comment-list {
   display: flex;
-  margin-top:50px;
+  margin-top: 50px;
 }
-.bookcomment-collection{
-  width:400px;
+.bookcomment-collection {
+  width: 400px;
 }
-.moviecomment-collection{
-  width:330px;
+.moviecomment-collection {
+  width: 330px;
 }
-.moviecomment-collection .title{
-  width:300px;
+.moviecomment-collection .title {
+  width: 300px;
 }
 .icon img {
   position: relative;

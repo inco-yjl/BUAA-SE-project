@@ -14,7 +14,7 @@
           </div>
           <div class="user-buttons">
             <div id="join-button">
-              <button v-if = "!flag" @click="join()">
+              <button v-if = "!flag" @click="join">
                 <img src="@/assets/group/join.png" />
               </button>
               <button v-if = "flag" @click="quit()">
@@ -23,7 +23,7 @@
             </div>
            
             <div class="group-detail-interact">
-              <button v-if="!isadmin">
+              <button v-if="!isadmin" @click = "toadmin()">
                 <img src="@/assets/group/apply.png" /><span
                   >申请成为管理员</span
                 >
@@ -79,12 +79,12 @@
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="passage.usericon" /><span
+                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
                       class="nameOfuser"
                       >{{ passage.username }}</span
                     >
                   </a>
-                  <span class="publishtime">{{ passage.date }}</span>
+                  <span class="publishtime">{{ changedate(passage.date) }}</span>
                 </div>
                 <div class="passage-content">
                   <a>{{ passage.title }}</a>
@@ -109,12 +109,12 @@
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="passage.usericon" /><span
+                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
                       class="nameOfuser"
                   >{{ passage.username }}</span
                   >
                   </a>
-                  <span class="publishtime">{{ passage.date }}</span>
+                  <span class="publishtime">{{ changedate(passage.date) }}</span>
                 </div>
                 <div class="passage-content">
                   <a>{{ passage.title }}</a>
@@ -147,12 +147,12 @@
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="passage.usericon" /><span
+                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
                       class="nameOfuser"
                   >{{ passage.username }}</span
                   >
                   </a>
-                  <span class="publishtime">{{ passage.date }}</span>
+                  <span class="publishtime">{{ changedate(passage.date)}}</span>
                 </div>
                 <div class="passage-content">
                   <a>{{ passage.title }}</a>
@@ -178,12 +178,12 @@
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="passage.usericon" /><span
+                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
                       class="nameOfuser"
                   >{{ passage.username }}</span
                   >
                   </a>
-                  <span class="publishtime">{{ passage.date }}</span>
+                  <span class="publishtime">{{ changedate(passage.date) }}</span>
                 </div>
                 <div class="passage-content">
                   <a>{{ passage.title }}</a>
@@ -216,12 +216,12 @@
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="passage.usericon" /><span
+                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
                       class="nameOfuser"
                   >{{ passage.username }}</span
                   >
                   </a>
-                  <span class="publishtime">{{ passage.date }}</span>
+                  <span class="publishtime">{{ changedate(passage.date) }}</span>
                 </div>
                 <div class="passage-content">
                   <a>{{ passage.title }}</a>
@@ -253,26 +253,15 @@
               <div class="collection-info">
                 {{ group.name }}
                 <div></div>
-                {{ group.number }}人参与
+                {{ group.member }}人参与
               </div>
             </a>
           </div>
         </div>
         <div class="collection">
           <div class="bookpage-title">
-            <a href="../user/books">
-              <img src="@/assets/guide/mycomment.png" />我的讨论
-            </a>
           </div>
-          <ul class="book-comment-list hotlist">
-            <li
-                :v-if="passages.length > 0"
-                v-for="passage in passages"
-                :key="passage.id"
-            >
-              <a @click="ToComment(passage.id)">{{ passage.title }}</a>
-            </li>
-          </ul>
+          
         </div>
       </div>
     </div>
@@ -289,7 +278,7 @@ export default {
   },
   data() {
     var id = this.$route.query.id;
-    var isadmin = true;
+    var isadmin = false;
     var group = {
       peoplenum: 20,
       name: "龙族",
@@ -387,6 +376,85 @@ export default {
                 type: 'success'
             });
         },
+    displayIcon(url) {
+      console.log("testurl");
+      console.log(url);
+      var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+      if (url !== "") {
+        var len = this.$axios.defaults.baseURL.length;
+        icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
+      }
+      return icon;
+    },
+    toadmin() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+        group_id: this.id,
+      }
+      this.$axios
+          .post("/group/group_manager", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              this.$message({
+                message: "成功成为管理员",
+                type: "success",
+              });
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    addgroupt() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+        group_id: this.id,
+        type: '1',
+      }
+      this.$axios
+          .post("/group/dealGroup", qs.stringify(params))
+          .then((res) => {
+            console.log("测试加入小组");
+            console.log(res);
+            if (res.data.errno === 0) {
+              this.$message({
+                message: "加入成功",
+                type: "success",
+              });
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    delgroup() {
+      var params = {
+        user_id: this.$store.getters.getUser.user.id,
+        group_id: this.id,
+        type: '2',
+      }
+      this.$axios
+          .post("/group/dealGroup", qs.stringify(params))
+          .then((res) => {
+            console.log(res);
+            if (res.data.errno === 0) {
+              this.$message({
+                message: "退出成功",
+                type: "success",
+              });
+            } else {
+              this.$message.error("查询失败");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
     usetonewpassage() {
       this.$router.push({
         name: "groupcomment",
@@ -432,19 +500,6 @@ i   },
       this.innew = false;
       this.inval = true;
     },
-    join() {
-      this.$set(this.group,'join',true);
-      this.flag = true;
-      this.group.member++;
-      this.$forceUpdate();
-    },
-    quit() {
-      this.$set(this.group,'join',false);
-      console.log(this.group.join);
-      this.flag = false;
-      this.group.member--;
-      this.$forceUpdate();
-    },
     getgroup() {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
@@ -453,20 +508,21 @@ i   },
       this.$axios
           .post("/group/detail", qs.stringify(params))
           .then((res) => {
+            console.log("查询小组信息");
             console.log(res);
             var i = 0;
-            
-            for(i = 0;i < res.data.manager.length;i++) {
-              if(this.$store.getters.getUser.user.id === res.data.manager.user_id) {
-                this.isadmin = true;
-                break;    
-              }
-            }
             if (res.data.errno === 0) {
               console.log("获取小组信息成功");
               console.log(res.data.data);
-              var i = 0;
               this.group = res.data.data;
+              for(i = 0;i < 2;i++) {
+                console.log(this.$store.getters.getUser.user.id);
+                console.log(res.data.data.manager[i].user_id);
+                if(this.$store.getters.getUser.user.id === res.data.data.manager[i].user_id) {
+                  this.isadmin = true;
+                  break;
+                }
+              }
             } else {
               this.$message.error("查询失败");
             }
@@ -557,7 +613,6 @@ i   },
               var j = 0;
               var flag = 0;
               console.log("test");
-              console.log(this.topmes[0].id);
               for (i = 0; i < 6 && i < res.data.data.length; i++) {
                 flag = 0;
                 for(j = 0;j < this.topmes.length;j++) {
@@ -615,6 +670,9 @@ i   },
             console.log(error);
           });
       this.onefinish = true;
+    },
+    changedate(date){
+      return date.substring(0,10);
     },
     hotmes() {
       var params = {
@@ -707,13 +765,16 @@ i   },
     },
     getaddgroup() {
       var params = {
+        user_id: this.$store.getters.getUser.user.id, 
       };
       this.$axios
           .post("/group/mygroup", qs.stringify(params))
           .then((res) => {
+            console.log("test.......");
             console.log(res);
             if (res.data.errno === 0) {
               console.log("13215645646");
+              console.log(res.data.data);
               this.addgroup = [];
               var i = 0;
               for (i = 0; i < 6 && i < res.data.data.length; i++) {
@@ -797,6 +858,21 @@ i   },
           .catch((error) => {
             console.log(error);
           });
+    },
+    join() {
+      this.$set(this.group,'join',true);
+      this.flag = true;
+      this.group.member++;
+      this.addgroupt();
+      this.$forceUpdate();
+    },
+    quit() {
+      this.$set(this.group,'join',false);
+      console.log(this.group.join);
+      this.flag = false;
+      this.group.member--;
+      this.delgroup();
+      this.$forceUpdate();
     },
   },
   mounted() {
