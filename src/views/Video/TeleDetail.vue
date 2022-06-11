@@ -259,23 +259,26 @@ export default {
     };
   },
   methods: {
-    share(){
-            var domUrl = document.createElement("input");
-            domUrl.value = window.location.href;
-            domUrl.id = "creatDom";
-            document.body.appendChild(domUrl);
-            domUrl.select(); // 选择对象
-            document.execCommand('Copy', 'false', null );
-            let creatDom = document.getElementById("creatDom");
-            creatDom.parentNode.removeChild(creatDom);
-            this.$message({
-                message: '复制成功',
-                type: 'success'
-            });
-        },
+    share() {
+      var domUrl = document.createElement("input");
+      domUrl.value = window.location.href;
+      domUrl.id = "creatDom";
+      document.body.appendChild(domUrl);
+      domUrl.select(); // 选择对象
+      document.execCommand("Copy", "false", null);
+      let creatDom = document.getElementById("creatDom");
+      creatDom.parentNode.removeChild(creatDom);
+      this.$message({
+        message: "复制成功",
+        type: "success",
+      });
+    },
     clickcollect() {
-      if (this.$store.getters.getUser.user.id === -1) {
-        this.$message.error("请先登录");
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
         return;
       }
       var params = {
@@ -301,8 +304,11 @@ export default {
         });
     },
     writeComment() {
-      if (this.$store.getters.getUser.user.id === -1) {
-        this.$message.error("请先登录");
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ){
+        this.$message.error("请先登录！");
         return;
       } else {
         this.$router.push({
@@ -318,8 +324,11 @@ export default {
       });
     },
     clickuncollect() {
-      if (this.$store.getters.getUser.user.id === -1) {
-        this.$message.error("请先登录");
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
         return;
       }
       var params = {
@@ -526,6 +535,14 @@ export default {
         });
     },
     starTheTele() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.evaluate = 0;
+        this.$message.error("请先登录！");
+        return;
+      }
       var params = {
         user_id: this.$store.getters.getUser.user.id,
         tele_id: this.id,

@@ -249,6 +249,13 @@ export default {
             });
         },
     replyTo(reply) {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ){
+        this.$message.error("请先登录！");
+        return;
+      }
       var params = {
         article_id: this.id,
         author_id: this.$store.getters.getUser.user.id,
@@ -293,6 +300,13 @@ export default {
       return icon;
     },
     Topreply() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ){
+        this.$message.error("请先登录！");
+        return;
+      }
       var params = {
         article_id: this.id,
         author_id: this.$store.getters.getUser.user.id,
@@ -592,6 +606,13 @@ export default {
         });
     },
     clickreply() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录");
+        return;
+      }
       if (this.Toreply === false) this.Toreply = true;
       else this.Toreply = false;
     },
@@ -603,6 +624,7 @@ export default {
     },
   },
   mounted() {
+    this.Toreply = false;
     this.updateComment();
     this.updateLike();
     window.onscroll = function (e) {

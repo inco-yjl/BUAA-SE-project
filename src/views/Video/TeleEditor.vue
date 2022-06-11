@@ -250,6 +250,14 @@ export default {
       });
     },
     UploadComment() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ){
+        this.$message.error("请先登录！");
+        this.backToTele();
+        return;
+      }
       if(this.evaluate===0) {
         this.$message.error("请先评分");
         return;

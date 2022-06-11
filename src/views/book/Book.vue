@@ -111,10 +111,10 @@
             <div class="comment-display-body">
               <div class="display-publisher">
                 <a class="userOfcomment" href="/otherusers/1">
-                  <img
-                    class="iconOfuser"
-                    :src="comment.usericon"
-                  /><span class="nameOfuser">{{ comment.username }}</span>
+                  <img class="iconOfuser" :src="comment.usericon" /><span
+                    class="nameOfuser"
+                    >{{ comment.username }}</span
+                  >
                 </a>
                 <span class="publish-info"
                   >{{ comment.date }}&ensp;评论了<a class="comment-book-name"
@@ -129,9 +129,9 @@
               </div>
               <div class="commenttext">
                 <a class="commenttext-origin" @click="ToComment(comment.id)">
-                <span class="comment-title">
-                  {{comment.title}}
-                </span><br>
+                  <span class="comment-title">
+                    {{ comment.title }} </span
+                  ><br />
                   {{ comment.content }}
                 </a>
               </div>
@@ -146,27 +146,29 @@
               <img src="@/assets/guide/book_collection.png" />已收藏书籍
             </a>
           </div>
-          <div
-            class="collection-list"
-            v-for="book in collections"
-            :key="book.id"
-          >
-            <a class="collection-item" @click="ToBookDetail(book.id)">
-              <img class="collection-img" :src="book.image" />
-              <div class="collection-info">
-                《{{ book.name }}》
-                <el-rate
-                  v-model="book.star"
-                  disabled
-                  show-score
-                  text-color="#ff9900"
-                  score-template="{value}"
-                  disabled-void-color="ffffff"
-                >
-                </el-rate>
-                {{ book.author }}
-              </div>
-            </a>
+          <div v-if="collections.length > 0">
+            <div
+              class="collection-list"
+              v-for="book in collections"
+              :key="book.id"
+            >
+              <a class="collection-item" @click="ToBookDetail(book.id)">
+                <img class="collection-img" :src="book.image" />
+                <div class="collection-info">
+                  《{{ book.name }}》
+                  <el-rate
+                    v-model="book.star"
+                    disabled
+                    show-score
+                    text-color="#ff9900"
+                    score-template="{value}"
+                    disabled-void-color="ffffff"
+                  >
+                  </el-rate>
+                  {{ book.author }}
+                </div>
+              </a>
+            </div>
           </div>
         </div>
         <div class="collection">
@@ -200,11 +202,11 @@ import qs from "qs";
 export default {
   name: "MyComponent",
   data() {
-    var hotbooks = [{}];
-    var highbooks = [{}];
+    var hotbooks = [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}];
+    var highbooks = [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}];
     var bookcomments = [];
-    var collections = [{}];
-    var passages = [{}];
+    var collections = [];
+    var passages = [];
     var loadSuccess = false;
     return {
       hotbooks,
@@ -219,7 +221,7 @@ export default {
     VueSlickCarousel,
     search,
   },
-  
+
   methods: {
     ToBookDetail(id) {
       this.$router.push({
@@ -231,7 +233,6 @@ export default {
       this.$router.push({ name: "bookcomment", query: { id: id } });
     },
     async updateCollection() {
-      if(!this.$store.getters.getUser || this.$store.getters.getUser.user.id===-1) return;
       var params = {
         user_id: this.$store.getters.getUser.user.id,
       };
@@ -245,8 +246,9 @@ export default {
             for (i = 0; i < 3 && i < res.data.data.length; i++) {
               res.data.data[i].star = parseFloat(res.data.data[i].star);
               this.collections.push(res.data.data[i]);
-              if(this.collections[i].author.length>11)
-              this.collections[i].author = this.collections[i].author.substring(0,10)+'…'
+              if (this.collections[i].author.length > 11)
+                this.collections[i].author =
+                  this.collections[i].author.substring(0, 10) + "…";
             }
           } else {
             this.$message.error("查询失败");
@@ -258,7 +260,6 @@ export default {
       this.loaddata = true;
     },
     async updatePassage() {
-      if(!this.$store.getters.getUser || this.$store.getters.getUser.user.id===-1) return;
       var params = {
         user_id: this.$store.getters.getUser.user.id,
       };
@@ -309,7 +310,7 @@ export default {
         var len = this.$axios.defaults.baseURL.length;
         icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
       }
-      return { icon: icon  };
+      return { icon: icon };
     },
     ToText(HTML) {
       var input = HTML;
@@ -563,8 +564,8 @@ div.comment-origin-pic {
   color: rgb(0, 166, 255);
 }
 .iconOfuser {
-  height:30px;
-  width:30px;
+  height: 30px;
+  width: 30px;
   border-radius: 20px;
   margin-right: 5px;
   vertical-align: sub;
@@ -615,7 +616,7 @@ a.comment-book-name {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
-  height:140px;
+  height: 140px;
 }
 .collection-list a:hover {
   background-color: #91919155;
@@ -644,7 +645,7 @@ a.comment-book-name {
   display: flex;
 }
 .collection-info {
-  margin:auto;
+  margin: auto;
   font-size: 15px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
@@ -667,7 +668,7 @@ a.comment-book-name {
   color: rgb(2, 98, 182);
 }
 .search-number {
-  margin-top:50px;
+  margin-top: 50px;
   margin-left: 300px;
 }
 </style>

@@ -107,6 +107,7 @@
       </div>
       <div class="aside">
         <div class="collection">
+          <div class="colletion-list-1">
           <div class="title">
             <a href="../user/topics">
               <img src="@/assets/guide/star_topic.png" />已关注话题
@@ -117,6 +118,7 @@
               <a @click="ToTopicDetail(collect.id)">{{ collect.name }}</a>
             </li>
           </ul>
+          </div>
           <div class="title">
             <a href="../user/topics">
               <img src="@/assets/guide/mycomment.png" />已发布动态
@@ -290,6 +292,9 @@ div.title {
 }
 .collection a:active {
   color: rgb(0, 166, 255);
+}
+.colletion-list-1{
+  height:135px;
 }
 .collection-list a {
   font-size: 17.5px;
@@ -510,20 +515,20 @@ export default {
     };
   },
   methods: {
-    share(){
-            var domUrl = document.createElement("input");
-            domUrl.value = window.location.href;
-            domUrl.id = "creatDom";
-            document.body.appendChild(domUrl);
-            domUrl.select(); // 选择对象
-            document.execCommand('Copy', 'false', null );
-            let creatDom = document.getElementById("creatDom");
-            creatDom.parentNode.removeChild(creatDom);
-            this.$message({
-                message: '复制成功',
-                type: 'success'
-            });
-        },
+    share() {
+      var domUrl = document.createElement("input");
+      domUrl.value = window.location.href;
+      domUrl.id = "creatDom";
+      document.body.appendChild(domUrl);
+      domUrl.select(); // 选择对象
+      document.execCommand("Copy", "false", null);
+      let creatDom = document.getElementById("creatDom");
+      creatDom.parentNode.removeChild(creatDom);
+      this.$message({
+        message: "复制成功",
+        type: "success",
+      });
+    },
     displayIcon(url) {
       var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
       if (url !== "") {
@@ -545,6 +550,13 @@ export default {
         .replace(/>/g, " ");
     },
     favor() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
+        return;
+      }
       this.liked = !this.liked;
       if (this.liked) this.clickcollect();
       else this.clickuncollect();
@@ -560,8 +572,7 @@ export default {
       }
     },
     getStyle(url) {
-      if(!url)
-      return;
+      if (!url) return;
       var img = new Image();
       img.src = url;
       if (img.width / img.height > 1.5) return "height:180px;width:auto";
@@ -621,8 +632,11 @@ export default {
       }
     },
     clickcollect() {
-      if (this.$store.getters.getUser.user.id === -1) {
-        this.$message.error("请先登录");
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
         return;
       }
       var params = {
@@ -655,8 +669,11 @@ export default {
       });
     },
     clickuncollect() {
-      if (this.$store.getters.getUser.user.id === -1) {
-        this.$message.error("请先登录");
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
         return;
       }
       var params = {
@@ -849,6 +866,14 @@ export default {
         });
     },
     writeTopicDt() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
+        return;
+      }
+
       this.$router.push({
         name: "topicDtEditor",
         query: {

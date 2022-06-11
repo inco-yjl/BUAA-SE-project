@@ -172,10 +172,10 @@
             >
               <div class="display-publisher">
                 <a class="userOfreply" @click="toUser(sreply.userid)">
-                  <img class="iconOfuser" :src="displayIcon(reply.usericon)" /><span
-                    class="nameOfuser"
-                    >{{ sreply.author_name }}</span
-                  >
+                  <img
+                    class="iconOfuser"
+                    :src="displayIcon(reply.usericon)"
+                  /><span class="nameOfuser">{{ sreply.author_name }}</span>
                 </a>
                 <span class="publishtime">{{ reply.date }}</span>
               </div>
@@ -289,54 +289,62 @@ export default {
     };
   },
   methods: {
-    share(){
-            var domUrl = document.createElement("input");
-            domUrl.value = window.location.href;
-            domUrl.id = "creatDom";
-            document.body.appendChild(domUrl);
-            domUrl.select(); // 选择对象
-            document.execCommand('Copy', 'false', null );
-            let creatDom = document.getElementById("creatDom");
-            creatDom.parentNode.removeChild(creatDom);
-            this.$message({
-                message: '复制成功',
-                type: 'success'
-            });
-        },
-        replyTo(reply) {
+    share() {
+      var domUrl = document.createElement("input");
+      domUrl.value = window.location.href;
+      domUrl.id = "creatDom";
+      document.body.appendChild(domUrl);
+      domUrl.select(); // 选择对象
+      document.execCommand("Copy", "false", null);
+      let creatDom = document.getElementById("creatDom");
+      creatDom.parentNode.removeChild(creatDom);
+      this.$message({
+        message: "复制成功",
+        type: "success",
+      });
+    },
+    replyTo(reply) {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ){
+        this.$message.error("请先登录！");
+        return;
+      }
+        
       var params = {
         article_id: this.id,
         author_id: this.$store.getters.getUser.user.id,
         text: this.textarea,
         reply_to: reply.reply_id,
       };
-      this.$axios
-        .post("/passage/reply", qs.stringify(params))
-        .then((res) => {
-          if (res.data.errno === 0) {
-            this.$message({
-              type: "success",
-              message: res.data.msg,
-            });
-            this.textarea="";
-            this.updateReply();
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        });
+      this.$axios.post("/passage/reply", qs.stringify(params)).then((res) => {
+        if (res.data.errno === 0) {
+          this.$message({
+            type: "success",
+            message: res.data.msg,
+          });
+          this.textarea = "";
+          this.updateReply();
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
     },
     updateReply() {
       var params = {
         article_id: this.id,
       };
-      this.$axios.post("/passage/get_reply", qs.stringify(params)).then((res) => {
-        if (res.data.errno === 0) {
-          console.log(res.data.data)
-          this.replys = res.data.data;
-        } else {
-          this.$message.error(res.data.msg);
-        }
-      });
+      this.$axios
+        .post("/passage/get_reply", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.data);
+            this.replys = res.data.data;
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
     },
     displayIcon(url) {
       var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
@@ -348,26 +356,31 @@ export default {
       return icon;
     },
     Topreply() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ){
+        this.$message.error("请先登录！");
+        return;
+      }
       var params = {
         article_id: this.id,
         author_id: this.$store.getters.getUser.user.id,
         text: this.textarea,
         reply_to: 0,
       };
-      this.$axios
-        .post("/passage/reply", qs.stringify(params))
-        .then((res) => {
-          if (res.data.errno === 0) {
-            this.$message({
-              type: "success",
-              message: res.data.msg,
-            });
-            this.textarea="";
-            this.updateReply();
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        });
+      this.$axios.post("/passage/reply", qs.stringify(params)).then((res) => {
+        if (res.data.errno === 0) {
+          this.$message({
+            type: "success",
+            message: res.data.msg,
+          });
+          this.textarea = "";
+          this.updateReply();
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
     },
     ToComment(id) {
       this.$router.push({ name: "telecomment", query: { id: id } });
@@ -404,11 +417,11 @@ export default {
       params = {
         tele_id: this.source.id,
       };
-      console.log(this.source.id)
+      console.log(this.source.id);
       this.$axios
         .post("/tele/recommend", qs.stringify(params))
         .then((res) => {
-          console.log('recommend')
+          console.log("recommend");
           if (res.data.errno === 0) {
             this.recommends = [];
             var i;
@@ -537,11 +550,6 @@ export default {
         this.$axios.defaults.baseURL.substring(0, len - 4) + this.passage.icon;
     },
     updateLike() {
-      if (
-        !this.$store.getters.getUser ||
-        this.$store.getters.getUser.user.id === -1
-      )
-        return;
       var user = this.$store.getters.getUser.user;
       var params = {
         user_id: user.id,
@@ -551,9 +559,9 @@ export default {
         .post("/passage/iflike", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
-            console.log('like');
+            console.log("like");
             var iflike = parseInt(res.data.data);
-            console.log(iflike)
+            console.log(iflike);
             if (iflike === 1) this.like = true;
             else this.like = false;
           } else {
@@ -579,7 +587,7 @@ export default {
             this.passage.date = this.passage.date.substring(0, 10);
             this.source.star = parseFloat(this.source.star);
             this.passage.like = parseInt(this.passage.like);
-            this.like
+            this.like;
             this.passage.reply = parseInt(this.passage.reply);
             this.updateIcon();
             this.loadSuccess = true;
@@ -649,6 +657,13 @@ export default {
         });
     },
     clickreply() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ){
+        this.$message.error("请先登录！");
+        return;
+      }
       if (this.Toreply === false) this.Toreply = true;
       else this.Toreply = false;
     },
@@ -753,12 +768,12 @@ export default {
 .passage-text >>> {
   font-size: 17px;
   line-height: 32px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 .passage-text >>> span {
   font-size: 17px !important;
   line-height: 32px !important;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif!important;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif !important;
 }
 
 .user-buttons {
@@ -925,7 +940,7 @@ a.replied-user {
   margin-right: 20px;
 }
 .source-info {
-  margin:auto;
+  margin: auto;
   font-size: 15px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
@@ -941,7 +956,7 @@ a.replied-user {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
-  height:140px;
+  height: 140px;
 }
 .source-book a:hover {
   background-color: #91919155;

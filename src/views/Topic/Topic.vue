@@ -99,6 +99,7 @@
       </div>
       <div class="aside">
         <div class="collection">
+          <div class="collection-list-1">
           <div class="title">
             <a href="../user/topics">
               <img src="@/assets/guide/star_topic.png" />已关注话题
@@ -109,6 +110,7 @@
               <a @click="ToTopicDetail(collect.id)">{{ collect.name }}</a>
             </li>
           </ul>
+          </div>
           <div class="title">
             <a href="../user/topics">
               <img src="@/assets/guide/mycomment.png" />已发布动态
@@ -331,6 +333,9 @@ div.title {
 }
 .collection a:active {
   color: rgb(0, 166, 255);
+}
+.collection-list-1{
+  height:135px;
 }
 .collection-list a {
   font-size: 18px;
@@ -603,18 +608,6 @@ export default {
       var i = 0;
       for (i = 0; i < length; i++) {
         this.dts.push(this.allDts[currentPage * 3 - 3 + i]);
-      }
-    },
-    favor(id) {
-      this.liked = !this.liked;
-      if (this.liked) {
-        this.content = "已关注";
-        this.bg_color = "#6cf57c";
-        this.ft_color = "#f2fef0";
-      } else {
-        this.content = "+关注话题";
-        this.bg_color = "#f2fef0";
-        this.ft_color = "#6cf57c";
       }
     },
     change() {

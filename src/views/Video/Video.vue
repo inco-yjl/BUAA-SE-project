@@ -231,29 +231,27 @@ export default {
   name: "MyComponent",
   data() {
     var hotmes= [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}];//我也没办法，加载好慢
-    var hotmoives = [{}];
+    var hotmovies = [{}];
     var hottele = [{}];
     var highmes=[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}];
-    var highmoives = [{}];
-    var hightele = [{}];
-    var highmovies = [{}];
+    var highmovies = [];
+    var hightele = [];
     var moviecomments = [
     ];
-    var collections = [{}];
-    var passages = [{}];
+    var collections = [];
+    var passages = [];
     var loadSuccess = false;
-    var telecollections = [{}];
-    var moviecollections = [{}];
+    var telecollections = [];
+    var moviecollections = [];
     var ismovie;
     return {
       hotmes,
-      hotmoives,
+      hotmovies,
       hottele,
       highmes,
-      highmoives,
-      hightele,
-      hotmovies: hotmoives,
       highmovies,
+      hightele,
+      hotmovies: hotmovies,
       moviecomments,
       collections,
       passages,
@@ -293,7 +291,7 @@ export default {
       document
         .getElementById("select-follow-topic-dt")
         .setAttribute("class", "selection_un");
-      this.hotmes = this.hotmoives;
+      this.hotmes = this.hotmovies;
     },
     specifyTopicdt() {
       document
@@ -306,7 +304,7 @@ export default {
       document
         .getElementById("select-follow-topic-dt-point")
         .setAttribute("class", "selection_un");
-      this.highmes = this.highmoives;
+      this.highmes = this.highmovies;
     },
     specifyTopicdtpoint() {
       document
@@ -369,12 +367,12 @@ export default {
         .replace(/>/g, " ");
     },
     ToVideoDetail(id) {
-      if (this.hotmes === this.hotmoives) {
+      if (this.hotmes === this.hotmovies) {
         this.$router.push({
           name: "moviedetail",
           query: { id: id },
         });
-        this.hotmes = this.hotmoives;
+        this.hotmes = this.hotmovies;
       } else if (this.hotmes === this.hottele) {
         this.$router.push({
           name: "teledetail",
@@ -384,12 +382,12 @@ export default {
       }
     },
     ToVideoDetailpoint(id) {
-      if (this.highmes === this.highmoives) {
+      if (this.highmes === this.highmovies) {
         this.$router.push({
           name: "moviedetail",
           query: { id: id },
         });
-        this.highmes = this.highmoives;
+        this.highmes = this.highmovies;
       } else if (this.highmes === this.hightele) {
         this.$router.push({
           name: "teledetail",
@@ -522,15 +520,15 @@ export default {
               if (movie[i].director.length > 10)
                 movie[i].director = movie[i].director.substring(0, 9) + "…";
             }
-            this.hotmoives = [];
+            this.hotmovies = [];
             for (i = 0; i < 20; i = i + 2) {
-              this.hotmoives.push({
+              this.hotmovies.push({
                 movie1: movie[i],
                 movie2: movie[i + 1],
                 id: i,
               });
             }
-            this.hotmes = this.hotmoives;
+            this.hotmes = this.hotmovies;
           } else {
             this.$message.error("查询失败");
           }
@@ -592,15 +590,15 @@ export default {
                 movie[i].name = movie[i].name.substring(0, 6) + "…";
               movie.star = parseFloat(movie.star);
             }
-            this.highmoives = [];
+            this.highmovies = [];
             for (i = 0; i < 20; i = i + 2) {
-              this.highmoives.push({
+              this.highmovies.push({
                 movie1: movie[i],
                 movie2: movie[i + 1],
                 id: i,
               });
             }
-            this.highmes = this.highmoives;
+            this.highmes = this.highmovies;
           } else {
             this.$message.error("查询失败");
           }

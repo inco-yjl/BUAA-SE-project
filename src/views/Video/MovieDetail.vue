@@ -32,7 +32,7 @@
                   <div class="score">
                     <strong class="num">{{ movie.score }}</strong>
                   </div>
-                   <div>{{ peoplenum }}人评价</div>
+                  <div>{{ peoplenum }}人评价</div>
                 </div>
               </div>
               <div>
@@ -173,9 +173,7 @@
                   class="commenttext-origin"
                   @click="Tomoviecomment(comment.id)"
                 >
-                  <span class="comment-title">
-                    {{ comment.title }} </span
-                  ><br />
+                  <span class="comment-title"> {{ comment.title }} </span><br />
                   {{ comment.content }}</a
                 >
               </div>
@@ -263,23 +261,26 @@ export default {
     };
   },
   methods: {
-    share(){
-            var domUrl = document.createElement("input");
-            domUrl.value = window.location.href;
-            domUrl.id = "creatDom";
-            document.body.appendChild(domUrl);
-            domUrl.select(); // 选择对象
-            document.execCommand('Copy', 'false', null );
-            let creatDom = document.getElementById("creatDom");
-            creatDom.parentNode.removeChild(creatDom);
-            this.$message({
-                message: '复制成功',
-                type: 'success'
-            });
-        },
+    share() {
+      var domUrl = document.createElement("input");
+      domUrl.value = window.location.href;
+      domUrl.id = "creatDom";
+      document.body.appendChild(domUrl);
+      domUrl.select(); // 选择对象
+      document.execCommand("Copy", "false", null);
+      let creatDom = document.getElementById("creatDom");
+      creatDom.parentNode.removeChild(creatDom);
+      this.$message({
+        message: "复制成功",
+        type: "success",
+      });
+    },
     clickcollect() {
-      if (this.$store.getters.getUser.user.id === -1) {
-        this.$message.error("请先登录");
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
         return;
       }
       var params = {
@@ -305,8 +306,11 @@ export default {
         });
     },
     writeComment() {
-      if (this.$store.getters.getUser.user.id === -1) {
-        this.$message.error("请先登录");
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
         return;
       } else {
         this.$router.push({
@@ -322,8 +326,11 @@ export default {
       });
     },
     clickuncollect() {
-      if (this.$store.getters.getUser.user.id === -1) {
-        this.$message.error("请先登录");
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
         return;
       }
       var params = {
@@ -362,12 +369,10 @@ export default {
             console.log(res.data.data);
             this.collections = [];
             var i = 0;
-            for (i = 0; i < 3 && i < res.data.data.length; i++){
-              res.data.data[i].star=parseFloat(res.data.data[i].star);
+            for (i = 0; i < 3 && i < res.data.data.length; i++) {
+              res.data.data[i].star = parseFloat(res.data.data[i].star);
               this.collections.push(res.data.data[i]);
-
             }
-              
           } else {
             this.$message.error("查询失败");
           }
@@ -531,6 +536,14 @@ export default {
         });
     },
     starTheMovie() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.evaluate = 0;
+        this.$message.error("请先登录！");
+        return;
+      }
       var params = {
         user_id: this.$store.getters.getUser.user.id,
         movie_id: this.id,
@@ -816,7 +829,7 @@ export default {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
-  height:140px;
+  height: 140px;
 }
 .collection-list a:hover {
   background-color: #91919155;

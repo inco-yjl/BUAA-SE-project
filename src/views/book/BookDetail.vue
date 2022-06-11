@@ -170,12 +170,11 @@
               </div>
               <div class="commenttext">
                 <a class="commenttext-origin" @click="ToComment(comment.id)">
-                <span class="comment-title">
-                  {{comment.title}}
-                </span><br>
-                {{
-                  comment.content
-                }}</a>
+                  <span class="comment-title">
+                    {{ comment.title }} </span
+                  ><br />
+                  {{ comment.content }}</a
+                >
               </div>
             </div>
           </div>
@@ -215,8 +214,8 @@ export default {
     var bookcomments = [{}];
     var allComments = [];
     var loadSuccess = false;
-    var collections = [{}];
-    var passages = [{}];
+    var collections = [];
+    var passages = [];
     var collect = false;
     var style1;
     var style2;
@@ -246,20 +245,20 @@ export default {
     };
   },
   methods: {
-    share(){
-            var domUrl = document.createElement("input");
-            domUrl.value = window.location.href;
-            domUrl.id = "creatDom";
-            document.body.appendChild(domUrl);
-            domUrl.select(); // 选择对象
-            document.execCommand('Copy', 'false', null );
-            let creatDom = document.getElementById("creatDom");
-            creatDom.parentNode.removeChild(creatDom);
-            this.$message({
-                message: '复制成功',
-                type: 'success'
-            });
-        },
+    share() {
+      var domUrl = document.createElement("input");
+      domUrl.value = window.location.href;
+      domUrl.id = "creatDom";
+      document.body.appendChild(domUrl);
+      domUrl.select(); // 选择对象
+      document.execCommand("Copy", "false", null);
+      let creatDom = document.getElementById("creatDom");
+      creatDom.parentNode.removeChild(creatDom);
+      this.$message({
+        message: "复制成功",
+        type: "success",
+      });
+    },
     ToComment(id) {
       console.log(id);
       this.$router.push({ name: "bookcomment", query: { id: id } });
@@ -323,8 +322,11 @@ export default {
         });
     },
     writeComment() {
-      if (this.$store.getters.getUser.user.id === -1) {
-        this.$message.error("请先登录");
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
         return;
       } else {
         this.$router.push({
@@ -334,6 +336,12 @@ export default {
       }
     },
     async updateCollection() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        return;
+      }
       var params = {
         user_id: this.$store.getters.getUser.user.id,
       };
@@ -348,8 +356,9 @@ export default {
             for (i = 0; i < 3 && i < res.data.data.length; i++) {
               res.data.data[i].star = parseFloat(res.data.data[i].star);
               this.collections.push(res.data.data[i]);
-              if(this.collections[i].author.length>11)
-              this.collections[i].author = this.collections[i].author.substring(0,10)+'…'
+              if (this.collections[i].author.length > 11)
+                this.collections[i].author =
+                  this.collections[i].author.substring(0, 10) + "…";
             }
           } else {
             this.$message.error("查询失败");
@@ -532,6 +541,14 @@ export default {
         });
     },
     starTheBook() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.evaluate = 0;
+        this.$message.error("请先登录！");
+        return;
+      }
       var params = {
         user_id: this.$store.getters.getUser.user.id,
         book_id: this.id,
@@ -797,7 +814,7 @@ export default {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
-  height:140px;
+  height: 140px;
 }
 .collection-list a:hover {
   background-color: #91919155;
@@ -826,7 +843,7 @@ export default {
   display: flex;
 }
 .collection-info {
-  margin:auto;
+  margin: auto;
   font-size: 15px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
@@ -925,7 +942,7 @@ button.selection_un {
 }
 
 .iconOfuser {
-  height:40px;
+  height: 40px;
   width: 40px;
   border-radius: 20px;
   margin-right: 5px;
@@ -958,7 +975,7 @@ a.commenttext-origin span:hover {
   text-decoration: underline;
 }
 .search-number {
-  margin-top:50px;
+  margin-top: 50px;
   margin-left: 300px;
 }
 </style>

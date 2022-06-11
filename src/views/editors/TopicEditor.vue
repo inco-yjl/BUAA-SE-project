@@ -12,7 +12,7 @@
         >此动态将被发布到<span class="topic-name">{{ topic.name }}</span
         >话题下</span
       >
-      <p class="topic-intro">简介:{{ topic.intro }}</p>
+      <p class="topic-intro">简介:<span v-html="topic.intro"></span></p>
     </div>
     <!--2.这里id对应new Vditor('vditor',{...})的第一个参数vidtor-->
     <div id="editor"></div>
@@ -120,6 +120,14 @@ export default {
       });
     },
     UploadDt() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ){
+        this.$message.error("请先登录！");
+        this.backToTopic();
+        return;
+      }
       this.passage = this.editor.txt.html();
       if (this.passage.length > 10000) {
         this.$message.error("字数过多！不得超过10000字");
