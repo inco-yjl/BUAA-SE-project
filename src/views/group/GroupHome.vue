@@ -52,21 +52,24 @@
           <div class="comment-display-groupPage">
             <div class="display-publisher">
               <a class="userOfcomment" href="/otherusers/1">
-                <img class="iconOfuser" :src="comment.usericon" /><span
-                  class="nameOfuser"
-                  >{{ comment.username }}</span
-                >
+                <img
+                  class="iconOfuser"
+                  :src="displayIcon(comment.usericon)"
+                /><span class="nameOfuser">{{ comment.username }}</span>
               </a>
               <span class="publish-info"
-                >{{ comment.date }}&ensp;发布于<a class="comment-book-name">{{
-                  comment.groupname
-                }}</a></span
+                >{{ newDate(comment.date) }}&ensp;发布于<a
+                  class="comment-book-name"
+                  >{{ comment.groupname }}</a
+                ></span
               >
             </div>
 
             <div class="commenttext">
-              <a class="commenttext-origin" >
-                {{comment.content}}</a> 
+              <a class="commenttext-origin" @click="grouppassage(comment.id)">
+                <span class="comment-title"> {{ comment.title }} </span><br />
+                {{ comment.content }}</a
+              >
             </div>
           </div>
         </div>
@@ -97,15 +100,7 @@
             <img class="collection-img" :src="group.img" />
             <div class="collection-info">
               {{ group.name }}
-              <el-rate
-                v-model="group.star"
-                disabled
-                show-score
-                text-color="#ff9900"
-                score-template="{value}"
-                disabled-void-color="ffffff"
-              >
-              </el-rate>
+              <br />
               {{ group.member }}人参与
             </div>
           </a>
@@ -145,93 +140,7 @@ export default {
   data() {
     var hotgroup = [{}];
     var addgroup = [{}];
-    var maxgroup = [
-      {
-        name: "星空",
-        id: 8,
-        img: "https://i.imgtg.com/2022/05/23/hgC1N.jpg",
-        number: 451,
-      },
-      {
-        name: "茉莉花",
-        id: 9,
-        img: " https://i.imgtg.com/2022/05/23/hgwDC.jpg",
-        number: 456,
-      },
-      {
-        name: "书法",
-        id: 10,
-        img: " https://i.imgtg.com/2022/05/23/hmM8L.jpg",
-        number: 982,
-      },
-      {
-        name: "修猫",
-        id: 11,
-        img: " https://i.imgtg.com/2022/05/23/hmaxi.jpg",
-        number: 238,
-      },
-      {
-        name: "奇观",
-        id: 12,
-        img: " https://i.imgtg.com/2022/05/23/hmopX.jpg",
-        number: 2123,
-      },
-      {
-        name: "樱岛",
-        id: 13,
-        img: "https://i.imgtg.com/2022/05/23/hmqft.jpg",
-        number: 123,
-      },
-      {
-        name: "喜羊羊与灰太狼",
-        id: 14,
-        img: "https://i.imgtg.com/2022/05/23/hmBBx.jpg",
-        number: 10985,
-      },
-    ];
-    var hopmessage = [
-      {
-        name: "星空",
-        id: 8,
-        number: 451,
-      },
-      {
-        name: "茉莉花",
-        id: 9,
-        img: " https://i.imgtg.com/2022/05/23/hgwDC.jpg",
-        number: 456,
-      },
-      {
-        name: "书法",
-        id: 10,
-        img: " https://i.imgtg.com/2022/05/23/hmM8L.jpg",
-        number: 982,
-      },
-      {
-        name: "修猫",
-        id: 11,
-        img: " https://i.imgtg.com/2022/05/23/hmaxi.jpg",
-        number: 238,
-      },
-      {
-        name: "奇观",
-        id: 12,
-        img: " https://i.imgtg.com/2022/05/23/hmopX.jpg",
-        number: 2123,
-      },
-      {
-        name: "樱岛",
-        id: 13,
-        img: "https://i.imgtg.com/2022/05/23/hmqft.jpg",
-        number: 123,
-      },
-      {
-        name: "喜羊羊与灰太狼",
-        id: 14,
-        img: "https://i.imgtg.com/2022/05/23/hmBBx.jpg",
-        number: 10985,
-      },
-    ];
+    var maxgroup = [];
     var groupcommit = [
       {
         name: "喜羊羊与灰太狼",
@@ -259,14 +168,14 @@ export default {
     ToText(HTML) {
       var input = HTML;
       return input
-          .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
-          .replace(/<[^>]+?>/g, "")
-          .replace(/[ ]|[&ensp;]/g, "")
-          .replace(/[ ]|[&nbsp;]/g, "")
-          .replace(/<[^>]+?>/g, "")
-          .replace(/\s+/g, " ")
-          .replace(/ /g, " ")
-          .replace(/>/g, " ");
+        .replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/[ ]|[&ensp;]/g, "")
+        .replace(/[ ]|[&nbsp;]/g, "")
+        .replace(/<[^>]+?>/g, "")
+        .replace(/\s+/g, " ")
+        .replace(/ /g, " ")
+        .replace(/>/g, " ");
     },
     gethootgroupmes() {
       var params = {
@@ -304,77 +213,87 @@ export default {
         user_id: this.$store.getters.getUser.user.id,
       };
       this.$axios
-          .post("/group/mygroup", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              console.log("13215645646");
-              this.addgroup = [];
-              var i = 0;
-              for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                this.addgroup.push(res.data.data[i]);
-              }
+        .post("/group/mygroup", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            console.log("13215645646");
+            this.addgroup = [];
+            var i = 0;
+            for (i = 0; i < 6 && i < res.data.data.length; i++) {
+              this.addgroup.push(res.data.data[i]);
             }
-            else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    newDate(thedate) {
+      return thedate.substring(0, 10);
     },
     getmaxgroup() {
       var params = {
         num: 6,
       };
       this.$axios
-          .post("/group/biggroup", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              console.log("13215645646");
-              this.maxgroup = [];
-              var i = 0;
-              for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                this.maxgroup.push(res.data.data[i]);
-              }
+        .post("/group/biggroup", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            console.log("13215645646");
+            this.maxgroup = [];
+            var i = 0;
+            for (i = 0; i < 6 && i < res.data.data.length; i++) {
+              this.maxgroup.push(res.data.data[i]);
             }
-            else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    displayIcon(url) {
+      var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+      if (url !== "") {
+        var len = this.$axios.defaults.baseURL.length;
+        icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
+      }
+      return icon;
     },
     gethotcommit() {
       var params = {
         num: 6,
       };
       this.$axios
-          .post("/group/hotpassage", qs.stringify(params))
-          .then((res) => {
-            console.log("biebbl");
-            console.log(res);
-            if (res.data.errno === 0) {
-              console.log("13215645646");
-              this.groupcommit = [];
-              var i = 0;
-              for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                this.groupcommit.push(res.data.data[i]);
-              }
-              for(i = 0;i < this.groupcommit.length;i++) {
-                this.groupcommit[i].content = this.ToText(this.groupcommit[i].content);
-              }
+        .post("/group/hotpassage", qs.stringify(params))
+        .then((res) => {
+          console.log("biebbl");
+          console.log(res);
+          if (res.data.errno === 0) {
+            console.log("13215645646");
+            this.groupcommit = [];
+            var i = 0;
+            for (i = 0; i < 6 && i < res.data.data.length; i++) {
+              this.groupcommit.push(res.data.data[i]);
             }
-            else {
-              this.$message.error("查询失败");
+            for (i = 0; i < this.groupcommit.length; i++) {
+              this.groupcommit[i].content = this.ToText(
+                this.groupcommit[i].content
+              );
             }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-    }
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   mounted() {
     this.gethootgroupmes();
@@ -460,6 +379,7 @@ export default {
   margin-bottom: 50px;
 }
 .book-comments-display {
+  margin-top: 50px;
   width: 1000px;
 }
 .comment-display-body {
@@ -575,10 +495,10 @@ a.comment-book-name {
 .collection .bookpage-title a:active {
   color: rgb(0, 166, 255);
 }
-.img-block{
+.img-block {
   display: inline;
-  height:85px;
-  width:85px;
+  height: 85px;
+  width: 85px;
   overflow: hidden;
   margin-right: 20px;
 }
@@ -673,7 +593,7 @@ div.comment-origin-pic {
 }
 a.commenttext-origin {
   position: relative;
-  top: 36px;
+  top: 20px;
   font-size: 17px;
   text-decoration: none;
   font-family: Helvetica, Arial, sans-serif;

@@ -160,7 +160,7 @@
             <hr />
             <div class="comment-display-body">
               <div class="display-publisher">
-                <a class="userOfcomment" href="/otherusers/1">
+                <a class="userOfcomment" @click="ToUser(comment.userid)">
                   <img class="iconOfuser" :src="comment.usericon" /><span
                     class="nameOfuser"
                     >{{ comment.username }}</span
@@ -170,9 +170,7 @@
               </div>
               <div class="commenttext">
                 <a class="commenttext-origin" @click="ToComment(comment.id)">
-                  <span class="comment-title">
-                    {{ comment.title }} </span
-                  ><br />
+                  <span class="comment-title"> {{ comment.title }} </span><br />
                   {{ comment.content }}</a
                 >
               </div>
@@ -245,6 +243,9 @@ export default {
     };
   },
   methods: {
+    ToUser(id) {
+      this.$router.push({ name: "users", query: { id: id } });
+    },
     share() {
       var domUrl = document.createElement("input");
       domUrl.value = window.location.href;

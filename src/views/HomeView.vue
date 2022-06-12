@@ -123,7 +123,7 @@
               class="comment"
             >
               <hr />
-              <a class="userOfcomment">
+              <a class="userOfcomment" @click="ToUser(comment.user_id)">
                 <img class="iconOfuser" :src="comment.usericon" /><span
                   class="nameOfuser"
                   >{{ comment.username }}</span
@@ -139,7 +139,7 @@
                   /></a>
                 </div>
                 <div class="comments-text">
-                  <a class="commentlist" @click="ToComment(comment.id)">
+                  <a class="commentlist" @click="ToBookComment(comment.id)">
                     <span class="comment-title"> {{ comment.title }} </span
                     ><br />{{ comment.content }}</a
                   >
@@ -169,7 +169,7 @@
               class="comment"
             >
               <hr />
-              <a class="userOfcomment">
+              <a class="userOfcomment" @click="ToUser(comment.user_id)">
                 <img
                   class="iconOfuser"
                   :src="comment.usericon"
@@ -185,7 +185,7 @@
                   /></a>
                 </div>
                 <div class="comments-text">
-                  <a class="commentlist" @click="ToComment(comment.id)">
+                  <a class="commentlist" @click="ToMovieComment(comment.id)">
                     <span class="comment-title"> {{ comment.title }} </span
                     ><br />{{ comment.content }}</a
                   >
@@ -575,9 +575,16 @@ export default {
     VueSlickCarousel,
   },
   methods: {
-    ToComment(id) {
+    ToUser(id){
+      this.$router.push({ name: "users", query: { id: id } });
+    },
+    ToBookComment(id) {
       console.log(id);
       this.$router.push({ name: "bookcomment", query: { id: id } });
+    },
+    ToMovieComment(id) {
+      console.log(id);
+      this.$router.push({ name: "moviecomment", query: { id: id } });
     },
     //this is the function to update the images of books
     logout() {

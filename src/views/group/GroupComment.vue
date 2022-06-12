@@ -2,7 +2,7 @@
   <div id="comment-editor">
     <div id="editor-header">
       <div class="return-to-group">
-        <button @click="backToBook">返回电视剧页</button>
+        <button @click="backToBook">返回小组页</button>
       </div>
       <div class="header-logo"></div>
       <div class="post-group-comment">
@@ -226,7 +226,7 @@ export default {
       }
       if(this.passage.length<25)
       {
-        this.$message.error("评论正文至少25个字符");
+        this.$message.error("正文至少25个字符");
         return;
       }
       var params = {

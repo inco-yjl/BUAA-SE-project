@@ -68,6 +68,41 @@ const routes = [
     component: () => import('../views/editors/CommentEditor.vue')
   },
   {
+    path: '/video',
+    name: 'video',
+    component: () => import('../views/Video/Video.vue')
+  },
+  {
+    path: 'video/telecomment',
+    name: 'telecomment',
+    component: () => import('../views/Video/TeleComment.vue')
+  },
+  {
+    path: 'video/moviecomment',
+    name: 'moviecomment',
+    component: () => import('../views/Video/MovieComment.vue')
+  },
+  {
+    path: '/video/movie/detail',
+    name: 'moviedetail',
+    component: () => import('../views/Video/MovieDetail.vue')
+  },
+  {
+    path: '/video/tele/detail',
+    name: 'teledetail',
+    component: () => import('../views/Video/TeleDetail.vue')
+  },
+  {
+    path: '/movieeditor',
+    name: 'movieeditor',
+    component: () => import('../views/Video/MovieEditor.vue')
+  },
+  {
+    path: '/teleeditor',
+    name: 'teleeditor',
+    component: () => import('../views/Video/TeleEditor.vue')
+  },
+  {
     path: '/passage',
     name: 'passage',
     component: () => import('../views/Passage.vue')
@@ -76,6 +111,11 @@ const routes = [
     path: '/person',
     name: 'person',
     component: () => import('../views/user/Person.vue')
+  }, 
+  {
+    path: '/users',
+    name: 'users',
+    component: () => import('../views/user/Other.vue')
   }, 
     {
       path: '/group',
@@ -133,42 +173,7 @@ const routes = [
       component: () => import('../views/group/admin.vue')
     },
     {
-      path: '/video',
-      name: 'video',
-      component: () => import('../views/Video/Video.vue')
-    },
-    {
-      path: '/video/movie/detail',
-      name: 'moviedetail',
-      component: () => import('../views/Video/MovieDetail.vue')
-    },
-    {
-      path: '/video/tele/detail',
-      name: 'teledetail',
-      component: () => import('../views/Video/TeleDetail.vue')
-    },
-    {
-      path: '/movieeditor',
-      name: 'movieeditor',
-      component: () => import('../views/Video/MovieEditor.vue')
-    },
-    {
-      path: '/teleeditor',
-      name: 'teleeditor',
-      component: () => import('../views/Video/TeleEditor.vue')
-    },
-    {
-      path: '/telecomment',
-      name: 'telecomment',
-      component: () => import('../views/Video/TeleComment.vue')
-    },
-    {
-      path: '/moviecomment',
-      name: 'moviecomment',
-      component: () => import('../views/Video/MovieComment.vue')
-    },
-    {
-      path: '/groupcomment',
+      path: '/group/comment',
       name: 'groupcomment',
       component: () => import('../views/group/GroupComment.vue')
     },

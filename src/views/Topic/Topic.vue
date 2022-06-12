@@ -837,13 +837,6 @@ export default {
       this.dtamount =this.collectamount;
       this.changeTopicdt(1);
     },
-    //this is the function to update the images of books
-    updateButton() {
-      document
-        .getElementsByClassName("selection_un")
-        .item(4)
-        .setAttribute("class", "selection_ed");
-    },
     updateCollection() {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
@@ -879,7 +872,6 @@ export default {
     },
   },
   mounted() {
-    this.updateButton();
     this.randomTopic();
     this.updateCollection();
     this.updatePassage();

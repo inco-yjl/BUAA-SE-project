@@ -53,7 +53,7 @@
         <div class="title">{{ passage.title }}</div>
         <div class="passage-info">
           <div>
-            <a class="userOfpassage" href="/otherusers/1">
+            <a class="userOfpassage" @click="ToUser(passage.user_id)">
               <img class="iconOfuser" :src="userIcon" />
               <span class="nameOfuser">{{ passage.username }}</span>
             </a>
@@ -118,7 +118,7 @@
           <div class="title">本书推荐书评</div>
           <ul class="recommend-list">
             <li v-for="passage in recommends" :key="passage.id">
-              <a>{{ passage.title }}</a>
+              <a @click="ToComment(passage.id)">{{ passage.title }}</a>
             </li>
           </ul>
         </div>
@@ -126,7 +126,7 @@
           <div class="title">该用户其他书评</div>
           <ul class="recommend-list">
             <li v-for="passage in passages" :key="passage.id">
-              <a>{{ passage.title }}</a>
+              <a @click="ToComment(passage.id)">{{ passage.title }}</a>
             </li>
           </ul>
         </div>
@@ -147,48 +147,63 @@
         <div class="title">回复</div>
         <div
           class="reply-display"
-          v-for="reply in replys"
+          v-for="(reply, index) in replys"
           :key="reply.reply_id"
         >
           <hr />
           <div class="display-publisher">
-            <a class="userOfreply" @click="toUser(reply.author_id)">
+            <a class="userOfreply" @click="ToUser(reply.author_id)">
               <img class="iconOfuser" :src="displayIcon(reply.usericon)" /><span
                 class="nameOfuser"
                 >{{ reply.author_name }}</span
               >
             </a>
-            <span class="publishtime">{{ reply.date }}</span>
           </div>
           <div class="reply-content">
             {{ reply.text }}
-            <button @click="replyTo(reply)">
+            <button @click="replyTo(index, reply)">
               <img src="@/assets/guide/sreply.png" />
             </button>
             <div
               class="sreply-display"
               v-for="sreply in reply.children"
-              :key="sreply.id"
+              :key="sreply.reply_id"
             >
               <div class="display-publisher">
-                <a class="userOfreply" @click="toUser(sreply.userid)">
+                <a class="userOfreply" @click="ToUser(sreply.author_id)">
                   <img
-                    class="iconOfuser"
-                    :src="displayIcon(reply.usericon)"
+                    style="width: 24px; height: 24px; border-radius: 24px"
+                    :src="displayIcon(sreply.usericon)"
                   /><span class="nameOfuser">{{ sreply.author_name }}</span>
                 </a>
-                <span class="publishtime">{{ reply.date }}</span>
               </div>
               <div class="reply-content">
-                <a class="replied-user" @click="toUser(sreply.replyed_userid)">
+                <a class="replied-user" @click="ToUser(sreply.replyed_userid)">
                   @{{ sreply.replyed_username }}
                 </a>
                 {{ sreply.text
-                }}<button @click="replyTo(sreply)">
+                }}<button @click="replyTo(index, sreply)">
                   <img src="@/assets/guide/sreply.png" />
                 </button>
               </div>
             </div>
+          </div>
+          <div
+            v-if="replyinput[index].ifreply === true"
+            class="second-reply-input"
+          >
+            <el-input
+              type="textarea"
+              :placeholder="replyinput[index].replyed_name"
+              rows="6"
+              v-model="textarea2"
+              maxlength="100"
+              show-word-limit
+            >
+            </el-input>
+            <el-button @click="Secondreply(replyinput[index].replyed_id)"
+              >提交</el-button
+            >
           </div>
         </div>
       </div>
@@ -228,11 +243,19 @@ export default {
       source,
       loadSuccess,
       trydelete: false,
+      replyinput: [],
       jubao,
+      textarea2: "",
       dialogFormVisible: false,
     };
   },
   methods: {
+    ToUser(id) {
+      this.$router.push({ name: "users", query: { id: id } });
+    },
+    ToComment(id) {
+      this.$router.push({ name: "bookcomment", query: { id: id } });
+    },
     share() {
       var domUrl = document.createElement("input");
       domUrl.value = window.location.href;
@@ -247,32 +270,47 @@ export default {
         type: "success",
       });
     },
-    replyTo(reply) {
-      if (
-        !this.$store.getters.getUser ||
-        this.$store.getters.getUser.user.id === -1
-      ) {
-        this.$message.error("请先登录！");
-        return;
-      }
+    Secondreply(replyed_id) {
       var params = {
         article_id: this.id,
         author_id: this.$store.getters.getUser.user.id,
-        text: this.textarea,
-        reply_to: reply.reply_id,
+        text: this.textarea2,
+        reply_to: replyed_id,
       };
-      this.$axios.post("/passage/reply", qs.stringify(params)).then((res) => {
-        if (res.data.errno === 0) {
-          this.$message({
-            type: "success",
-            message: res.data.msg,
-          });
-          this.textarea = "";
-          this.updateReply();
-        } else {
-          this.$message.error(res.data.msg);
+      console.log(replyed_id);
+      this.$axios
+        .post("/passage/reply", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            this.reply = res.data.data;
+            this.updateReply();
+            this.passage.reply = this.passage.reply + 1;
+            this.textarea2 = "";
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    replyTo(index, reply) {
+      console.log(reply);
+      if (
+        this.replyinput[index].ifreply === true &&
+        this.replyinput[index].replyed_id === reply.reply_id &&
+        this.replyinput[index].replyed_name === "@" + reply.author_name
+      ) {
+        this.replyinput[index].ifreply = false;
+      } else {
+        for (var i = 0; i < this.replyinput.length; i++) {
+          this.replyinput[i].ifreply = false;
         }
-      });
+        this.replyinput[index].replyed_id = reply.reply_id;
+        this.replyinput[index].replyed_name = "@" + reply.author_name;
+        this.replyinput[index].ifreply = true;
+      }
+      console.log(this.replyinput[index]);
     },
     updateReply() {
       var params = {
@@ -284,6 +322,12 @@ export default {
           if (res.data.errno === 0) {
             console.log(res.data.data);
             this.replys = res.data.data;
+            for (var i = 0; i < this.replys.length; i++)
+              this.replyinput.push({
+                ifreply: false,
+                replyed_id: 0,
+                replyed_name: "",
+              });
           } else {
             this.$message.error(res.data.msg);
           }
@@ -299,13 +343,6 @@ export default {
       return icon;
     },
     Topreply() {
-      if (
-        !this.$store.getters.getUser ||
-        this.$store.getters.getUser.user.id === -1
-      ) {
-        this.$message.error("请先登录！");
-        return;
-      }
       var params = {
         article_id: this.id,
         author_id: this.$store.getters.getUser.user.id,
@@ -314,12 +351,14 @@ export default {
       };
       this.$axios.post("/passage/reply", qs.stringify(params)).then((res) => {
         if (res.data.errno === 0) {
+          this.reply = res.data.data;
           this.$message({
             type: "success",
             message: res.data.msg,
           });
-          this.textarea = "";
           this.updateReply();
+          this.passage.reply = this.passage.reply + 1;
+          this.textarea = "";
         } else {
           this.$message.error(res.data.msg);
         }
@@ -667,6 +706,7 @@ export default {
 .iconOfuser {
   height: 30px;
   width: 30px;
+  border-radius: 20px;
   margin-right: 5px;
   vertical-align: sub;
 }

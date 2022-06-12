@@ -14,7 +14,7 @@
           </div>
           <div class="user-buttons">
             <div id="join-button">
-              <button v-if = "!flag" @click="join">
+              <button v-if = "!flag" @click="joinin">
                 <img src="@/assets/group/join.png" />
               </button>
               <button v-if = "flag" @click="quit()">
@@ -456,6 +456,17 @@ export default {
           });
     },
     usetonewpassage() {
+      if (
+        !this.$store.getters.getUser ||
+        this.$store.getters.getUser.user.id === -1
+      ) {
+        this.$message.error("请先登录！");
+        return;
+      }
+      if(!this.flag){
+        this.$message.error("只有小组成员可以发帖！");
+        return;
+      }
       this.$router.push({
         name: "groupcomment",
         query: { id: this.id },
@@ -866,7 +877,7 @@ i   },
             console.log(error);
           });
     },
-    join() {
+    joinin() {
       this.$set(this.group,'join',true);
       this.flag = true;
       this.group.member++;
@@ -1514,9 +1525,9 @@ a.comment-book-name {
   top: 2px;
 }
 #join-button {
-  position: absolute;
-  left: 340px;
-  top: 340px;
+  position: relative;
+  top:-70px;
+  left:-220px;
 }
 #join-button img {
   height: 40px;

@@ -53,7 +53,7 @@
         <div class="title">{{ passage.title }}</div>
         <div class="passage-info">
           <div>
-            <a class="userOfpassage" href="/otherusers/1">
+            <a class="userOfpassage" @click="ToUser(passage.user_id)">
               <img class="iconOfuser" :src="userIcon" />
               <span class="nameOfuser">{{ passage.username }}</span>
             </a>
@@ -147,48 +147,63 @@
         <div class="title">回复</div>
         <div
           class="reply-display"
-          v-for="reply in replys"
+          v-for="(reply, index) in replys"
           :key="reply.reply_id"
         >
           <hr />
           <div class="display-publisher">
-            <a class="userOfreply" @click="toUser(reply.author_id)">
+            <a class="userOfreply" @click="ToUser(reply.author_id)">
               <img class="iconOfuser" :src="displayIcon(reply.usericon)" /><span
                 class="nameOfuser"
                 >{{ reply.author_name }}</span
               >
             </a>
-            <span class="publishtime">{{ reply.date }}</span>
           </div>
           <div class="reply-content">
             {{ reply.text }}
-            <button @click="replyTo(reply)">
+            <button @click="replyTo(index, reply)">
               <img src="@/assets/guide/sreply.png" />
             </button>
             <div
               class="sreply-display"
               v-for="sreply in reply.children"
-              :key="sreply.id"
+              :key="sreply.reply_id"
             >
               <div class="display-publisher">
-                <a class="userOfreply" @click="toUser(sreply.userid)">
-                  <img class="iconOfuser" :src="displayIcon(reply.usericon)" /><span
-                    class="nameOfuser"
-                    >{{ sreply.author_name }}</span
-                  >
+                <a class="userOfreply" @click="ToUser(sreply.author_id)">
+                  <img
+                    style="width: 24px; height: 24px; border-radius: 24px"
+                    :src="displayIcon(sreply.usericon)"
+                  /><span class="nameOfuser">{{ sreply.author_name }}</span>
                 </a>
-                <span class="publishtime">{{ reply.date }}</span>
               </div>
-              <div class="reply-content">
-                <a class="replied-user" @click="toUser(sreply.replyed_userid)">
+             <div class="reply-content">
+                <a class="replied-user" @click="ToUser(sreply.replyed_userid)">
                   @{{ sreply.replyed_username }}
                 </a>
                 {{ sreply.text
-                }}<button @click="replyTo(sreply)">
+                }}<button @click="replyTo(index, sreply)">
                   <img src="@/assets/guide/sreply.png" />
                 </button>
               </div>
             </div>
+          </div>
+          <div
+            v-if="replyinput[index].ifreply === true"
+            class="second-reply-input"
+          >
+            <el-input
+              type="textarea"
+              :placeholder="replyinput[index].replyed_name"
+              rows="6"
+              v-model="textarea2"
+              maxlength="100"
+              show-word-limit
+            >
+            </el-input>
+            <el-button @click="Secondreply(replyinput[index].replyed_id)"
+              >提交</el-button
+            >
           </div>
         </div>
       </div>
@@ -231,64 +246,90 @@ export default {
       jubao,
       loadSuccess,
       dialogFormVisible: false,
+      replyinput: [],
+      textarea2: "",
     };
   },
   methods: {
-    share(){
-            var domUrl = document.createElement("input");
-            domUrl.value = window.location.href;
-            domUrl.id = "creatDom";
-            document.body.appendChild(domUrl);
-            domUrl.select(); // 选择对象
-            document.execCommand('Copy', 'false', null );
-            let creatDom = document.getElementById("creatDom");
-            creatDom.parentNode.removeChild(creatDom);
-            this.$message({
-                message: '复制成功',
-                type: 'success'
-            });
-        },
-    replyTo(reply) {
-      if (
-        !this.$store.getters.getUser ||
-        this.$store.getters.getUser.user.id === -1
-      ){
-        this.$message.error("请先登录！");
-        return;
-      }
+    ToUser(id) {
+      this.$router.push({ name: "users", query: { id: id } });
+    },
+    share() {
+      var domUrl = document.createElement("input");
+      domUrl.value = window.location.href;
+      domUrl.id = "creatDom";
+      document.body.appendChild(domUrl);
+      domUrl.select(); // 选择对象
+      document.execCommand("Copy", "false", null);
+      let creatDom = document.getElementById("creatDom");
+      creatDom.parentNode.removeChild(creatDom);
+      this.$message({
+        message: "复制成功",
+        type: "success",
+      });
+    },
+    Secondreply(replyed_id) {
       var params = {
         article_id: this.id,
         author_id: this.$store.getters.getUser.user.id,
-        text: this.textarea,
-        reply_to: reply.reply_id,
+        text: this.textarea2,
+        reply_to: replyed_id,
       };
+      console.log(replyed_id);
       this.$axios
         .post("/passage/reply", qs.stringify(params))
         .then((res) => {
           if (res.data.errno === 0) {
-            this.$message({
-              type: "success",
-              message: res.data.msg,
-            });
-            this.textarea="";
+            this.reply = res.data.data;
+            this.passage.reply = this.passage.reply+1;
             this.updateReply();
+            this.textarea2 = "";
           } else {
             this.$message.error(res.data.msg);
           }
+        })
+        .catch((error) => {
+          console.log(error);
         });
+    },
+    replyTo(index, reply) {
+      console.log(reply);
+      if (
+        this.replyinput[index].ifreply === true &&
+        this.replyinput[index].replyed_id === reply.reply_id &&
+        this.replyinput[index].replyed_name === "@" + reply.author_name
+      ) {
+        this.replyinput[index].ifreply = false;
+      } else {
+        for (var i = 0; i < this.replyinput.length; i++) {
+          this.replyinput[i].ifreply = false;
+        }
+        this.replyinput[index].replyed_id = reply.reply_id;
+        this.replyinput[index].replyed_name = "@" + reply.author_name;
+        this.replyinput[index].ifreply = true;
+      }
+      console.log(this.replyinput[index]);
     },
     updateReply() {
       var params = {
         article_id: this.id,
       };
-      this.$axios.post("/passage/get_reply", qs.stringify(params)).then((res) => {
-        if (res.data.errno === 0) {
-          console.log(res.data.data)
-          this.replys = res.data.data;
-        } else {
-          this.$message.error(res.data.msg);
-        }
-      });
+      this.$axios
+        .post("/passage/get_reply", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.data);
+            this.replys = res.data.data;
+            for (var i = 0; i < this.replys.length; i++)
+              this.replyinput.push({
+                ifreply: false,
+                replyed_id: 0,
+                replyed_name: "",
+              });
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
     },
     displayIcon(url) {
       var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
@@ -300,33 +341,26 @@ export default {
       return icon;
     },
     Topreply() {
-      if (
-        !this.$store.getters.getUser ||
-        this.$store.getters.getUser.user.id === -1
-      ){
-        this.$message.error("请先登录！");
-        return;
-      }
       var params = {
         article_id: this.id,
         author_id: this.$store.getters.getUser.user.id,
         text: this.textarea,
         reply_to: 0,
       };
-      this.$axios
-        .post("/passage/reply", qs.stringify(params))
-        .then((res) => {
-          if (res.data.errno === 0) {
-            this.$message({
-              type: "success",
-              message: res.data.msg,
-            });
-            this.textarea="";
-            this.updateReply();
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        });
+      this.$axios.post("/passage/reply", qs.stringify(params)).then((res) => {
+        if (res.data.errno === 0) {
+          this.reply = res.data.data;
+          this.$message({
+            type: "success",
+            message: res.data.msg,
+          });
+          this.updateReply();
+          this.passage.reply = this.passage.reply+1;
+          this.textarea = "";
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
     },
     ToComment(id) {
       this.$router.push({ name: "moviecomment", query: { id: id } });
@@ -363,11 +397,11 @@ export default {
       params = {
         movie_id: this.source.id,
       };
-      console.log(this.source.id)
+      console.log(this.source.id);
       this.$axios
         .post("/movie/recommend", qs.stringify(params))
         .then((res) => {
-          console.log('recommend')
+          console.log("recommend");
           if (res.data.errno === 0) {
             this.recommends = [];
             var i;
@@ -536,7 +570,7 @@ export default {
             this.passage.date = this.passage.date.substring(0, 10);
             this.source.star = parseFloat(this.source.star);
             this.passage.like = parseInt(this.passage.like);
-            this.like
+            this.like;
             this.passage.reply = parseInt(this.passage.reply);
             this.updateIcon();
             this.loadSuccess = true;
@@ -616,17 +650,12 @@ export default {
       if (this.Toreply === false) this.Toreply = true;
       else this.Toreply = false;
     },
-    toUser(id) {
-      this.$router.push({
-        name: "user",
-        query: { id: id },
-      });
-    },
   },
   mounted() {
     this.Toreply = false;
     this.updateComment();
     this.updateLike();
+    this.updateReply();
     window.onscroll = function (e) {
       console.log("slide");
       var vertical = document.getElementsByClassName("content-body").item(0);
@@ -678,6 +707,7 @@ export default {
 .iconOfuser {
   height: 30px;
   width: 30px;
+  border-radius: 20px;
   margin-right: 5px;
   vertical-align: sub;
 }
@@ -705,7 +735,7 @@ export default {
 }
 .passage-text {
   margin-top: 10px;
-  padding-bottom:50px;
+  padding-bottom: 50px;
   padding-left: 30px;
   padding-right: 60px;
 }
@@ -888,7 +918,7 @@ a.replied-user {
   margin-right: 20px;
 }
 .source-info {
-  margin:auto;
+  margin: auto;
   font-size: 15px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
@@ -904,7 +934,7 @@ a.replied-user {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
-  height:140px;
+  height: 140px;
 }
 .source-book a:hover {
   background-color: #91919155;

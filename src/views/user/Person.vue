@@ -71,6 +71,7 @@
           >
             <a class="collection-item" @click="ToMovieDetail(video.id)">
               <img class="collection-img" :src="video.image" />
+
               <div class="collection-info">
                 《{{ video.name }}》({{ video.year }})
                 <el-rate
@@ -144,18 +145,10 @@
             :key="group.id"
           >
             <a class="collection-item" @click="ToGroupDetail(group.id)">
-              <img class="collection-img" :src="group.img" />
+              <div class="group-img"><img class="collection-img" :src="group.img" /></div>
               <div class="collection-info">
                 {{ group.name }}
-                <el-rate
-                  v-model="group.star"
-                  disabled
-                  show-score
-                  text-color="#ff9900"
-                  score-template="{value}"
-                  disabled-void-color="ffffff"
-                >
-                </el-rate>
+                <br />
                 {{ group.member }}人参与
               </div>
             </a>
@@ -248,7 +241,7 @@ export default {
       bookcollections,
       moviecollections,
       telecollections,
-      groupcollections:[],
+      groupcollections: [],
       booktempcomments: [],
       tempmoviecollections: [],
       tempbookComments: [],
@@ -770,7 +763,12 @@ export default {
 }
 .collection-img {
   width: 85px;
+  height:auto;
   margin-right: 20px;
+}
+.group-img img {
+  overflow: hidden;
+  height:86px;
 }
 .collection-item {
   display: flex;

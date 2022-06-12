@@ -307,7 +307,6 @@ export default {
     var allGroups = [];
     var allTies = [];
     var value = 3.7;
-    var hasMovie = false;
     return {
       content: "",
       movieText: "",
@@ -318,7 +317,7 @@ export default {
       groupText: "",
       tieText: "",
       hasBook: false,
-      hasMovie,
+      hasMovie:false,
       hasTele: false,
       hasTopic: false,
       hasGroup: false,
@@ -348,13 +347,12 @@ export default {
   },
   methods: {
     updatecontent() {
-      var input = this.$route.query;
-      this.content = input.content;
-      this.hasBook = input.hasBook;
-      this.hasMovie = input.hasMovie;
-      this.hasTele = input.hasTele;
-      this.hasTopic = input.hasTopic;
-      this.hasGroup = input.hasGroup;
+      this.content = this.$route.query.content;
+      this.hasBook = this.$route.query.hasBook;
+      this.hasMovie = this.$route.query.hasMovie;
+      this.hasTele = this.$route.query.hasTele;
+      this.hasTopic = this.$route.query.hasTopic;
+      this.hasGroup = this.$route.query.hasGroup;
       this.updateBook();
       this.updateMovie();
       this.updateTele();
@@ -722,7 +720,9 @@ export default {
         });
     },
   },
-  mounted() {},
+  mounted() {
+    this.updatecontent();
+  },
 };
 </script>
 <style scoped>

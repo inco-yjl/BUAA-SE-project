@@ -46,7 +46,8 @@
                         >《{{ movie.movie1.name }}》</span
                       ><br v-if="movie.movie1.name.length < 7" />
                       <span class="movie-display-writer"
-                        >{{ movie.movie1.director }}{{ movie.movie1.nation }}</span
+                        >{{ movie.movie1.director
+                        }}{{ movie.movie1.nation }}</span
                       >
                     </div>
                   </a>
@@ -59,7 +60,8 @@
                         >《{{ movie.movie2.name }}》</span
                       ><br v-if="movie.movie2.name.length < 7" />
                       <span class="movie-display-writer"
-                        >{{ movie.movie2.director }}{{ movie.movie2.nation }}</span
+                        >{{ movie.movie2.director
+                        }}{{ movie.movie2.nation }}</span
                       >
                     </div>
                   </a>
@@ -140,11 +142,11 @@
             <hr />
             <div class="comment-display-body">
               <div class="display-publisher">
-                <a class="userOfcomment" href="/otherusers/1">
-                  <img
-                    class="iconOfuser"
-                    :src="comment.usericon"
-                  /><span class="nameOfuser">{{ comment.username }}</span>
+                <a class="userOfcomment" @click="ToUser(comment.user_id)">
+                  <img class="iconOfuser" :src="comment.usericon" /><span
+                    class="nameOfuser"
+                    >{{ comment.username }}</span
+                  >
                 </a>
                 <span class="publish-info"
                   >{{ comment.date }}&ensp;评论了<a class="comment-movie-name"
@@ -153,15 +155,17 @@
                 >
               </div>
               <div class="comment-origin-pic">
-                <a class="comment-origin" @click="ToMovieDetail(comment.movieid)"
+                <a
+                  class="comment-origin"
+                  @click="ToMovieDetail(comment.movieid)"
                   ><img class="comment-pic" :src="comment.img" />
                 </a>
               </div>
               <div class="commenttext">
                 <a class="commenttext-origin" @click="ToComment(comment.id)">
-                <span class="comment-title">
-                  {{comment.title}}
-                </span><br>
+                  <span class="comment-title">
+                    {{ comment.title }} </span
+                  ><br />
                   {{ comment.content }}
                 </a>
               </div>
@@ -173,7 +177,10 @@
         <div class="collection">
           <div class="videopage-title">
             <a href="../user/movies">
-              <img id="collection-guide" src="@/assets/guide/movie_collection.png" />我的收藏
+              <img
+                id="collection-guide"
+                src="@/assets/guide/movie_collection.png"
+              />我的收藏
             </a>
           </div>
           <div
@@ -230,14 +237,57 @@ import qs from "qs";
 export default {
   name: "MyComponent",
   data() {
-    var hotmes= [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}];//我也没办法，加载好慢
+    var hotmes = [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+    ]; //我也没办法，加载好慢
     var hotmovies = [{}];
     var hottele = [{}];
-    var highmes=[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}];
+    var highmes = [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+    ];
     var highmovies = [];
     var hightele = [];
-    var moviecomments = [
-    ];
+    var moviecomments = [];
     var collections = [];
     var passages = [];
     var loadSuccess = false;
@@ -267,7 +317,7 @@ export default {
   },
   methods: {
     usetocolloction(index) {
-      if (index < this.ismovie){
+      if (index < this.ismovie) {
         this.$router.push({
           name: "teledetail",
           query: { id: this.collections[index].id },
@@ -279,11 +329,11 @@ export default {
         });
       }
     },
-    ToComment(id){
+    ToComment(id) {
       this.$router.push({
-          name: "moviecomment",
-          query: { id: id },
-        });
+        name: "moviecomment",
+        query: { id: id },
+      });
     },
     getcommit() {},
     hotTopicdt() {
@@ -348,11 +398,11 @@ export default {
       }
       return { icon: icon };
     },
-    ToMovieDetail(id){
+    ToMovieDetail(id) {
       this.$router.push({
-          name: "moviedetail",
-          query: { id: id },
-        });
+        name: "moviedetail",
+        query: { id: id },
+      });
     },
     ToText(HTML) {
       var input = HTML;
@@ -408,6 +458,9 @@ export default {
           query: { id: this.passages[index].id },
         });
     },
+    ToUser(id) {
+      this.$router.push({ name: 'users', query: { id: id } });
+    },
     async updateCollection() {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
@@ -441,7 +494,7 @@ export default {
               for (i = 0; i < 2 && i < res.data.data.length; i++) {
                 res.data.data[i].star = parseFloat(res.data.data[i].star);
                 this.collections.push(res.data.data[i]);
-                console.log(this.collections[i].star)
+                console.log(this.collections[i].star);
               }
           } else {
             this.$message.error("查询失败");
@@ -456,7 +509,7 @@ export default {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
       };
-      
+
       this.passages = [];
       this.$axios
         .post("/movie/mypassage", qs.stringify(params))
@@ -478,7 +531,7 @@ export default {
       this.$axios
         .post("/tele/mypassage", qs.stringify(params))
         .then((res) => {
-          console.log("查询到我的剧评")
+          console.log("查询到我的剧评");
           if (res.data.errno === 0) {
             var i;
             var length = 2;
@@ -507,11 +560,10 @@ export default {
             var i = 0;
             for (i = 0; i < 20; i++) {
               var length = 14 - movie[i].name.length;
-              movie[i].director='[导演]'+movie[i].director;
-              if(movie[i].name.length>14)
-              {
-                movie[i].name =  movie[i].name.substring(0,14)+'…';
-                movie[i].director = '';
+              movie[i].director = "[导演]" + movie[i].director;
+              if (movie[i].name.length > 14) {
+                movie[i].name = movie[i].name.substring(0, 14) + "…";
+                movie[i].director = "";
                 continue;
               }
               if (movie[i].name.length > 7 && movie[i].director.length > length)
@@ -546,9 +598,9 @@ export default {
             var i = 0;
             for (i = 0; i < 20; i++) {
               var length = 14 - tele[i].name.length;
-              if(tele[i].name.length>14){
-                tele[i].name = tele[i].name.substring(0,14)+'…';
-                tele[i].nation = '';
+              if (tele[i].name.length > 14) {
+                tele[i].name = tele[i].name.substring(0, 14) + "…";
+                tele[i].nation = "";
                 continue;
               }
               if (tele[i].name.length > 7 && tele[i].nation.length > length)
@@ -744,8 +796,8 @@ button.selection_ed {
   vertical-align: -20%;
   margin-right: 5px;
 }
-#collection-guide{
-  height:37px;
+#collection-guide {
+  height: 37px;
   vertical-align: -30%;
 }
 .aside {
@@ -843,7 +895,7 @@ div.comment-origin-pic {
 }
 .iconOfuser {
   height: 30px;
-  width:30px;
+  width: 30px;
   border-radius: 20px;
   margin-right: 5px;
   vertical-align: sub;
@@ -894,7 +946,7 @@ a.comment-movie-name {
   background-color: #dfdede55;
   margin-top: 10px;
   width: 300px;
-  height:140px;
+  height: 140px;
 }
 .collection-list a:hover {
   background-color: #91919155;
@@ -923,7 +975,7 @@ a.comment-movie-name {
   display: flex;
 }
 .collection-info {
-  margin:auto;
+  margin: auto;
   font-size: 15px;
   line-height: 30px;
   font-family: Source Han Sans CN Normal;

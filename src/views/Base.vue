@@ -84,10 +84,10 @@
           :visible.sync="drawer"
           :direction="direction"
         >
-          <div v-for="per in messages" :key="per.index">
-            <a herf="">
-              <img class="el-drawer-img" src="../assets/user/int.jpg" />
-              <span>{{ per.name }} @了你</span>
+          <div v-for="(per,index) in messages" :key="index">
+            <a @click="ToArticle(per.column,per.article_id)">
+              <img class="el-drawer-img" :src="displayIcon(per.usericon)" />
+              <span>{{ per.author_name }} @了你</span>
             </a>
           </div>
         </el-drawer>
@@ -101,48 +101,7 @@
 import qs from "qs";
 export default {
   data() {
-    var messages = [
-      {
-        img: "../assets/user/int.jpg",
-        name: "owwo",
-      },
-      {
-        img: "../assets/user/int.png",
-        name: "owwo",
-      },
-      {
-        img: "../assets/user/int.png",
-        name: "owwo",
-      },
-      {
-        img: "../assets/user/int.png",
-        name: "owwo",
-      },
-      {
-        img: "../assets/user/int.png",
-        name: "owwo",
-      },
-      {
-        img: "../assets/user/int.png",
-        name: "owwo",
-      },
-      {
-        img: "../assets/user/int.png",
-        name: "owwo",
-      },
-      {
-        img: "../assets/user/int.png",
-        name: "owwo",
-      },
-      {
-        img: "../assets/user/int.png",
-        name: "owwo",
-      },
-      {
-        img: "../assets/user/int.png",
-        name: "owwo",
-      },
-    ];
+    var messages = [];
     var navigate = true;
     return {
       navigate,
@@ -158,9 +117,71 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.updateUser();
+      this.updateMess();
     });
   },
   methods: {
+    ToArticle(column,id){
+      if(column === 1)
+      this.ToBookComment(id);
+      if(column === 2)
+      this.ToMovieComment(id);
+      if(column===3)
+      this.ToTelecomment(id);
+      if(column===4)
+      this.ToTopicDt(id);
+
+    },
+        ToBookComment(id) {
+      console.log(id);
+      this.$router.push({ name: "bookcomment", query: { id: id } });
+    },
+    ToMovieComment(id) {
+      console.log(id);
+      this.$router.push({ name: "moviecomment", query: { id: id } });
+    },
+        ToTelecomment(id) {
+      this.$router.push({ name: "telecomment", query: { id: id } });
+    },
+        ToTopicDt(id) {
+      this.$router.push({
+        name: "topicdt",
+        query: { id: id },
+      });
+    },
+     displayIcon(url) {
+      var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
+      if (url !== "") {
+        var len = this.$axios.defaults.baseURL.length;
+        icon = this.$axios.defaults.baseURL.substring(0, len - 4) + url;
+      }
+      console.log(icon);
+      return icon;
+    },
+    updateMess(){
+      if(!this.$store.getters.getUser || this.$store.getters.getUser.user.id===-1)
+      return;
+      var user = this.$store.getters.getUser.user;
+      var params = {
+        user_id: user.id,
+      };
+      this.$axios
+        .post("/passage/get_message", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            for(var i=res.data.data.length-1;i>=0;i--)
+            {
+              this.messages.push(res.data.data[i]);
+            }
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     updateUser() {
       if(!this.$store.getters.getUser || this.$store.getters.getUser.user.id===-1)
       {

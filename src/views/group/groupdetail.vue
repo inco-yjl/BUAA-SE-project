@@ -12,7 +12,7 @@
             <button v-if="liked" @click="favor()">
               <img src="@/assets/group/quit.png" />
             </button>
-            <button v-else @click="fovor()">
+            <button v-else @click="favor()">
               <img src="@/assets/group/join.png" />
             </button>
           </div>
@@ -329,6 +329,10 @@ a.comment-book-name {
 .topic-name {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-weight: bold;
+}
+.join-button{
+  position: relative;
+  margin-left: 20px;
 }
 .title_second_head{
   font-size: 26px;

@@ -35,6 +35,16 @@ export default({
   },
   methods:{
     search(){
+      if(this.book === false && this.tele === false && this.topic === false && this.group === false)
+      {
+        this.$message.error("请选择搜索范围！");
+        return;
+      }
+      if(!this.content)
+      {
+        this.$message.error("请输入关键字！");
+        return;
+      }
       this.$router.push({
         name: "search",
         query: { 

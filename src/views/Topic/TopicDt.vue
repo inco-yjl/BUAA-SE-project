@@ -103,7 +103,7 @@
         <div class="title">回复</div>
         <div
           class="reply-display"
-          v-for="reply in replys"
+          v-for="(reply, index) in replys"
           :key="reply.reply_id"
         >
           <hr />
@@ -114,37 +114,52 @@
                 >{{ reply.author_name }}</span
               >
             </a>
-            <span class="publishtime">{{ reply.date }}</span>
           </div>
           <div class="reply-content">
             {{ reply.text }}
-            <button @click="replyTo(reply)">
+            <button @click="replyTo(index, reply)">
               <img src="@/assets/guide/sreply.png" />
             </button>
             <div
               class="sreply-display"
               v-for="sreply in reply.children"
-              :key="sreply.id"
+              :key="sreply.reply_id"
             >
               <div class="display-publisher">
-                <a class="userOfreply" @click="toUser(sreply.userid)">
-                  <img class="iconOfuser" :src="displayIcon(reply.usericon)" /><span
-                    class="nameOfuser"
-                    >{{ sreply.author_name }}</span
-                  >
+                <a class="userOfreply" @click="toUser(sreply.author_id)">
+                  <img
+                    class="iconOfuser"
+                    :src="displayIcon(sreply.usericon)"
+                  /><span class="nameOfuser">{{ sreply.author_name }}</span>
                 </a>
-                <span class="publishtime">{{ reply.date }}</span>
               </div>
               <div class="reply-content">
-                <a class="replied-user" @click="toUser(sreply.replyed_userid)">
-                  @{{ sreply.replyed_username }}
+                <a class="replied-user" @click="toUser(sreply.author_id)">
+                  @{{ sreply.author_name }}
                 </a>
                 {{ sreply.text
-                }}<button @click="replyTo(sreply)">
+                }}<button @click="replyTo(index, sreply)">
                   <img src="@/assets/guide/sreply.png" />
                 </button>
               </div>
             </div>
+          </div>
+          <div
+            v-if="replyinput[index].ifreply === true"
+            class="second-reply-input"
+          >
+            <el-input
+              type="textarea"
+              :placeholder="replyinput[index].replyed_name"
+              rows="6"
+              v-model="textarea2"
+              maxlength="100"
+              show-word-limit
+            >
+            </el-input>
+            <el-button @click="Secondreply(replyinput[index].replyed_id)"
+              >提交</el-button
+            >
           </div>
         </div>
       </div>
@@ -179,6 +194,8 @@ export default {
       text: "",
       textarea: "",
       loadSuccess: false,
+      replyinput: [],
+      textarea2: "",
     };
   },
   mounted() {
@@ -198,50 +215,81 @@ export default {
     };
   },
   methods: {
-    share(){
-            var domUrl = document.createElement("input");
-            domUrl.value = window.location.href;
-            domUrl.id = "creatDom";
-            document.body.appendChild(domUrl);
-            domUrl.select(); // 选择对象
-            document.execCommand('Copy', 'false', null );
-            let creatDom = document.getElementById("creatDom");
-            creatDom.parentNode.removeChild(creatDom);
-            this.$message({
-                message: '复制成功',
-                type: 'success'
-            });
-        },
-     replyTo(reply) {
+    share() {
+      var domUrl = document.createElement("input");
+      domUrl.value = window.location.href;
+      domUrl.id = "creatDom";
+      document.body.appendChild(domUrl);
+      domUrl.select(); // 选择对象
+      document.execCommand("Copy", "false", null);
+      let creatDom = document.getElementById("creatDom");
+      creatDom.parentNode.removeChild(creatDom);
+      this.$message({
+        message: "复制成功",
+        type: "success",
+      });
+    },
+    Secondreply(replyed_id) {
       var params = {
         article_id: this.id,
         author_id: this.$store.getters.getUser.user.id,
-        text: this.textarea,
-        reply_to: reply.reply_id,
+        text: this.textarea2,
+        reply_to: replyed_id,
       };
+      console.log(replyed_id);
       this.$axios
         .post("/passage/reply", qs.stringify(params))
         .then((res) => {
-          if (res.data.errno === 0) this.reply = res.data.data;
-          else {
+          if (res.data.errno === 0) {
+            this.reply = res.data.data;
+            this.updateReply();
+            this.textarea2 = "";
+          } else {
             this.$message.error(res.data.msg);
           }
-        }).catch((error) => {
-               console.log(error);
-             });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    replyTo(index, reply) {
+      console.log(reply);
+      if (
+        this.replyinput[index].ifreply === true &&
+        this.replyinput[index].replyed_id === reply.reply_id &&
+        this.replyinput[index].replyed_name === "@" + reply.author_name
+      ) {
+        this.replyinput[index].ifreply = false;
+      } else {
+        for(var i=0;i<this.replyinput.length;i++){
+          this.replyinput[i].ifreply = false;
+        }
+        this.replyinput[index].replyed_id = reply.reply_id;
+        this.replyinput[index].replyed_name = "@" + reply.author_name;
+        this.replyinput[index].ifreply = true;
+      }
+      console.log(this.replyinput[index]);
     },
     updateReply() {
       var params = {
         article_id: this.id,
       };
-      this.$axios.post("/passage/get_reply", qs.stringify(params)).then((res) => {
-        if (res.data.errno === 0) {
-          console.log(res.data.data)
-          this.replys = res.data.data;
-        } else {
-          this.$message.error(res.data.msg);
-        }
-      });
+      this.$axios
+        .post("/passage/get_reply", qs.stringify(params))
+        .then((res) => {
+          if (res.data.errno === 0) {
+            console.log(res.data.data);
+            this.replys = res.data.data;
+            for (var i = 0; i < this.replys.length; i++)
+              this.replyinput.push({
+                ifreply: false,
+                replyed_id: 0,
+                replyed_name: "",
+              });
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
     },
     displayIcon(url) {
       var icon = "https://i.imgtg.com/2022/05/08/zDzsM.png";
@@ -259,20 +307,19 @@ export default {
         text: this.textarea,
         reply_to: 0,
       };
-      this.$axios
-        .post("/passage/reply", qs.stringify(params))
-        .then((res) => {
-          if (res.data.errno === 0) {
-            this.reply = res.data.data;
-            this.$message({
-              type: "success",
-              message: res.data.msg,
-            });
-            this.updateReply();
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        });
+      this.$axios.post("/passage/reply", qs.stringify(params)).then((res) => {
+        if (res.data.errno === 0) {
+          this.reply = res.data.data;
+          this.$message({
+            type: "success",
+            message: res.data.msg,
+          });
+          this.updateReply();
+          this.textarea = "";
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
     },
     ToTopicDetail(id) {
       this.$router.push({
