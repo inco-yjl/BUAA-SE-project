@@ -157,5 +157,7 @@ export default {
   cursor: pointer;
   float:right;
 }
-
+button.send-button:active{
+  text-decoration: underline;
+}
 </style>
