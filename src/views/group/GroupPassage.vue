@@ -58,7 +58,7 @@
               <span class="nameOfuser">{{ passage.username }}</span>
             </a>
             <span class="normal">&ensp;评论了</span>
-            <a class="comment-book-name">《{{ source.name }}》 </a>
+            <a class="comment-group-name">《{{ source.name }}》 </a>
             <span class="normal">{{ passage.date }}</span>
           </div>
         </div>
@@ -98,7 +98,7 @@
           </a>
         </div>
         <div class="collection">
-          <div class="bookpage-title">
+          <div class="grouppage-title">
             <a href="../GroupHome">
               <img src="@/assets/group/collect.png" />我加入的小组
             </a>
@@ -244,7 +244,7 @@ export default {
       this.$router.push({ name: "users", query: { id: id } });
     },
     ToComment(id) {
-      this.$router.push({ name: "bookcomment", query: { id: id } });
+      this.$router.push({ name: "groupcomment", query: { id: id } });
     },
     share() {
       var domUrl = document.createElement("input");
@@ -443,7 +443,7 @@ export default {
               type: "success",
               message: res.data.msg,
             });
-            this.$router.push({ name: "book" });
+            this.$router.push({ name: "group" });
           } else {
             this.$message.error(res.data.msg);
           }
@@ -895,7 +895,7 @@ a.replied-user {
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
 }
-.source-book a {
+.source-group a {
   margin-left: 10px;
   margin-right: 10px;
   padding-top: 10px;
@@ -908,7 +908,7 @@ a.replied-user {
   width: 300px;
   height: 140px;
 }
-.source-book a:hover {
+.source-group a:hover {
   background-color: #91919155;
 }
 .recommend-list a {
@@ -1001,7 +1001,7 @@ blockquote p {
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
 }
-.bookpage-title {
+.grouppage-title {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   text-align: left;
   font-size: 24px;
@@ -1011,20 +1011,20 @@ blockquote p {
 .collection-list a:hover {
   background-color: #91919155;
 }
-.collection .bookpage-title a {
+.collection .grouppage-title a {
   font-family: "Noto Serif SC", serif;
   color: black;
   transition: all 0.1s ease;
   text-decoration: none;
   font-size: 22px;
 }
-.collection .bookpage-title a:hover {
+.collection .grouppage-title a:hover {
   color: rgb(2, 98, 182);
 }
-.collection .bookpage-title a:hover::after {
+.collection .grouppage-title a:hover::after {
   opacity: 1;
 }
-.collection .bookpage-title a:active {
+.collection .grouppage-title a:active {
   color: rgb(0, 166, 255);
 }
 .title {
