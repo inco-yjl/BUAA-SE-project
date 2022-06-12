@@ -128,6 +128,11 @@ const routes = [
       component: () => import('../views/group/GroupMain.vue')
     },
     {
+      path: '/group/passage',
+      name: 'grouppassage',
+      component: () => import('../views/group/GroupPassage.vue')
+    },
+    {
       path: '/group/addgroup',
       name: 'groupadd',
       component: () => import('../views/group/GroupAdd.vue')

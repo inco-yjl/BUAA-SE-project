@@ -2,8 +2,8 @@
   <div class="groupPagebody">
     <search></search>
     <div class="aside-left vertical">
-      <div class="bookpage-hit">
-        <div class="bookpage-title">
+      <div class="grouppage-hit">
+        <div class="grouppage-title">
           <img src="@/assets/title/groups.png" />最受欢迎
         </div>
 
@@ -21,8 +21,8 @@
         </div>
       </div>
 
-      <div class="bookpage-hit">
-        <div class="bookpage-title">
+      <div class="grouppage-hit">
+        <div class="grouppage-title">
           <img src="@/assets/group/biggroup.png" />最多人在
         </div>
         <div class="collection-list" v-for="group in maxgroup" :key="group.id">
@@ -39,34 +39,34 @@
         </div>
       </div>
 
-      <div class="bookpage-hit">
-        <div class="bookpage-title">
+      <div class="grouppage-hit">
+        <div class="grouppage-title">
           <img src="@/assets/group/popular.png" />热门讨论
         </div>
         <div
-          class="book-comments-display"
+          class="group-comments-display"
           v-for="comment in groupcommit"
           :key="comment.id"
         >
           <hr />
           <div class="comment-display-groupPage">
             <div class="display-publisher">
-              <a class="userOfcomment" href="/otherusers/1">
+              <a class="userOfcomment" @click="ToUser(comment.userid)">
                 <img
                   class="iconOfuser"
                   :src="displayIcon(comment.usericon)"
                 /><span class="nameOfuser">{{ comment.username }}</span>
               </a>
               <span class="publish-info"
-                >{{ newDate(comment.date) }}&ensp;发布于<a
-                  class="comment-book-name"
+                >{{ newDate(comment.date) }}&ensp;发布于<a @click="usetogroupdetail(comment.groupid)"
+                  class="comment-group-name"
                   >{{ comment.groupname }}</a
                 ></span
               >
             </div>
 
             <div class="commenttext">
-              <a class="commenttext-origin" @click="grouppassage(comment.id)">
+              <a class="commenttext-origin" @click="ToComment(comment.id)">
                 <span class="comment-title"> {{ comment.title }} </span><br />
                 {{ comment.content }}</a
               >
@@ -77,7 +77,7 @@
     </div>
     <div class="aside">
       <div class="collection">
-        <div class="bookpage-title">
+        <div class="grouppage-title">
           <a href="../GroupHome">
             <img src="@/assets/group/collect.png" />我加入的小组
           </a>
@@ -105,22 +105,6 @@
             </div>
           </a>
         </div>
-      </div>
-      <div class="collection">
-        <div class="bookpage-title">
-          <a href="../user/books">
-            <img src="@/assets/guide/mycomment.png" />我的讨论
-          </a>
-        </div>
-        <ul class="book-comment-list hotlist">
-          <li
-            :v-if="passages.length > 0"
-            v-for="passage in passages"
-            :key="passage.id"
-          >
-            <a @click="ToComment(passage.id)">{{ passage.title }}</a>
-          </li>
-        </ul>
       </div>
     </div>
   </div>
@@ -165,6 +149,12 @@ export default {
     groupPerson,
   },
   methods: {
+    ToComment(id){
+      this.$router.push({ name: 'grouppassage', query: { id: id } });
+    },
+    ToUser(id) {
+      this.$router.push({ name: 'users', query: { id: id } });
+    },
     ToText(HTML) {
       var input = HTML;
       return input
@@ -303,7 +293,7 @@ export default {
     window.onscroll = function (e) {
       console.log("slide");
       var vertical = document
-        .getElementsByClassName("bookpage-vertical")
+        .getElementsByClassName("vertical")
         .item(0);
       var pos = vertical.getBoundingClientRect();
       console.log(pos.top);
@@ -371,14 +361,14 @@ export default {
   box-shadow: 0px 2px 3px #888888a6;
   height: 750px;
   position: fixed;
-  left: 1260px;
+  left: 1200px;
   top: -50px;
   width: 352px;
 }
-.bookpage-comments {
+.grouppage-comments {
   margin-bottom: 50px;
 }
-.book-comments-display {
+.group-comments-display {
   margin-top: 50px;
   width: 1000px;
 }
@@ -426,6 +416,8 @@ div.comment-origin-pic {
 }
 .iconOfuser {
   border-radius: 20px;
+  height:30px;
+  width:30px;
   margin-right: 5px;
   vertical-align: sub;
 }
@@ -456,7 +448,7 @@ a.commenttext-origin span {
 a.commenttext-origin span:hover {
   text-decoration: underline;
 }
-a.comment-book-name {
+a.comment-group-name {
   font-weight: 400;
   font-size: 17px;
   color: rgb(157, 157, 157);
@@ -479,20 +471,20 @@ a.comment-book-name {
 .collection-list a:hover {
   background-color: #91919155;
 }
-.collection .bookpage-title a {
+.collection .grouppage-title a {
   font-family: "Noto Serif SC", serif;
   color: black;
   transition: all 0.1s ease;
   text-decoration: none;
   font-size: 22px;
 }
-.collection .bookpage-title a:hover {
+.collection .grouppage-title a:hover {
   color: rgb(2, 98, 182);
 }
-.collection .bookpage-title a:hover::after {
+.collection .grouppage-title a:hover::after {
   opacity: 1;
 }
-.collection .bookpage-title a:active {
+.collection .grouppage-title a:active {
   color: rgb(0, 166, 255);
 }
 .img-block {
@@ -525,11 +517,11 @@ a.comment-book-name {
   color: rgb(2, 98, 182);
   font-weight: 600;
 }
-.book-comment-list a {
+.group-comment-list a {
   font-size: 18px;
   font-family: Source Han Sans CN Normal;
 }
-.book-comment-list a:hover {
+.group-comment-list a:hover {
   font-weight: 600;
   color: rgb(2, 98, 182);
 }
@@ -605,7 +597,7 @@ a.commenttext-origin:hover {
   color: gray;
   text-decoration: none;
 }
-a.comment-book-name {
+a.comment-group-name {
   font-weight: 400;
   font-size: 17px;
   color: rgb(157, 157, 157);
@@ -682,12 +674,12 @@ a.comment-book-name {
   position: relative;
   width: 1100px;
 }
-.bookpage-title img {
+.grouppage-title img {
   height: 37px;
   vertical-align: -20%;
   margin-right: 5px;
 }
-.bookpage-hit {
+.grouppage-hit {
   position: relative;
   float: left;
   width: 1000px;
@@ -711,7 +703,7 @@ a.comment-book-name {
   border-color: rgb(181, 181, 181);
   box-shadow: 0px 2px 3px #888888a6;
 }
-.bookpage-title {
+.grouppage-title {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   text-align: left;
   font-size: 24px;

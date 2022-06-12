@@ -14,16 +14,16 @@
           </div>
           <div class="user-buttons">
             <div id="join-button">
-              <button v-if = "!flag" @click="joinin">
+              <button v-if="!flag" @click="joinin">
                 <img src="@/assets/group/join.png" />
               </button>
-              <button v-if = "flag" @click="quit()">
+              <button v-if="flag" @click="quit()">
                 <img src="@/assets/group/quit.png" />
               </button>
             </div>
-           
+
             <div class="group-detail-interact">
-              <button v-if="!isadmin" @click = "toadmin()">
+              <button v-if="!isadmin" @click="toadmin()">
                 <img src="@/assets/group/apply.png" /><span
                   >申请成为管理员</span
                 >
@@ -31,7 +31,7 @@
               <button class="share-topic" @click="share">
                 <img src="@/assets/guide/share.png" /><span>分享小组</span>
               </button>
-              <button class="write-dt" @click = "usetonewpassage()">
+              <button class="write-dt" @click="usetonewpassage()">
                 <img src="@/assets/guide/write_dt.png" /><span>发布帖子</span>
               </button>
             </div>
@@ -69,69 +69,86 @@
             </span>
           </div>
           <div class="display-passage">
-            <el-empty v-if = "(inhot && topempty && hotempty) || (innew && newempty && topempty) || (inval && valempty)"></el-empty>
+            <el-empty
+              v-if="
+                (inhot && topempty && hotempty) ||
+                (innew && newempty && topempty) ||
+                (inval && valempty)
+              "
+            ></el-empty>
             <div
               class="passage-block"
               v-for="passage in topmes"
               :key="passage.id"
-              v-if = "inhot && !(topempty && hotempty)">
+              v-if="inhot && !(topempty && hotempty)"
+            >
               <hr />
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
-                      class="nameOfuser"
-                      >{{ passage.username }}</span
-                    >
+                    <img
+                      class="iconOfuser"
+                      :src="displayIcon(passage.usericon)"
+                    /><span class="nameOfuser">{{ passage.username }}</span>
                   </a>
-                  <span class="publishtime">{{ changedate(passage.date) }}</span>
+                  <span class="publishtime">{{
+                    changedate(passage.date)
+                  }}</span>
                 </div>
                 <div class="passage-content">
                   <a>{{ passage.title }}</a>
                 </div>
                 <button
-                    v-if = "isadmin"
-                    class="topic-button"
-                    :style="{ backgroundColor: bg_color, color: ft_color }"
-                    @click="delmes(passage.id,1)"
+                  v-if="isadmin"
+                  class="topic-button"
+                  :style="{ backgroundColor: bg_color, color: ft_color }"
+                  @click="delmes(passage.id, 1)"
                 >
                   取消置顶
                 </button>
-                <div class="top-icon" style="margin-left: 50px; margin-right: 20px"><img src="@/assets/group/top.png" /></div>
+                <div
+                  class="top-icon"
+                  style="margin-left: 50px; margin-right: 20px"
+                >
+                  <img src="@/assets/group/top.png" />
+                </div>
               </div>
             </div>
             <div
-                class="passage-block"
-                v-for="passage in hotpassage"
-                :key="passage.id"
-                v-if = "inhot && !(topempty && hotempty)">
+              class="passage-block"
+              v-for="passage in hotpassage"
+              :key="passage.id"
+              v-if="inhot && !(topempty && hotempty)"
+            >
               <hr />
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
-                      class="nameOfuser"
-                  >{{ passage.username }}</span
-                  >
+                    <img
+                      class="iconOfuser"
+                      :src="displayIcon(passage.usericon)"
+                    /><span class="nameOfuser">{{ passage.username }}</span>
                   </a>
-                  <span class="publishtime">{{ changedate(passage.date) }}</span>
+                  <span class="publishtime">{{
+                    changedate(passage.date)
+                  }}</span>
                 </div>
                 <div class="passage-content">
                   <a>{{ passage.title }}</a>
                 </div>
                 <button
-                    v-if = "isadmin"
-                    class="topic-button"
-                    :style="{ backgroundColor: bg_color, color: ft_color }"
-                    @click="addmes(passage.id,1)"
+                  v-if="isadmin"
+                  class="topic-button"
+                  :style="{ backgroundColor: bg_color, color: ft_color }"
+                  @click="addmes(passage.id, 1)"
                 >
                   置顶
                 </button>
                 <button
-                    v-if = "isadmin"
-                    class="topic-button"
-                    :style="{ backgroundColor: bg_color, color: ft_color }"
-                    @click="addmes(passage.id,2)"
+                  v-if="isadmin"
+                  class="topic-button"
+                  :style="{ backgroundColor: bg_color, color: ft_color }"
+                  @click="addmes(passage.id, 2)"
                 >
                   精华
                 </button>
@@ -139,68 +156,78 @@
               </div>
             </div>
             <div
-                class="passage-block"
-                v-for="passage in topmes"
-                :key="passage.id"
-                v-if = "innew && !(newempty && topempty)">
+              class="passage-block"
+              v-for="passage in topmes"
+              :key="passage.id"
+              v-if="innew && !(newempty && topempty)"
+            >
               <hr />
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
-                      class="nameOfuser"
-                  >{{ passage.username }}</span
-                  >
+                    <img
+                      class="iconOfuser"
+                      :src="displayIcon(passage.usericon)"
+                    /><span class="nameOfuser">{{ passage.username }}</span>
                   </a>
-                  <span class="publishtime">{{ changedate(passage.date)}}</span>
+                  <span class="publishtime">{{
+                    changedate(passage.date)
+                  }}</span>
                 </div>
                 <div class="passage-content">
-                  <a>{{ passage.title }}</a>
+                  <a @click="ToComment(passage.id)">{{ passage.title }}</a>
                 </div>
                 <button
-                    v-if = "isadmin"
-                    class="topic-button"
-                    :style="{ backgroundColor: bg_color, color: ft_color }"
-                    @click="delmes(passage.id,1)"
+                  v-if="isadmin"
+                  class="topic-button"
+                  :style="{ backgroundColor: bg_color, color: ft_color }"
+                  @click="delmes(passage.id, 1)"
                 >
                   取消置顶
                 </button>
-                <div class="top-icon" style="margin-left: 50px; margin-right: 20px"><img src="@/assets/group/top.png" /></div>
+                <div
+                  class="top-icon"
+                  style="margin-left: 50px; margin-right: 20px"
+                >
+                  <img src="@/assets/group/top.png" />
+                </div>
               </div>
-       
             </div>
             <div
-                class="passage-block"
-                v-for="passage in newpassage"
-                :key="passage.id"
-                v-if = "innew && !(topempty && newempty)">
+              class="passage-block"
+              v-for="passage in newpassage"
+              :key="passage.id"
+              v-if="innew && !(topempty && newempty)"
+            >
               <hr />
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
-                      class="nameOfuser"
-                  >{{ passage.username }}</span
-                  >
+                    <img
+                      class="iconOfuser"
+                      :src="displayIcon(passage.usericon)"
+                    /><span class="nameOfuser">{{ passage.username }}</span>
                   </a>
-                  <span class="publishtime">{{ changedate(passage.date) }}</span>
+                  <span class="publishtime">{{
+                    changedate(passage.date)
+                  }}</span>
                 </div>
                 <div class="passage-content">
-                  <a>{{ passage.title }}</a>
+                  <a @click="ToComment(passage.id)">{{ passage.title }}</a>
                 </div>
                 <button
-                    v-if = "isadmin"
-                    class="topic-button"
-                    :style="{ backgroundColor: bg_color, color: ft_color }"
-                    @click="addmes(passage.id,1)"
+                  v-if="isadmin"
+                  class="topic-button"
+                  :style="{ backgroundColor: bg_color, color: ft_color }"
+                  @click="addmes(passage.id, 1)"
                 >
                   置顶
                 </button>
                 <button
-                    v-if = "isadmin"
-                    class="topic-button"
-                    :style="{ backgroundColor: bg_color, color: ft_color }"
-                    @click="addmes(passage.id,2)"
+                  v-if="isadmin"
+                  class="topic-button"
+                  :style="{ backgroundColor: bg_color, color: ft_color }"
+                  @click="addmes(passage.id, 2)"
                 >
                   精华
                 </button>
@@ -208,33 +235,41 @@
               </div>
             </div>
             <div
-                class="passage-block"
-                v-for="passage in valmes"
-                :key="passage.id"
-                v-if = "inval && !valempty">
+              class="passage-block"
+              v-for="passage in valmes"
+              :key="passage.id"
+              v-if="inval && !valempty"
+            >
               <hr />
               <div class="passage-display-body">
                 <div class="display-publisher">
                   <a class="userOfdiary" href="/otherusers/1">
-                    <img class="iconOfuser" :src="displayIcon(passage.usericon)" /><span
-                      class="nameOfuser"
-                  >{{ passage.username }}</span
-                  >
+                    <img
+                      class="iconOfuser"
+                      :src="displayIcon(passage.usericon)"
+                    /><span class="nameOfuser">{{ passage.username }}</span>
                   </a>
-                  <span class="publishtime">{{ changedate(passage.date) }}</span>
+                  <span class="publishtime">{{
+                    changedate(passage.date)
+                  }}</span>
                 </div>
                 <div class="passage-content">
-                  <a>{{ passage.title }}</a>
+                  <a @click="ToComment(passage.id)">{{ passage.title }}</a>
                 </div>
                 <button
-                    v-if = "isadmin"
-                    class="topic-button"
-                    :style="{ backgroundColor: bg_color, color: ft_color }"
-                    @click="delmes(passage.id,2)"
+                  v-if="isadmin"
+                  class="topic-button"
+                  :style="{ backgroundColor: bg_color, color: ft_color }"
+                  @click="delmes(passage.id, 2)"
                 >
                   取消精华
                 </button>
-                <div class="top-icon" style="margin-right: 20px;margin-left: 50px"><img src="@/assets/group/star.png" /></div>
+                <div
+                  class="top-icon"
+                  style="margin-right: 20px; margin-left: 50px"
+                >
+                  <img src="@/assets/group/star.png" />
+                </div>
               </div>
             </div>
           </div>
@@ -247,7 +282,11 @@
               <img src="@/assets/guide/book_collection.png" />我加入的小组
             </a>
           </div>
-          <div class="collection-list" v-for="group in addgroup" :key="group.id">
+          <div
+            class="collection-list"
+            v-for="group in addgroup"
+            :key="group.id"
+          >
             <a class="collection-item" @click="usetogroupdetail(group.id)">
               <img class="collection-img" :src="group.img" />
               <div class="collection-info">
@@ -259,9 +298,7 @@
           </div>
         </div>
         <div class="collection">
-          <div class="bookpage-title">
-          </div>
-          
+          <div class="bookpage-title"></div>
         </div>
       </div>
     </div>
@@ -270,7 +307,7 @@
 <script>
 import search from "@/components/SelectSearch.vue";
 import qs from "qs";
-import admin from "@/components/admin.vue"
+import admin from "@/components/admin.vue";
 export default {
   components: {
     search,
@@ -346,7 +383,7 @@ export default {
       inval,
       flag,
       group,
-      join:group.join,
+      join: group.join,
       allPassages,
       topPassage,
       topmes,
@@ -362,20 +399,20 @@ export default {
     };
   },
   methods: {
-    share(){
-            var domUrl = document.createElement("input");
-            domUrl.value = window.location.href;
-            domUrl.id = "creatDom";
-            document.body.appendChild(domUrl);
-            domUrl.select(); // 选择对象
-            document.execCommand('Copy', 'false', null );
-            let creatDom = document.getElementById("creatDom");
-            creatDom.parentNode.removeChild(creatDom);
-            this.$message({
-                message: '复制成功',
-                type: 'success'
-            });
-        },
+    share() {
+      var domUrl = document.createElement("input");
+      domUrl.value = window.location.href;
+      domUrl.id = "creatDom";
+      document.body.appendChild(domUrl);
+      domUrl.select(); // 选择对象
+      document.execCommand("Copy", "false", null);
+      let creatDom = document.getElementById("creatDom");
+      creatDom.parentNode.removeChild(creatDom);
+      this.$message({
+        message: "复制成功",
+        type: "success",
+      });
+    },
     displayIcon(url) {
       console.log("testurl");
       console.log(url);
@@ -390,70 +427,70 @@ export default {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
         group_id: this.id,
-      }
+      };
       this.$axios
-          .post("/group/group_manager", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              this.$message({
-                message: "成功成为管理员",
-                type: "success",
-              });
-            } else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        .post("/group/group_manager", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            this.$message({
+              message: "成功成为管理员",
+              type: "success",
+            });
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     addgroupt() {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
         group_id: this.id,
-        type: '1',
-      }
+        type: "1",
+      };
       this.$axios
-          .post("/group/dealGroup", qs.stringify(params))
-          .then((res) => {
-            console.log("测试加入小组");
-            console.log(res);
-            if (res.data.errno === 0) {
-              this.$message({
-                message: "加入成功",
-                type: "success",
-              });
-            } else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        .post("/group/dealGroup", qs.stringify(params))
+        .then((res) => {
+          console.log("测试加入小组");
+          console.log(res);
+          if (res.data.errno === 0) {
+            this.$message({
+              message: "加入成功",
+              type: "success",
+            });
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     delgroup() {
       var params = {
         user_id: this.$store.getters.getUser.user.id,
         group_id: this.id,
-        type: '2',
-      }
+        type: "2",
+      };
       this.$axios
-          .post("/group/dealGroup", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              this.$message({
-                message: "退出成功",
-                type: "success",
-              });
-            } else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        .post("/group/dealGroup", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            this.$message({
+              message: "退出成功",
+              type: "success",
+            });
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     usetonewpassage() {
       if (
@@ -463,7 +500,7 @@ export default {
         this.$message.error("请先登录！");
         return;
       }
-      if(!this.flag){
+      if (!this.flag) {
         this.$message.error("只有小组成员可以发帖！");
         return;
       }
@@ -475,38 +512,39 @@ export default {
     usetogroupdetail(id) {
       this.$router.push({
         name: "groupdetail",
-        query: { id: this.id },
+        query: { id: id },
       });
-i   },
+      i;
+    },
     hotPassage() {
       document
-          .getElementById("select-new-topic-dt")
-          .setAttribute("class", "selection_un");
+        .getElementById("select-new-topic-dt")
+        .setAttribute("class", "selection_un");
       document
-          .getElementById("select-star-topic-dt")
-          .setAttribute("class", "selection_un");
+        .getElementById("select-star-topic-dt")
+        .setAttribute("class", "selection_un");
       this.inhot = true;
       this.innew = false;
       this.inval = false;
     },
     newPassage() {
       document
-          .getElementById("select-hot-topic-dt")
-          .setAttribute("class", "selection_un");
+        .getElementById("select-hot-topic-dt")
+        .setAttribute("class", "selection_un");
       document
-          .getElementById("select-star-topic-dt")
-          .setAttribute("class", "selection_un");
+        .getElementById("select-star-topic-dt")
+        .setAttribute("class", "selection_un");
       this.inhot = false;
       this.innew = true;
       this.inval = false;
     },
     starPassage() {
       document
-          .getElementById("select-hot-topic-dt")
-          .setAttribute("class", "selection_un");
+        .getElementById("select-hot-topic-dt")
+        .setAttribute("class", "selection_un");
       document
-          .getElementById("select-new-topic-dt")
-          .setAttribute("class", "selection_un");
+        .getElementById("select-new-topic-dt")
+        .setAttribute("class", "selection_un");
       this.inhot = false;
       this.innew = false;
       this.inval = true;
@@ -515,32 +553,35 @@ i   },
       var params = {
         user_id: this.$store.getters.getUser.user.id,
         group_id: this.id,
-      }
+      };
       this.$axios
-          .post("/group/detail", qs.stringify(params))
-          .then((res) => {
-            console.log("查询小组信息");
-            console.log(res);
-            var i = 0;
-            if (res.data.errno === 0) {
-              console.log("获取小组信息成功");
-              console.log(res.data.data);
-              this.group = res.data.data;
-              for(i = 0;i < 2;i++) {
-                console.log(this.$store.getters.getUser.user.id);
-                console.log(res.data.data.manager[i].user_id);
-                if(this.$store.getters.getUser.user.id === res.data.data.manager[i].user_id) {
-                  this.isadmin = true;
-                  break;
-                }
+        .post("/group/detail", qs.stringify(params))
+        .then((res) => {
+          console.log("查询小组信息");
+          console.log(res);
+          var i = 0;
+          if (res.data.errno === 0) {
+            console.log("获取小组信息成功");
+            console.log(res.data.data);
+            this.group = res.data.data;
+            for (i = 0; i < 2; i++) {
+              console.log(this.$store.getters.getUser.user.id);
+              console.log(res.data.data.manager[i].user_id);
+              if (
+                this.$store.getters.getUser.user.id ===
+                res.data.data.manager[i].user_id
+              ) {
+                this.isadmin = true;
+                break;
               }
-            } else {
-              this.$message.error("查询失败");
             }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     srcmes() {
       console.log("11");
@@ -549,343 +590,329 @@ i   },
         kind: 1,
       };
       this.$axios
-          .post("/group/search", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              console.log("获取置顶信息成功");
-              this.topmes = [];
-              var i = 0;
-              for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                res.data.data[i].star = parseFloat(res.data.data[i].star);
-                this.topmes.push(res.data.data[i]);
-              }
-              if(res.data.data.length === 0) {
-                this.topmes = [];
-                this.topempty = true;
-              }
-              this.passageNum += res.data.data.length;
+        .post("/group/search", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            console.log("获取置顶信息成功");
+            this.topmes = [];
+            var i = 0;
+            for (i = 0; i < 6 && i < res.data.data.length; i++) {
+              res.data.data[i].star = parseFloat(res.data.data[i].star);
+              this.topmes.push(res.data.data[i]);
             }
-            else if(res.data.errno === 1002) {
+            if (res.data.data.length === 0) {
               this.topmes = [];
               this.topempty = true;
             }
-            else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+            this.passageNum += res.data.data.length;
+          } else if (res.data.errno === 1002) {
+            this.topmes = [];
+            this.topempty = true;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       params = {
         group_id: this.id,
         kind: 2,
       };
       this.$axios
-          .post("/group/search", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              console.log("获取精华信息成功");
-              this.valmes = [];
-              var i = 0;
-              for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                res.data.data[i].star = parseFloat(res.data.data[i].star);
-                this.valmes.push(res.data.data[i]);
-              }
-              if(res.data.data.length === 0) {
-                this.valmes = [];
-                this.valempty = true;
-              }
-              this.passageNum += res.data.data.length;
+        .post("/group/search", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            console.log("获取精华信息成功");
+            this.valmes = [];
+            var i = 0;
+            for (i = 0; i < 6 && i < res.data.data.length; i++) {
+              res.data.data[i].star = parseFloat(res.data.data[i].star);
+              this.valmes.push(res.data.data[i]);
             }
-            else if(res.data.errno === 1002) {
+            if (res.data.data.length === 0) {
               this.valmes = [];
               this.valempty = true;
             }
-            else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+            this.passageNum += res.data.data.length;
+          } else if (res.data.errno === 1002) {
+            this.valmes = [];
+            this.valempty = true;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       var params = {
         group_id: this.id,
-      }
+      };
       this.$axios
-          .post("/group/hot_article", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              console.log("获取热门信息成功");
-              this.hotpassage = [];
-              var i = 0;
-              var j = 0;
-              var flag = 0;
-              console.log("test");
-              for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                flag = 0;
-                for(j = 0;j < this.topmes.length;j++) {
-                  if(this.topmes[j].id === res.data.data[i].id) {
-                    flag = 1;
-                    break;
-                  }
+        .post("/group/hot_article", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            console.log("获取热门信息成功");
+            this.hotpassage = [];
+            var i = 0;
+            var j = 0;
+            var flag = 0;
+            console.log("test");
+            for (i = 0; i < 6 && i < res.data.data.length; i++) {
+              flag = 0;
+              for (j = 0; j < this.topmes.length; j++) {
+                if (this.topmes[j].id === res.data.data[i].id) {
+                  flag = 1;
+                  break;
                 }
-                for(j = 0;j < this.valmes.length;j++) {
-                  if(this.valmes[j].id === res.data.data[i].id) {
-                    flag = 1;
-                    break;
-                  }
+              }
+              for (j = 0; j < this.valmes.length; j++) {
+                if (this.valmes[j].id === res.data.data[i].id) {
+                  flag = 1;
+                  break;
                 }
-                if(!flag)
-                  this.hotpassage.push(res.data.data[i]);
               }
-              if(res.data.data.length === 0) {
-                this.hotempty = true;
-              }
-              this.passageNum += this.hotpassage.length;
+              if (!flag) this.hotpassage.push(res.data.data[i]);
             }
-            else {
-              this.$message.error("查询失败");
+            if (res.data.data.length === 0) {
+              this.hotempty = true;
             }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+            this.passageNum += this.hotpassage.length;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       var params = {
         group_id: this.id,
-      }
+      };
       this.$axios
-          .post("/group/new_article", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              console.log("获取热门信息成功");
+        .post("/group/new_article", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            console.log("获取热门信息成功");
+            this.newpassage = [];
+            var i = 0;
+            for (i = 0; i < 6 && i < res.data.data.length; i++) {
+              res.data.data[i].star = parseFloat(res.data.data[i].star);
+              this.newpassage.push(res.data.data[i]);
+            }
+            if (res.data.data.length === 0) {
               this.newpassage = [];
-              var i = 0;
-              for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                res.data.data[i].star = parseFloat(res.data.data[i].star);
-                this.newpassage.push(res.data.data[i]);
-              }
-              if(res.data.data.length === 0) {
-                this.newpassage = [];
-                this.newempty = true;
-              }
+              this.newempty = true;
             }
-            else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       this.onefinish = true;
     },
-    changedate(date){
-      return date.substring(0,10);
+    changedate(date) {
+      return date.substring(0, 10);
     },
     hotmes() {
       var params = {
         group_id: this.id,
-      }
+      };
       this.$axios
-          .post("/group/hot_article", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              console.log("获取热门信息成功");
-              this.hotpassage = [];
-              var i = 0;
-              var j = 0;
-              var flag = 0;
-              console.log("test");
-              console.log(this.topmes[0].id);
-              for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                flag = 0;
-                for(j = 0;j < this.topmes.length;j++) {
-                  if(this.topmes[j].id === res.data.data[i].id) {
-                    flag = 1;
-                    break; 
-                  }
+        .post("/group/hot_article", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            console.log("获取热门信息成功");
+            this.hotpassage = [];
+            var i = 0;
+            var j = 0;
+            var flag = 0;
+            console.log("test");
+            console.log(this.topmes[0].id);
+            for (i = 0; i < 6 && i < res.data.data.length; i++) {
+              flag = 0;
+              for (j = 0; j < this.topmes.length; j++) {
+                if (this.topmes[j].id === res.data.data[i].id) {
+                  flag = 1;
+                  break;
                 }
-                for(j = 0;j < this.valmes.length;j++) {
-                  if(this.valmes[j].id === res.data.data[i].id) {
-                    flag = 1;
-                    break;
-                  }
+              }
+              for (j = 0; j < this.valmes.length; j++) {
+                if (this.valmes[j].id === res.data.data[i].id) {
+                  flag = 1;
+                  break;
                 }
-                if(!flag)
-                  this.hotpassage.push(res.data.data[i]);
               }
-              if(res.data.data.length === 0) {
-                this.hotempty = true;
-              }
-              this.passageNum += this.hotpassage.length;
+              if (!flag) this.hotpassage.push(res.data.data[i]);
             }
-            else {
-              this.$message.error("查询失败");
+            if (res.data.data.length === 0) {
+              this.hotempty = true;
             }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+            this.passageNum += this.hotpassage.length;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       var params = {
         group_id: this.id,
-      }
+      };
       this.$axios
-          .post("/group/new_article", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              console.log("获取热门信息成功");
+        .post("/group/new_article", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            console.log("获取热门信息成功");
+            this.newpassage = [];
+            var i = 0;
+            var j = 0;
+            var flag = 0;
+            for (i = 0; i < 6 && i < res.data.data.length; i++) {
+              flag = 0;
+              for (j = 0; j < this.topmes.length; j++) {
+                if (this.topmes[j].id === res.data.data[i].id) {
+                  flag = 1;
+                  break;
+                }
+              }
+              for (j = 0; j < this.valmes.length; j++) {
+                if (this.valmes[j].id === res.data.data[i].id) {
+                  flag = 1;
+                  break;
+                }
+              }
+              if (!flag) this.newpassage.push(res.data.data[i]);
+            }
+            if (res.data.data.length === 0) {
               this.newpassage = [];
-              var i = 0;
-              var j = 0;
-              var flag = 0;
-              for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                flag = 0;
-                for(j = 0;j < this.topmes.length;j++) {
-                  if(this.topmes[j].id === res.data.data[i].id) {
-                    flag = 1;
-                    break;
-                  }
-                }
-                for(j = 0;j < this.valmes.length;j++) {
-                  if(this.valmes[j].id === res.data.data[i].id) {
-                    flag = 1;
-                    break;
-                  }
-                }
-                if(!flag)
-                  this.newpassage.push(res.data.data[i]);
-              }
-              if(res.data.data.length === 0) {
-                this.newpassage = [];
-                this.newempty = true;
-              }
-              
+              this.newempty = true;
             }
-            else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     getaddgroup() {
       var params = {
-        user_id: this.$store.getters.getUser.user.id, 
+        user_id: this.$store.getters.getUser.user.id,
       };
       this.$axios
-          .post("/group/mygroup", qs.stringify(params))
-          .then((res) => {
-            console.log("test.......");
-            console.log(res);
-            if (res.data.errno === 0) {
-              console.log("13215645646");
-              console.log(res.data.data);
-              this.addgroup = [];
-              var i = 0;
-              for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                this.addgroup.push(res.data.data[i]);
-                console.log(res.data.data[i].id );
-                console.log(this.id);
-                if(res.data.data[i].id == this.id)  {               
-                  console.log(this.flag);
-                  this.flag = true; 
-                  console.log(this.flag);
-                }
+        .post("/group/mygroup", qs.stringify(params))
+        .then((res) => {
+          console.log("test.......");
+          console.log(res);
+          if (res.data.errno === 0) {
+            console.log("13215645646");
+            console.log(res.data.data);
+            this.addgroup = [];
+            var i = 0;
+            for (i = 0; i < 6 && i < res.data.data.length; i++) {
+              this.addgroup.push(res.data.data[i]);
+              console.log(res.data.data[i].id);
+              console.log(this.id);
+              if (res.data.data[i].id == this.id) {
+                console.log(this.flag);
+                this.flag = true;
+                console.log(this.flag);
               }
             }
-          else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
-    delmes(id,kind) {
+    ToComment(id) {
+      this.$router.push({ name: "grouppassage", query: { id: id } });
+    },
+    delmes(id, kind) {
       var params = {
         kind: kind,
         group_id: this.id,
         article_id: id,
       };
       this.$axios
-          .post("/group/delete", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              console.log("取消成功");
-              this.valmes = [];
-              var i = 0;
-              for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                res.data.data[i].star = parseFloat(res.data.data[i].star);
-                this.valmes.push(res.data.data[i]);
-              }
-              this.$message({
-                message: "取消成功",
-                type: "success",
-              });
+        .post("/group/delete", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            console.log("取消成功");
+            this.valmes = [];
+            var i = 0;
+            for (i = 0; i < 6 && i < res.data.data.length; i++) {
+              res.data.data[i].star = parseFloat(res.data.data[i].star);
+              this.valmes.push(res.data.data[i]);
             }
-            else if(res.data.errno === 1002) {
-              this.valmes = [];
-              this.valempty = true;
-            }
-            else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+            this.$message({
+              message: "取消成功",
+              type: "success",
+            });
+          } else if (res.data.errno === 1002) {
+            this.valmes = [];
+            this.valempty = true;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
-    addmes(id,kind) {
+    addmes(id, kind) {
       var params = {
         kind: kind,
         group_id: this.id,
         article_id: id,
       };
       this.$axios
-          .post("/group/add", qs.stringify(params))
-          .then((res) => {
-            console.log(res);
-            if (res.data.errno === 0) {
-              console.log("申请成功");
-              this.valmes = [];
-              var i = 0;
-              for (i = 0; i < 6 && i < res.data.data.length; i++) {
-                res.data.data[i].star = parseFloat(res.data.data[i].star);
-                this.valmes.push(res.data.data[i]);
-              }
-              this.$message({
-                message: "申请成功",
-                type: "success",
-              });
+        .post("/group/add", qs.stringify(params))
+        .then((res) => {
+          console.log(res);
+          if (res.data.errno === 0) {
+            console.log("申请成功");
+            this.valmes = [];
+            var i = 0;
+            for (i = 0; i < 6 && i < res.data.data.length; i++) {
+              res.data.data[i].star = parseFloat(res.data.data[i].star);
+              this.valmes.push(res.data.data[i]);
             }
-            else if(res.data.errno === 1002) {
-              this.valmes = [];
-              this.valempty = true;
-            }
-            else {
-              this.$message.error("查询失败");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+            this.$message({
+              message: "申请成功",
+              type: "success",
+            });
+          } else if (res.data.errno === 1002) {
+            this.valmes = [];
+            this.valempty = true;
+          } else {
+            this.$message.error("查询失败");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     joinin() {
-      this.$set(this.group,'join',true);
+      this.$set(this.group, "join", true);
       this.flag = true;
       this.group.member++;
       this.addgroupt();
       this.$forceUpdate();
     },
     quit() {
-      this.$set(this.group,'join',false);
+      this.$set(this.group, "join", false);
       console.log(this.group.join);
       this.flag = false;
       this.group.member--;
@@ -897,7 +924,7 @@ i   },
     this.getgroup();
     this.srcmes();
     this.getaddgroup();
-    while(!this.onefinish);
+    while (!this.onefinish);
     this.hotmes();
   },
 };
@@ -1072,10 +1099,10 @@ a.comment-book-name {
 .collection .bookpage-title a:active {
   color: rgb(0, 166, 255);
 }
-.img-block{
+.img-block {
   display: inline;
-  height:85px;
-  width:85px;
+  height: 85px;
+  width: 85px;
   overflow: hidden;
   margin-right: 20px;
 }
@@ -1212,7 +1239,6 @@ a.comment-book-name {
   line-height: 30px;
   font-family: Source Han Sans CN Normal;
 }
-
 
 .body {
   width: 1600px;
@@ -1448,12 +1474,12 @@ a.comment-book-name {
   width: 200px;
   margin-top: 2px;
 }
-.top-icon img{
-    height:28px;
+.top-icon img {
+  height: 28px;
 }
-.star-icon img{
-    height:30px;
-    margin-left: 8px;
+.star-icon img {
+  height: 30px;
+  margin-left: 8px;
 }
 .passage-content a {
   font-size: 20px;
@@ -1526,8 +1552,8 @@ a.comment-book-name {
 }
 #join-button {
   position: relative;
-  top:-70px;
-  left:-220px;
+  top: -70px;
+  left: -220px;
 }
 #join-button img {
   height: 40px;
